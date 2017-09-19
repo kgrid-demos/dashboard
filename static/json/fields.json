@@ -1,0 +1,17 @@
+{"fields":
+	[
+		{"name" : "title", "type": "text","title":"TITLE","section":"metadata","model":"metadata.title"}, 
+		{"name" : "description", "type": "textarea","title":"DESCRIPTION","section":"metadata","model":"metadata.description"},
+		{"name" : "keywords", "type": "text","title":"KEYWORDS","section":"metadata","model":"metadata.keywords"}, 
+   		{"name" : "owner", "type": "text","title":"OWNERS","section":"metadata","model":"metadata.owner"},
+   		{"name" : "contributors", "type": "text","title":"CONTRIBUTORS","section":"metadata","model":"metadata.contributors"}, 
+   		{"name" : "license", "type": "linked","title":"LICENSE","section":"metadata","model":"metadata.license"}, 
+   		{"name" : "citations", "type": "list","title":"CITATIONS","section":"metadata","model":"metadata.citations"},
+   		{"name" : "functionName", "type": "text","title":"FUNCTION NAME","section":"payload","model":"payload.fucntionName"},
+   		{"name" : "engineType", "type": "text","title":"ENGINE TYPE","section":"payload","model":"payload.engineType"}, 
+   		{"name" : "content", "type": "textarea","title":"CONTENT","section":"payload","model":"payload.content"},
+   		{"name" : "inputMessage", "type": "textarea","title":"CONTENT","section":"inputMessage","model":"inputMessage"}, 
+   		{"name" : "outputMessage", "type": "textarea","title":"CONTENT","section":"outputMessage","model":"outputMessage"}, 
+   		{"name" : "logData", "type": "textarea","title":"CONTENT","section":"logData","model":"logData"}
+    ]
+}

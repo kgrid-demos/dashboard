@@ -1,0 +1,269 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic,700,700italic,800,800italic);
+
+body, div, h1, h2, h3, h4, h5, h6, p, ul, ol, li, dl, dt, dd, img, form, fieldset, input, textarea, blockquote, button {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-family: 'Open Sans', sans-serif;
+  color: #555555;
+  font-weight: 500;
+}
+
+img {
+  image-rendering: auto;
+  image-rendering: crisp-edges;
+  /*image-rendering: pixelated;*/
+}
+h1    { font-size: 32px; }
+h2    { font-size: 21px; }
+h3    { font-size: 21px; display: inline-block; }
+h4    { font-size: 18px; display: inline-block; }
+h5    { font-size: 16px; display: inline-block; line-height:1.8em;}
+h6    { font-size: 14px; display: inline-block;}
+p     { font-size: 14px; }
+.p2   { font-size: 12px; }
+.kg-label { font-size: 12px; text-transform: uppercase; }
+.kg-form  { font-size: 16px; }
+
+
+.ft-sz-12    { font-size: 12px; }
+.ft-sz-28    { font-size: 28px; }
+small { font-size:  70%; }
+
+* {
+	outline:none;
+}
+.nav>li>a {
+    position: relative;
+    display: block;
+    padding: 0px 0px;
+    margin: 0px 0px;
+}
+.nav>li>a:hover {
+  background-color:transparent;
+}
+a, a:hover, a:visited, a:focus {
+	text-decoration:none;
+	cursor: pointer;
+	transition: color 0.5s ease;
+}
+
+.wrapper {
+	background-color: transparent;
+	width: 1584px;
+	margin: 0 auto;
+}
+
+.login-wrapper {
+  position:fixed;
+  top:0px;
+  right:60px;
+  float:right;
+}
+.datagrid {
+	margin:0 auto;
+	position: relative;
+	width: 1024px;
+	overflow: hidden;
+	max-width: 1028px;
+}
+
+.nav .datagrid {
+  	min-height: 58px;
+}
+.e5backing .datagrid {
+  	min-height: 880px;
+    	padding-bottom: 30px;
+}
+
+.middleout a>span:after {
+	content: '';
+	display: block;
+	margin: auto;
+	height: 2px;
+	width: 0px;
+	background: transparent;
+	transition: width .5s ease, background-color .5s ease;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.1);
+    border-radius: 0px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 0px;
+/*     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);  */
+}
+::-webkit-scrollbar-track {
+      background-color: #fff;
+} /* the new scrollbar will have a flat appearance with the set background color */
+
+::-webkit-scrollbar-thumb {
+      background-color: #eeeeee;
+} /* this will style the thumb, ignoring the track */
+
+::-webkit-scrollbar-button {
+    display:none;
+    background-color: #e5e5e5;
+} /* optionally, you can style the top and the bottom buttons (left and right for horizontal bars) */
+
+::-webkit-scrollbar-corner {
+      background-color: #fff;
+} /* if both the vertical and the horizontal bars appear, then perhaps the right bottom corner also needs to be styled */
+
+
+.noscroll { overflow: hidden; }
+.whitebacking {
+	background-color:transparent;
+	position: relative;
+	z-index:200;
+}
+
+.e5backing {
+	background-color:#e5e5e5;
+}
+.mar-top20 {
+  margin-top:20px;
+}
+.mar-top30 {
+  margin-top:30px;
+}
+.mar-bot-5{
+  margin-bottom:5px;
+}
+.pad-b-5 {
+  padding-bottom: 5px;
+}
+.pad-t-2 {
+  padding-top: 2px;
+}
+.pad-t-15{
+    padding-top:15px;
+ }
+.pad-l-10 {
+  padding-left:10px;
+}
+.pad-l-20 {
+  padding-left:20px;
+}
+.pad-0 {
+  padding:0px;
+}
+.mar-r-30 {
+  margin-right:30px;
+}
+.mar-r-12 {
+  margin-right:12px;
+}
+.bg-trans {
+  background-color: transparent;
+}
+.bg-white {
+    background-color: #fff;
+}
+.brd-r {
+  border-right: 1px solid #666666;
+}
+.lh-1 { line-height: 1em; }
+.lh-3 { line-height: 3em; }
+.wd-70 { width: 70px;}
+.ht-40 {  height: 40px; }
+.ht-30 {  height: 30px; }
+.float-r {  float: right; }
+
+.kgl-banner {
+    background-color: transparent;
+    position: relative;
+    width: 1024px;
+    overflow: visible;
+    z-index: 10;
+    height: 220px;
+    margin: 0 auto;
+    padding: 0px 12px;
+}
+/* Icon Buttons */
+ul.actioniconlist {
+	list-style: none;
+}
+ul.actioniconlist li {
+  display: inline-block;
+	width: 50px;
+	text-align:center;
+	overflow-x:visible;
+}
+ul.actioniconlist li>div {
+  width: 80px;
+  left: -20px;
+  position: relative;
+}
+ul.actioniconlist li div.actioniconcap {
+	font-size: 8px;
+	font-weight:700;
+	opacity: 0;
+	position: relative;
+	height: 18px;
+	width: 65px;
+	transition: opacity 0.5s ease;
+	border-radius:10px;
+	padding:2px 0px;
+	text-align:center;
+	margin:0 auto;
+}
+ul.actioniconlist li a:hover +div.actioniconcap {
+	opacity: 1;
+}
+
+div.actionicon {
+	width:28px;
+	height: 28px;
+	border-radius:100%;
+	margin: 3px auto;
+	position: relative;
+}
+
+div.actionicon i {
+	margin: 6px;
+	font-size: 15px;
+}
+/* Buttons*/
+.kgl-close {
+	position: relative;
+	top: 0px;
+	left: 0px;
+  border: none;
+  width: 55px;
+  height: 55px;
+  line-height: 55px;
+  padding: 0px 0px 0px 0px;
+  background-color: transparent;
+}
+/* Overlay Sidebar */
+
+.sidebar_close {
+    background-color:#fff;
+    position:absolute;
+    height: 100%;
+    width:55px;
+    text-align:center;
+    border-right: 1px solid #e5e5e5;
+		cursor:pointer;
+}
+
+.sidebar_close h3{
+    position:absolute;
+    line-height:60px;
+    vertical-align:middle;
+    top:40px;
+    left:10px;
+    font-size:14px;
+    -webkit-transform: rotate(270deg);
+    -moz-transform: rotate(270deg);
+    -ms-transform: rotate(270deg);
+    -o-transform: rotate(270deg);
+    transform: rotate(270deg);
+	}

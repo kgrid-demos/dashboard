@@ -1,0 +1,572 @@
+.kgl-select {
+	width:100%;
+	padding: 6px;
+	height:40px;
+}
+
+.kgl-content {
+	position: absolute;
+	margin-top: 60px;
+	width:100%;
+	min-width: 1584px;
+}
+
+.kgl-type{
+	vertical-align: middle;
+	height: 40px;
+}
+
+.kgl-viewlist {
+	list-style:none;
+	padding: 10px 16px 16px 16px;
+}
+
+.kgl-viewlist input, .kgl-viewlist div, .kgl-viewlist h4{
+	background-color: #fff;
+	padding: 0px;
+	color: #555555;
+	font-weight: 400;
+	font-size: 14px;
+	border-radius: 5px;
+	margin: 0px;
+}
+
+span.kgl-right{
+	border-left: 1px solid #555555;
+	padding: 0px 0px 0px 10px;
+}
+
+.kgl-banner h1 small {
+	font-size:28px;
+  line-height: 1.35em;
+  display: block;
+  font-weight: 300;
+}
+
+.main-content {
+	min-height: 1500px;
+	width:100%;
+	padding:30px;
+}
+
+.kgl-backtotop {
+	position:fixed;
+    bottom:60px;
+    right:150px;
+    margin:0 auto;
+    display:none;
+    z-index:500;
+}
+
+.headercol{
+	position: relative;
+	text-align: left;
+	height: 30px;
+	border-collapse: collapse;
+	display: table;
+	max-width: 1028px;
+	z-index: 125;
+	margin: 8px auto;
+	width:1024px;
+}
+
+
+.headercol ul {
+	display: table-row;
+}
+
+
+.headercontainer {
+	width:1584px;
+	border:none;
+	box-shadow: none;
+	overflow:visible;
+	height:auto;
+	margin: 0 auto;
+		z-index: 125;
+}
+.header{
+	position: relative;
+		min-width: 1584px;
+	width:100%;
+	border: 1px solid lightgrey;
+	box-shadow: 0 2px 2px rgba(0, 0, 0, 0.35);
+	z-index: 150;
+	margin: 0 auto;
+	background-color:#fff;
+}
+
+#bannerbk{
+	width:1584px;
+}
+
+.overlay-alert {
+    height: 60px;
+    width: 1030px;
+    position: absolute;
+    bottom:0px;
+    left: 60px;
+    background-color: #fff;
+}
+
+#login_overlay .overlay-board {
+    width: 480px;
+}
+
+.done_btn {
+    height: 55px;
+    width: 910px;
+    margin: 55px auto;
+    background-color: #0075bc;
+    color: #fff;
+    border-radius: 10px;
+    position: absolute;
+}
+
+ul#edittabs {
+	list-style-type: none;
+	margin: 0 0 12px 0;
+	padding: 0px;
+	text-align: center;
+}
+
+ul#edittabs li, ul#tabs li {
+	display: block;
+	float: left;
+	color: #b3b3b3;
+	font-size: 14px;
+	font-weight: 400;
+	text-decoration: none;
+	text-align: center;
+	line-height: 2;
+	margin-top: 6px;
+	margin-bottom: 6px;
+	margin-left: 48px;
+	margin-right: 2px;
+	cursor: pointer;
+	vertical-align: bottom;
+	padding: 0px 0px 0px 0px;
+	transition: color 0.5s ease;
+}
+
+ul#edittabs li span:before {
+  content: "*";
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #0075bc;
+  visibility: hidden;
+  -webkit-transform: scaleX(0);
+  transform: scaleX(0);
+  -webkit-transition: all 0.3s ease-in-out 0s;
+  transition: all 0.3s ease-in-out 0s;
+}
+
+ul#edittabs li span:hover:before {
+  visibility: visible;
+  -webkit-transform: scaleX(1);
+  transform: scaleX(1);
+}
+
+ul#edittabs li:after {
+	content: '';
+	display: block;
+	margin: auto;
+	height: 2px;
+	width: 0px;
+	background: transparent;
+	transition: width .5s ease, background-color .5s ease;
+}
+ul#edittabs li.middleout:after {
+	width: 100%;
+	background: #0075bc;
+}
+
+ul#edittabs li:hover, ul#tabs li:hover{
+	background-color: transparent;
+	color: #555555;
+}
+
+ul#edittabs li.active {
+	color: #555555;
+
+}
+
+
+ul#edittab:hover {
+	color: #b3b3b3;
+}
+
+ul#edittab {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+ul#edittab li {
+	display: none;
+	width: 99%;
+	float: left;
+	padding: 0px;
+	min-height:300px;
+/* 	height:300px;	 */
+	box-sizing: border-box;
+	background-color: #ffffff;
+}
+
+ul#edittab li.active {
+	display: block;
+}
+
+ul#edittab li h2 {
+	font-weight: 400;
+	margin-bottom: 30px;
+	padding-bottom: 5px;
+	border-bottom: solid 5px #32c896;
+}
+
+ul#citationlist li {
+	display: block;
+	width: 100%;
+	float: left;
+	margin-top: 2px;
+	min-height:22px;
+	height:30px;
+	padding: 0px;
+	box-sizing: border-box;
+	background-color: #ffffff;
+}
+
+.inputfile {
+	display: block;
+	margin: 0 auto;
+}
+
+
+.addtext a {
+	width:100%;
+  border: 1px solid #fff;
+  	white-space: nowrap;
+	overflow: hidden;
+  	text-overflow: ellipsis;
+}
+
+h3 {
+    font-size: 21px;
+    font-weight: 400;
+}
+
+h4 {
+    color: #555555;
+    font-weight: 400;
+    font-size: 14px;
+    padding: 16px 16px;
+    margin: 0 auto;
+}
+
+.addtext textarea:disabled{
+		border: 1px solid #fff;
+}
+
+textarea {
+	width: 100%;
+/* 	min-height: 380px; */
+	margin: 0px;
+	padding: 5px;
+	border: 1px solid #0075bc;
+	border-radius: 0px;
+}
+.userbutton {
+	position: absolute;
+	right: 22px;
+	bottom: 35px;
+}
+
+.current-tab span{
+/* 	border-bottom: 2px solid #39b54a; */
+	padding-bottom:2px;
+	color:#555555;
+
+}
+
+
+.fixed {
+  top: 0px;
+  position: fixed;
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+  align-content: center;
+	z-index:350;
+}
+
+#objEditor_overlay .ol_pane {
+	left: 30%;
+}
+
+
+    #linkedfields{
+    width:100%;}
+
+    .ol-slot {
+    	width: 96%;
+    	margin: 0 auto;
+    }
+
+#pub, #pri {
+	margin-left: 14px;
+}
+
+input[id$="datepicker"]{
+		width:150px;
+	}
+
+	#closebutton {
+	  position: absolute;
+	  top:-18px;
+	  right:-18px;
+	  z-index: 1000;
+	  box-shadow: 1px 1px #555555;
+	}
+	.delete_btn, .edit_btn{
+		display:inline-block;
+		background-color:#fff;
+		line-height: 1em;
+		font-size:14px;
+		color: #b3b3b3;
+		padding:0px 10px 0px 10px;
+
+	}
+	 .edit_btn{
+	 	border-right: 1px solid #b3b3b3;
+	 }
+
+
+	.delete_btn:hover, .edit_btn:hover{
+		color:#555555;
+	}
+
+	.edit {
+		background-color: #fff;
+		color: #0075bc;
+		font-size: 14px;
+		font-weight: 400;
+		padding-left: 22px;
+		line-height: 2.5em;
+		border: none;
+		outline: none;
+		cursor: pointer;
+		vertical-align: middle;
+			transition: color 0.5s ease;
+	}
+
+	.edit:hover{
+		color: #555555;
+	}
+
+	.done {
+		background-color: #fff;
+		color: #39b54a;
+		font-size: 14px;
+		font-weight: 300;
+		padding-left: 5px;
+		padding-right: 5px;
+		border: 1px solid #39b54a;
+		outline: none;
+		border-radius: 0px;
+		cursor: pointer;
+		position: absolute;
+		right: 250px;
+		top: -26px;
+	}
+
+	 #filterBtn a:hover, #filterBtn a:visited {
+	 	color: #555555;
+	 }
+
+
+	label {
+		font-weight: 400;
+		margin:10px 0px;
+	}
+
+	input[type=radio] {
+		display: inline-block;
+	}
+
+	.date2 {
+		padding: 0px;
+	}
+
+	.kgl-pub input[type=radio]{
+	  display: none;
+	}
+	.kgl-pub {
+	width:80px;
+	padding-left: 0px;
+	}
+	.kgl-pub .active {
+	margin-left: 5px;
+	padding-bottom:2px;
+	border-bottom: 2px solid #0075bc;
+	}
+
+	.datetype {
+	 margin:0px 0px 10px 0px;
+	}
+
+
+	.signup-link {
+		cursor: default;
+		color: #333333;
+	}
+
+/* Override Less Style */
+.nav .open>a {
+	background-color: transparent;
+}
+
+.nav-tabs>li>a:hover {
+    border-color: #fff;
+}
+
+.nav-tabs {
+    border-bottom: 1px solid #fff;
+}
+
+.nav-tabs>li>a {
+    margin-right: 2px;
+    line-height: 1.42857143;
+    border: 1px solid transparent;
+    border-radius: 4px 4px 0 0;
+}
+
+
+.roundbutton {
+  font-family: 'Open Sans', sans-serif;
+    width:35px;
+    height:35px;
+    border-radius: 100%;
+    color:dimgrey;
+    background-color:white;
+    border:1px solid #555555;
+    font-size:12pt;
+    font-weight: 300;
+    margin:0 -5px;
+    line-height: 35px;
+    position:relative;
+    vertical-align:middle;
+    /*margin-top:25px;
+    margin-left:25px;*/
+}
+.roundbutton p{
+  padding:6px 0;
+}
+
+
+	.saveChange{
+	  height:40px;
+	  width:145px;
+	  border:none;
+	  border-radius: 10px;
+	  background-color: #39b54a;
+	  color:white;
+	  font-size: 14px;
+	  text-align: center;
+	  margin-left: 350px;
+	  font-weight: 300;
+	  margin-right: 25px;
+	}
+
+
+	img{
+	    vertical-align: middle;
+	    margin:0 auto;
+	}
+
+	        #infoicon{
+	            position:absolute;
+	            bottom:-20px;
+	            right:350px;
+	            margin:0 auto;
+	            z-index:500;
+	        }
+	                #addObjbutton{
+	            position:absolute;
+	            bottom:-20px;
+	            right:350px;
+	            z-index:500;
+	            margin: 0 auto;
+	         }
+
+	#settinglink, #objsettinglink{
+	  margin-left: 20px;
+	}
+
+.roundbutton:hover{
+    border:1px solid #0075bc;
+    color:#0075bc;
+    font-weight:400;
+    background-color:#0075bc;
+}
+
+/* CSS for InfoGrid */
+.infogrid {
+	background-color: #fff;
+	position: relative;
+	width: 1028px;
+	font-family: 'Open Sans', sans-serif;
+	color: #555555;
+	overflow: hidden;
+	max-width: 1024px;
+	text-align: center;
+	padding: 50px 0px;
+	margin-top: 60px;
+	min-height: 740px;
+}
+
+.block_title {
+	width: 100%;
+	font-size: 21px;
+	font-weight: 300;
+	color: #555555;
+	padding-top: 25px;
+	padding-bottom: 20px;
+}
+
+.line {
+	display: inline-block;
+	width: 50px;
+	padding: 0px 16px;
+	vertical-align: middle;
+	color: #b3b3b3;
+}
+
+
+.inline {
+	display: inline-block;
+	margin:0px 0px 0px 50px;
+	vertical-align: middle;
+}
+
+.line hr {
+	border: 1px solid #fff;
+	border-bottom-color: #555555;
+	color: #fff;
+}
+
+.infoblock {
+	padding-top: 10px;
+	padding-bottom: 30px;
+}
+
+.block_info {
+	width: 100%;
+	font-size: 14px;
+	font-weight: 400;
+	color: #555555;
+	padding-top: 0px;
+	line-height: 1.8em;
+}
