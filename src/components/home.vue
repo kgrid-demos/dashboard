@@ -2,15 +2,33 @@
 <div class='content'>
 	<applayout>
 		<div slot='banner'>
-			<div class='bannercontent' >
-				<h1 class='pad-l-20'>{{patient.firstname}} {{patient.lastname}} <small class='pad-l-20'>Age {{patient.age}}, {{patient.gender}}</small></h1>
+			<div class='row'>
+			<div class='col-md-2 col-sm-2 col-xs-2 '></div>
+			<div class='col-md-8 col-sm-8 col-xs-8 '>
+				<form id="search">
+					<i class='fa fa-search'></i> <input name="query" v-model="searchQuery">
+				</form>
 			</div>
-		</div>
-		<div slot='main'>
-			<div class='maincontent'>
-			<div class='col-md-2 col-sm-2 col-xs-2 kg-bg-custom-0 ht-full'></div>
-			<div class='col-md-10 col-sm-10 col-xs-10 kg-bg-custom-1 ht-full'></div>
+			<div class='col-md-1 col-sm-1 col-xs-1 '></div>
 			</div>
+			</div>
+			<div slot='main'>
+<div class='row'>
+			<div class='col-md-2 col-sm-2 col-xs-2  ht-full'></div>
+			<div class='col-md-8 col-sm-8 col-xs-8  ht-full'>
+
+			<kogrid
+	    :data="patients"
+	    :columns="gridColumns"
+	    :filter-key="searchQuery"
+			v-on:selected='selected'>
+	  </kogrid>
+
+
+			</div>
+			<div class='col-md-2 col-sm-2 col-xs-2 ht-full'></div>
+
+</div>
 		</div>
 	</applayout>
 </div>
@@ -19,15 +37,20 @@
 
 import applayout from './applayout.vue';
 import eventBus from '../eventBus.js';
-
+import kogrid from './kogrid.vue';
 export default {
     name: 'home',
 	data : function() {
 		return {
-			patient:{firstname:"Bridget",lastname:"Kearns",age:67,gender:"Female"}
-		    }},
+			searchQuery: '',
+			gridColumns: ['ID','Name', 'Age','Gender'],
+			gridData: []
+		}
+	},
 
 	created : function() {
+		var self=this;
+		self.gridData=[];
 
 	},
 	mounted:function(){
@@ -37,15 +60,25 @@ export default {
 
 	  },
 	computed : {
-
+		patients: function() {
+			return this.$store.getters.getPatientList
+		},
+		datalength:function(){
+			return this.$store.getters.getDataLength;
+			}
 	},
 	methods : {
-
-	},
-	components:{
-		'applayout':applayout,
+		selected: function(t){
+			console.log(this.patients[t].ID);
+			this.$store.commit("setSelectedPatient", this.patients[t]);
+			eventBus.$emit("patientSelected",this.patients[t]);
 
 		}
+	},
+	components:{
+		applayout,
+		kogrid
+	}
 };
 </script>
 <style scoped>
@@ -58,6 +91,7 @@ export default {
 		letter-spacing: 0.1em;
     padding-top: 65px;
     background: transparent;
+		height: 40px;
 }
 .bannercontent h1 {
 	line-height:1.3em;

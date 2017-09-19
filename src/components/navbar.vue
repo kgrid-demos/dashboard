@@ -4,14 +4,14 @@
 						<span>Dashboard</span>
 			</router-link>
 			<nav class='navbar navbar-fixed-top kgl-1 kg-bg-color kg-color'>
-				<div class='wrapper'>
+
 						<ul class='nav navbar-nav'>
 							<router-link tag='li' :class="{'active': $route.fullPath === '/about'}" to='/about'><a><span>Patient</span></a></router-link>
 							<router-link tag='li' :class="{'active': $route.fullPath === '/about'}" to='/about'><a><span>Calendar</span></a></router-link>
 							<router-link tag='li' :class="{'active': $route.fullPath === '/about'}" to='/about'><a><span>Notifications</span></a></router-link>
 							<router-link tag='li' :class="{'active': $route.fullPath === '/about'}" to='/about'><a><span>Dr.</span></a></router-link>
 						</ul>
-				</div>
+
 			</nav>
 		</div>
 </template>
