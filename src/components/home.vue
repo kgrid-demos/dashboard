@@ -82,6 +82,18 @@ export default {
 };
 </script>
 <style scoped>
+form#search {
+width:100%;
+		padding:10px 20px 10px 20px;
+		line-height:1.5em;
+		border:1px solid#e5e5e5;
+		margin-bottom: 20px;
+}
+form#search input {
+	line-height:1.5em;
+			padding:10px 10px;
+}
+
 .bannercontent {
     margin-top: 75px;
     text-align: left;
@@ -112,4 +124,5 @@ export default {
 h1 small {
 	font-size:50%;
 }
+
 </style>

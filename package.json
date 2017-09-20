@@ -16,7 +16,9 @@
     "tether": "^1.4.0",
     "vee-validate": "^2.0.0-rc.5",
     "vue": "^2.3.4",
+    "vue-grid-layout": "^2.1.9",
     "vue-router": "2.5.3",
+    "vuedraggable": "^2.14.1",
     "vuex": "^2.3.1",
     "webpack": "^2.7.0"
   },

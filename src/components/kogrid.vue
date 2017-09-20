@@ -100,20 +100,15 @@ th {
   user-select: none;
 }
 
-
 th, td {
-  padding: 10px 10px;
+  padding: 15px 15px;
   text-overflow: ellipsis;
 }
 
 th:nth-child(1){  width: 300px;}
-th:nth-child(2){  width: 600px;}
+th:nth-child(2){  width: 400px;}
 th:nth-child(3){  width: 200px;}
-th:nth-child(4){  width: 100px;}
-
-
-
-
+th:nth-child(4){  width: 200px;}
 
 th.active {
   color: #fff;
@@ -128,6 +123,13 @@ tr:nth-child(even) {
 }
 tr {
     background-color: #fff;
+    border:1px solid transparent;
+    transition: background 0.5s ease, color 0.5s ease;
+    cursor:pointer;
+}
+tr:hover{
+    background:#7d948e;
+    color: #fff
 }
 .arrow {
   display: inline-block;

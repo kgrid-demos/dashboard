@@ -2,6 +2,8 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 //import VeeValidate from 'vee-validate';
 import Vuex from 'vuex';
+import draggable from 'vuedraggable';
+import VueGridLayout from 'vue-grid-layout';
 import App from './App';
 import store from './store';
 import eventBus from './eventBus.js';

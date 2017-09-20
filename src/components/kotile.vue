@@ -1,0 +1,104 @@
+<template>
+		<div class="container kgl-tile" v-bind:id="object">
+				<p>{{object}}</p>
+				<div class="cornerflag"><p class='ft-sz-12'>{{cflag}}</p></div>
+
+			</div>
+	</template>
+	<script>
+	import moment from 'moment'
+	import eventBus from '../eventBus.js';
+	export default {
+  		name:	"kotile",
+		props : [ 'object', 'cflag' ,'tileindex'],
+		created: function(){
+
+		},
+		computed : {
+
+					},
+		methods : {
+
+					}
+				};
+				</script>
+				<style>
+				.cornerflag {
+					position:absolute;
+					top:0;
+					left:0;
+					text-align:center;
+					width:30px;
+					height:30px;
+					border:1px solid transparent;
+					color:#fff;
+					z-index:20;
+				}
+
+
+				.kgl-tile::before,
+				.kgl-tile::after {
+				    content: '';
+				    position: absolute;
+				    top: 0;
+				    left: 0;
+				    border-color: transparent;
+				    border-style: solid;
+						z-index:10;
+				}
+
+				.kgl-tile::before {
+				    border-width: 1px;
+				    border-left-color: #ccc;
+				    border-top-color: #ccc;
+				}
+
+				.kgl-tile::after {
+			    	border-width: 1.35em;
+				    border-left-color: #bbbbbb;
+				    border-top-color: #bbbbbb;
+				}
+
+				.cornerflag p {
+					postion:relative;
+					text-align:center;
+					transform: rotate(-45deg);
+					color:#fff;
+
+				}
+
+				.kgl-tile {
+				position: relative;
+				    text-align: center;
+				    width: 120px;
+						height: 60px;
+				    background-color: #fff;
+			    	color: #696969;
+
+				    font-weight: 400;
+				    border: 2px solid #e5e5e5;
+				    padding: 0px ;
+						text-transform: uppercase;
+						transition: all 0.5s ease;
+				}
+				.kgl-tile>p {
+					position:relative;
+					top: 50%;
+					-webkit-transform: translateY(-50%);
+					-ms-transform: translateY(-50%);
+					transform: translateY(-50%);
+
+				}
+				.kgl-tile:hover {
+				   border: 2px solid #0075bc;
+					 cursor:pointer;
+				}
+
+
+.kgl-id {
+	text-align: right;
+	padding-right: 0px;
+	right:-10px;
+}
+
+				</style>

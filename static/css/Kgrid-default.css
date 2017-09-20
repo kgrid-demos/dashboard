@@ -8,7 +8,9 @@ body, div, h1, h2, h3, h4, h5, h6, p, ul, ol, li, dl, dt, dd, img, form, fieldse
   color: #555555;
   font-weight: 500;
 }
-
+ul {
+  list-style:none;
+}
 img {
   image-rendering: auto;
   image-rendering: crisp-edges;
@@ -172,6 +174,7 @@ a, a:hover, a:visited, a:focus {
 .lh-1 { line-height: 1em; }
 .lh-3 { line-height: 3em; }
 .wd-70 { width: 70px;}
+.ht-50 {  height: 50px; }
 .ht-40 {  height: 40px; }
 .ht-30 {  height: 30px; }
 .float-r {  float: right; }
