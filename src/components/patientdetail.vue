@@ -18,7 +18,7 @@
 		<div slot='main'>
 			<div class='maincontent'>
 				<div class='col-md-2 col-sm-2 col-xs-2 kg-bg-custom-0 ht-full'>
-					<draggable class='wlist' element="ul" v-model="widgetList" :options="dragOptions"   >
+					<draggable class='wlist' element="ul" v-model="widgetList" :options="dragOptions">
 						<li v-for='(object,index) in widgetList' v-bind:key='index'>
 							<kocard :object='object.label' :id='object.label' :cflag="object.type" :tileindex='index' draggable='true'  @dragstart='dragWidget' ></kocard>
 						</li>
@@ -42,14 +42,15 @@
 														:w.sync="item.w"
 														:h.sync="item.h"
 														:i="item.i"
-														v-bind:key="item.i">
+														v-bind:key="item.i"
+                            @resized="resizedEvent">
 							<div class='widgetcontainer'  @dragenter='denter' @dragleave='dexit' @dragover='dover' @drop='dropped'>
 								<div class=''>{{item.i}}		Drag a widget and drop here			</div>
 
 
 								<draggable class='wlayout' element="ul" v-model="widgetList2[item.i]" :options="dragOptions"   >
 														<li v-for='(object,index) in widgetList2[item.i]' v-bind:key='index' v-if='widgetList2[item.i].length==1|object.type!="NEW"'>
-															<kotile :object='object.label' :id='object.label' :cflag="object.type" :tileindex='index' draggable='true'  @dragstart='dragWidget' ></kotile>
+															<kotile :object='object.label' :id='object.label' :cflag="object.type" :tileindex='index' :containerheight=100 draggable='true' @dragstart='dragWidget' ></kotile>
 														</li>
 													</draggable></div>
 						</grid-item>
@@ -67,6 +68,7 @@ import applayout from './applayout.vue';
 import eventBus from '../eventBus.js';
 import kotile from './kotile.vue'
 import kocard from './kocard.vue'
+import widget from "./widget.vue";
 export default {
     name: 'patientdetail',
 	data : function() {
@@ -108,7 +110,7 @@ export default {
 			return this.$store.getters.getpatientbyid(this.$route.params.id);
 		},
 		nextitem:function(){
-			var item={x:9,y:20,w:3,h:4,i:0};
+			var item={x:2,y:2,w:3,h:4,i:0};
 			item.i=this.layout.length+"";
 
 			return item
@@ -116,53 +118,60 @@ export default {
 
 	},
 	methods : {
-	saveconfig:function(){
-		var pid=this.$route.params.id;
-		this.$store.commit('saveConfig',{'id':pid,'list':this.widgetList,'layout':this.layout});
-	},
-		dropWidget:function(e){
-			e.preventDefault();
-			console.log("Dropped"+this.draggedid);
-		},
-		allowDrop:function(e){
-			e.preventDefault();
-		},
-		dragWidget:function(ev){
-			ev.stopPropagation();
-	   	return true;
+    saveconfig:function(){
+      var pid=this.$route.params.id;
+      this.$store.commit('saveConfig',{'id':pid,'list':this.widgetList,'layout':this.layout});
+    },
+    dropWidget:function(e){
+      e.preventDefault();
+      console.log("Dropped"+this.draggedid);
+    },
+    allowDrop:function(e){
+      e.preventDefault();
+    },
+    dragWidget:function(ev){
+      ev.stopPropagation();
+      return true;
 
-		},
-		denter: function(e){
-				e.preventDefault();
-						e.stopPropagation();
-				console.log("Drag enter");
-				$(e.target).addClass("over");
-		},
-		dexit: function(e){
-				e.preventDefault();
-				e.stopPropagation();
-				console.log("Drag exit");
-				$(e.target).removeClass("over");
-		},
-		dover:function(e){
-			e.preventDefault();
-			e.stopPropagation();
-			console.log("Drag over");
-			$(e.target).css("font-size","20px;");
-		},
-		dropped:function(e) {
-		e.preventDefault();
-		e.stopPropagation();
-		console.log('Something is dropped ');
-		console.log(e.target);
-		if(this.widgetList.length>1){
-			this.layout.push(this.nextitem)
-			this.widgetList2.push([])
-		}
-		},
+    },
+    denter: function(e){
+        e.preventDefault();
+            e.stopPropagation();
+        console.log("Drag enter");
+        $(e.target).addClass("over");
+    },
+    dexit: function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        console.log("Drag exit");
+        $(e.target).removeClass("over");
+    },
+    dover:function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      console.log("Drag over");
+      $(e.target).css("font-size","20px;");
+    },
+    dropped:function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log('Something is dropped ');
+    console.log(e.target);
+    console.log(e.target.clientHeight);
+    if(this.widgetList.length>1){
+      this.layout.push(this.nextitem)
+      this.widgetList2.push([])
+      }
+    },
+    resizedEvent: function(i, newH, newW, newHPx, newWPx){
+      var msg = "RESIZED i=" + i + ", H=" + newH + ", W=" + newW + ", H(px)=" + newHPx + ", W(px)=" + newWPx;
+      console.log(msg);
+      console.log(this.widgetList2[i]);
+    }
 
 	},
 	components:{
+    widget,
 		applayout,
 		kotile,
 		kocard,

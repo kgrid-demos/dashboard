@@ -1,14 +1,15 @@
 <template>
 		<div class="container kgl-tile" v-bind:id="object">
-				<p>{{object}}</p>
+				<p><widget :chartheight='this.containerheight'></widget></p>
 		</div>
 	</template>
 	<script>
-	import moment from 'moment'
+	import moment from 'moment';
 	import eventBus from '../eventBus.js';
+	import widget from './widget.vue';
 	export default {
   		name:	"kotile",
-		props : [ 'object', 'cflag' ,'tileindex'],
+		props : [ 'object', 'cflag' ,'tileindex', 'containerheight'],
 		created: function(){
 
 		},
@@ -17,7 +18,10 @@
 					},
 		methods : {
 
-					}
+					},
+		components : {
+		  widget
+		}
 				};
 				</script>
 				<style scoped>
