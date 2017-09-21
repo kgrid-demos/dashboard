@@ -70,9 +70,7 @@ export default {
 	methods : {
 		selected: function(t){
 			console.log(this.patients[t].ID);
-			this.$store.commit("setSelectedPatient", this.patients[t]);
 			eventBus.$emit("patientSelected",this.patients[t]);
-
 		}
 	},
 	components:{

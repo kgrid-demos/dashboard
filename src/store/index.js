@@ -28,20 +28,63 @@ export default new Vuex.Store({
                   { ID:"PA-67034-02", Name:"Alvin Adams",Age:"27", Gender:"male"},
                 { ID:"PA-67034-03", Name:"Larry Lambert Jr.", Age:"17", Gender:"male"},
               { ID:"PA-67034-04", Name:"Marry McMahon", Age:"74", Gender:"female"}],
-    paconfigs:[{patientid:"id",widgets:[]}],
-    selectedPatient:{ ID:"", Name:"", Age:"", Gender:""}
+    paconfigs:[ { patientid:"PA-67034-01",
+                  widgetlist:[  {"label":"Pain","type":"PRO","inuse":false},
+                                {"label":"Anxiety","type":"PRO","inuse":false},
+                                {"label":"Depression","type":"PRO","inuse":false},
+                                {"label":"Nausea","type":"PRO","inuse":false},
+                                {"label":"Smoking CESSATION","type":"SM","inuse":false},
+                                {"label":"NUTRITION","type":"SM","inuse":false}], layout:[{"x":0,"y":0,"w":3,"h":4,"i":"0","c":""}]},
+                { patientid:"PA-67034-02",
+                  widgetlist:[{"label":"Pain","type":"PRO","inuse":false},
+                                {"label":"Anxiety","type":"PRO","inuse":false},
+                                {"label":"Depression","type":"PRO","inuse":false},
+                                {"label":"Nausea","type":"PRO","inuse":false},
+                                {"label":"Smoking CESSATION","type":"SM","inuse":false},
+                                {"label":"NUTRITION","type":"SM","inuse":false}], layout:[{"x":0,"y":0,"w":3,"h":4,"i":"0","c":""}]},
+                { patientid:"PA-67034-03",
+                  widgetlist:[  {"label":"Pain","type":"PRO","inuse":false},
+                                {"label":"Anxiety","type":"PRO","inuse":false},
+                                {"label":"Depression","type":"PRO","inuse":false},
+                                {"label":"Nausea","type":"PRO","inuse":false},
+                                {"label":"Smoking CESSATION","type":"SM","inuse":false},
+                                {"label":"NUTRITION","type":"SM","inuse":false}], layout:[{"x":0,"y":0,"w":3,"h":4,"i":"0","c":""}]}]
 
           },
   mutations: {
-    setSelectedPatient(state,patient){
-        state.selectedPatient=patient;
-    },
     setFilteredCount(state,count){
         state.displayDataCount=count;
+    },
+    saveConfig(state, obj){
+      var index = state.paconfigs.map(function(e) {return e.patientid}).indexOf(obj.id);
+      console.log(obj.list);
+      state.paconfigs[index].widgetlist=JSON.parse(JSON.stringify(obj.list));
+      console.log(obj.layout);
+      state.paconfigs[index].layout=JSON.parse(JSON.stringify(obj.layout));
     }
   },
   getters: {
-
+    getwidgetbypid:state=>{
+      var self=this;
+      return function(id){
+        var index = state.paconfigs.map(function(e) {return e.patientid}).indexOf(id);
+        return state.paconfigs[index].widgetlist;
+      }
+    },
+    getlayoutbypid:state=>{
+      var self=this;
+      return function(id){
+        var index = state.paconfigs.map(function(e) {return e.patientid}).indexOf(id);
+        return state.paconfigs[index].layout;
+      }
+    },
+    getpatientbyid:state => {
+      var self=this;
+      return function(id){
+        var index = state.patientlist.map(function(e) {return e.ID}).indexOf(id);
+        return state.patientlist[index];
+      }
+    },
     getfirstname: state => {
       return (state.currentUser.first_name || '')
     },
@@ -51,9 +94,6 @@ export default new Vuex.Store({
     getPatientList: state=>{
         return (state.patientlist) ;
     },
-    getSelectedPatient: state=>{
-        return (state.selectedPatient) ;
-    }
   }
   // plugins: debug ? [createLogger()] : []
 })

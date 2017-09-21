@@ -1,13 +1,15 @@
 <template>
 		<div class="container kgl-tile" v-bind:id="object">
 				<p>{{object}}</p>
-		</div>
+				<div class="cornerflag"><p class='ft-sz-12'>{{cflag}}</p></div>
+
+			</div>
 	</template>
 	<script>
 	import moment from 'moment'
 	import eventBus from '../eventBus.js';
 	export default {
-  		name:	"kotile",
+  		name:	"kocard",
 		props : [ 'object', 'cflag' ,'tileindex'],
 		created: function(){
 
@@ -21,13 +23,25 @@
 				};
 				</script>
 				<style scoped>
+				.cornerflag {
+					position:absolute;
+					top:0;
+					left:0;
+					text-align:center;
+					width:30px;
+					height:30px;
+					border:1px solid transparent;
+					color:#fff;
+					z-index:20;
+				}
+
 
 				.kgl-tile::before,
 				.kgl-tile::after {
 				    content: '';
 				    position: absolute;
-				    bottom: 0;
-				    right: 0;
+				    top: 0;
+				    left: 0;
 				    border-color: transparent;
 				    border-style: solid;
 						z-index:10;
@@ -35,14 +49,14 @@
 
 				.kgl-tile::before {
 				    border-width: 1px;
-				    border-right-color: #ccc;
-				    border-bottom-color: #ccc;
+				    border-left-color: #ccc;
+				    border-top-color: #ccc;
 				}
 
 				.kgl-tile::after {
-			    	border-width: 0.5em;
-				    border-right-color: #bbbbbb;
-				    border-bottom-color: #bbbbbb;
+			    	border-width: 1.35em;
+				    border-left-color: #bbbbbb;
+				    border-top-color: #bbbbbb;
 				}
 
 				.cornerflag p {
@@ -54,10 +68,10 @@
 				}
 
 				.kgl-tile {
-						position: relative;
+				position: relative;
 				    text-align: center;
-				    width: 100%;
-						height: 100%;
+				    width: 120px;
+						height: 60px;
 				    background-color: #fff;
 			    	color: #696969;
 
