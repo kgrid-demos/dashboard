@@ -1,6 +1,6 @@
 <template>
 		<div class="container kgl-tile" v-bind:id="object">
-				<p><widget :chartheight='this.containerheight'></widget></p>
+				<p>{{object}}<widget :chartheight='containerheight'></widget></p>
 		</div>
 	</template>
 	<script>
@@ -26,38 +26,8 @@
 				</script>
 				<style scoped>
 
-				.kgl-tile::before,
-				.kgl-tile::after {
-				    content: '';
-				    position: absolute;
-				    bottom: 0;
-				    right: 0;
-				    border-color: transparent;
-				    border-style: solid;
-						z-index:10;
-				}
 
-				.kgl-tile::before {
-				    border-width: 1px;
-				    border-right-color: #ccc;
-				    border-bottom-color: #ccc;
-				}
-
-				.kgl-tile::after {
-			    	border-width: 0.5em;
-				    border-right-color: #bbbbbb;
-				    border-bottom-color: #bbbbbb;
-				}
-
-				.cornerflag p {
-					postion:relative;
-					text-align:center;
-					transform: rotate(-45deg);
-					color:#fff;
-
-				}
-
-				.kgl-tile {
+			.kgl-tile {
 						position: relative;
 				    text-align: center;
 				    width: 100%;

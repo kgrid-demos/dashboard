@@ -26,13 +26,14 @@
 				</div>
 				<div class='col-md-10 col-sm-10 col-xs-10 kg-bg-custom-1 ht-full pad-0' >
 					<div class='row ht-50'>
-						<button class='kg-btn-primary' @click='saveconfig'>Save Changes</button>
+						<button class='kg-btn-primary' v-if='!isInEdit' @click='toggleEditMode'>Edit</button>
+						<button class='kg-btn-primary' v-if='isInEdit' @click='saveconfig'>Save Changes</button>
 					</div>
 					<grid-layout		:layout.sync="layout"
 													:col-num="12"
 													:row-height="30"
-													:is-draggable="true"
-													:is-resizable="true"
+													:is-draggable="isInEdit"
+													:is-resizable="isInEdit"
 													:vertical-compact="true"
 													:margin="[10, 10]"
 													:use-css-transforms="true">
@@ -44,13 +45,11 @@
 														:i="item.i"
 														v-bind:key="item.i"
                             @resized="resizedEvent">
-							<div class='widgetcontainer'  @dragenter='denter' @dragleave='dexit' @dragover='dover' @drop='dropped'>
-								<div class=''>{{item.i}}		Drag a widget and drop here			</div>
-
-
-								<draggable class='wlayout' element="ul" v-model="widgetList2[item.i]" :options="dragOptions"   >
-														<li v-for='(object,index) in widgetList2[item.i]' v-bind:key='index' v-if='widgetList2[item.i].length==1|object.type!="NEW"'>
-															<kotile :object='object.label' :id='object.label' :cflag="object.type" :tileindex='index' :containerheight=100 draggable='true' @dragstart='dragWidget' ></kotile>
+							<div class='widgetcontainer' @dragenter="denter" @dragover="dover" @drop='dropped'>
+								<div v-show='isInEdit' style="text-align: center; vertical-align: middle; font-size: 16px; font-weight: 700;position:relative;top:50%;transform:translateY(-50%)">Add a widget</div>
+								<draggable class='wlayout' element="ul" v-model="itemWidgetList[item.i]"  :options="dragOptions"   >
+														<li v-for='(object,index) in itemWidgetList[item.i]' v-bind:key='index' v-if='itemWidgetList[item.i].length==1|object.type!="NEW"'>
+															<kotile :object='object.label' :id='object.id' :cflag="object.type" :tileindex='index' :containerheight="100" draggable='true' @dragstart='dragWidget' ></kotile>
 														</li>
 													</draggable></div>
 						</grid-item>
@@ -73,21 +72,18 @@ export default {
     name: 'patientdetail',
 	data : function() {
 		return {
-			widgetList:[{"label":"Pain","type":"PRO"},
-			{"label":"Anxiety","type":"PRO"},
-			{"label":"Depression","type":"PRO"},
-			{"label":"Nausea","type":"PRO"},
-			{"label":"Smoking CESSATION","type":"SM"},
-			{"label":"NUTRITION","type":"SM"}],
-			widgetList2:[],
+			widgetList:[],
+			itemWidgetList:[],
+			pwidgetlist:[],
 			draggedid:"",
+			isInEdit:false,
 			layout:[
-        {"x":0,"y":0,"w":3,"h":4,"i":"0"},
+        {"x":0,"y":0,"w":3,"h":4,"i":"0","c":""},
     ],
 		dragOptions: {
 			animation: 0,
 			group: 'description',
-			disabled: false,
+			disabled: true,
 			ghostClass: 'ghost'
 		}
 
@@ -98,76 +94,101 @@ export default {
 
 	},
 	mounted:function(){
-		this.widgetList=JSON.parse(JSON.stringify(this.$store.getters.getwidgetbypid(this.$route.params.id)));
-		this.layout=JSON.parse(JSON.stringify(this.$store.getters.getlayoutbypid(this.$route.params.id)));
+		var self = this;
+		self.itemWidgetList=[];
+		this.layout=JSON.parse(JSON.stringify(this.$store.getters.getlayoutbyid(this.$route.params.id)));
+		this.pwidgetlist=this.layout.map(function(e){return e.c})
+		this.widgetList = this.widgetMaster.filter(function(e){return (this.indexOf(e.id)<0);},self.pwidgetlist)
+		this.layout.forEach(function(item){
+			var index= self.widgetMaster.map(function(e){return e.id}).indexOf(item.c);
+			if(index>=0){
+				var nextwidget=[];
+				nextwidget.push(self.widgetMaster[index]);
+				self.itemWidgetList.push(nextwidget);
+			}
+		})
+		if(this.itemWidgetList.length==0){
+			this.isInEdit=true;
+			this.dragOptions.disabled=false;
+		}
+
 	},
 	updated: function() {
 	  },
 	computed : {
-
 		patient: function(){
 			console.log(this.$route.params.id);
 			return this.$store.getters.getpatientbyid(this.$route.params.id);
 		},
 		nextitem:function(){
-			var item={x:2,y:2,w:3,h:4,i:0};
+			var item={x:0,y:20,w:3,h:4,i:"0",c:""};
 			item.i=this.layout.length+"";
-
 			return item
-		}
+		},
+		widgetMaster: function(){
+			return this.$store.getters.getwidgetMaster;
+		},
 
 	},
 	methods : {
     saveconfig:function(){
-      var pid=this.$route.params.id;
-      this.$store.commit('saveConfig',{'id':pid,'list':this.widgetList,'layout':this.layout});
-    },
-    dropWidget:function(e){
-      e.preventDefault();
-      console.log("Dropped"+this.draggedid);
-    },
-    allowDrop:function(e){
-      e.preventDefault();
+			this.isInEdit = false;
+			this.updateLayoutContent();
+	    var pid=this.$route.params.id;
+      this.$store.commit('saveConfig',{'id':pid,'layout':this.layout});
     },
     dragWidget:function(ev){
       ev.stopPropagation();
+			console.log("Start Dragging ");
+			console.log(ev.target)
       return true;
 
     },
     denter: function(e){
         e.preventDefault();
-            e.stopPropagation();
+				e.stopPropagation();
         console.log("Drag enter");
         $(e.target).addClass("over");
     },
     dexit: function(e){
         e.preventDefault();
-        e.stopPropagation();
-        console.log("Drag exit");
+				e.stopPropagation();
         $(e.target).removeClass("over");
     },
     dover:function(e){
       e.preventDefault();
-      e.stopPropagation();
+			e.stopPropagation();
       console.log("Drag over");
-      $(e.target).css("font-size","20px;");
+      console.log(e.target);
     },
     dropped:function(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    console.log('Something is dropped ');
-    console.log(e.target);
-    console.log(e.target.clientHeight);
-    if(this.widgetList.length>1){
-      this.layout.push(this.nextitem)
-      this.widgetList2.push([])
+    	e.preventDefault();
+    	console.log(e.target.clientHeight);
+    	if(this.widgetList.length>2){
+      	this.layout.push(this.nextitem)
+      	this.itemWidgetList.push([])
       }
+
     },
+		toggleEditMode:function(){
+			this.isInEdit=true;
+			this.dragOptions.disabled=false;
+		},
     resizedEvent: function(i, newH, newW, newHPx, newWPx){
       var msg = "RESIZED i=" + i + ", H=" + newH + ", W=" + newW + ", H(px)=" + newHPx + ", W(px)=" + newWPx;
       console.log(msg);
-      console.log(this.widgetList2[i]);
-    }
+      console.log(this.itemWidgetList[i]);
+    },
+		updateLayoutContent:function(){
+			var self = this;
+			this.itemWidgetList.forEach(function(item, index) {
+					console.log(index);
+					console.log(item);
+					if(item.length>0)
+						{ self.layout[index].c = item[0].id;}
+				}
+			)
+		}
 
 	},
 	components:{
@@ -209,7 +230,6 @@ export default {
 	position:relative;
 	width:100%;
 	height:100%;
-	background-color:#e9e9e9;
 }
 .widgetcontainer.over {
 		background-color:yellow;
@@ -235,7 +255,7 @@ ul.wlist li {
 	margin: 10px auto;
 }
 ul.wlayout {
-	opacity:0.9;
+	opacity:1;
 	position:absolute;
 	top:0;
 	margin:0px;
@@ -246,9 +266,15 @@ ul.wlayout li {
 	margin: 0px;
 	height:100%;
 }
-.vue-grid-item {
-position:relative;
-border:1px dashed #999999;
-background-color:#f7f7f7;
+.vue-grid-item.vue-resizable {
+	position:relative;
+	border:1px dashed #999999;
+	background-color:#f7f7f7;
 }
+.vue-grid-item {
+	position:relative;
+	border:1px dashed transparent;
+	background-color:transparent;
+}
+
 </style>

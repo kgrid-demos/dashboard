@@ -9,46 +9,26 @@ export default new Vuex.Store({
   strict: debug,
   state:{
     debugEnabled:true,
-    currentUser:{username:"",first_name:"",last_name:""},
-    patients:[{ id:"PA-67034-01",
-                name:{given:"Larry", family:"Lambert"},
-                gender:"male",
-                birthDate:"1935-12-16",
-                telecom: { "system": "phone", "value": "227.044.2468", "use": "home" },
-                email:{value:"larryl@pa.kgrid.org", "use":"personal"}
-              },
-              { id:"PA-67034-02",
-                          name:{given:"Alvin", family:"Adams"},
-                          gender:"male",
-                          birthDate:"1998-02-11",
-                          telecom: { "system": "phone", "value": "734.201.0091", "use": "home" },
-                          email:{value:"alvina@pa.kgrid.org", "use":"personal"}
-                        }],
+    currentUser:{username:"chad",first_name:"",last_name:""},
     patientlist:[{ ID:"PA-67034-01", Name:"Larry Lambert", Age:"54", Gender:"male"},
                   { ID:"PA-67034-02", Name:"Alvin Adams",Age:"27", Gender:"male"},
                 { ID:"PA-67034-03", Name:"Larry Lambert Jr.", Age:"17", Gender:"male"},
               { ID:"PA-67034-04", Name:"Marry McMahon", Age:"74", Gender:"female"}],
+    widgetMasterList:[{"id":"PRO-01","label":"Pain","type":"PRO"},
+                  {"id":"PRO-02","label":"Anxiety","type":"PRO"},
+                  {"id":"PRO-03","label":"Depression","type":"PRO"},
+                  {"id":"PRO-04","label":"Nausea","type":"PRO"},
+                  {"id":"SM-01","label":"Smoking CESSATION","type":"SM"},
+                  {"id":"SM-02","label":"NUTRITION","type":"SM"}],
     paconfigs:[ { patientid:"PA-67034-01",
-                  widgetlist:[  {"label":"Pain","type":"PRO","inuse":false},
-                                {"label":"Anxiety","type":"PRO","inuse":false},
-                                {"label":"Depression","type":"PRO","inuse":false},
-                                {"label":"Nausea","type":"PRO","inuse":false},
-                                {"label":"Smoking CESSATION","type":"SM","inuse":false},
-                                {"label":"NUTRITION","type":"SM","inuse":false}], layout:[{"x":0,"y":0,"w":3,"h":4,"i":"0","c":""}]},
+                  layout:[{"x":0,"y":0,"w":3,"h":4,"i":"0","c":""}]},
                 { patientid:"PA-67034-02",
-                  widgetlist:[{"label":"Pain","type":"PRO","inuse":false},
-                                {"label":"Anxiety","type":"PRO","inuse":false},
-                                {"label":"Depression","type":"PRO","inuse":false},
-                                {"label":"Nausea","type":"PRO","inuse":false},
-                                {"label":"Smoking CESSATION","type":"SM","inuse":false},
-                                {"label":"NUTRITION","type":"SM","inuse":false}], layout:[{"x":0,"y":0,"w":3,"h":4,"i":"0","c":""}]},
+                  layout:[{"x":0,"y":0,"w":3,"h":4,"i":"0","c":""}]},
                 { patientid:"PA-67034-03",
-                  widgetlist:[  {"label":"Pain","type":"PRO","inuse":false},
-                                {"label":"Anxiety","type":"PRO","inuse":false},
-                                {"label":"Depression","type":"PRO","inuse":false},
-                                {"label":"Nausea","type":"PRO","inuse":false},
-                                {"label":"Smoking CESSATION","type":"SM","inuse":false},
-                                {"label":"NUTRITION","type":"SM","inuse":false}], layout:[{"x":0,"y":0,"w":3,"h":4,"i":"0","c":""}]}]
+                  layout:[{"x":0,"y":0,"w":3,"h":4,"i":"0","c":""}]},
+                { patientid:"PA-67034-04",
+                    layout:[{"x":0,"y":0,"w":3,"h":4,"i":"0","c":""}]},
+                ]
 
           },
   mutations: {
@@ -57,26 +37,20 @@ export default new Vuex.Store({
     },
     saveConfig(state, obj){
       var index = state.paconfigs.map(function(e) {return e.patientid}).indexOf(obj.id);
-      console.log(obj.list);
-      state.paconfigs[index].widgetlist=JSON.parse(JSON.stringify(obj.list));
       console.log(obj.layout);
       state.paconfigs[index].layout=JSON.parse(JSON.stringify(obj.layout));
     }
   },
   getters: {
-    getwidgetbypid:state=>{
-      var self=this;
-      return function(id){
-        var index = state.paconfigs.map(function(e) {return e.patientid}).indexOf(id);
-        return state.paconfigs[index].widgetlist;
-      }
-    },
-    getlayoutbypid:state=>{
+    getlayoutbyid:state=>{
       var self=this;
       return function(id){
         var index = state.paconfigs.map(function(e) {return e.patientid}).indexOf(id);
         return state.paconfigs[index].layout;
       }
+    },
+    getwidgetMaster: state => {
+       return state.widgetMasterList;
     },
     getpatientbyid:state => {
       var self=this;
