@@ -26,8 +26,13 @@
 				</div>
 				<div class='col-md-10 col-sm-10 col-xs-10 kg-bg-custom-1 ht-full pad-0' >
 					<div class='row ht-50'>
-						<button class='kg-btn-primary' v-if='!isInEdit' @click='toggleEditMode'>Edit</button>
-						<button class='kg-btn-primary' v-if='isInEdit' @click='saveconfig'>Save Changes</button>
+					<div class='col-md-6 pad-0'>
+						<button class='kg-btn-primary ' v-if='isInEdit && pwidgetlist.length==1 && pwidgetlist[0]=="" ' @click='loadDefault'> Load Default Layout </button>
+					</div>
+					<div class='col-md-6 pad-0'>
+						<button class='kg-btn-primary float-r' v-if='!isInEdit' @click='toggleEditMode'>Edit</button>
+						<button class='kg-btn-primary float-r' v-if='isInEdit' @click='saveconfig'>Save Changes</button>
+						</div>
 					</div>
 					<grid-layout		:layout.sync="layout"
 													:col-num="12"
@@ -52,7 +57,7 @@
 						<div class='widgetcontainer fill' @dragenter="denter" @dragover="dover" @drop='dropped'>
 								<draggable class='wlayout' element="ul" v-model="itemWidgetList[item.i]"  :options="dragOptions"   >
 														<li v-for='(object,index) in itemWidgetList[item.i]' v-bind:key='index' v-if='itemWidgetList[item.i].length==1|object.type!="NEW"'>
-															<kotile :object='object.label'  :cflag="object.type" :tileindex='index' :containerheight="(item.h)*30" draggable='true' @dragstart='dragWidget' ></kotile>
+															<kotile :object='object.label'  :cflag="object.type" :tileindex='index' :containerheight="((item.h-1)*35)" draggable='true' @dragstart='dragWidget' ></kotile>
 														</li>
 													</draggable></div>
 						</grid-item>
@@ -81,7 +86,7 @@ export default {
 			draggedid:"",
 			isInEdit:false,
 			layout:[
-        {"x":0,"y":0,"w":3,"h":4,"i":"0","c":""},
+        {"x":0,"y":0,"w":4,"h":6,"i":"0","c":""},
     ],
 		dragOptions: {
 			animation: 0,
@@ -126,7 +131,7 @@ export default {
 			return this.$store.getters.getpatientbyid(this.$route.params.id);
 		},
 		nextitem:function(){
-			var item={x:0,y:20,w:3,h:4,i:"0",c:""};
+			var item={x:0,y:20,w:4,h:6,i:"0",c:""};
 			item.i=this.layout.length+"";
 			return item
 		},
@@ -155,6 +160,25 @@ export default {
 				}else {
 				return 120;
 				}
+		},
+		loadDefault:function(){
+			var self = this;
+			this.layout.splice(0,1);
+			this.itemWidgetList.splice(0,1);
+			this.layout=JSON.parse(JSON.stringify(this.$store.getters.getDefaultLayout));
+			this.pwidgetlist=this.layout.map(function(e){return e.c})
+			this.widgetList = this.widgetMaster.filter(function(e){return (this.indexOf(e.id)<0);},self.pwidgetlist)
+			this.layout.forEach(function(item){
+				var index= self.widgetMaster.map(function(e){return e.id}).indexOf(item.c);
+				console.log(item.i + "   "+ index +"  "+item.c);
+				if(index>=0){
+					var nextwidgetlist=[];
+					nextwidgetlist.push(self.widgetMaster[index]);
+					self.itemWidgetList.push(nextwidgetlist);
+				}else {
+					self.itemWidgetList.push([]);
+				}
+			})
 		},
     dragWidget:function(ev){
       ev.stopPropagation();
@@ -242,7 +266,7 @@ export default {
 }
 .kg-btn-primary{
 	background-color:#f7f7f7;
-	float:right;
+
 	border:1px solid #777777;
 	padding:10px 20px;
 	margin:10px 25px;

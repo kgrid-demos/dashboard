@@ -25,14 +25,21 @@ export default new Vuex.Store({
                   {"id":"SM-01","label":"Smoking CESSATION","type":"SM"},
                   {"id":"SM-02","label":"NUTRITION","type":"SM"}],
     paconfigs:[ { patientid:"PA-67034-01",
-                  layout:[{"x":0,"y":0,"w":3,"h":4,"i":"0","c":""}]},
+                  layout:[{"x":0,"y":0,"w":4,"h":6,"i":"0","c":""}]},
                 { patientid:"PA-67034-02",
-                  layout:[{"x":0,"y":0,"w":3,"h":4,"i":"0","c":""}]},
+                  layout:[{"x":0,"y":0,"w":4,"h":6,"i":"0","c":""}]},
                 { patientid:"PA-67034-03",
-                  layout:[{"x":0,"y":0,"w":3,"h":4,"i":"0","c":""}]},
+                  layout:[{"x":0,"y":0,"w":4,"h":6,"i":"0","c":""}]},
                 { patientid:"PA-67034-04",
-                    layout:[{"x":0,"y":0,"w":3,"h":4,"i":"0","c":""}]},
-                ]
+                    layout:[{"x":0,"y":0,"w":4,"h":6,"i":"0","c":""}]},
+                ],
+    defaultLayout:[{"x":0,"y":0,"w":4,"h":6,"i":"0","c":"PRO-01"},
+                  {"x":0,"y":6,"w":4,"h":6,"i":"1","c":"SM-01"},
+                {"x":4,"y":0,"w":4,"h":6,"i":"2","c":"PRO-04"},
+              {"x":0,"y":12,"w":4,"h":6,"i":"3","c":"SM-02"},
+            {"x":8,"y":0,"w":4,"h":6,"i":"4","c":"PRO-02"},
+          {"x":4,"y":6,"w":8,"h":12,"i":"5","c":"PRO-03"},
+        {"x":0,"y":23,"w":4,"h":6,"i":"6","c":""}]
 
           },
   mutations: {
@@ -48,6 +55,9 @@ export default new Vuex.Store({
         var index = state.paconfigs.map(function(e) {return e.patientid}).indexOf(id);
         return state.paconfigs[index].layout;
       }
+    },
+    getDefaultLayout:state=>{
+        return state.defaultLayout;
     },
     getwidgetMaster: state => {
        return state.widgetMasterList;
