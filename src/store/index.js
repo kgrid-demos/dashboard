@@ -1,12 +1,16 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import VuexPersistence from 'vuex-persist'
 
 Vue.use(Vuex)
 
 const debug = process.env.NODE_ENV !== 'production'
-
+const vuexLocal = new VuexPersistence ({
+    storage: window.localStorage
+})
 export default new Vuex.Store({
   strict: debug,
+  plugins: [vuexLocal.plugin],
   state:{
     debugEnabled:true,
     currentUser:{username:"chad",first_name:"",last_name:""},

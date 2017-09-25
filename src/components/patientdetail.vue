@@ -164,11 +164,10 @@ export default {
     dropped:function(e) {
     	e.preventDefault();
     	console.log(e.target.clientHeight);
-    	if(this.widgetList.length>2){
+    	if(this.widgetList.length>=1){
       	this.layout.push(this.nextitem)
       	this.itemWidgetList.push([])
       }
-
     },
 		toggleEditMode:function(){
 			this.isInEdit=true;
