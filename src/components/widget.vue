@@ -63,7 +63,7 @@
 <style scoped>
   .graph {
     width: 100%;
-    margin:  3px;
+    margin: 3px auto;
     border: 1px solid black;
   }
 

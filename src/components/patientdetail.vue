@@ -45,8 +45,10 @@
 														:i="item.i"
 														v-bind:key="item.i"
                             @resized="resizedEvent">
-							<div class='widgetcontainer' @dragenter="denter" @dragover="dover" @drop='dropped'>
-								<div v-show='isInEdit' style="text-align: center; vertical-align: middle; font-size: 16px; font-weight: 700;position:relative;top:50%;transform:translateY(-50%)">Add a widget</div>
+														<div v-show='(item.c=="")&&isInEdit' style="text-align: center; vertical-align: middle; font-size: 16px; font-weight: 700;position:relative;top:50%;transform:translateY(-50%)">Add a widget</div>
+														<div class='widgetTitle' v-if='item.c!=""'><p v-if='itemWidgetList[item.i].length>0'>{{itemWidgetList[item.i][0].label}}</p>
+														<i class='fa fa-close' v-if='isInEdit' @click='removeWidget(item.i)'></i></div>
+						<div class='widgetcontainer fill' @dragenter="denter" @dragover="dover" @drop='dropped'>
 								<draggable class='wlayout' element="ul" v-model="itemWidgetList[item.i]"  :options="dragOptions"   >
 														<li v-for='(object,index) in itemWidgetList[item.i]' v-bind:key='index' v-if='itemWidgetList[item.i].length==1|object.type!="NEW"'>
 															<kotile :object='object.label' :id='object.id' :cflag="object.type" :tileindex='index' :containerheight="100" draggable='true' @dragstart='dragWidget' ></kotile>
@@ -105,9 +107,11 @@ export default {
 				var nextwidget=[];
 				nextwidget.push(self.widgetMaster[index]);
 				self.itemWidgetList.push(nextwidget);
+			}else {
+				self.itemWidgetList.push([]);
 			}
 		})
-		if(this.itemWidgetList.length==0){
+		if(this.pwidgetlist.length==1&&this.pwidgetlist[0]==''){
 			this.isInEdit=true;
 			this.dragOptions.disabled=false;
 		}
@@ -129,6 +133,11 @@ export default {
 			return this.$store.getters.getwidgetMaster;
 		},
 
+	},
+	watch:{
+		itemWidgetList:function(){
+					this.updateLayoutContent();
+		}
 	},
 	methods : {
     saveconfig:function(){
@@ -164,11 +173,19 @@ export default {
     dropped:function(e) {
     	e.preventDefault();
     	console.log(e.target.clientHeight);
+
     	if(this.widgetList.length>=1){
       	this.layout.push(this.nextitem)
       	this.itemWidgetList.push([])
       }
     },
+		removeWidget:function(i){
+			var obj = this.itemWidgetList[i][0];
+			this.itemWidgetList[i].splice(0);
+			this.widgetList.push(obj);
+			this.layout[i].c="";
+			this.pwidgetList[i]="";
+		},
 		toggleEditMode:function(){
 			this.isInEdit=true;
 			this.dragOptions.disabled=false;
@@ -228,11 +245,34 @@ export default {
 .widgetcontainer {
 	position:relative;
 	width:100%;
-	height:100%;
+flex: auto;
 }
 .widgetcontainer.over {
 		background-color:yellow;
 }
+.widgetTitle {
+   padding:5px;
+	 background-color:#2362b2;
+	  border: 2px solid transparent;
+		border-bottom:none;
+	 }
+.widgetTitle p {
+	font-size:12px;
+	font-weight:700;
+	color: #fff;
+	text-align: center;
+}
+.widgetTitle i {
+	font-size:12px;
+	font-weight:500;
+	color: #fff;
+	float:right;
+	position:absolute;
+	top:10px;
+	right:10px;
+	cursor:pointer;
+}
+
 .kg-bg-custom-0 {
 	background-color:#f5f5f5;
 }
@@ -274,6 +314,8 @@ ul.wlayout li {
 	position:relative;
 	border:1px dashed transparent;
 	background-color:transparent;
+	display: flex;
+	flex-direction:column;
 }
 
 </style>

@@ -1,6 +1,6 @@
 <template>
 		<div class="container kgl-tile" v-bind:id="object">
-				<p>{{object}}<widget :chartheight='containerheight'></widget></p>
+				<p><widget :chartheight='containerheight'></widget></p>
 		</div>
 	</template>
 	<script>
@@ -36,21 +36,14 @@
 			    	color: #696969;
 
 				    font-weight: 400;
-				    border: 2px solid #e5e5e5;
+				    border: 1px solid #fff;
 				    padding: 0px ;
 						text-transform: uppercase;
 						transition: all 0.5s ease;
 				}
-				.kgl-tile>p {
-					position:relative;
-					top: 50%;
-					-webkit-transform: translateY(-50%);
-					-ms-transform: translateY(-50%);
-					transform: translateY(-50%);
 
-				}
 				.kgl-tile:hover {
-				   border: 2px solid #0075bc;
+				   border: 1px solid #0075bc;
 					 cursor:pointer;
 				}
 
