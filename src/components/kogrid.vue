@@ -62,7 +62,7 @@ export default {
           return (a === b ? 0 : a > b ? 1 : -1) * order
         })
       }
-      this.$store.commit('setFilteredCount', data.length)
+
       return data
     },
 

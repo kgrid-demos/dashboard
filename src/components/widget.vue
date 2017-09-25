@@ -1,6 +1,6 @@
 <template name="widget">
   <div class="graph">
-    <painchart :chart-data="datacollection" :options="{maintainAspectRatio: false}" :height="this.correctedheight()"></painchart>
+    <painchart :chart-data="datacollection" :options="{maintainAspectRatio: false}" :height="chartheight"></painchart>
     <button @click="fillData()">Randomize</button>
   </div>
 </template>

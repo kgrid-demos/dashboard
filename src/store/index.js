@@ -36,12 +36,8 @@ export default new Vuex.Store({
 
           },
   mutations: {
-    setFilteredCount(state,count){
-        state.displayDataCount=count;
-    },
     saveConfig(state, obj){
       var index = state.paconfigs.map(function(e) {return e.patientid}).indexOf(obj.id);
-      console.log(obj.layout);
       state.paconfigs[index].layout=JSON.parse(JSON.stringify(obj.layout));
     }
   },

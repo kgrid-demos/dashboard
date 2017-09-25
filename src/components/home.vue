@@ -6,7 +6,7 @@
 			<div class='col-md-2 col-sm-2 col-xs-2 '></div>
 			<div class='col-md-8 col-sm-8 col-xs-8 '>
 				<form id="search">
-					<i class='fa fa-search'></i> <input name="query" v-model="searchQuery">
+					<i class='fa fa-search'></i> <input name="query" spellcheck=false v-model="searchQuery">
 				</form>
 			</div>
 			<div class='col-md-1 col-sm-1 col-xs-1 '></div>

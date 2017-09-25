@@ -8,7 +8,7 @@
 	import eventBus from '../eventBus.js';
 	import widget from './widget.vue';
 	export default {
-  		name:	"kotile",
+  	name:	"kotile",
 		props : [ 'object', 'cflag' ,'tileindex', 'containerheight'],
 		created: function(){
 
