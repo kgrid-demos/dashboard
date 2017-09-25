@@ -1,21 +1,54 @@
 <template name="widget">
   <div class="graph">
-    <painchart :chart-data="datacollection" :options="{responsive:true,maintainAspectRatio: false}" :styles='myStyles'></painchart>
-    <button @click="fillData()">Randomize</button>
+    <painchart v-if="!showoptions" :chart-data="datacollection" :options="{maintainAspectRatio: false}" :styles='myStyles'></painchart>
+    <div v-if="showoptions" style="height:100%;">
+      <div style="width:50%; height:100%; float: left;">
+        Measurement Instrument:
+        <br><br>
+        Daily Frequency:
+        <br><br>
+        Notification Threshold:
+      </div>
+      <div style="width:50%; height:100%; float: left;">
+        <select v-model="selectedinstrument">
+          <option v-for="instrument in instruments" v-bind:value="instrument.name">
+            {{ instrument.name }}
+          </option>
+        </select>
+        <br><br>
+
+        <vue-slider ref="slider" @drag-start="dragstart" :min=1 :max=4 :piecewise=true v-model="dailyfreq"></vue-slider>
+        <br>
+        <vue-slider ref="slider" :min=5 :max=7 :piecewise=true v-model="notifythresh"></vue-slider>
+      </div>
+    </div>
+    <button v-if="!showoptions" @click="toggleoptions">Chart Options</button>
+    <button v-if="showoptions" @click="toggleoptions">Save Settings</button>
   </div>
 </template>
 
 <script>
-  import painchart from './painchart.js'
+  import painchart from './painchart.js';
+  import vueSlider from 'vue-slider-component';
 
   export default {
     props: ['chartheight'],
     components: {
-      painchart
+      painchart,
+      vueSlider
     },
     data () {
       return {
-        datacollection: null
+        datacollection: null,
+        showoptions: false,
+        instruments: [
+          { name: "GAD-7 Questionnaire", value: 1 },
+          { name: "Hilbert-Thad Questionnaire", value: 2},
+          { name: "Penta-PLU Pain Probe", value: 3}
+        ],
+        selectedinstrument: "GAD-7 Questionnaire",
+        dailyfreq: 1,
+        notifythresh: 5
       }
     },
     computed : {
@@ -55,12 +88,20 @@
           ]
         }
       },
-      correctedheight: function() {
-        console.log("correcting height to " + this.chartheight - 25);
-        return this.chartheight - 25;
+      correctedheight () {
+        console.log("correcting height to " + this.chartheight/2);
+        return chartheight/2;
+      },
+      toggleoptions () {
+        this.showoptions = !this.showoptions;
+        console.log("Showing options")
       },
       getRandomInt () {
         return Math.floor(Math.random() * (50 - 5 + 1)) + 5
+      },
+      dragstart (ctx) {
+
+        console.log("Dragging slider " + ctx);
       }
     }
   }
@@ -69,13 +110,14 @@
 <style scoped>
   .graph {
     width: 100%;
-    margin: 3px auto;
+    height: 100%;
+    margin: 0;
     border: 1px solid black;
   }
 
   button {
-    font-size: 1ex;
-    margin: 0 auto  ;
+    font-size: 1em;
+    margin: 0 auto;
     width: 10em;
     padding: 0.5ex 1ex;
   }

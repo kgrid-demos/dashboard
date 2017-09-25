@@ -20,6 +20,7 @@
     "vue-chartjs": "^2.8.7",
     "vue-grid-layout": "^2.1.9",
     "vue-router": "2.5.3",
+    "vue-slider-component": "^2.4.1",
     "vuedraggable": "^2.14.1",
     "vuex": "^2.3.1",
     "vuex-persist": "^0.1.8",
