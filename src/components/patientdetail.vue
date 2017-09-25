@@ -43,6 +43,7 @@
 														:w.sync="item.w"
 														:h.sync="item.h"
 														:i="item.i"
+														ref='item'
 														v-bind:key="item.i"
                             @resized="resizedEvent">
 														<div v-show='(item.c=="")&&isInEdit' style="text-align: center; vertical-align: middle; font-size: 16px; font-weight: 700;position:relative;top:50%;transform:translateY(-50%)">Add a widget</div>
@@ -51,7 +52,7 @@
 						<div class='widgetcontainer fill' @dragenter="denter" @dragover="dover" @drop='dropped'>
 								<draggable class='wlayout' element="ul" v-model="itemWidgetList[item.i]"  :options="dragOptions"   >
 														<li v-for='(object,index) in itemWidgetList[item.i]' v-bind:key='index' v-if='itemWidgetList[item.i].length==1|object.type!="NEW"'>
-															<kotile :object='object.label' :id='object.id' :cflag="object.type" :tileindex='index' :containerheight="object.h" draggable='true' @dragstart='dragWidget' ></kotile>
+															<kotile :object='object.label'  :cflag="object.type" :tileindex='index' :containerheight="(item.h)*30" draggable='true' @dragstart='dragWidget' ></kotile>
 														</li>
 													</draggable></div>
 						</grid-item>
@@ -105,13 +106,7 @@ export default {
 			var index= self.widgetMaster.map(function(e){return e.id}).indexOf(item.c);
 			if(index>=0){
 				var nextwidgetlist=[];
-				var nextwidget ={};
-				nextwidget.itemindex=item.i;
-				nextwidget.id=self.widgetMaster[index].id;
-				nextwidget.label=self.widgetMaster[index].label;
-				nextwidget.type=self.widgetMaster[index].type;
-				nextwidget.h = item.h *30;
-				nextwidgetlist.push(nextwidget);
+				nextwidgetlist.push(self.widgetMaster[index]);
 				self.itemWidgetList.push(nextwidgetlist);
 			}else {
 				self.itemWidgetList.push([]);
@@ -152,6 +147,15 @@ export default {
       this.$store.commit('saveConfig',{'id':pid,'layout':this.layout});
 			this.isInEdit = false;
     },
+		getHeight:function(i){
+			console.log(i);
+			if(this.$refs.item[i]){
+				console.log(this.$refs.item[i].$el.clientHeight)
+				return this.$refs.item[i].$el.clientHeight;
+				}else {
+				return 120;
+				}
+		},
     dragWidget:function(ev){
       ev.stopPropagation();
 			console.log("Start Dragging ");
@@ -196,7 +200,6 @@ export default {
 		},
     resizedEvent: function(i, newH, newW, newHPx, newWPx){
       var msg = "RESIZED i=" + i + ", H=" + newH + ", W=" + newW + ", H(px)=" + newHPx + ", W(px)=" + newWPx;
-			this.itemWidgetList[i][0].h=newHPx;
       console.log(msg);
       console.log(this.itemWidgetList[i]);
     },
@@ -309,6 +312,7 @@ ul.wlayout {
 ul.wlayout li {
 	margin: 0px;
 	height:100%;
+	flex:auto;
 }
 .vue-grid-item.vue-resizable {
 	position:relative;

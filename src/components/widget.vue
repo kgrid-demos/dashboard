@@ -1,6 +1,6 @@
 <template name="widget">
   <div class="graph">
-    <painchart :chart-data="datacollection" :options="{maintainAspectRatio: false}" :height="chartheight"></painchart>
+    <painchart :chart-data="datacollection" :options="{responsive:true,maintainAspectRatio: false}" :styles='myStyles'></painchart>
     <button @click="fillData()">Randomize</button>
   </div>
 </template>
@@ -19,6 +19,12 @@
       }
     },
     computed : {
+    myStyles () {
+     return {
+       height: `${this.chartheight}px`,
+       position: 'relative'
+     }
+   }
     },
     mounted () {
       this.fillData()
