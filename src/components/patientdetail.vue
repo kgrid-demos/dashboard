@@ -31,9 +31,9 @@
 					<div class='col-md-6 pad-0'>
 					<div class="pad-l-20"  v-if='!isInEdit && pwidgetlist.length>1 '>
 
-							<button class='kg-btn-primary ' @click=''> <i class='fa fa-angle-left fa-lg'></i></button>
-							<button class='kg-btn-primary ' style='width:240px;'> {{dateRange.starttime}} - {{ dateRange.endtime}} </button>
-							<button class='kg-btn-primary '> <i class='fa fa-angle-right fa-lg'></i></button>
+							<button class='kg-btn-primary ' @click='gopreviousweek'> <i class='fa fa-angle-left fa-lg'></i></button>
+							<button class='kg-btn-primary ' style='width:240px;'> {{dateRangeLabel.start}} - {{ dateRangeLabel.end}} </button>
+							<button class='kg-btn-primary ' @click='gonextweek'> <i class='fa fa-angle-right fa-lg'></i></button>
 							</div>
 					</div>
 					<div class='col-md-2 pad-0'></div>
@@ -123,13 +123,14 @@ export default {
 			disabled: true,
 			ghostClass: 'ghost'
 		},
-		dateRange:{starttime:moment('2017-09-24').format("MMM. D, YYYY"), endtime: moment('2017-09-30').format("MMM. D, YYYY")},
+		dateRange:{starttime:0, endtime: 6},
 		}
 	},
 	created : function() {
 		var self = this;
-		var thisweek = moment.duration().weeks();
-		console.log(thisweek);
+		var lastsunday = moment().day(-7);
+		console.log("Last Sunday:");
+		console.log(lastsunday);
 
 	},
 	mounted:function(){
@@ -157,6 +158,16 @@ export default {
 	updated: function() {
 	  },
 	computed : {
+		dateRangeLabel: function(){
+			var obj ={};
+			obj.start=moment().day(this.dateRange.starttime).format("MMM. D, YYYY")
+			obj.end=moment().day(this.dateRange.endtime).format("MMM. D, YYYY")
+			obj.startDate=moment().day(this.dateRange.starttime)
+			obj.endDate=moment().day(this.dateRange.endtime)
+
+			console.log(obj);
+			return obj
+		},
 		patient: function(){
 			console.log(this.$route.params.id);
 			return this.$store.getters.getpatientbyid(this.$route.params.id);
@@ -177,6 +188,16 @@ export default {
 		}
 	},
 	methods : {
+		gopreviousweek:function(){
+			this.dateRange.starttime=this.dateRange.starttime-7;
+			this.dateRange.endtime=this.dateRange.endtime-7;
+			eventBus.$emit("previousWeek", this.dateRangeLabel);
+		},
+		gonextweek:function(){
+			this.dateRange.starttime=this.dateRange.starttime+7;
+			this.dateRange.endtime=this.dateRange.endtime+7;
+			eventBus.$emit("nextWeek", this.dateRangeLabel);  
+		},
     saveconfig:function(){
 			this.updateLayoutContent();
 	    var pid=this.$route.params.id;

@@ -30,6 +30,7 @@
 <script>
   import painchart from './painchart.js';
   import vueSlider from 'vue-slider-component';
+  import eventBus from '../eventBus.js';
 
   export default {
     props: ['chartheight'],
@@ -50,6 +51,15 @@
         dailyfreq: 1,
         notifythresh: 5
       }
+    },
+    created: function(){
+      var self=this;
+      eventBus.$on('previousWeek', function(obj){
+        self.fillData();
+      });
+      eventBus.$on('nextWeek', function(obj){
+        self.fillData();
+      });
     },
     computed : {
     myStyles () {
