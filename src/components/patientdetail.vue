@@ -17,22 +17,33 @@
 		</div>
 		<div slot='main'>
 			<div class='maincontent'>
-				<div class='col-md-2 col-sm-2 col-xs-2 kg-bg-custom-0 ht-full'>
+				<div class='col-md-2 col-sm-2 col-xs-2 ht-full kg-bg-custom-0 pad-0' v-if='isInEdit'>
+											<div class='row ft-sz-16 pad-t-15 txtcenter'> <h3>Widget List</h3></div>
 					<draggable class='wlist' element="ul" v-model="widgetList" :options="dragOptions">
 						<li v-for='(object,index) in widgetList' v-bind:key='index'>
 							<kocard :object='object.label' :id='object.label' :cflag="object.type" :tileindex='index' draggable='true'  @dragstart='dragWidget' ></kocard>
 						</li>
 					</draggable>
 				</div>
-				<div class='col-md-10 col-sm-10 col-xs-10 kg-bg-custom-1 ht-full pad-0' >
+								<div class='col-md-2 col-sm-2 col-xs-2 ht-full kg-bg-custom-1 pad-0' v-else></div>
+				<div class='col-md-8 col-sm-8 col-xs-8 kg-bg-custom-1 ht-full pad-0' >
 					<div class='row ht-50'>
 					<div class='col-md-6 pad-0'>
-						<button class='kg-btn-primary ' v-if='isInEdit && pwidgetlist.length==1 && pwidgetlist[0]=="" ' @click='loadDefault'> Load Default Layout </button>
+					<div class="pad-l-20"  v-if='!isInEdit && pwidgetlist.length>1 '>
+
+							<button class='kg-btn-primary ' @click=''> <i class='fa fa-angle-left fa-lg'></i></button>
+							<button class='kg-btn-primary ' style='width:240px;'> {{dateRange.starttime}} - {{ dateRange.endtime}} </button>
+							<button class='kg-btn-primary '> <i class='fa fa-angle-right fa-lg'></i></button>
+							</div>
 					</div>
-					<div class='col-md-6 pad-0'>
-						<button class='kg-btn-primary float-r' v-if='!isInEdit' @click='toggleEditMode'>Edit</button>
-						<button class='kg-btn-primary float-r' v-if='isInEdit' @click='saveconfig'>Save Changes</button>
-						</div>
+					<div class='col-md-2 pad-0'></div>
+
+					<div class='col-md-4  '>
+					<div class='float-r'>
+						<button class='kg-btn-primary ' v-if='isInEdit && pwidgetlist.length==1 && pwidgetlist[0]=="" ' @click='loadDefault'> Load Default Layout </button>
+						<button class='kg-btn-primary ' v-if='!isInEdit' @click='toggleEditMode'>Edit</button>
+						<button class='kg-btn-primary ' v-if='isInEdit' @click='saveconfig'>Save Changes</button></div>
+					</div>
 					</div>
 					<grid-layout		:layout.sync="layout"
 													:col-num="12"
@@ -63,12 +74,30 @@
 						</grid-item>
 					</grid-layout>
 				</div>
-			</div>
+
+
+						<div class='col-md-2 col-sm-2 col-xs-2 kg-bg-custom-0 pad-0 ht-full'  v-if='isInEdit'>
+							<div class='row ft-sz-16 pad-l-20 pad-t-15'> <i class='fa fa-info-circle fa-2x '></i></div>
+							<div class='row ft-sz-14 pad-l-20 pad-r-20 pad-t-15'>
+								<h3> First time to build the dashboard </h3><p class='mar-top15'> You can manually drag and drop the widgets, or click on "Load Default Layout" to use a predefined layout which can be further customized.   </p>
+								<p class='mar-top30'> </p>
+								<h3> To add a widget </h3><p class='mar-top15'> From the list of available widgets,  drag and drop to an empty slot. </p>
+								<p class='mar-top30'> </p>
+								<h3> To repositon a  widget </h3><p class='mar-top15'> Click on the blue bar of the widget,  move a different location, other widgets might move around as well. </p>
+								<p class='mar-top30'> </p>
+								<h3> To resize a  widget </h3><p class='mar-top15'> Click on the handle at the lower right corner of the widget,  drag to resize the widget, other widgets might move around as well. </p>
+								<p class='mar-top30'> </p>
+								<h3> Finish configuration </h3><p class='mar-top15'> Click on "Save Changes",  the configuration for this patient will be saved and the dashboard will change to view mode. To activate the edit mode, simply click on "Edit". </p>
+								</div>
+						</div>
+						<div class='col-md-2 col-sm-2 col-xs-2 kg-bg-custom-1 pad-0 ht-full'  v-else></div>
+								</div>
 		</div>
 	</applayout>
 </div>
 </template>
 <script>
+import moment from 'moment';
 import VueGridLayout from 'vue-grid-layout';
 import draggable from 'vuedraggable'
 import applayout from './applayout.vue';
@@ -93,12 +122,14 @@ export default {
 			group: 'description',
 			disabled: true,
 			ghostClass: 'ghost'
-		}
-
+		},
+		dateRange:{starttime:moment('2017-09-24').format("MMM. D, YYYY"), endtime: moment('2017-09-30').format("MMM. D, YYYY")},
 		}
 	},
 	created : function() {
 		var self = this;
+		var thisweek = moment.duration().weeks();
+		console.log(thisweek);
 
 	},
 	mounted:function(){
@@ -266,10 +297,10 @@ export default {
 }
 .kg-btn-primary{
 	background-color:#f7f7f7;
-
 	border:1px solid #777777;
 	padding:10px 20px;
-	margin:10px 25px;
+	margin:10px 10px;
+	display:inline-block;
 }
 .maincontent{
 	min-height:500px;
@@ -313,7 +344,7 @@ flex: auto;
 }
 .ht-full{
 	height: 100%;
-	min-height:550px;
+	min-height:800px;
 }
 h1 small {
 	font-size:50%;
