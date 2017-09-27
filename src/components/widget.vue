@@ -91,7 +91,6 @@
         self.fillData();
       });
       var uid = this.$route.params.id + this.title;
-      console.log("saved datasettings is " + this.$store.getters.getDataSettings(uid) + " for the uid " + uid);
       if (this.$store.getters.getDataSettings(uid)) {
         this.datasettings = this.$store.getters.getDataSettings(uid).datasettings;
       } else {
@@ -137,10 +136,6 @@
           ]
         }
       },
-      correctedheight () {
-        console.log("correcting height to " + this.chartheight/2);
-        return chartheight/2;
-      },
       showoptionspane () {
         this.showoptions = !this.showoptions;
       },
@@ -148,7 +143,6 @@
         this.showoptions = !this.showoptions;
         this.fillData();
         var uid = this.$route.params.id + this.title;
-        console.log("trying to save uid " + uid);
         this.$store.commit('saveWidgetSettings', {'id':uid, 'datasettings':this.datasettings});
       },
       getRandomInt () {
@@ -156,7 +150,6 @@
       },
       dragstart (ctx) {
         this.$emit('sliderdrag');
-        console.log("Dragging slider " + ctx);
       },
       determinecolor() {
         var colors = [];
