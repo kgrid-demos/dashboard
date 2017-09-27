@@ -65,8 +65,8 @@
 														<div v-show='(item.c=="")&&isInEdit' style="text-align: center; vertical-align: middle; font-size: 16px; font-weight: 700;position:relative;top:50%;transform:translateY(-50%)">Add a widget</div>
 														<div class='widgetTitle' v-if='item.c!=""'><p v-if='itemWidgetList[item.i].length>0'>{{itemWidgetList[item.i][0].label}}</p>
 														<i class='fa fa-close' v-if='isInEdit' @click='removeWidget(item.i)'></i></div>
-						<div class='widgetcontainer fill' @dragenter="denter" @dragover="dover" @drop='dropped'>
-								<draggable class='wlayout' element="ul" v-model="itemWidgetList[item.i]"  :options="dragOptions"   >
+						<div class='widgetcontainer fill' @dragenter="denter" @dragover.native="dover" @drop='dropped(widgetList.length, $event)'>
+								<draggable class='wlayout' element="ul" v-model="itemWidgetList[item.i]" :options="dragOptions"   >
 														<li v-for='(object,index) in itemWidgetList[item.i]' v-bind:key='index' v-if='itemWidgetList[item.i].length==1|object.type!="NEW"'>
 															<kotile :object='object.label'  :cflag="object.type" :tileindex='index' :containerheight="((item.h-1)*35)" draggable='true' @dragstart='dragWidget' ></kotile>
 														</li>
@@ -184,7 +184,7 @@ export default {
 	},
 	watch:{
 		itemWidgetList:function(){
-					this.updateLayoutContent();
+			this.updateLayoutContent();
 		}
 	},
 	methods : {
@@ -196,10 +196,16 @@ export default {
 		gonextweek:function(){
 			this.dateRange.starttime=this.dateRange.starttime+7;
 			this.dateRange.endtime=this.dateRange.endtime+7;
-			eventBus.$emit("nextWeek", this.dateRangeLabel);  
+			eventBus.$emit("nextWeek", this.dateRangeLabel);
 		},
     saveconfig:function(){
 			this.updateLayoutContent();
+			this.layout = this.layout.filter(function(e){return (e.c!="")}).map(function(e,index){
+				var item=e;
+				item.i=index+"";
+				return item;
+			});
+			this.itemWidgetList=this.itemWidgetList.filter(function(e){return (e.length!=0)});
 	    var pid=this.$route.params.id;
       this.$store.commit('saveConfig',{'id':pid,'layout':this.layout});
 			this.isInEdit = false;
@@ -255,10 +261,10 @@ export default {
       console.log("Drag over");
       console.log(e.target);
     },
-    dropped:function(e) {
+    dropped:function(i,e) {
     	e.preventDefault();
-    	console.log(e.target.clientHeight);
-    	if(this.widgetList.length>=1){
+    	console.log(i);
+    	if(this.widgetList.length>=1&&this.widgetList.length!=i){
       	this.layout.push(this.nextitem)
       	this.itemWidgetList.push([])
       }
@@ -273,6 +279,10 @@ export default {
 		toggleEditMode:function(){
 			this.isInEdit=true;
 			this.dragOptions.disabled=false;
+			if(this.widgetList.length>=1){
+      	this.layout.push(this.nextitem)
+      	this.itemWidgetList.push([])
+      }
 		},
     resizedEvent: function(i, newH, newW, newHPx, newWPx){
       var msg = "RESIZED i=" + i + ", H=" + newH + ", W=" + newW + ", H(px)=" + newHPx + ", W(px)=" + newWPx;
@@ -286,8 +296,12 @@ export default {
 					console.log(item);
 					if(item.length>0)
 						{ self.layout[index].c = item[0].id;}
+						else {
+						 self.layout[index].c = "";
+						}
 				}
 			)
+
 			this.pwidgetlist=this.layout.map(function(e){return e.c})
 		}
 	},
