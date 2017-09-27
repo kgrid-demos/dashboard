@@ -68,11 +68,9 @@ export default new Vuex.Store({
     },
     saveWidgetSettings(state, obj){
       var index = state.widgetSettings.map(function(e) {return e.id}).indexOf(obj.id);
-      console.log("obj id is " + obj.id + " index is " + index);
       if(index >= 0) {
         state.widgetSettings[index].datasettings=JSON.parse(JSON.stringify(obj.datasettings));
       } else {
-        console.log("saving " + JSON.parse(JSON.stringify(obj.datasettings)).id);
         state.widgetSettings.push({id: obj.id, datasettings:JSON.parse(JSON.stringify(obj.datasettings))});
       }
 
