@@ -57,12 +57,23 @@ export default new Vuex.Store({
     prostatus : [
 
     ],
+    widgetSettings: [
 
+    ]
           },
   mutations: {
     saveConfig(state, obj){
       var index = state.paconfigs.map(function(e) {return e.patientid}).indexOf(obj.id);
       state.paconfigs[index].layout=JSON.parse(JSON.stringify(obj.layout));
+    },
+    saveWidgetSettings(state, obj){
+      var index = state.widgetSettings.map(function(e) {return e.id}).indexOf(obj.id);
+      if(index >= 0) {
+        state.widgetSettings[index].datasettings=JSON.parse(JSON.stringify(obj.datasettings));
+      } else {
+        state.widgetSettings.push({id: obj.id, datasettings:JSON.parse(JSON.stringify(obj.datasettings))});
+      }
+
     }
   },
   getters: {
@@ -75,6 +86,12 @@ export default new Vuex.Store({
     },
     getDefaultLayout:state=>{
         return state.defaultLayout;
+    },
+    getDataSettings:state=>{
+      return function(id) {
+        var index = state.widgetSettings.map(function (e) {return e.id}).indexOf(id);
+        return state.widgetSettings[index];
+      }
     },
     getwidgetMaster: state => {
        return state.widgetMasterList;
