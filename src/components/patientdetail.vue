@@ -68,7 +68,7 @@
 						<div class='widgetcontainer fill' @dragenter="denter" @dragover="dover" @drop='dropped'>
 								<draggable class='wlayout' element="ul" v-model="itemWidgetList[item.i]"  :options="dragOptions"   >
 														<li v-for='(object,index) in itemWidgetList[item.i]' v-bind:key='index' v-if='itemWidgetList[item.i].length==1|object.type!="NEW"'>
-															<kotile :object='object.label'  :cflag="object.type" :tileindex='index' :containerheight="((item.h-1)*35)" draggable='true' @dragstart='dragWidget' ></kotile>
+															<kotile :object='object.label'  :cflag="object.type" :tileindex='index' :containerheight="((item.h-1)*40)" :editmode='isInEdit' draggable='true' @dragstart='dragWidget' v-on:preventdrag="preventDrag(item.i)"></kotile>
 														</li>
 													</draggable></div>
 						</grid-item>
@@ -131,6 +131,7 @@ export default {
 		var lastsunday = moment().day(-7);
 		console.log("Last Sunday:");
 		console.log(lastsunday);
+		eventBus.$emit("previousWeek", this.dateRangeLabel);
 
 	},
 	mounted:function(){
@@ -289,6 +290,9 @@ export default {
 				}
 			)
 			this.pwidgetlist=this.layout.map(function(e){return e.c})
+		},
+		preventDrag: function(e) {
+      return false;
 		}
 	},
 	components:{
