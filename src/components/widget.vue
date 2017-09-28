@@ -79,8 +79,7 @@
     created: function() {
       var self = this;
       eventBus.$on('setdaterange', function (obj) {
-        self.getData(obj.startDate, obj.endDate);
-        self.fillData();
+        self.changeWeek(obj.startDate);
       });
       eventBus.$on('saveSettings', function () {
         self.saveoptions();
@@ -102,6 +101,7 @@
           notifymax: 9
         };
       }
+      this.changeWeek(this.startdate);
     },
     computed : {
     myStyles () {
