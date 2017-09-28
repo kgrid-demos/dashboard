@@ -18,7 +18,7 @@
 		<div slot='main'>
 			<div class='maincontent'>
 				<div class='col-md-2 col-sm-2 col-xs-2  pad-0' v-if='isInEdit'>
-				<div class='animated ht-full kg-bg-custom-0'>
+				<div class='animated ht-full kg-bg-custom-0' @drop='dropped'>
 											<div class='row ft-sz-16 pad-t-15 txtcenter'> <h3>Widget List</h3></div>
 					<draggable class='wlist' element="ul" v-model="widgetList" :options="dragOptions">
 						<li v-for='(object,index) in widgetList' v-bind:key='index'>
@@ -28,7 +28,7 @@
 					</div>
 				</div>
 								<div class='col-md-2 col-sm-2 col-xs-2 ht-full  pad-0' v-else></div>
-				<div class='col-md-8 col-sm-8 col-xs-8 kg-bg-custom-1 ht-full pad-0' >
+				<div class='col-md-8 col-sm-8 col-xs-8 kg-bg-custom-1 ht-full pad-0'>
 					<div class='row ht-50'>
 					<div class='col-md-6 pad-0'>
 					<div class="pad-l-15"  v-if='!isInEdit && pwidgetlist.length>=1 '>
@@ -42,7 +42,7 @@
 
 					<div class='col-md-4  '>
 					<div class='float-r'>
-						<button class='kg-btn-primary ' v-if='isInEdit && pwidgetlist.length==1 && pwidgetlist[0]=="" ' @click='loadDefault'> Load Default Layout </button>
+						<button class='kg-btn-primary ' v-if='isInEdit && pwidgetlist.length==1&&this.pwidgetlist[0]=="" ' @click='loadDefault'> Load Default Layout </button>
 						<button class='kg-btn-primary ' v-if='!isInEdit' @click='toggleEditMode'>Edit</button>
 						<button class='kg-btn-primary ' v-if='isInEdit' @click='saveconfig'>Save Changes</button></div>
 					</div>
@@ -67,7 +67,7 @@
 														<div v-show='(item.c=="")&&isInEdit' style="text-align: center; vertical-align: middle; font-size: 16px; font-weight: 700;position:relative;top:50%;transform:translateY(-50%)">Add a widget</div>
 														<div class='widgetTitle' v-if='item.c!=""'><p v-if='itemWidgetList[item.i].length>0'>{{itemWidgetList[item.i][0].label}}</p>
 														<i class='fa fa-close' v-if='isInEdit' @click='removeWidget(item.i)'></i></div>
-						<div class='widgetcontainer fill' @dragenter="denter" @dragover.native="dover" @drop='dropped(widgetList.length, $event)'>
+						<div class='widgetcontainer fill'  @mousedown.stop @dragstart.stop @dragend.stop @drag.stop @mouseup.stop @drop='dropped'>
 								<draggable class='wlayout' element="ul" v-model="itemWidgetList[item.i]" :options="dragOptions"   >
 														<li v-for='(object,index) in itemWidgetList[item.i]' v-bind:key='index' v-if='itemWidgetList[item.i].length==1|object.type!="NEW"'>
 															<kotile :object='object.label'  :cflag="object.type" :tileindex='index' :containerheight="((item.h-1)*40)" :editmode='isInEdit' :startdate="dateRangeLabel.startDate" draggable='true' @dragstart='dragWidget' v-on:preventdrag="preventDrag(item.i)"></kotile>
@@ -143,6 +143,7 @@ export default {
 		this.layout=JSON.parse(JSON.stringify(this.$store.getters.getlayoutbyid(this.$route.params.id)));
 		this.pwidgetlist=this.layout.map(function(e){return e.c})
 		this.widgetList = this.widgetMaster.filter(function(e){return (this.indexOf(e.id)<0);},self.pwidgetlist)
+		if(this.layout.length>0){
 		this.layout.forEach(function(item){
 			var index= self.widgetMaster.map(function(e){return e.id}).indexOf(item.c);
 			if(index>=0){
@@ -153,7 +154,8 @@ export default {
 				self.itemWidgetList.push([]);
 			}
 		})
-		if(this.pwidgetlist.length==1&&this.pwidgetlist[0]==''){
+		}
+		if(this.pwidgetlist.length==0){
 			this.isInEdit=true;
 			this.dragOptions.disabled=false;
 		}
@@ -169,7 +171,6 @@ export default {
 			obj.startDate=moment().day(this.dateRange.starttime)
 			obj.endDate=moment().day(this.dateRange.endtime)
 
-			console.log(obj);
 			return obj
 		},
 		patient: function(){
@@ -189,6 +190,11 @@ export default {
 	watch:{
 		itemWidgetList:function(){
 			this.updateLayoutContent();
+			var zeroitem=this.itemWidgetList.filter(function(e){return (e.length==0)});
+			if(zeroitem.length==0 && this.widgetList.length>=1){
+				this.layout.push(this.nextitem)
+				this.itemWidgetList.push([])
+			}
 		}
 	},
 	methods : {
@@ -245,6 +251,7 @@ export default {
 					self.itemWidgetList.push([]);
 				}
 			})
+			this.cleanupLayout();
 		},
     dragWidget:function(ev){
       ev.stopPropagation();
@@ -256,12 +263,10 @@ export default {
         e.preventDefault();
 				e.stopPropagation();
         console.log("Drag enter");
-        $(e.target).addClass("over");
     },
     dexit: function(e){
         e.preventDefault();
 				e.stopPropagation();
-        $(e.target).removeClass("over");
     },
     dover:function(e){
       e.preventDefault();
@@ -269,13 +274,10 @@ export default {
       console.log("Drag over");
       console.log(e.target);
     },
-    dropped:function(i,e) {
-    	e.preventDefault();
-    	console.log(i+"   "+this.widgetList.length);
-    	if(this.widgetList.length>1){
-      	this.layout.push(this.nextitem)
-      	this.itemWidgetList.push([])
-      }
+    dropped:function(e) {
+			e.preventDefault();
+			console.log("dropped")
+			this.cleanupLayout();
     },
 		removeWidget:function(i){
 			var obj = this.itemWidgetList[i][0];
@@ -284,16 +286,11 @@ export default {
 			this.layout[i].c="";
 			this.pwidgetlist[i]="";
 			this.cleanupLayout();
-			this.layout.push(this.nextitem)
-			this.itemWidgetList.push([])
+
 		},
 		toggleEditMode:function(){
 			this.isInEdit=true;
 			this.dragOptions.disabled=false;
-			if(this.widgetList.length>=1){
-      	this.layout.push(this.nextitem)
-      	this.itemWidgetList.push([])
-      }
 		},
     resizedEvent: function(i, newH, newW, newHPx, newWPx){
       var msg = "RESIZED i=" + i + ", H=" + newH + ", W=" + newW + ", H(px)=" + newHPx + ", W(px)=" + newWPx;
@@ -303,8 +300,6 @@ export default {
 		updateLayoutContent:function(){
 			var self = this;
 			this.itemWidgetList.forEach(function(item, index) {
-					console.log(index);
-					console.log(item);
 					if(item.length>0)
 						{ self.layout[index].c = item[0].id;}
 						else {

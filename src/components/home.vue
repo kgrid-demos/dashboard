@@ -81,15 +81,16 @@ export default {
 </script>
 <style scoped>
 form#search {
-width:100%;
+	width:100%;
 		padding:10px 20px 10px 20px;
 		line-height:1.5em;
 		border:1px solid#e5e5e5;
 		margin-bottom: 20px;
 }
 form#search input {
+	width: 100%;
 	line-height:1.5em;
-			padding:10px 10px;
+	padding:10px 10px;
 }
 
 .bannercontent {

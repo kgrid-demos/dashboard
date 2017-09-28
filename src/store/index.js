@@ -34,20 +34,19 @@ export default new Vuex.Store({
                         { "x":4,"y":0,"w":4,"h":6,"i":"2","c":"PRO-04"},
                         { "x":0,"y":12,"w":4,"h":6,"i":"3","c":"SM-02"},
                         { "x":8,"y":0,"w":4,"h":6,"i":"4","c":"PRO-02"},
-                        { "x":4,"y":6,"w":8,"h":12,"i":"5","c":"PRO-03"},
-                        { "x":0,"y":23,"w":4,"h":6,"i":"6","c":""}],
+                        { "x":4,"y":6,"w":8,"h":12,"i":"5","c":"PRO-03"}],
 
     ptregistrymodel: {patientid:'',providerid:'',regdate:''},
 
     // Patient Dashboard Layout Configuration
-    paconfigs:[ { patientid:"PA-67034-01",
-                  layout:[{"x":0,"y":0,"w":4,"h":6,"i":"0","c":""}]},
-                { patientid:"PA-67034-02",
-                  layout:[{"x":0,"y":0,"w":4,"h":6,"i":"0","c":""}]},
-                { patientid:"PA-67034-03",
-                  layout:[{"x":0,"y":0,"w":4,"h":6,"i":"0","c":""}]},
-                { patientid:"PA-67034-04",
-                    layout:[{"x":0,"y":0,"w":4,"h":6,"i":"0","c":""}]},
+    paconfigs:[ { patientid:"PA-67034-001",
+                  layout:[]},
+                { patientid:"PA-67034-002",
+                  layout:[]},
+                { patientid:"PA-67034-003",
+                  layout:[]},
+                { patientid:"PA-67034-004",
+                    layout:[]},
                 ],
 
     // PRO Configuration
