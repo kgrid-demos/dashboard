@@ -38,9 +38,10 @@
   import linechart from './linechart.js';
   import vueSlider from 'vue-slider-component';
   import eventBus from '../eventBus.js';
+  import moment from 'moment';
 
   export default {
-    props: ['chartheight', 'editmode', 'title', 'showoptions'],
+    props: ['chartheight', 'editmode', 'title', 'showoptions', 'startdate'],
     components: {
       linechart,
       vueSlider
@@ -50,7 +51,7 @@
         datacollection: null,
         datasettings: null,
         hover: false,
-        labels: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+        labels: null,
         data: [this.getRandomInt(), this.getRandomInt(), this.getRandomInt(), this.getRandomInt(), this.getRandomInt(), this.getRandomInt(), this.getRandomInt()],
         chartOptions: {
           maintainAspectRatio: false,
@@ -78,19 +79,14 @@
     created: function() {
       var self = this;
       eventBus.$on('previousWeek', function (obj) {
-        self.getData(obj.startDate, obj.endDate);
-        self.fillData();
+        console.log("prev week")
+        self.changeWeek(obj.startDate);
       });
       eventBus.$on('nextWeek', function (obj) {
-        self.getData(obj.startDate, obj.endDate);
-        self.fillData();
+        self.changeWeek(obj.start);
       });
       eventBus.$on('saveSettings', function () {
         self.saveoptions();
-        self.showoptions = false;
-      });
-      eventBus.$on('edit', function () {
-        self.showoptions = true;
       });
       var uid = this.$route.params.id + this.title;
       if (this.$store.getters.getDataSettings(uid)) {
@@ -109,6 +105,7 @@
           notifymax: 9
         };
       }
+      this.changeWeek(this.startdate);
     },
     computed : {
     myStyles () {
@@ -142,11 +139,7 @@
           ]
         }
       },
-      showoptionspane () {
-        this.showoptions = !this.showoptions;
-      },
       saveoptions () {
-        this.showoptions = !this.showoptions;
         this.fillData();
         var uid = this.$route.params.id + this.title;
         this.$store.commit('saveWidgetSettings', {'id':uid, 'datasettings':this.datasettings});
@@ -171,9 +164,14 @@
         });
         return colors;
       },
-      getData(startDate, endDate) {
-        this.fillData([this.getRandomInt(), this.getRandomInt(), this.getRandomInt(), this.getRandomInt(), this.getRandomInt(), this.getRandomInt(), this.getRandomInt()],
-            ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]);
+      changeWeek(startDate) {
+        var format = 'MMM. D';
+        var sDate = moment(startDate);
+        this.data = [this.getRandomInt(), this.getRandomInt(), this.getRandomInt(), this.getRandomInt(), this.getRandomInt(), this.getRandomInt(), this.getRandomInt()];
+        this.labels = [sDate.format(format), sDate.add(1, 'd').format(format), sDate.add(1, 'd').format(format),
+          sDate.add(1, 'd').format(format), sDate.add(1, 'd').format(format), sDate.add(1, 'd').format(format),
+          sDate.add(1, 'd').format(format)];
+        this.fillData();
       }
 
     }

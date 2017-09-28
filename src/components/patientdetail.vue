@@ -68,7 +68,7 @@
 						<div class='widgetcontainer fill' @dragenter="denter" @dragover.native="dover" @drop='dropped(widgetList.length, $event)'>
 								<draggable class='wlayout' element="ul" v-model="itemWidgetList[item.i]" :options="dragOptions"   >
 														<li v-for='(object,index) in itemWidgetList[item.i]' v-bind:key='index' v-if='itemWidgetList[item.i].length==1|object.type!="NEW"'>
-															<kotile :object='object.label'  :cflag="object.type" :tileindex='index' :containerheight="((item.h-1)*40)" :editmode='isInEdit' draggable='true' @dragstart='dragWidget' v-on:preventdrag="preventDrag(item.i)"></kotile>
+															<kotile :object='object.label'  :cflag="object.type" :tileindex='index' :containerheight="((item.h-1)*40)" :editmode='isInEdit' :startdate="dateRangeLabel.startDate" draggable='true' @dragstart='dragWidget' v-on:preventdrag="preventDrag(item.i)"></kotile>
 														</li>
 													</draggable></div>
 						</grid-item>
@@ -284,7 +284,6 @@ export default {
       	this.layout.push(this.nextitem)
       	this.itemWidgetList.push([])
       }
-      eventBus.$emit('edit');
 		},
     resizedEvent: function(i, newH, newW, newHPx, newWPx){
       var msg = "RESIZED i=" + i + ", H=" + newH + ", W=" + newW + ", H(px)=" + newHPx + ", W(px)=" + newWPx;

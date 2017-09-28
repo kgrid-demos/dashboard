@@ -1,6 +1,6 @@
 <template>
 		<div class="container kgl-tile" v-bind:id="object">
-				<p><widget :chartheight='(containerheight-30)' :editmode="editmode" :title="object" :showoptions="editmode" v-on:sliderdrag="preventDrag"></widget></p>
+				<p><widget :chartheight='(containerheight-30)' :editmode="editmode" :title="object" :showoptions="editmode" :startdate="startdate" v-on:sliderdrag="preventDrag"></widget></p>
 		</div>
 	</template>
 	<script>
@@ -9,7 +9,7 @@
 	import widget from './widget.vue';
 	export default {
   	name:	"kotile",
-		props : [ 'object', 'cflag' ,'tileindex', 'containerheight', 'editmode'],
+		props : [ 'object', 'cflag' ,'tileindex', 'containerheight', 'editmode', 'startdate'],
 		created: function(){
 
 		},
