@@ -1,6 +1,6 @@
 <template name="widget">
   <div class="graph">
-    <painchart v-if="!showoptions" :chart-data="datacollection" :options="chartOptions" :styles='myStyles'></painchart>
+    <linechart v-if="!showoptions" :chart-data="datacollection" :options="chartOptions" :styles='myStyles'></linechart>
     <div v-if="showoptions">
       <div class="optrow">
         <div class="options">
@@ -27,7 +27,7 @@
           Notification Threshold:
         </div>
         <div class="options">
-          <vue-slider ref="slider" :min=5 :max=7 tooltip="hover" :piecewise=true v-model="datasettings.notifythresh"></vue-slider>
+          <vue-slider ref="slider" :min="datasettings.notifymin" :max="datasettings.notifymax" tooltip="hover" :piecewise=true v-model="datasettings.notifythresh"></vue-slider>
         </div>
       </div>
     </div>
@@ -40,14 +40,14 @@
 </template>
 
 <script>
-  import painchart from './painchart.js';
+  import linechart from './linechart.js';
   import vueSlider from 'vue-slider-component';
   import eventBus from '../eventBus.js';
 
   export default {
     props: ['chartheight', 'editmode', 'title'],
     components: {
-      painchart,
+      linechart,
       vueSlider
     },
     data () {
@@ -57,7 +57,7 @@
         showoptions: false,
         hover: false,
         labels: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-        data: [3, 4, 5, 6, 7, 8, 9],//[this.getRandomInt(), this.getRandomInt(), this.getRandomInt(), this.getRandomInt(), this.getRandomInt(), this.getRandomInt(), this.getRandomInt()],
+        data: [this.getRandomInt(), this.getRandomInt(), this.getRandomInt(), this.getRandomInt(), this.getRandomInt(), this.getRandomInt(), this.getRandomInt()],
         chartOptions: {
           maintainAspectRatio: false,
           legend: {
@@ -70,10 +70,11 @@
           },
           scales: {
             yAxes: [{
-              gridlines: {
+              gridLines: {
                 display: true,
-                color: 'gray',
-                lineWidth: 2
+                color: '#f2f2f2',
+                lineWidth: 2,
+                drawBorder: false
               }
             }]
           },
@@ -96,13 +97,15 @@
       } else {
         this.datasettings = {
           instruments: [
-            { name: "GAD-7 Questionnaire", value: 1 },
+            { name: "GAD-7 Questionnaire", value: 1},
             { name: "Hilbert-Thad Questionnaire", value: 2},
             { name: "Penta-PLU Pain Probe", value: 3}
           ],
           selectedinstrument: {name: "GAD-7 Questionnaire", value: 1},
           dailyfreq: 1,
-          notifythresh: 5
+          notifythresh: 6,
+          notifymin: 6,
+          notifymax: 9
         };
       }
     },
@@ -123,12 +126,14 @@
           labels: this.labels,
           datasets: [
             {
-              label: 'Pain',
+              label: this.title,
               backgroundColor:'rgba(255, 255, 255, 1)',
               data: this.data,
               fill: false,
               lineTension: 0,
+              borderColor: '#bfbfbf',
               pointBorderColor: this.determinecolor(),
+              pointBorderWidth: 3,
               pointStyle: 'circle',
               pointRadius: 7,
               borderWidth: 2
@@ -146,7 +151,7 @@
         this.$store.commit('saveWidgetSettings', {'id':uid, 'datasettings':this.datasettings});
       },
       getRandomInt () {
-        return Math.floor(Math.random() * (10 - 5 + 1)) + 5
+        return Math.floor(Math.random() * (10)) + 1
       },
       dragstart (ctx) {
         this.$emit('sliderdrag');
@@ -169,6 +174,7 @@
         this.fillData([this.getRandomInt(), this.getRandomInt(), this.getRandomInt(), this.getRandomInt(), this.getRandomInt(), this.getRandomInt(), this.getRandomInt()],
             ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]);
       }
+
     }
   }
 </script>
