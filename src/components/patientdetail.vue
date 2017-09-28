@@ -29,7 +29,7 @@
 				<div class='col-md-8 col-sm-8 col-xs-8 kg-bg-custom-1 ht-full pad-0' >
 					<div class='row ht-50'>
 					<div class='col-md-6 pad-0'>
-					<div class="pad-l-20"  v-if='!isInEdit && pwidgetlist.length>1 '>
+					<div class="pad-l-15"  v-if='!isInEdit && pwidgetlist.length>1 '>
 
 							<button class='kg-btn-primary ' @click='gopreviousweek'> <i class='fa fa-angle-left fa-lg'></i></button>
 							<button class='kg-btn-primary ' style='width:240px;'> {{dateRangeLabel.start}} - {{ dateRangeLabel.end}} </button>

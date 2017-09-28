@@ -175,9 +175,10 @@
 
 <style scoped>
   .graph {
-    width: 100%;
+    width: 96%;
     height: 100%;
-    padding-top: 12px;
+    padding-top: 25px;
+    margin:0 auto;
     background-color: white;
   }
 
