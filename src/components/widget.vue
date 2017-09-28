@@ -77,11 +77,7 @@
     },
     created: function() {
       var self = this;
-      eventBus.$on('previousWeek', function (obj) {
-        self.getData(obj.startDate, obj.endDate);
-        self.fillData();
-      });
-      eventBus.$on('nextWeek', function (obj) {
+      eventBus.$on('setdaterange', function (obj) {
         self.getData(obj.startDate, obj.endDate);
         self.fillData();
       });

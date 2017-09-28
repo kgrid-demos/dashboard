@@ -4,12 +4,12 @@
 		<div slot='banner'>
 			<div class='bannercontent' >
 				<div class='row'>
-					<div class='col-md-1'>
+					<div class='col-md-2 col-sm-2 col-xs-2'>
 						<router-link  class='float-r' to='/'>
 							<i class='fa fa-arrow-left'></i>
 						</router-link>
 					</div>
-					<div class="col-md-11">
+					<div class="col-md-10 col-sm-10 col-xs-10 pad-0">
 						<h1 class='pad-l-20'>{{patient.Name}}<small class='pad-l-20'>Age {{patient.Age}}, {{patient.Gender}}</small></h1>
 					</div>
 				</div>
@@ -17,19 +17,21 @@
 		</div>
 		<div slot='main'>
 			<div class='maincontent'>
-				<div class='col-md-2 col-sm-2 col-xs-2 ht-full kg-bg-custom-0 pad-0' v-if='isInEdit'>
+				<div class='col-md-2 col-sm-2 col-xs-2  pad-0' v-if='isInEdit'>
+				<div class='animated ht-full kg-bg-custom-0'>
 											<div class='row ft-sz-16 pad-t-15 txtcenter'> <h3>Widget List</h3></div>
 					<draggable class='wlist' element="ul" v-model="widgetList" :options="dragOptions">
 						<li v-for='(object,index) in widgetList' v-bind:key='index'>
 							<kocard :object='object.label' :id='object.label' :cflag="object.type" :tileindex='index' draggable='true'  @dragstart='dragWidget' ></kocard>
 						</li>
 					</draggable>
+					</div>
 				</div>
-								<div class='col-md-2 col-sm-2 col-xs-2 ht-full kg-bg-custom-1 pad-0' v-else></div>
+								<div class='col-md-2 col-sm-2 col-xs-2 ht-full  pad-0' v-else></div>
 				<div class='col-md-8 col-sm-8 col-xs-8 kg-bg-custom-1 ht-full pad-0' >
 					<div class='row ht-50'>
 					<div class='col-md-6 pad-0'>
-					<div class="pad-l-15"  v-if='!isInEdit && pwidgetlist.length>1 '>
+					<div class="pad-l-15"  v-if='!isInEdit && pwidgetlist.length>=1 '>
 
 							<button class='kg-btn-primary ' @click='gopreviousweek'> <i class='fa fa-angle-left fa-lg'></i></button>
 							<button class='kg-btn-primary ' style='width:240px;'> {{dateRangeLabel.start}} - {{ dateRangeLabel.end}} </button>
@@ -76,7 +78,8 @@
 				</div>
 
 
-						<div class='col-md-2 col-sm-2 col-xs-2 kg-bg-custom-0 pad-0 ht-full'  v-if='isInEdit'>
+						<div class='col-md-2 col-sm-2 col-xs-2 pad-0 '  v-if='isInEdit'>
+						<div class='animated ht-full kg-bg-custom-0'>
 							<div class='row ft-sz-16 pad-l-20 pad-t-15'> <i class='fa fa-info-circle fa-2x '></i></div>
 							<div class='row ft-sz-14 pad-l-20 pad-r-20 pad-t-15'>
 								<h3> First time to build the dashboard </h3><p class='mar-top15'> You can manually drag and drop the widgets, or click on "Load Default Layout" to use a predefined layout which can be further customized.   </p>
@@ -89,8 +92,9 @@
 								<p class='mar-top30'> </p>
 								<h3> Finish configuration </h3><p class='mar-top15'> Click on "Save Changes",  the configuration for this patient will be saved and the dashboard will change to view mode. To activate the edit mode, simply click on "Edit". </p>
 								</div>
+								</div>
 						</div>
-						<div class='col-md-2 col-sm-2 col-xs-2 kg-bg-custom-1 pad-0 ht-full'  v-else></div>
+						<div class='col-md-2 col-sm-2 col-xs-2  pad-0 ht-full'  v-else></div>
 								</div>
 		</div>
 	</applayout>
@@ -131,7 +135,7 @@ export default {
 		var lastsunday = moment().day(-7);
 		console.log("Last Sunday:");
 		console.log(lastsunday);
-		eventBus.$emit("previousWeek", this.dateRangeLabel);
+		eventBus.$emit("setdaterange", this.dateRangeLabel);
 	},
 	mounted:function(){
 		var self = this;
@@ -191,21 +195,24 @@ export default {
 		gopreviousweek:function(){
 			this.dateRange.starttime=this.dateRange.starttime-7;
 			this.dateRange.endtime=this.dateRange.endtime-7;
-			eventBus.$emit("previousWeek", this.dateRangeLabel);
+			eventBus.$emit("setdaterange", this.dateRangeLabel);
 		},
 		gonextweek:function(){
 			this.dateRange.starttime=this.dateRange.starttime+7;
 			this.dateRange.endtime=this.dateRange.endtime+7;
-			eventBus.$emit("nextWeek", this.dateRangeLabel);
+			eventBus.$emit("setdaterange", this.dateRangeLabel);
 		},
-    saveconfig:function(){
-			this.updateLayoutContent();
+		cleanupLayout: function(){
 			this.layout = this.layout.filter(function(e){return (e.c!="")}).map(function(e,index){
 				var item=e;
 				item.i=index+"";
 				return item;
-			});
+				});
 			this.itemWidgetList=this.itemWidgetList.filter(function(e){return (e.length!=0)});
+		},
+    saveconfig:function(){
+			this.updateLayoutContent();
+			this.cleanupLayout();
 	    var pid=this.$route.params.id;
       this.$store.commit('saveConfig',{'id':pid,'layout':this.layout});
       eventBus.$emit("saveSettings");
@@ -264,8 +271,8 @@ export default {
     },
     dropped:function(i,e) {
     	e.preventDefault();
-    	console.log(i);
-    	if(this.widgetList.length>=1&&this.widgetList.length!=i){
+    	console.log(i+"   "+this.widgetList.length);
+    	if(this.widgetList.length>1){
       	this.layout.push(this.nextitem)
       	this.itemWidgetList.push([])
       }
@@ -276,6 +283,9 @@ export default {
 			this.widgetList.push(obj);
 			this.layout[i].c="";
 			this.pwidgetlist[i]="";
+			this.cleanupLayout();
+			this.layout.push(this.nextitem)
+			this.itemWidgetList.push([])
 		},
 		toggleEditMode:function(){
 			this.isInEdit=true;
