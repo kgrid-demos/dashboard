@@ -132,7 +132,6 @@ export default {
 		console.log("Last Sunday:");
 		console.log(lastsunday);
 		eventBus.$emit("previousWeek", this.dateRangeLabel);
-
 	},
 	mounted:function(){
 		var self = this;
@@ -209,6 +208,7 @@ export default {
 			this.itemWidgetList=this.itemWidgetList.filter(function(e){return (e.length!=0)});
 	    var pid=this.$route.params.id;
       this.$store.commit('saveConfig',{'id':pid,'layout':this.layout});
+      eventBus.$emit("saveSettings");
 			this.isInEdit = false;
     },
 		getHeight:function(i){
@@ -284,6 +284,7 @@ export default {
       	this.layout.push(this.nextitem)
       	this.itemWidgetList.push([])
       }
+      eventBus.$emit('edit');
 		},
     resizedEvent: function(i, newH, newW, newHPx, newWPx){
       var msg = "RESIZED i=" + i + ", H=" + newH + ", W=" + newW + ", H(px)=" + newHPx + ", W(px)=" + newWPx;

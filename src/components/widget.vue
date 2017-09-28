@@ -31,11 +31,6 @@
         </div>
       </div>
     </div>
-    <button class="edit" v-if="!showoptions && editmode" @click="showoptionspane" @mouseenter="hover = true" @mouseleave="hover = false">
-      <img v-if="!hover" src="../../static/images/black_gear.png">
-      <img v-if="hover" src="../../static/images/red_gear.png">
-    </button>
-    <button class="save" v-if="showoptions" @click="saveoptions">Save Settings</button>
   </div>
 </template>
 
@@ -45,7 +40,7 @@
   import eventBus from '../eventBus.js';
 
   export default {
-    props: ['chartheight', 'editmode', 'title'],
+    props: ['chartheight', 'editmode', 'title', 'showoptions'],
     components: {
       linechart,
       vueSlider
@@ -54,7 +49,6 @@
       return {
         datacollection: null,
         datasettings: null,
-        showoptions: false,
         hover: false,
         labels: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
         data: [this.getRandomInt(), this.getRandomInt(), this.getRandomInt(), this.getRandomInt(), this.getRandomInt(), this.getRandomInt(), this.getRandomInt()],
@@ -90,6 +84,13 @@
       eventBus.$on('nextWeek', function (obj) {
         self.getData(obj.startDate, obj.endDate);
         self.fillData();
+      });
+      eventBus.$on('saveSettings', function () {
+        self.saveoptions();
+        self.showoptions = false;
+      });
+      eventBus.$on('edit', function () {
+        self.showoptions = true;
       });
       var uid = this.$route.params.id + this.title;
       if (this.$store.getters.getDataSettings(uid)) {

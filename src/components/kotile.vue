@@ -1,6 +1,6 @@
 <template>
 		<div class="container kgl-tile" v-bind:id="object">
-				<p><widget :chartheight='(containerheight-30)' :editmode="editmode" :title="object" v-on:sliderdrag="preventDrag"></widget></p>
+				<p><widget :chartheight='(containerheight-30)' :editmode="editmode" :title="object" :showoptions="editmode" v-on:sliderdrag="preventDrag"></widget></p>
 		</div>
 	</template>
 	<script>
