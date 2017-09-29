@@ -21,7 +21,7 @@ export default new Vuex.Store({
                         { "id":"SM-01","label":"Smoking CESSATION","type":"SM"},
                         { "id":"SM-02","label":"NUTRITION","type":"SM"}],
     patientlist:      [ { ID:"PA-67034-001", Name:"Larry Lambert", Age:"54", Gender:"male",
-                            wlist:[{id:'PRO-01',"label":"Pain",count:-1},{id:'PRO-02',"label":"Anxiety",count:-1},{id:'PRO-03',"label":"Depression",count:-1},{id:'PRO-04',"label":"Nausea",count:-1},{id:'SM-01',"label":"Smoking CESSATION",count:3},{id:'SM-02',"label":"NUTRITION",count:-1}]},
+                            wlist:[{id:'PRO-01',"label":"Pain",count:-1},{id:'PRO-02',"label":"Anxiety",count:-1},{id:'PRO-03',"label":"Depression",count:-1},{id:'PRO-04',"label":"Nausea",count:-1},{id:'SM-01',"label":"Smoking CESSATION",count:-1},{id:'SM-02',"label":"NUTRITION",count:-1}]},
                         { ID:"PA-67034-002", Name:"Alvin Adams",Age:"27", Gender:"male",
                             wlist:[{id:'PRO-01',"label":"Pain",count:-1},{id:'PRO-02',"label":"Anxiety",count:-1},{id:'PRO-03',"label":"Depression",count:-1},{id:'PRO-04',"label":"Nausea",count:-1},{id:'SM-01',"label":"Smoking CESSATION",count:-1},{id:'SM-02',"label":"NUTRITION",count:-1}]},
                         { ID:"PA-67034-003", Name:"Larry Lambert Jr.", Age:"17", Gender:"male",
@@ -66,9 +66,14 @@ export default new Vuex.Store({
       state.paconfigs[index].layout=JSON.parse(JSON.stringify(obj.layout));
       //Need to remove when the PRO registration is done , for front debug purpose
       state.patientlist[index].wlist.forEach(function(e){
-        if(e.count==-1){
-          var i=obj.layout.map(function(e) {return e.c}).indexOf(e.id);
-          if(i!=-1) e.count=0;
+        var i=obj.layout.map(function(e) {return e.c}).indexOf(e.id);
+        console.log(i)
+        if(i>=0){
+          if(e.count==-1){
+            e.count=0;
+          }
+        }else {
+          e.count=-1;
         }
       })
     },
