@@ -77,6 +77,19 @@ export default new Vuex.Store({
         }
       })
     },
+    updateAlert(state,obj){
+      var pindex = state.patientlist.map(function(e) {return e.ID}).indexOf(obj.pid);
+      console.log(obj.pid+" "+pindex);
+      var windex = state.patientlist[pindex].wlist.map(function(e) {return e.id}).indexOf(obj.wid);
+      var value = state.patientlist[pindex].wlist[windex].count;
+      if(obj.message==""){  //clear message
+          if(value>0) {
+            state.patientlist[pindex].wlist[windex].count--;
+          }
+      }else {  //add message
+        state.patientlist[pindex].wlist[windex].count++;
+      }
+    },
     saveWidgetSettings(state, obj){
       var index = state.widgetSettings.map(function(e) {return e.id}).indexOf(obj.id);
       if(index >= 0) {

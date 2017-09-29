@@ -63,8 +63,13 @@
 														v-bind:key="item.i"
                             @resized="resizedEvent">
 														<div v-show='(item.c=="")&&isInEdit' style="text-align: center; vertical-align: middle; font-size: 16px; font-weight: 700;position:relative;top:50%;transform:translateY(-50%)">Add a widget</div>
-														<div class='widgetTitle' v-if='item.c!=""'><p v-if='itemWidgetList[item.i].length>0'>{{itemWidgetList[item.i][0].label}}</p>
-														<i class='fa fa-close' v-if='isInEdit' @click='removeWidget(item.i)'></i></div>
+														<div class='widgetTitle' v-if='item.c!=""'>
+															<div class='badge' v-if='!isInEdit' v-show='count[item.i]>0'>{{count[item.i]}}</div>
+															<p v-if='itemWidgetList[item.i].length>0'>{{itemWidgetList[item.i][0].label}}</p>
+															<i class='fa fa-plus' v-if='!isInEdit'  style="margin-right:70px;" @click='addAlert(itemWidgetList[item.i][0].id)'></i>
+															<i class='fa fa-minus'  v-if='!isInEdit'  style="margin-right:20px;" @click='removeAlert(itemWidgetList[item.i][0].id)'></i>
+															<i class='fa fa-close' v-if='isInEdit' @click='removeWidget(item.i)'></i>
+															</div>
 						<div class='widgetcontainer fill'  @mousedown.stop @dragstart.stop @dragend.stop @drag.stop @mouseup.stop @drop='dropped'>
 								<draggable class='wlayout' element="ul" v-model="itemWidgetList[item.i]" :options="dragOptions"   >
 														<li v-for='(object,index) in itemWidgetList[item.i]' v-bind:key='index' v-if='itemWidgetList[item.i].length==1|object.type!="NEW"'>
@@ -129,8 +134,6 @@ export default {
 	created : function() {
 		var self = this;
 		var lastsunday = moment().day(-7);
-		console.log("Last Sunday:");
-		console.log(lastsunday);
 		eventBus.$emit("setdaterange", this.dateRangeLabel);
 	},
 	mounted:function(){
@@ -166,7 +169,6 @@ export default {
 			obj.end=moment().day(this.dateRange.endtime).format("MMM. D, YYYY")
 			obj.startDate=moment().day(this.dateRange.starttime)
 			obj.endDate=moment().day(this.dateRange.endtime)
-
 			return obj
 		},
 		patient: function(){
@@ -181,7 +183,17 @@ export default {
 		widgetMaster: function(){
 			return this.$store.getters.getwidgetMaster;
 		},
-
+		count:function(){
+			var self=this;
+			var c =[];
+			this.itemWidgetList.forEach(function(item){
+				if(item.length>0){
+					var index = self.patient.wlist.map(function(e){return e.id}).indexOf(item[0].id);
+					c.push(self.patient.wlist[index].count);
+				}
+			})
+			return c;
+		}
 	},
 	watch:{
 		itemWidgetList:function(){
@@ -194,6 +206,24 @@ export default {
 		}
 	},
 	methods : {
+		getCount:function(t){
+			var index= this.patient.wlist.map(function(e){return e.id}).indexOf(t);
+			return this.patient.wlist[index].count;
+		},
+		addAlert:function(id){
+			var obj={};
+			obj.pid=this.patient.ID;
+			obj.wid=id;
+			obj.message="Alert!";
+		   this.$store.commit("updateAlert",obj);
+		},
+		removeAlert: function(id){
+			var obj={};
+			obj.pid=this.patient.ID;
+			obj.wid=id;
+			obj.message="";
+		 	this.$store.commit("updateAlert",obj);
+		},
 		gopreviousweek:function(){
 			this.dateRange.starttime=this.dateRange.starttime-7;
 			this.dateRange.endtime=this.dateRange.endtime-7;
@@ -221,8 +251,7 @@ export default {
 			this.isInEdit = false;
     },
 		getHeight:function(i){
-			console.log(i);
-			if(this.$refs.item[i]){
+				if(this.$refs.item[i]){
 				console.log(this.$refs.item[i].$el.clientHeight)
 				return this.$refs.item[i].$el.clientHeight;
 				}else {
@@ -238,8 +267,7 @@ export default {
 			this.widgetList = this.widgetMaster.filter(function(e){return (this.indexOf(e.id)<0);},self.pwidgetlist)
 			this.layout.forEach(function(item){
 				var index= self.widgetMaster.map(function(e){return e.id}).indexOf(item.c);
-				console.log(item.i + "   "+ index +"  "+item.c);
-				if(index>=0){
+			if(index>=0){
 					var nextwidgetlist=[];
 					nextwidgetlist.push(self.widgetMaster[index]);
 					self.itemWidgetList.push(nextwidgetlist);
@@ -290,8 +318,7 @@ export default {
 		},
     resizedEvent: function(i, newH, newW, newHPx, newWPx){
       var msg = "RESIZED i=" + i + ", H=" + newH + ", W=" + newW + ", H(px)=" + newHPx + ", W(px)=" + newWPx;
-      console.log(msg);
-      console.log(this.itemWidgetList[i]);
+
     },
 		updateLayoutContent:function(){
 			var self = this;
@@ -365,7 +392,7 @@ flex: auto;
 	color: #fff;
 	text-align: center;
 }
-.widgetTitle i {
+.widgetTitle i, .widgetTitle .badge {
 	font-size:12px;
 	font-weight:500;
 	color: #fff;
@@ -375,6 +402,11 @@ flex: auto;
 	right:10px;
 	cursor:pointer;
 }
+.widgetTitle .badge {
+	top:5px;
+	right:45px;
+}
+
 
 .kg-bg-custom-0 {
 	background-color:#f5f5f5;

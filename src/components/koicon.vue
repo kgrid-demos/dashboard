@@ -29,7 +29,7 @@
 					right: -5px;
 					top: -5px;
 					color: #fff;
-					background-color:red;
+					background-color:#bc2526;
 				}
 
 				.kgl-icon p {
@@ -58,11 +58,8 @@
 						transition: all 0.5s ease;
 				}
 				.kgl-icon.active {
-					background-color: green;
+					background-color: #002a5b;
 					color: #fff;
-
-
-
 				}
 				.kgl-icon>p {
 					position:relative;
