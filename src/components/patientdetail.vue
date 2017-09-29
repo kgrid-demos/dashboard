@@ -119,6 +119,8 @@ export default {
 			pwidgetlist:[],
 			draggedid:"",
 			isInEdit:false,
+			defaultw:6,
+			defaulth:6,
 			layout:[
         {"x":0,"y":0,"w":4,"h":6,"i":"0","c":""},
     ],
@@ -176,7 +178,27 @@ export default {
 			return this.$store.getters.getpatientbyid(this.$route.params.id);
 		},
 		nextitem:function(){
-			var item={x:0,y:20,w:4,h:6,i:"0",c:""};
+			var item={x:0,y:20,w:6,h:6,i:"0",c:""};
+			var x = 0;
+			var y = 0;
+			var self=this;
+			var layout = this.layout.sort(function(a,b){return a.y-b.y})
+			layout.forEach(function(e){
+				var w0 = x-e.x;
+				var h0= y-e.y;
+				if( w0<self.defaultw | h0<self.defaulth )	{
+					x = e.x+self.defaultw;
+					if(x>self.defaultw){
+						x=0;
+						y=y+self.defaulth;
+					}
+				}
+			})
+			console.log('X= '+x+ " Y= "+y);
+			item.x=x;
+			item.y=y;
+			item.w=this.defaultw;
+			item.h=this.defaulth;
 			item.i=this.layout.length+"";
 			return item
 		},
@@ -198,10 +220,8 @@ export default {
 	watch:{
 		itemWidgetList:function(){
 			this.updateLayoutContent();
-			var zeroitem=this.itemWidgetList.filter(function(e){return (e.length==0)});
-			if(zeroitem.length==0 && this.widgetList.length>=1){
-				this.layout.push(this.nextitem)
-				this.itemWidgetList.push([])
+			if(this.isInEdit) {
+				this.addEmptySlot();
 			}
 		}
 	},
@@ -315,6 +335,14 @@ export default {
 		toggleEditMode:function(){
 			this.isInEdit=true;
 			this.dragOptions.disabled=false;
+			this.addEmptySlot();
+		},
+		addEmptySlot: function(){
+			var zeroitem=this.itemWidgetList.filter(function(e){return (e.length==0)});
+			if(zeroitem.length==0 && this.widgetList.length>=1){
+				this.layout.push(this.nextitem)
+				this.itemWidgetList.push([])
+				}
 		},
     resizedEvent: function(i, newH, newW, newHPx, newWPx){
       var msg = "RESIZED i=" + i + ", H=" + newH + ", W=" + newW + ", H(px)=" + newHPx + ", W(px)=" + newWPx;
@@ -445,6 +473,7 @@ ul.wlayout li {
 	position:relative;
 	border:1px dashed #999999;
 	background-color:#f7f7f7;
+	box-shadow: none;
 }
 .vue-grid-item {
 	position:relative;
@@ -452,6 +481,7 @@ ul.wlayout li {
 	background-color:transparent;
 	display: flex;
 	flex-direction:column;
+	box-shadow: 4px 4px 4px 1px rgba(0, 0, 0, .2);
 }
 
 </style>

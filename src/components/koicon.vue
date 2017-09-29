@@ -1,10 +1,11 @@
 <template>
 		<div class="container kgl-icon" :class="{ active: object.count>=0 }" v-bind:id="object.id">
-				<p class='ft-sz-12'>{{object.label}}</p>
-				<div class="badge" v-show='object.count>0'><p class='ft-sz-10'>{{object.count}}</p></div>
-
+			<p class='ft-sz-12'>{{object.label}}</p>
+			<div class="badge" v-show='object.count>0'>
+				<p class='ft-sz-10'>{{object.count}}</p>
 			</div>
-	</template>
+		</div>
+</template>
 	<script>
 	import moment from 'moment'
 	import eventBus from '../eventBus.js';
@@ -30,6 +31,7 @@
 					top: -5px;
 					color: #fff;
 					background-color:#bc2526;
+					border-radius:100%;
 				}
 
 				.kgl-icon p {
@@ -58,7 +60,7 @@
 						transition: all 0.5s ease;
 				}
 				.kgl-icon.active {
-					background-color: #002a5b;
+					background-color: #00b5af;
 					color: #fff;
 				}
 				.kgl-icon>p {
