@@ -3,32 +3,28 @@
 	<applayout>
 		<div slot='banner'>
 			<div class='row'>
-			<div class='col-md-2 col-sm-2 col-xs-2 '></div>
-			<div class='col-md-8 col-sm-8 col-xs-8 '>
-				<form id="search">
-					<i class='fa fa-search'></i> <input name="query" spellcheck=false v-model="searchQuery">
-				</form>
+				<div class='col-md-2 col-sm-2 col-xs-2 '></div>
+				<div class='col-md-8 col-sm-8 col-xs-8 '>
+					<form id="search">
+						<i class='fa fa-search'></i> <input name="query" spellcheck=false v-model="searchQuery">
+					</form>
+				</div>
+				<div class='col-md-1 col-sm-1 col-xs-1 '></div>
 			</div>
-			<div class='col-md-1 col-sm-1 col-xs-1 '></div>
+		</div>
+		<div slot='main'>
+			<div class='row'>
+				<div class='col-md-2 col-sm-2 col-xs-2  ht-full'></div>
+				<div class='col-md-8 col-sm-8 col-xs-8  ht-full'>
+					<kogrid
+	    			:data="patients"
+	    			:columns="gridColumns"
+	    			:filter-key="searchQuery"
+						v-on:selected='selected'>
+	  			</kogrid>
+				</div>
+				<div class='col-md-2 col-sm-2 col-xs-2 ht-full'></div>
 			</div>
-			</div>
-			<div slot='main'>
-<div class='row'>
-			<div class='col-md-2 col-sm-2 col-xs-2  ht-full'></div>
-			<div class='col-md-8 col-sm-8 col-xs-8  ht-full'>
-
-			<kogrid
-	    :data="patients"
-	    :columns="gridColumns"
-	    :filter-key="searchQuery"
-			v-on:selected='selected'>
-	  </kogrid>
-
-
-			</div>
-			<div class='col-md-2 col-sm-2 col-xs-2 ht-full'></div>
-
-</div>
 		</div>
 	</applayout>
 </div>
@@ -61,7 +57,17 @@ export default {
 	  },
 	computed : {
 		patients: function() {
-			return this.$store.getters.getPatientList
+			var ptlist = this.$store.getters.getPatientList;
+			var plist =[];
+			ptlist.forEach(function(e){
+				var p = {};
+				p.ID=e.ID;
+				p.Name=e.Name;
+				p.Age=e.Age;
+				p.Gender=e.Gender;
+				plist.push(e)
+			})
+			return plist
 		},
 		datalength:function(){
 			return this.$store.getters.getDataLength;

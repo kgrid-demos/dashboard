@@ -1,0 +1,77 @@
+<template>
+		<div class="container kgl-icon" :class="{ active: object.count>=0 }" v-bind:id="object.id">
+				<p class='ft-sz-12'>{{object.label}}</p>
+				<div class="badge" v-show='object.count>0'><p class='ft-sz-10'>{{object.count}}</p></div>
+
+			</div>
+	</template>
+	<script>
+	import moment from 'moment'
+	import eventBus from '../eventBus.js';
+	export default {
+  		name:	"koicon",
+		props : [ 'object', 'cflag' ,'tileindex'],
+		created: function(){
+
+		},
+		computed : {
+
+					},
+		methods : {
+
+					}
+				};
+				</script>
+				<style scoped>
+
+				.kgl-icon .badge{
+					position: absolute;
+					right: -5px;
+					top: -5px;
+					color: #fff;
+					background-color:red;
+				}
+
+				.kgl-icon p {
+					font-size: 11px;
+					color: #fff;
+				}
+
+				ul li {
+				display:table-cell;
+				}
+
+				.kgl-icon {
+						position: relative;
+				    text-align: center;
+						max-width: 75px;
+						height: 40px;
+				    background-color: #f7f7f7;
+			    	color: #fff;
+
+				    font-weight: 400;
+				    border: 1px solid #fff;
+						border-radius: 5px;
+				    padding: 0px ;
+						margin:0px 5px;
+						text-transform: uppercase;
+						transition: all 0.5s ease;
+				}
+				.kgl-icon.active {
+					background-color: green;
+					color: #fff;
+
+
+
+				}
+				.kgl-icon>p {
+					position:relative;
+					top: 50%;
+					-webkit-transform: translateY(-50%);
+					-ms-transform: translateY(-50%);
+					transform: translateY(-50%);
+
+				}
+
+
+				</style>

@@ -1,6 +1,6 @@
 <template>
 		<div class="container kgl-tile" v-bind:id="object">
-				<p><widget :chartheight='(containerheight-30)' :editmode="editmode" :title="object" :showoptions="editmode" :startdate="startdate" v-on:sliderdrag="preventDrag"></widget></p>
+				<p><widget :chartheight='(containerheight-30)' :editmode="editmode" :title="object" :showoptions="editmode" :startdate="startdate" ></widget></p>
 		</div>
 	</template>
 	<script>
@@ -17,9 +17,6 @@
 
 					},
 		methods : {
-			preventDrag (e) {
-			  this.$emit('preventdrag');
-			}
 					},
 		components : {
 		  widget

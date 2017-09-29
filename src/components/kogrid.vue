@@ -10,6 +10,7 @@
           <span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'">
           </span>
         </th>
+        <th>Interventions</th>
       </tr>
     </thead>
     <tbody>
@@ -17,13 +18,16 @@
         <td v-for="key in columns">
           {{entry[key]}}
         </td>
+        <td>
+          <ul><li v-for='widget in entry.wlist'><koicon :object='widget' ></koicon></li></ul>
+        </td>
       </tr>
     </tbody>
   </table>
 </template>
 
 <script>
-
+import koicon from "./koicon.vue"
 export default {
   name: 'kogrid',
   template: '#grid-template',
@@ -31,6 +35,9 @@ export default {
     data: Array,
     columns: Array,
     filterKey: String
+  },
+  components:{
+    koicon
   },
   data: function () {
     var sortOrders = {}
@@ -84,6 +91,9 @@ export default {
 }
 </script>
 <style scoped>
+ul li {
+  display: table-cell;
+}
 table {
   border: 2px solid #0075bc;
   border-radius: 3px;
@@ -151,4 +161,5 @@ tr:hover{
   border-right: 4px solid transparent;
   border-top: 4px solid #fff;
 }
+
 </style>
