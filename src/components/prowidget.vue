@@ -19,7 +19,7 @@
           Daily Frequency:
         </div>
         <div class="options">
-          <vue-slider ref="slider" @drag-start="dragstart" :min=1 :max=4 tooltip="hover" :piecewise=true v-model="datasettings.dailyfreq"></vue-slider>
+          <vue-slider ref="slider" :min=1 :max=4 tooltip="hover" :piecewise=true v-model="datasettings.dailyfreq"></vue-slider>
         </div>
       </div>
       <div class="optrow">
@@ -85,7 +85,7 @@
       });
       var uid = this.$route.params.id + this.title;
       if (this.$store.getters.getDataSettings(uid)) {
-        this.datasettings = this.$store.getters.getDataSettings(uid).datasettings;
+        this.datasettings = Object.assign({}, this.$store.getters.getDataSettings(uid).datasettings);
       } else {
         this.datasettings = {
           instruments: [
@@ -141,9 +141,6 @@
       },
       getRandomInt () {
         return Math.floor(Math.random() * (10)) + 1;
-      },
-      dragstart (ctx) {
-        this.$emit('sliderdrag');
       },
       determinecolor() {
         var colors = [];

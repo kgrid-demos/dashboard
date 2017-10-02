@@ -27,7 +27,7 @@
           Weekly Frequency:
         </div>
         <div class="options">
-          <vue-slider ref="slider" @drag-start="dragstart" :min=1 :max=7 tooltip="hover" :piecewise=true v-model="datasettings.weeklyfreq"></vue-slider>
+          <vue-slider ref="slider" :min=1 :max=7 tooltip="hover" :piecewise=true v-model="datasettings.weeklyfreq"></vue-slider>
         </div>
       </div>
       <div class="optrow">
@@ -35,7 +35,7 @@
           Minutes Per Module:
         </div>
         <div class="options">
-          <vue-slider ref="slider" @drag-start="dragstart" :min=15 :max=60 tooltip="hover" :interval=15 :piecewise=true v-model="datasettings.minutespermodule"></vue-slider>
+          <vue-slider ref="slider" :min=15 :max=60 tooltip="hover" :interval=15 :piecewise=true v-model="datasettings.minutespermodule"></vue-slider>
         </div>
       </div>
       <div class="optrow">
@@ -78,7 +78,7 @@
       });
       var uid = this.$route.params.id + this.title;
       if (this.$store.getters.getDataSettings(uid)) {
-        this.datasettings = this.$store.getters.getDataSettings(uid).datasettings;
+        this.datasettings = Object.assign({}, this.$store.getters.getDataSettings(uid).datasettings);
       } else {
         this.datasettings = {
           instruments: [
@@ -121,7 +121,7 @@
         for (let i = 1; i <= this.datasettings.weeklyfreq; i++) {
           if (startDate < moment().subtract(1, 'w')) {
             modStatus = this.getRandomStatus(2);
-          } else if(startDate > moment()){
+          } else if(startDate > moment() || modStatus === "☐"){
             modStatus = "☐";
           } else {
             modStatus = this.getRandomStatus(3);
@@ -136,9 +136,6 @@
         var uid = this.$route.params.id + this.title;
         this.$store.commit('saveWidgetSettings', {'id':uid, 'datasettings':this.datasettings});
         this.getweeklymodules();
-      },
-      dragstart (ctx) {
-        this.$emit('sliderdrag');
       },
       getRandomStatus (availableStatuses) {
         const statusint = Math.floor(Math.random() * (availableStatuses ? availableStatuses : 3));

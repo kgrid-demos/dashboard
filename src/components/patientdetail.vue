@@ -60,19 +60,21 @@
 														:i="item.i"
 														ref='item'
 														v-bind:key="item.i"
-                            @resized="resizedEvent">
-														<div v-show='(item.c=="")&&isInEdit' style="text-align: center; vertical-align: middle; font-size: 16px; font-weight: 700;position:relative;top:50%;transform:translateY(-50%)">Add a widget</div>
-														<div class='widgetTitle' v-if='item.c!=""'>
+                            @resized="resizedEvent"
+											 			drag-allow-from=".draggablehandle"
+											 			drag-ignore-from=".no-drag">
+														<div class="draggable-handle" v-show='(item.c=="")&&isInEdit' style="text-align: center; vertical-align: middle; font-size: 16px; font-weight: 700;position:relative;top:50%;transform:translateY(-50%)">Add a widget</div>
+														<div class='widgetTitle' v-bind:class="{draggablehandle: isInEdit}" v-if='item.c!=""'>
 															<div class='badge' v-if='!isInEdit' v-show='count[item.i]>0'>{{count[item.i]}}</div>
 															<p v-if='itemWidgetList[item.i].length>0'>{{itemWidgetList[item.i][0].label}}</p>
 															<i class='fa fa-plus' v-if='!isInEdit'  style="margin-right:70px;" @click='addAlert(itemWidgetList[item.i][0].id)'></i>
 															<i class='fa fa-minus'  v-if='!isInEdit'  style="margin-right:20px;" @click='removeAlert(itemWidgetList[item.i][0].id)'></i>
 															<i class='fa fa-close' v-if='isInEdit' @click='removeWidget(item.i)'></i>
-															</div>
-						<div class='widgetcontainer fill'  @mousedown.stop @dragstart.stop @dragend.stop @drag.stop @mouseup.stop @drop='dropped'>
-								<draggable class='wlayout' element="ul" v-model="itemWidgetList[item.i]" :options="dragOptions"   >
+														</div>
+						<div class='widgetcontainer fill no-drag' @drop='dropped'>
+								<draggable class='wlayout' element="ul" v-model="itemWidgetList[item.i]" :options="dragOptions">
 														<li v-for='(object,index) in itemWidgetList[item.i]' v-bind:key='index' v-if='itemWidgetList[item.i].length==1|object.type!="NEW"'>
-															<kotile :object='object.label'  :cflag="object.type" :tileindex='index' :containerheight="((item.h-1)*40)" :editmode='isInEdit' :startdate="dateRangeLabel.startDate" draggable='true' @dragstart='dragWidget' v-on:preventdrag="preventDrag(item.i)"></kotile>
+															<kotile :object='object.label'  :cflag="object.type" :tileindex='index' :containerheight="((item.h-1)*40)" :editmode='isInEdit' :startdate="dateRangeLabel.startDate" draggable='true'  @dragstart='dragWidget'></kotile>
 														</li>
 													</draggable></div>
 						</grid-item>
@@ -126,7 +128,7 @@ export default {
 			animation: 0,
 			group: 'description',
 			disabled: true,
-			ghostClass: 'ghost'
+			ghostClass: 'ghost',
 		},
 		dateRange:{starttime:0, endtime: 6},
 		}
@@ -298,7 +300,7 @@ export default {
     dragWidget:function(ev){
       ev.stopPropagation();
 			console.log("Start Dragging ");
-			console.log(ev.target)
+			console.log(ev.target);
       return true;
     },
     denter: function(e){
@@ -318,7 +320,7 @@ export default {
     },
     dropped:function(e) {
 			e.preventDefault();
-			console.log("dropped")
+			console.log("dropped");
 			this.cleanupLayout();
     },
 		removeWidget:function(i){
@@ -358,9 +360,6 @@ export default {
 			)
 
 			this.pwidgetlist=this.layout.map(function(e){return e.c})
-		},
-		preventDrag: function(e) {
-      return false;
 		}
 	},
 	components:{
@@ -430,6 +429,10 @@ flex: auto;
 .widgetTitle .badge {
 	top:5px;
 	right:45px;
+}
+
+.draggablehandle {
+	cursor: pointer;
 }
 
 

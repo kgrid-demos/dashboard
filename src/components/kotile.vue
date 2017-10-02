@@ -2,7 +2,7 @@
 		<div class="container kgl-tile" v-bind:id="object">
 				<p>
           <prowidget v-if="cflag === 'PRO'" :chartheight='(containerheight-30)' :editmode="editmode" :title="object" :startdate="startdate"></prowidget>
-          <smwidget v-if="cflag === 'SM'" :editmode="editmode" :title="object"></smwidget>
+          <smwidget v-if="cflag === 'SM'" :editmode="editmode" :title="object" ></smwidget>
         </p>
 
 		</div>
@@ -22,6 +22,9 @@
 
 					},
 		methods : {
+		  sliderdrag () {
+		    this.$emit("sliderdrag");
+      }
 					},
 		components : {
 		  prowidget,
