@@ -6,11 +6,13 @@
 			<nav class='navbar navbar-fixed-top kgl-1 kg-bg-color kg-color'>
 
 						<ul class='nav navbar-nav'>
+							<li class='test' @click='resetstore'><a><span>Reset</span></a></li>
 							<router-link tag='li' :class="{'active': $route.fullPath === '/'}" to='/'><a><span>Patients</span></a></router-link>
 							<router-link tag='li' :class="{'active': $route.fullPath === '/about'}" to='/about'><a><span>Calendar</span></a></router-link>
 							<router-link tag='li' :class="{'active': $route.fullPath === '/about'}" to='/about'><a><span>Notifications</span></a></router-link>
-							<router-link tag='li' :class="{'active': $route.fullPath === '/about'}" to='/about'><a><span>Dr.</span></a></router-link>
-						</ul>
+							<router-link tag='li' :class="{'active': $route.fullPath === '/about'}" to='/about'><a><span>User</span></a></router-link>
+							<li class='test' @click='resetstore'><a><span>Reset</span></a></li>
+													</ul>
 
 			</nav>
 		</div>
@@ -38,7 +40,13 @@ export default {
 		}
   },
   methods: {
-
+		resetstore:function(){
+			if (confirm("Datastore will be reset! Are you sure?") == true) {
+							this.$store.commit('resetState');
+						} else {
+							
+						}
+		}
   }
 };
 </script>
@@ -48,6 +56,12 @@ export default {
 .navbar-nav {
 	float:right;
 	margin: 0px 40px 0px 0px;
+}
+.kgl-1 .navbar-nav>li.test {
+	opacity:0;
+}
+.kgl-1 .navbar-nav>li.test:hover {
+	opacity:1;
 }
 .kgl-1 .navbar-nav>li a {
 	font-size:14px;

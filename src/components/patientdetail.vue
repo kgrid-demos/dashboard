@@ -30,15 +30,14 @@
 				<div class='col-md-2 col-sm-2 col-xs-2 ht-full  pad-0' v-else></div>
 				<div class='col-md-8 col-sm-8 col-xs-8 kg-bg-custom-1 ht-full pad-0'>
 					<div class='row ht-50'>
-					<div class='col-md-6 pad-0'>
+					<div class='col-md-7 col-sm-5 pad-0'>
 					<div class="pad-l-15"  v-if='!isInEdit && pwidgetlist.length>=1 '>
 							<button class='kg-btn-primary ' @click='gopreviousweek'> <i class='fa fa-angle-left fa-lg'></i></button>
 							<button class='kg-btn-primary ' style='width:240px;'> {{dateRangeLabel.start}} - {{ dateRangeLabel.end}} </button>
 							<button class='kg-btn-primary ' @click='gonextweek'> <i class='fa fa-angle-right fa-lg'></i></button>
 							</div>
 					</div>
-					<div class='col-md-2 pad-0'></div>
-					<div class='col-md-4  '>
+						<div class='col-md-5 col-sm-5 '>
 					<div class='float-r'>
 						<button class='kg-btn-primary ' v-if='isInEdit && pwidgetlist.length==1&&this.pwidgetlist[0]=="" ' @click='loadDefault'> Load Default Layout </button>
 						<button class='kg-btn-primary ' v-if='!isInEdit' @click='toggleEditMode'>Edit</button>

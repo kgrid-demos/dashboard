@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import VuexPersistence from 'vuex-persist'
+import { initialState } from './modules/state.js'
 
 Vue.use(Vuex)
 
@@ -76,6 +77,9 @@ export default new Vuex.Store({
           e.count=-1;
         }
       })
+    },
+    resetState(state) {
+      Object.assign(state, initialState);
     },
     updateAlert(state,obj){
       var pindex = state.patientlist.map(function(e) {return e.ID}).indexOf(obj.pid);
