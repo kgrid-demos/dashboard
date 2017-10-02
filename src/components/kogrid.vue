@@ -1,6 +1,6 @@
 <template>
 
-  <table>
+  <table class='group0'>
     <thead>
       <tr>
         <th v-for="key in columns"
@@ -34,7 +34,8 @@ export default {
   props: {
     data: Array,
     columns: Array,
-    filterKey: String
+    filterKey: String,
+    groupid:-1
   },
   components:{
     koicon
@@ -50,6 +51,13 @@ export default {
     }
   },
   computed: {
+    groupclass: function(){
+      var c="default";
+      if(this.groupid!=-1){
+        c='group'+this.groupid;
+      }
+      return c;
+    },
     filteredData: function () {
       var sortKey = this.sortKey
       var filterKey = this.filterKey && this.filterKey.toLowerCase()
@@ -95,21 +103,87 @@ ul li {
   display: table-cell;
 }
 table {
-  border: 2px solid #0075bc;
   border-radius: 3px;
   background-color: #fff;
 }
 
+table.default {
+  border: 2px solid #0075bc;
+}
+table.group0 {
+  border: 2px solid #0075bc;
+}
+table.group1 {
+  border: 2px solid blue;
+}
+table.group2 {
+  border: 2px solid green;
+}
+table.group3 {
+  border: 2px solid #0075bc;
+}
+table.group4 {
+  border: 2px solid #0075bc;
+}
+table.group5 {
+  border: 2px solid #0075bc;
+}
+table.group6 {
+  border: 2px solid #0075bc;
+}
+table.group7 {
+  border: 2px solid #0075bc;
+}
+table.group8 {
+  border: 2px solid #0075bc;
+}
+table.group9 {
+  border: 2px solid #0075bc;
+}
+
 th {
-  background-color: #0075bc;
-  color: #fff;
+color: #fff;
   cursor: pointer;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
 }
+table.default  th {
+background-color: #fff;
+color: #0075bc;
+}
+table.group0  th{
+background-color: #0075bc;
 
+}
+  table.group1  th{
+    background-color: blue;
+}
+table.group2  th{
+  background-color: green;
+}
+table.group3  th{
+  border: 2px solid #0075bc;
+}
+table.group4  th{
+  border: 2px solid #0075bc;
+}
+table.group5  th {
+  border: 2px solid #0075bc;
+}
+table.group6  th{
+  border: 2px solid #0075bc;
+}
+table.group7  th{
+  border: 2px solid #0075bc;
+}
+table.group8  th{
+  border: 2px solid #0075bc;
+}
+table.group9 th {
+  border: 2px solid #0075bc;
+}
 th, td {
   padding: 15px 15px;
   text-overflow: ellipsis;

@@ -34,9 +34,10 @@ const routes = [
                 { path : '/patient/:id', name : 'patient', component : require('./components/patientdetail.vue'), data: function(){
                 	   	console.log("current Patient ID:"+ this.$route.params.id);
                     }	},
-                    { path : '/PRO/:id', name : 'pro', component : require('./components/pro.vue'), data: function(){
+                { path : '/PRO/:id', name : 'pro', component : require('./components/pro.vue'), data: function(){
                     	   	console.log("current PRO ID:"+ this.$route.params.id);
                         }	},
+
                       	    ];
 
 const router = new VueRouter({

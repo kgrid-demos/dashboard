@@ -1,13 +1,12 @@
 <template id='navbar'>
 	<div class='kgl-nav'>
-			<router-link class='navbar-brand kgl-1' to='/'>
-						<span>Dashboard</span>
-			</router-link>
+			<a class='navbar-brand kgl-1' @click='stationselector'>
+						<span>{{dashboard}}</span>
+			</a>
 			<nav class='navbar navbar-fixed-top kgl-1 kg-bg-color kg-color'>
-
+	
 						<ul class='nav navbar-nav'>
-							<li class='test' @click='resetstore'><a><span>Reset</span></a></li>
-							<router-link tag='li' :class="{'active': $route.fullPath === '/'}" to='/'><a><span>Patients</span></a></router-link>
+							<li :class="{'active': $route.fullPath === '/'}" @click='seeallpatients'><a><span>All Patients</span></a></li>
 							<router-link tag='li' :class="{'active': $route.fullPath === '/about'}" to='/about'><a><span>Calendar</span></a></router-link>
 							<router-link tag='li' :class="{'active': $route.fullPath === '/about'}" to='/about'><a><span>Notifications</span></a></router-link>
 							<router-link tag='li' :class="{'active': $route.fullPath === '/about'}" to='/about'><a><span>User</span></a></router-link>
@@ -25,7 +24,8 @@ export default {
   name: 'navbar',
   data: function () {
     return {
- 			showDropdown : false
+ 			showDropdown : false,
+
     };
   },
   created: function() {
@@ -35,17 +35,31 @@ export default {
 		firstname: function(){
 			return (this.$store.state.currentUser.first_name || "")
 		},
-	isAdmin: function(){
+		isAdmin: function(){
 			return this.$store.getters.isAdmin;
-		}
+		},
+		dashboard: function(){
+			var d= 'Dashboard';
+			if(this.$store.getters.getCurrentStation.label!=""){
+			d = d +" - ";
+			}
+			d=d+this.$store.getters.getCurrentStation.label;
+			return d;
+			}
   },
   methods: {
 		resetstore:function(){
 			if (confirm("Datastore will be reset! Are you sure?") == true) {
 							this.$store.commit('resetState');
 						} else {
-							
+
 						}
+		},
+		stationselector:function(){
+			this.$store.commit('selstation',{value:-1});
+		},
+		seeallpatients:function(){
+			this.$store.commit('setgroupid',{value:-1});
 		}
   }
 };
@@ -92,7 +106,7 @@ export default {
 	padding: 14px 0px;
 	z-index:400;
 	top:0;
-	width:200px;
+	width:350px;
 	left:40px;
 	height:56px;
 	border:none;

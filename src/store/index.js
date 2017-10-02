@@ -21,15 +21,15 @@ export default new Vuex.Store({
                         { "id":"PRO-04","label":"Nausea","type":"PRO"},
                         { "id":"SM-01","label":"Smoking CESSATION","type":"SM"},
                         { "id":"SM-02","label":"NUTRITION","type":"SM"}],
-    patientlist:      [ { ID:"PA-67034-001", Name:"Larry Lambert", Age:"54", Gender:"male",
+    patientlist:      [ { ID:"PA-67034-001", Name:"Larry Lambert", Age:"54", Gender:"male", type:0,group:[0,1,2,3,4],
                             wlist:[{id:'PRO-01',"label":"Pain",count:-1},{id:'PRO-02',"label":"Anxiety",count:-1},{id:'PRO-03',"label":"Depression",count:-1},{id:'PRO-04',"label":"Nausea",count:-1},{id:'SM-01',"label":"Smoking CESSATION",count:-1},{id:'SM-02',"label":"NUTRITION",count:-1}]},
-                        { ID:"PA-67034-002", Name:"Alvin Adams",Age:"27", Gender:"male",
-                            wlist:[{id:'PRO-01',"label":"Pain",count:-1},{id:'PRO-02',"label":"Anxiety",count:-1},{id:'PRO-03',"label":"Depression",count:-1},{id:'PRO-04',"label":"Nausea",count:-1},{id:'SM-01',"label":"Smoking CESSATION",count:-1},{id:'SM-02',"label":"NUTRITION",count:-1}]},
-                        { ID:"PA-67034-003", Name:"Larry Lambert Jr.", Age:"17", Gender:"male",
-                            wlist:[{id:'PRO-01',"label":"Pain",count:-1},{id:'PRO-02',"label":"Anxiety",count:-1},{id:'PRO-03',"label":"Depression",count:-1},{id:'PRO-04',"label":"Nausea",count:-1},{id:'SM-01',"label":"Smoking CESSATION",count:-1},{id:'SM-02',"label":"NUTRITION",count:-1}]},
-                        { ID:"PA-67034-004", Name:"Marry McMahon", Age:"74", Gender:"female",
-                            wlist:[{id:'PRO-01',"label":"Pain",count:-1},{id:'PRO-02',"label":"Anxiety",count:-1},{id:'PRO-03',"label":"Depression",count:-1},{id:'PRO-04',"label":"Nausea",count:-1},{id:'SM-01',"label":"Smoking CESSATION",count:-1},{id:'SM-02',"label":"NUTRITION",count:-1}]},
-                      ],
+                                            { ID:"PA-67034-002", Name:"Alvin Adams",Age:"27", Gender:"male", type:0,group:[0,1,2,3,4],
+                                                wlist:[{id:'PRO-01',"label":"Pain",count:-1},{id:'PRO-02',"label":"Anxiety",count:-1},{id:'PRO-03',"label":"Depression",count:-1},{id:'PRO-04',"label":"Nausea",count:-1},{id:'SM-01',"label":"Smoking CESSATION",count:-1},{id:'SM-02',"label":"NUTRITION",count:-1}]},
+                                            { ID:"PA-67034-003", Name:"Larry Lambert Jr.", Age:"17", Gender:"male",type:0,group:[0,1,3,4,5],
+                                                wlist:[{id:'PRO-01',"label":"Pain",count:-1},{id:'PRO-02',"label":"Anxiety",count:-1},{id:'PRO-03',"label":"Depression",count:-1},{id:'PRO-04',"label":"Nausea",count:-1},{id:'SM-01',"label":"Smoking CESSATION",count:-1},{id:'SM-02',"label":"NUTRITION",count:-1}]},
+                                            { ID:"PA-67034-004", Name:"Marry McMahon", Age:"74", Gender:"female",type:0,group:[1,2,3,4,5],
+                                                wlist:[{id:'PRO-01',"label":"Pain",count:-1},{id:'PRO-02',"label":"Anxiety",count:-1},{id:'PRO-03',"label":"Depression",count:-1},{id:'PRO-04',"label":"Nausea",count:-1},{id:'SM-01',"label":"Smoking CESSATION",count:-1},{id:'SM-02',"label":"NUTRITION",count:-1}]},
+                                          ],
     defaultLayout:    [ { "x":0,"y":0,"w":4,"h":6,"i":"0","c":"PRO-01"},
                         { "x":0,"y":6,"w":4,"h":6,"i":"1","c":"SM-01"},
                         { "x":4,"y":0,"w":4,"h":6,"i":"2","c":"PRO-04"},
@@ -59,7 +59,11 @@ export default new Vuex.Store({
     ],
     widgetSettings: [
 
-    ]
+    ],
+    currentStation:{id:0,"label":"Colon Cancer"},
+    currentGroupid:{id:0,"color":"#0075bc"},
+    cancertypes:[{id:0,"label":"Colon Cancer"},{id:1,"label":"Liver Cancer"},{id:2,"label":"Prostate Cancer"},{id:3,"label":"Lung Cancer"}],
+
           },
   mutations: {
     saveConfig(state, obj){
@@ -94,6 +98,21 @@ export default new Vuex.Store({
         state.patientlist[pindex].wlist[windex].count++;
       }
     },
+    selstation(state,obj){
+      if(obj.value!=-1){
+      state.currentStation.id=state.cancertypes[obj.value].id;
+      state.currentStation.label=state.cancertypes[obj.value].label;
+    }
+    else {
+      state.currentStation.id=-1;
+      state.currentStation.label="";
+    }
+    },
+
+    setgroupid(state,obj){
+          state.currentGroupid.id=obj.value;
+
+        },
     saveWidgetSettings(state, obj){
       var index = state.widgetSettings.map(function(e) {return e.id}).indexOf(obj.id);
       if(index >= 0) {
@@ -144,8 +163,22 @@ export default new Vuex.Store({
     getuser: state => {
        return state.currentUser
     },
+    getCurrentStation: state =>{
+        return state.currentStation;
+    },
+    getCurrentGroupid:state=>{
+      return state.currentGroupid;
+    },
     getPatientList: state=>{
-        return (state.patientlist) ;
+      var l=[];
+      Object.assign(l, state.patientlist);
+
+      if(state.currentStation.id!=-1){
+        l=l.filter(function(e) {
+          return (e.type==state.currentStation.id)
+        })
+      }
+      return l ;
     },
   }
   // plugins: debug ? [createLogger()] : []
