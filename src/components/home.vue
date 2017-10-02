@@ -2,7 +2,7 @@
 <div class='content'>
 	<applayout>
 		<div slot='banner'>
-			<div class='row'>
+			<div class='row' v-show='stationSelected'>
 				<div class='col-md-2 col-sm-2 col-xs-2 '></div>
 				<div class='col-md-8 col-sm-8 col-xs-8 '>
 					<form id="search">
@@ -14,8 +14,14 @@
 			</div>
 		</div>
 		<div slot='main'>
-			<div class='row'>
-				<div class='col-md-2 col-sm-2 col-xs-2  ht-full'></div>
+			<div class='row' v-if="stationSelected">
+				<div class='col-md-2 col-sm-2 col-xs-2  ht-full'>
+					<div v-if='currentGroup.id==-1'>
+										<p style='text-align:center;margin-bottom:30px;'>Group ID</p>
+						<ul class='groupids'><li v-for='(num,index) in groups' @click='selectgroup(index)'>{{num}}</li></ul>
+					</div>
+
+				</div>
 				<div class='col-md-8 col-sm-8 col-xs-8  ht-full'>
 					<kogrid
 	    			:data="patients"
@@ -25,6 +31,14 @@
 	  			</kogrid>
 				</div>
 				<div class='col-md-2 col-sm-2 col-xs-2 ht-full'></div>
+			</div>
+			<div class='row' v-else>
+				<div class='col-md-2 col-sm-2 col-xs-2  ht-full pad-0'></div>
+				<div class='col-md-2 col-sm-2 col-xs-2  ht-full pad-0' @click='selectStation(0)'><div class='station'><p class='ht-full '>Colon Cancer</p></div></div>
+				<div class='col-md-2 col-sm-2 col-xs-2  ht-full pad-0' @click='selectStation(1)'><div class='station'><p class='ht-full '>Liver Cancer</p></div></div>
+				<div class='col-md-2 col-sm-2 col-xs-2  ht-full pad-0' @click='selectStation(2)'><div class='station'><p class='ht-full '>Prostate Cancer</p></div></div>
+				<div class='col-md-2 col-sm-2 col-xs-2  ht-full pad-0' @click='selectStation(3)'><div class='station'><p class='ht-full '>Lung Cancer</p></div></div>
+				<div class='col-md-2 col-sm-2 col-xs-2  ht-full pad-0'></div>
 			</div>
 		</div>
 	</applayout>
@@ -41,7 +55,9 @@ export default {
 		return {
 			searchQuery: '',
 			gridColumns: ['ID','Name', 'Age','Gender'],
-			gridData: []
+			gridData: [],
+			groups:[0,1,2,3,4,5,6,7,8,9],
+
 		}
 	},
 
@@ -57,27 +73,47 @@ export default {
 
 	  },
 	computed : {
+	currentGroup: function(){
+		return this.$store.getters.getCurrentGroupid;
+	},
 		patients: function() {
+			var self =this;
 			var ptlist = this.$store.getters.getPatientList;
 			var plist =[];
-			ptlist.forEach(function(e){
-				var p = {};
-				p.ID=e.ID;
-				p.Name=e.Name;
-				p.Age=e.Age;
-				p.Gender=e.Gender;
-				plist.push(e)
+			if(self.currentGroup.id==-1){
+				return ptlist;
+			}else {
+				ptlist.forEach(function(e){
+					var ind = e.group.indexOf(self.currentGroup.id);
+
+					if(ind!=-1){
+						plist.push(e)
+					}
 			})
 			return plist
+			}
+
 		},
 		datalength:function(){
 			return this.$store.getters.getDataLength;
-			}
+			},
+		stationSelected: function(){
+			return this.$store.getters.getCurrentStation.id!=-1
+		},
+		currentGroup: function(){
+		  return this.$store.getters.getCurrentGroupid;
+		},
 	},
 	methods : {
 		selected: function(t){
 			console.log(this.patients[t].ID);
 			eventBus.$emit("patientSelected",this.patients[t]);
+		},
+		selectStation: function(i){
+			this.$store.commit('selstation',{value:i});
+		},
+		selectgroup: function(index){
+			this.$store.commit('setgroupid',{value:index});
 		}
 	},
 	components:{
@@ -127,8 +163,46 @@ form#search input {
 	height: 100%;
 	min-height:450px;
 }
+.station {
+text-align: center;
+vertical-align: middle;
+padding:20px;
+ position:relative;
+ top:50%;
+ background-color:#0075bc;
+ border: 2px solid #0075bc;
+ margin:20px;
+	cursor:pointer;
+	border-radius: 15px;
+}
+
+
+.station p{
+font-size: 28px;
+font-weight: 700;
+color:#fff;
+    transform: translateY(35%);
+		}
+
+
+		.station:hover {
+		 background-color:#fff;
+		}
+		.station:hover p{
+			color: #0075bc;
+			}
 h1 small {
 	font-size:50%;
+}
+ul.groupids li {
+ text-align: center;
+ cursor: pointer;
+ font-size: 18px;
+ margin: 5px 80px;
+ border: 1px dashed #e5e5e5;
+	padding: 10px;
+	background-color: #f7f7f7;
+
 }
 
 </style>
