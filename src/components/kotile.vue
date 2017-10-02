@@ -1,12 +1,17 @@
 <template>
 		<div class="container kgl-tile" v-bind:id="object">
-				<p><widget :chartheight='(containerheight-30)' :editmode="editmode" :title="object" :showoptions="editmode" :startdate="startdate" ></widget></p>
+				<p>
+          <prowidget v-if="cflag === 'PRO'" :chartheight='(containerheight-30)' :editmode="editmode" :title="object" :startdate="startdate"></prowidget>
+          <smwidget v-if="cflag === 'SM'" :editmode="editmode" :title="object"></smwidget>
+        </p>
+
 		</div>
 	</template>
 	<script>
 	import moment from 'moment';
 	import eventBus from '../eventBus.js';
-	import widget from './widget.vue';
+	import prowidget from './prowidget.vue';
+	import smwidget from './smwidget.vue';
 	export default {
   	name:	"kotile",
 		props : [ 'object', 'cflag' ,'tileindex', 'containerheight', 'editmode', 'startdate'],
@@ -19,7 +24,8 @@
 		methods : {
 					},
 		components : {
-		  widget
+		  prowidget,
+      smwidget
 		}
 				};
 				</script>

@@ -69,7 +69,7 @@ import applayout from './applayout.vue';
 import eventBus from '../eventBus.js';
 import kotile from './kotile.vue'
 import kocard from './kocard.vue'
-import widget from "./widget.vue";
+import widget from "./prowidget.vue";
 export default {
     name: 'pro',
 	data : function() {

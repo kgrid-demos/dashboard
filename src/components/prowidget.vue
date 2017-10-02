@@ -1,7 +1,7 @@
-<template name="widget">
+<template name="prowidget">
   <div class="graph">
-    <linechart v-if="!showoptions" :chart-data="datacollection" :options="chartOptions" :styles='myStyles'></linechart>
-    <div v-if="showoptions">
+    <linechart v-if="!editmode" :chart-data="datacollection" :options="chartOptions" :styles='myStyles'></linechart>
+    <div v-if="editmode">
       <div class="optrow">
         <div class="options">
           Measurement Instrument:
@@ -41,7 +41,7 @@
   import moment from 'moment';
 
   export default {
-    props: ['chartheight', 'editmode', 'title', 'showoptions', 'startdate'],
+    props: ['chartheight', 'editmode', 'title', 'startdate'],
     components: {
       linechart,
       vueSlider
@@ -50,9 +50,8 @@
       return {
         datacollection: null,
         datasettings: null,
-        hover: false,
         labels: null,
-        data: [this.getRandomInt(), this.getRandomInt(), this.getRandomInt(), this.getRandomInt(), this.getRandomInt(), this.getRandomInt(), this.getRandomInt()],
+        data: null,
         chartOptions: {
           maintainAspectRatio: false,
           legend: {
@@ -141,7 +140,7 @@
         this.$store.commit('saveWidgetSettings', {'id':uid, 'datasettings':this.datasettings});
       },
       getRandomInt () {
-        return Math.floor(Math.random() * (10)) + 1
+        return Math.floor(Math.random() * (10)) + 1;
       },
       dragstart (ctx) {
         this.$emit('sliderdrag');
