@@ -34,7 +34,7 @@
 					<div class="pad-l-15"  v-if='!isInEdit && pwidgetlist.length>=1 '>
 							<button class='kg-btn-primary ' @click='gopreviousweek'> <i class='fa fa-angle-left fa-lg'></i></button>
 							<button class='kg-btn-primary ' style='width:240px;'> {{dateRangeLabel.start}} - {{ dateRangeLabel.end}} </button>
-							<button class='kg-btn-primary ' @click='gonextweek'> <i class='fa fa-angle-right fa-lg'></i></button>
+							<button class='kg-btn-primary ' v-bind:class="{btnDisabled: !enableNextArrow}" @click='gonextweek'> <i class='fa fa-angle-right fa-lg'></i></button>
 							</div>
 					</div>
 						<div class='col-md-5 col-sm-5 '>
@@ -119,6 +119,7 @@ export default {
 			pwidgetlist:[],
 			draggedid:"",
 			isInEdit:false,
+			enableNextArrow:false,
 			defaultw:6,
 			defaulth:6,
 			layout:[
@@ -247,12 +248,16 @@ export default {
 		gopreviousweek:function(){
 			this.dateRange.starttime=this.dateRange.starttime-7;
 			this.dateRange.endtime=this.dateRange.endtime-7;
+			this.enableNextArrow = true;
 			eventBus.$emit("setdaterange", this.dateRangeLabel);
 		},
 		gonextweek:function(){
-			this.dateRange.starttime=this.dateRange.starttime+7;
-			this.dateRange.endtime=this.dateRange.endtime+7;
-			eventBus.$emit("setdaterange", this.dateRangeLabel);
+		  if(this.enableNextArrow) {
+        this.dateRange.starttime = this.dateRange.starttime + 7;
+        this.dateRange.endtime = this.dateRange.endtime + 7;
+        this.enableNextArrow = this.dateRangeLabel.endDate.isBefore(moment());
+        eventBus.$emit("setdaterange", this.dateRangeLabel);
+      }
 		},
 		cleanupLayout: function(){
 			this.layout = this.layout.filter(function(e){return (e.c!="")}).map(function(e,index){
@@ -393,6 +398,14 @@ export default {
 	margin:10px 10px;
 	display:inline-block;
 }
+
+.btnDisabled {
+	background-color:#eeeeee;
+	border:1px solid #aaaaaa;
+	color:#aaaaaa;
+	cursor: not-allowed;
+}
+
 .maincontent{
 	min-height:500px;
 }
