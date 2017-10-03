@@ -52,6 +52,7 @@
         datasettings: null,
         labels: null,
         data: null,
+        date: null,
         chartOptions: {
           maintainAspectRatio: false,
           legend: {
@@ -77,13 +78,15 @@
     },
     created: function() {
       var self = this;
+      this.date = this.startdate;
       eventBus.$on('setdaterange', function (obj) {
-        self.changeWeek(obj.startDate);
+        self.date = obj.startDate;
+        self.changeWeek();
       });
       eventBus.$on('saveSettings', function () {
         self.saveoptions();
       });
-      var uid = this.$route.params.id + this.title;
+      const uid = this.$route.params.id + this.title;
       if (this.$store.getters.getDataSettings(uid)) {
         this.datasettings = Object.assign({}, this.$store.getters.getDataSettings(uid).datasettings);
       } else {
@@ -100,7 +103,7 @@
           notifymax: 9
         };
       }
-      this.changeWeek(this.startdate);
+      this.changeWeek();
     },
     computed : {
     myStyles () {
@@ -135,9 +138,9 @@
         }
       },
       saveoptions () {
-        this.fillData();
         var uid = this.$route.params.id + this.title;
         this.$store.commit('saveWidgetSettings', {'id':uid, 'datasettings':this.datasettings});
+        this.changeWeek();
       },
       getRandomInt () {
         return Math.floor(Math.random() * (10)) + 1;
@@ -146,9 +149,9 @@
         var colors = [];
         var self = this;
         this.data.forEach( function (e) {
-          if (e > self.datasettings.notifythresh) {
+          if (e >= self.datasettings.notifythresh) {
             colors.push('red');
-          } else if (e > self.datasettings.notifythresh / 2 + 1) {
+          } else if (e >= self.datasettings.notifythresh / 2 + 1) {
             colors.push('orange')
           }else {
             colors.push('green');
@@ -156,13 +159,29 @@
         });
         return colors;
       },
-      changeWeek(startDate) {
-        var format = 'MMM. D';
-        var sDate = moment(startDate);
-        this.data = [this.getRandomInt(), this.getRandomInt(), this.getRandomInt(), this.getRandomInt(), this.getRandomInt(), this.getRandomInt(), this.getRandomInt()];
-        this.labels = [sDate.format(format), sDate.add(1, 'd').format(format), sDate.add(1, 'd').format(format),
-          sDate.add(1, 'd').format(format), sDate.add(1, 'd').format(format), sDate.add(1, 'd').format(format),
-          sDate.add(1, 'd').format(format)];
+      changeWeek() {
+        const dayFormat = 'MMM. D';
+        const hourFormat = 'MMM. D H:mm';
+        const sDate = moment(this.date).set({'hour': 0, 'minute': 0});
+        this.data = [];
+        this.labels = [];
+        for(let i = 0; i < this.datasettings.dailyfreq * 7; i++) {
+          this.data.push(this.getRandomInt());
+          switch(this.datasettings.dailyfreq) {
+            case 1:
+              this.labels.push(moment(sDate).add(i, 'd').format(dayFormat));
+              break;
+            case 2:
+              this.labels.push(moment(sDate).add(i * 12, 'h').format(hourFormat));
+              break;
+            case 3:
+              this.labels.push(moment(sDate).add(i * 6, 'h').format(hourFormat));
+              break;
+            case 4:
+              this.labels.push(moment(sDate).add(i * 3, 'h').format(hourFormat));
+              break;
+          }
+        }
         this.fillData();
       }
 
@@ -203,7 +222,7 @@
   }
 
   .options {
-    padding: 1em;
+    padding: 0.7em;
     width: 50%;
     height: 100%;
     float: left;
@@ -214,7 +233,7 @@
   }
 
   .optrow {
-    margin-top: 0.5em;
+    margin-top: 0.7em;
     clear: both;
   }
 

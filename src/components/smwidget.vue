@@ -43,7 +43,7 @@
           Notification Threshold:
         </div>
         <div class="options">
-          <vue-slider ref="slider" :min="datasettings.notifymin" :max="datasettings.notifymax" tooltip="hover" :piecewise=true v-model="datasettings.notifythresh"></vue-slider>
+          <vue-slider ref="slider" :min="datasettings.notifymin" :max="datasettings.weeklyfreq" tooltip="hover" :piecewise=true v-model="datasettings.notifythresh"></vue-slider>
         </div>
       </div>
     </div>
@@ -90,10 +90,8 @@
           weeklyfreq: 4,
           minutespermodule: 15,
           notifythresh: 1,
-          notifymin: 1,
-          notifymax: 7
+          notifymin: 1
         };
-        console.log("Set default data settings");
       }
       this.getweeklymodules(this.startdate);
     },
@@ -135,7 +133,7 @@
       saveoptions () {
         var uid = this.$route.params.id + this.title;
         this.$store.commit('saveWidgetSettings', {'id':uid, 'datasettings':this.datasettings});
-        this.getweeklymodules();
+        //this.getweeklymodules();
       },
       getRandomStatus (availableStatuses) {
         const statusint = Math.floor(Math.random() * (availableStatuses ? availableStatuses : 3));
@@ -180,9 +178,9 @@
   }
 
   .module {
-    font-size:18pt;
+    font-size:24pt;
     float: left;
-    margin: 1em auto 0;
+    margin: 0.7em auto 0;
     line-height: 14pt;
   }
   .module div {
@@ -193,7 +191,7 @@
     font-size: 10pt;
   }
   .options {
-    padding: 1em;
+    padding: 0.7em;
     width: 50%;
     height: 100%;
     float: left;
@@ -204,7 +202,7 @@
   }
 
   .optrow {
-    margin-top: 0.5em;
+    margin-top: 0.7em;
     clear: both;
   }
 
