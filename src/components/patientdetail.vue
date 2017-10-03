@@ -346,7 +346,7 @@ export default {
 		},
     resizedEvent: function(i, newH, newW, newHPx, newWPx){
       var msg = "RESIZED i=" + i + ", H=" + newH + ", W=" + newW + ", H(px)=" + newHPx + ", W(px)=" + newWPx;
-
+			window.dispatchEvent(new Event('resize'));
     },
 		updateLayoutContent:function(){
 			var self = this;

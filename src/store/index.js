@@ -7,6 +7,7 @@ Vue.use(Vuex)
 
 const debug = process.env.NODE_ENV !== 'production'
 const vuexLocal = new VuexPersistence ({
+    key:"first",
     storage: window.localStorage
 })
 export default new Vuex.Store({
@@ -30,6 +31,7 @@ export default new Vuex.Store({
                                             { ID:"PA-67034-004", Name:"Marry McMahon", Age:"74", Gender:"female",type:0,group:[1,2,3,4,5],
                                                 wlist:[{id:'PRO-01',"label":"Pain",count:-1},{id:'PRO-02',"label":"Anxiety",count:-1},{id:'PRO-03',"label":"Depression",count:-1},{id:'PRO-04',"label":"Nausea",count:-1},{id:'SM-01',"label":"Smoking CESSATION",count:-1},{id:'SM-02',"label":"NUTRITION",count:-1}]},
                                           ],
+    
     defaultLayout:    [ { "x":0,"y":0,"w":4,"h":6,"i":"0","c":"PRO-01"},
                         { "x":0,"y":6,"w":4,"h":6,"i":"1","c":"SM-01"},
                         { "x":4,"y":0,"w":4,"h":6,"i":"2","c":"PRO-04"},

@@ -4,7 +4,7 @@
 						<span>{{dashboard}}</span>
 			</a>
 			<nav class='navbar navbar-fixed-top kgl-1 kg-bg-color kg-color'>
-	
+
 						<ul class='nav navbar-nav'>
 							<li :class="{'active': $route.fullPath === '/'}" @click='seeallpatients'><a><span>All Patients</span></a></li>
 							<router-link tag='li' :class="{'active': $route.fullPath === '/about'}" to='/about'><a><span>Calendar</span></a></router-link>
@@ -60,6 +60,7 @@ export default {
 		},
 		seeallpatients:function(){
 			this.$store.commit('setgroupid',{value:-1});
+			this.$router.push({ path: '/' });
 		}
   }
 };
