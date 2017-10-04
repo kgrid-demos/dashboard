@@ -27,6 +27,7 @@
 	    			:data="patients"
 	    			:columns="gridColumns"
 	    			:filter-key="searchQuery"
+						:groupid="currentGroup.id"
 						v-on:selected='selected'>
 	  			</kogrid>
 				</div>
@@ -54,7 +55,7 @@ export default {
 	data : function() {
 		return {
 			searchQuery: '',
-			gridColumns: ['ID','Name', 'Age','Gender'],
+			gridColumns: ['id','name', 'age','gender'],
 			gridData: [],
 			groups:[0,1,2,3,4,5,6,7,8,9],
 
@@ -73,24 +74,20 @@ export default {
 
 	  },
 	computed : {
-	currentGroup: function(){
-		return this.$store.getters.getCurrentGroupid;
-	},
+		currentGroup: function(){
+			return this.$store.getters.getCurrentGroupid;
+		},
 		patients: function() {
 			var self =this;
 			var ptlist = this.$store.getters.getPatientList;
 			var plist =[];
 			if(self.currentGroup.id==-1){
-				return ptlist;
+				return ptlist.filter(function(e, pos){
+  				return ptlist.map(function(e) {return e.id}).indexOf(e.id)== pos ;
+					});
 			}else {
-				ptlist.forEach(function(e){
-					var ind = e.group.indexOf(self.currentGroup.id);
-
-					if(ind!=-1){
-						plist.push(e)
-					}
-			})
-			return plist
+				return ptlist.filter(function(e){
+				  return (e.groupid==self.currentGroup.id)});
 			}
 
 		},
@@ -106,7 +103,7 @@ export default {
 	},
 	methods : {
 		selected: function(t){
-			console.log(this.patients[t].ID);
+			console.log(this.patients[t].id+this.patients[t].groupid);
 			eventBus.$emit("patientSelected",this.patients[t]);
 		},
 		selectStation: function(i){

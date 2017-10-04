@@ -90,10 +90,11 @@ var vm = new Vue({
 			router.push({ path: '/' });
 		});
 		eventBus.$on("patientSelected", function(patient){
-			router.push({ name:'patient' ,params: { id: patient.ID}});
+			router.push({ name:'patient' ,params: { id: patient.id}});
 		});
 	  eventBus.$on("patientRemoved", function(obj){
 			router.push({ path: '/' });
 	  });
+
 	}
 	}).$mount('#app');

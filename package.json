@@ -9,6 +9,7 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "axios": "^0.16.2",
     "bootstrap": "^3.3.7",
     "chart.js": "^2.7.0",
     "es6-promise": "^4.1.0",

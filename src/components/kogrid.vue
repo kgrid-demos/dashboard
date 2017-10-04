@@ -10,7 +10,7 @@
           <span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'">
           </span>
         </th>
-        <th>Interventions</th>
+        <th><span v-if='groupid!=-1'>Interventions</span></th>
       </tr>
     </thead>
     <tbody>
@@ -19,7 +19,7 @@
           {{entry[key]}}
         </td>
         <td>
-          <ul><li v-for='widget in entry.wlist'><koicon :object='widget' ></koicon></li></ul>
+          <ul v-if='groupid!=-1'><li v-for='widget in entry.wlist'><koicon :object='widget' ></koicon></li></ul>
         </td>
       </tr>
     </tbody>
@@ -31,12 +31,9 @@ import koicon from "./koicon.vue"
 export default {
   name: 'kogrid',
   template: '#grid-template',
-  props: {
-    data: Array,
-    columns: Array,
-    filterKey: String,
-    groupid:-1
-  },
+  props: [
+    'data','columns','filterKey','groupid'
+  ],
   components:{
     koicon
   },
@@ -93,7 +90,8 @@ export default {
       this.sortOrders[key] = this.sortOrders[key] * -1
     },
     selectRow: function(key){
-      this.$emit("selected", key)
+      if(this.groupid!=-1)
+        this.$emit("selected", key)
     }
   }
 }

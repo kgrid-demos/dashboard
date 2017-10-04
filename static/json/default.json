@@ -1,0 +1,47 @@
+
+	{"defaultLayout":	[
+			{ "x":0,"y":0,"w":4,"h":6,"i":"0","c":"PRO-01"},
+			{ "x":0,"y":6,"w":4,"h":6,"i":"1","c":"SM-01"},
+			{ "x":4,"y":0,"w":4,"h":6,"i":"2","c":"PRO-04"},
+			{ "x":0,"y":12,"w":4,"h":6,"i":"3","c":"SM-02"},
+			{ "x":8,"y":0,"w":4,"h":6,"i":"4","c":"PRO-02"},
+			{ "x":4,"y":6,"w":8,"h":12,"i":"5","c":"PRO-03"}
+ 		],
+		"cancertypes": [
+			{ "id":0,"label":"Colon Cancer"},
+			{"id":1,"label":"Liver Cancer"},
+			{"id":2,"label":"Prostate Cancer"},
+			{"id":3,"label":"Lung Cancer"}
+		],
+		"group":[
+			{"id":0},{"id":1},{"id":2},{"id":3},{"id":4},{"id":5},{"id":6},{"id":7},{"id":8},{"id":9}
+		],
+		"defaultWidgetSetting" :  [ { "id":"PRO-01","label":"Pain", "type":"PRO","dataprop":{"a":"b"}, "datasetting":{"a":"b"}},
+															{ "id":"PRO-02","label":"Anxiety", "type":"PRO", "dataprop":{"a":"b"}, "datasetting":{"a":"b"}},
+														  { "id":"PRO-03","label":"Depression", "type":"PRO", "dataprop":{"a":"b"}, "datasetting":{"a":"b"}},
+														  { "id":"PRO-04","label":"Nausea",  "type":"PRO","dataprop":{"a":"b"}, "datasetting":{"a":"b"}},
+														  { "id":"SM-01","label":"Smoking CESSATION",  "type":"SM","dataprop":{"a":"b"}, "datasetting":{"a":"b"}},
+													    { "id":"SM-02","label":"NUTRITION", "type":"SM", "dataprop":{"a":"b"}, "datasetting":{"a":"b"}}],
+		"patientMasterList":  [
+			{ "id":"PA-67034-001", "name":"Larry Lambert", "age":"54", "gender":"male", "type":0,"group":[{"id":0},{"id":1},{"id":2},{"id":3},{"id":4}]},
+      { "id":"PA-67034-002", "name":"Alvin Adams", "age":"27", "gender":"male", "type":0,"group":[{"id":0},{"id":1},{"id":2},{"id":3},{"id":4}]},
+			{ "id":"PA-67034-003", "name":"Larry Lambert Jr.", "age":"17", "gender":"male", "type":0,"group":[{"id":0},{"id":1},{"id":2},{"id":3},{"id":5}]},
+			{ "id":"PA-67034-004", "name":"Mary McMahon", "age":"74", "gender":"female", "type":0,"group":[{"id":1},{"id":2},{"id":3},{"id":4},{"id":5}]},
+			{ "id":"PA-67034-005", "name":"Kian Koepp", "age":"71", "gender":"male", "type":0,"group":[{"id":0},{"id":1},{"id":2},{"id":3},{"id":4}]},
+	    { "id":"PA-67034-006", "name":"Ashtyn Schulist", "age":"32", "gender":"male", "type":2,"group":[{"id":0},{"id":1},{"id":2},{"id":3},{"id":4}]},
+			{ "id":"PA-67034-007", "name":"Ralph Yost", "age":"65", "gender":"male", "type":1,"group":[{"id":0},{"id":1},{"id":3},{"id":5},{"id":7}]},
+			{ "id":"PA-67034-008", "name":"Marian Casper", "age":"45", "gender":"female", "type":1,"group":[{"id":1},{"id":2},{"id":3},{"id":4},{"id":5}]}
+		],
+		"patientstemplate":{ "id":"PA-67034-001","name":"Larry Lambert", "age":"54", "gender":"male", "type":0, "groupid": -1,
+			"wlist":[
+				{"id":"PRO-01","label":"Pain","count":-1},
+				{"id":"PRO-02","label":"Anxiety","count":-1},
+				{"id":"PRO-03","label":"Depression","count":-1},
+				{"id":"PRO-04","label":"Nausea","count":-1},
+				{"id":"SM-01","label":"Smoking CESSATION","count":-1},
+				{"id":"SM-02","label":"NUTRITION","count":-1}
+			],
+			"layout":[],
+			"widgetSettings": []
+		}
+	}

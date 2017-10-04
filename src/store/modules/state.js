@@ -1,12 +1,6 @@
 export var initialState = {
   debugEnabled:true,
   currentUser: {username:"chad",first_name:"",last_name:""},
-  widgetMasterList: [ { "id":"PRO-01","label":"Pain","type":"PRO"},
-                      { "id":"PRO-02","label":"Anxiety","type":"PRO"},
-                      { "id":"PRO-03","label":"Depression","type":"PRO"},
-                      { "id":"PRO-04","label":"Nausea","type":"PRO"},
-                      { "id":"SM-01","label":"Smoking CESSATION","type":"SM"},
-                      { "id":"SM-02","label":"NUTRITION","type":"SM"}],
   patientlist:      [ { ID:"PA-67034-001", Name:"Larry Lambert", Age:"54", Gender:"male", type:0,group:[0,1,2,3,4],
                           wlist:[{id:'PRO-01',"label":"Pain",count:-1},{id:'PRO-02',"label":"Anxiety",count:-1},{id:'PRO-03',"label":"Depression",count:-1},{id:'PRO-04',"label":"Nausea",count:-1},{id:'SM-01',"label":"Smoking CESSATION",count:-1},{id:'SM-02',"label":"NUTRITION",count:-1}]},
                       { ID:"PA-67034-002", Name:"Alvin Adams",Age:"27", Gender:"male", type:0,group:[0,1,2,3,4],

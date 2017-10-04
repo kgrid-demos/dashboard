@@ -1,8 +1,8 @@
 <template>
-		<div class="container kgl-tile" v-bind:id="object">
+		<div class="container kgl-tile" v-bind:id="object.label">
 				<p>
-          <prowidget v-if="cflag === 'PRO'" :chartheight='(containerheight-30)' :editmode="editmode" :title="object" :startdate="startdate"></prowidget>
-          <smwidget v-if="cflag === 'SM'" :editmode="editmode" :title="object" ></smwidget>
+          <prowidget v-if="cflag === 'PRO'" :chartheight='(containerheight-30)' :editmode="editmode" :object="object" :title="object.label" :startdate="startdate"></prowidget>
+          <smwidget v-if="cflag === 'SM'" :editmode="editmode" :object="object" :title="object.label" ></smwidget>
         </p>
 
 		</div>

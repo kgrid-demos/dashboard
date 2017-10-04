@@ -41,7 +41,7 @@
   import moment from 'moment';
 
   export default {
-    props: ['chartheight', 'editmode', 'title', 'startdate'],
+    props: ['chartheight', 'editmode', 'object','title', 'startdate'],
     components: {
       linechart,
       vueSlider
@@ -83,12 +83,12 @@
         self.date = obj.startDate;
         self.changeWeek();
       });
-      eventBus.$on('saveSettings', function () {
-        self.saveoptions();
+      eventBus.$on('saveSettings', function (obj) {
+        self.saveoptions(obj);
       });
-      const uid = this.$route.params.id + this.title;
-      if (this.$store.getters.getDataSettings(uid)) {
-        this.datasettings = Object.assign({}, this.$store.getters.getDataSettings(uid).datasettings);
+      const obj = {"id":this.$route.params.id,"group":this.currentGroup.id,"wid": this.object.id};
+      if (this.$store.getters.getDataSettings(obj)) {
+        this.datasettings = Object.assign({}, this.$store.getters.getDataSettings(obj).datasettings);
       } else {
         this.datasettings = {
           instruments: [
@@ -106,6 +106,9 @@
       this.changeWeek();
     },
     computed : {
+    currentGroup:function(){
+      return this.$store.getters.getCurrentGroupid;
+    },
     myStyles () {
      return {
        height: `${this.chartheight}px`,
@@ -137,9 +140,9 @@
           ]
         }
       },
-      saveoptions () {
-        var uid = this.$route.params.id + this.title;
-        this.$store.commit('saveWidgetSettings', {'id':uid, 'datasettings':this.datasettings});
+      saveoptions:function (obj) {
+        var payload  = {'pid': obj.id, "group":obj.group, "wid":this.object.id,'datasettings':this.datasettings}
+        this.$store.commit('saveWidgetSettings', payload);
         this.changeWeek();
       },
       getRandomInt () {

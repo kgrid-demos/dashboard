@@ -10,7 +10,7 @@
 						</router-link>
 					</div>
 					<div class="col-md-10 col-sm-10 col-xs-10 pad-0">
-						<h1 class='pad-l-20'>{{patient.Name}}<small class='pad-l-20'>Age {{patient.Age}}, {{patient.Gender}}</small></h1>
+						<h1 class='pad-l-20'>{{patient.name}}<small class='pad-l-20'>Age {{patient.age}}, {{patient.gender}}</small></h1>
 					</div>
 				</div>
 			</div>
@@ -74,7 +74,7 @@
 						<div class='widgetcontainer fill no-drag' @drop='dropped'>
 								<draggable class='wlayout' element="ul" v-model="itemWidgetList[item.i]" :options="dragOptions">
 														<li v-for='(object,index) in itemWidgetList[item.i]' v-bind:key='index' v-if='itemWidgetList[item.i].length==1|object.type!="NEW"'>
-															<kotile :object='object.label'  :cflag="object.type" :tileindex='index' :containerheight="((item.h-1)*40)" :editmode='isInEdit' :startdate="dateRangeLabel.startDate" draggable='true'  @dragstart='dragWidget'></kotile>
+															<kotile :object='object'  :cflag="object.type" :tileindex='index' :containerheight="((item.h-1)*40)" :editmode='isInEdit' :startdate="dateRangeLabel.startDate" draggable='true'  @dragstart='dragWidget'></kotile>
 														</li>
 													</draggable></div>
 						</grid-item>
@@ -141,8 +141,8 @@ export default {
 	},
 	mounted:function(){
 		var self = this;
-		self.itemWidgetList=[];
-		this.layout=JSON.parse(JSON.stringify(this.$store.getters.getlayoutbyid(this.$route.params.id)));
+		this.itemWidgetList=[];
+		this.layout=JSON.parse(JSON.stringify(this.$store.getters.getlayoutbyid({'id':this.$route.params.id,'group':this.currentGroup.id})));
 		this.pwidgetlist=this.layout.map(function(e){return e.c})
 		this.widgetList = this.widgetMaster.filter(function(e){return (this.indexOf(e.id)<0);},self.pwidgetlist)
 		if(this.layout.length>0){
@@ -166,6 +166,9 @@ export default {
 	updated: function() {
 	  },
 	computed : {
+		currentGroup: function(){
+			return this.$store.getters.getCurrentGroupid;
+		},
 		dateRangeLabel: function(){
 			var obj ={};
 			obj.start=moment().day(this.dateRange.starttime).format("MMM. D, YYYY")
@@ -176,7 +179,7 @@ export default {
 		},
 		patient: function(){
 			console.log(this.$route.params.id);
-			return this.$store.getters.getpatientbyid(this.$route.params.id);
+			return this.$store.getters.getpatientbyid({"id":this.$route.params.id,"group":this.currentGroup.id});
 		},
 		nextitem:function(){
 			var item={x:0,y:20,w:6,h:6,i:"0",c:""};
@@ -233,14 +236,16 @@ export default {
 		},
 		addAlert:function(id){
 			var obj={};
-			obj.pid=this.patient.ID;
+			obj.pid=this.patient.id;
+			obj.group=this.patient.groupid;
 			obj.wid=id;
 			obj.message="Alert!";
-		   this.$store.commit("updateAlert",obj);
+		  this.$store.commit("updateAlert",obj);
 		},
 		removeAlert: function(id){
 			var obj={};
-			obj.pid=this.patient.ID;
+			obj.pid=this.patient.id;
+			obj.group=this.patient.groupid;
 			obj.wid=id;
 			obj.message="";
 		 	this.$store.commit("updateAlert",obj);
@@ -271,8 +276,8 @@ export default {
 			this.updateLayoutContent();
 			this.cleanupLayout();
 	    var pid=this.$route.params.id;
-      this.$store.commit('saveConfig',{'id':pid,'layout':this.layout});
-      eventBus.$emit("saveSettings");
+      this.$store.commit('saveConfig',{'id':pid,'group':this.currentGroup.id,'layout':this.layout});
+      eventBus.$emit("saveSettings",{'id':pid,'group':this.currentGroup.id});
 			this.isInEdit = false;
     },
 		getHeight:function(i){

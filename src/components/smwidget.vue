@@ -57,7 +57,7 @@
   import moment from 'moment';
 
   export default {
-    props: ['chartheight', 'editmode', 'title', 'startdate', 'totalminutes', 'minutescompleted'],
+    props: ['chartheight', 'editmode', 'object','title', 'startdate', 'totalminutes', 'minutescompleted'],
     components: {
       linechart,
       vueSlider
@@ -76,9 +76,9 @@
       eventBus.$on('saveSettings', function () {
         self.saveoptions();
       });
-      var uid = this.$route.params.id + this.title;
-      if (this.$store.getters.getDataSettings(uid)) {
-        this.datasettings = Object.assign({}, this.$store.getters.getDataSettings(uid).datasettings);
+      const obj = {"id":this.$route.params.id,"group":this.currentGroup.id,"wid": this.object.id};
+      if (this.$store.getters.getDataSettings(obj)) {
+        this.datasettings = Object.assign({}, this.$store.getters.getDataSettings(obj).datasettings);
       } else {
         this.datasettings = {
           instruments: [
@@ -96,7 +96,10 @@
       this.getweeklymodules(this.startdate);
     },
     computed : {
-      myStyles () {
+    currentGroup:function(){
+      return this.$store.getters.getCurrentGroupid;
+    },
+          myStyles () {
         return {
           height: `${this.chartheight}px`,
           position: 'relative'
@@ -130,9 +133,8 @@
           this.weeklymodules.push({id: i, status: modStatus, datecompleted: moduleCompleteDate.format('MMM. D')});
         }
       },
-      saveoptions () {
-        var uid = this.$route.params.id + this.title;
-        this.$store.commit('saveWidgetSettings', {'id':uid, 'datasettings':this.datasettings});
+      saveoptions :function ()  {
+          this.$store.commit('saveWidgetSettings', {'pid': this.$route.params.id, "group":this.currentGroup.id, "wid":this.object.id,'datasettings':this.datasettings});
         //this.getweeklymodules();
       },
       getRandomStatus (availableStatuses) {

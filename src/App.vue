@@ -7,6 +7,7 @@
 <script>
 import navbar from './components/navbar.vue';
 import eventBus from './eventBus.js';
+import axios from 'axios';
 
 export default {
   name: 'app1',
@@ -16,15 +17,18 @@ export default {
     };
   },
   created: function () {
-
+    var self=this;
+    axios.get("./static/json/default.json").then( response=> {
+      self.$store.commit('init', response.data)
+      }).catch(e=>{
+        console.log(e)
+      });
   },
   components: {
     navbar
   },
 	computed:{
-    ifDebug: function(){
-      return this.store.state.debugEnabled;
-    }
+
 	},
 	mounted:function(){
 
