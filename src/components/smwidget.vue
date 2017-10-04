@@ -97,7 +97,7 @@
     },
     computed : {
     currentGroup:function(){
-      return this.$store.getters.getCurrentGroupid;
+      return this.$store.getters.getcurrentGroup;
     },
           myStyles () {
         return {

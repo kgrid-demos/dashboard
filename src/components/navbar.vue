@@ -19,7 +19,7 @@
 
 <script>
 import eventBus from '../eventBus.js'
-
+import axios from 'axios';
 export default {
   name: 'navbar',
   data: function () {
@@ -50,10 +50,15 @@ export default {
   methods: {
 		resetstore:function(){
 			if (confirm("Datastore will be reset! Are you sure?") == true) {
-							this.$store.commit('resetState');
-						} else {
+				var self=this;
+				axios.get("./static/json/default.json").then( response=> {
+					self.$store.commit('resetState', response.data)
+				}).catch(e=>{
+					console.log(e)
+				});
+			} else {
 
-						}
+			}
 		},
 		stationselector:function(){
 			this.$store.commit('selstation',{value:-1});

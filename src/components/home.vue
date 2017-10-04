@@ -16,9 +16,9 @@
 		<div slot='main'>
 			<div class='row' v-if="stationSelected">
 				<div class='col-md-2 col-sm-2 col-xs-2  ht-full'>
-					<div v-if='currentGroup.id==-1'>
-										<p style='text-align:center;margin-bottom:30px;'>Group ID</p>
-						<ul class='groupids'><li v-for='(num,index) in groups' @click='selectgroup(index)'>{{num}}</li></ul>
+					<div>
+										<p style='text-align:center;margin-bottom:30px;'></p>
+						<ul class='groupids' ><li v-for='(num,index) in groups' @click='selectgroup(index)' :class="{'active': currentGroup.id==num}">{{num}}</li></ul>
 					</div>
 
 				</div>
@@ -75,7 +75,7 @@ export default {
 	  },
 	computed : {
 		currentGroup: function(){
-			return this.$store.getters.getCurrentGroupid;
+			return this.$store.getters.getcurrentGroup;
 		},
 		patients: function() {
 			var self =this;
@@ -98,12 +98,13 @@ export default {
 			return this.$store.getters.getCurrentStation.id!=-1
 		},
 		currentGroup: function(){
-		  return this.$store.getters.getCurrentGroupid;
+		  return this.$store.getters.getcurrentGroup;
 		},
 	},
 	methods : {
 		selected: function(t){
 			console.log(this.patients[t].id+this.patients[t].groupid);
+			this.$store.commit('setCurrentPatientIndex',{'pid':this.patients[t].id,'group':this.patients[t].groupid});
 			eventBus.$emit("patientSelected",this.patients[t]);
 		},
 		selectStation: function(i){
@@ -195,11 +196,22 @@ ul.groupids li {
  text-align: center;
  cursor: pointer;
  font-size: 18px;
- margin: 5px 80px;
+ font-weight: 400;
+ color:#eeeeee;
+ margin: 0px 160px 10px 0px;
  border: 1px dashed #e5e5e5;
 	padding: 10px;
 	background-color: #f7f7f7;
+	transition: color 0.3s ease;
+}
+ul.groupids li:hover {
+	color:#555555;
 
 }
 
+ul.groupids li.active {
+ font-weight: 800;
+ color:#333333;
+
+}
 </style>

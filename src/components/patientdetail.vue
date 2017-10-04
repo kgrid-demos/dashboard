@@ -167,7 +167,7 @@ export default {
 	  },
 	computed : {
 		currentGroup: function(){
-			return this.$store.getters.getCurrentGroupid;
+			return this.$store.getters.getcurrentGroup;
 		},
 		dateRangeLabel: function(){
 			var obj ={};
@@ -198,7 +198,6 @@ export default {
 					}
 				}
 			})
-			console.log('X= '+x+ " Y= "+y);
 			item.x=x;
 			item.y=y;
 			item.w=this.defaultw;
@@ -276,16 +275,15 @@ export default {
 			this.updateLayoutContent();
 			this.cleanupLayout();
 	    var pid=this.$route.params.id;
-      this.$store.commit('saveConfig',{'id':pid,'group':this.currentGroup.id,'layout':this.layout});
+			this.$store.commit('saveConfig',{'id':pid,'group':this.currentGroup.id,'layout':this.layout});      
       eventBus.$emit("saveSettings",{'id':pid,'group':this.currentGroup.id});
 			this.isInEdit = false;
     },
 		getHeight:function(i){
 				if(this.$refs.item[i]){
-				console.log(this.$refs.item[i].$el.clientHeight)
-				return this.$refs.item[i].$el.clientHeight;
+					return this.$refs.item[i].$el.clientHeight;
 				}else {
-				return 120;
+					return 120;
 				}
 		},
 		loadDefault:function(){
@@ -368,7 +366,6 @@ export default {
 						}
 				}
 			)
-
 			this.pwidgetlist=this.layout.map(function(e){return e.c})
 		}
 	},
