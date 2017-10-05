@@ -1,0 +1,160 @@
+{
+  "dashboardlog": [
+    {
+      "entry": {
+        "id": "PA-67034-002",
+        "name": "Alvin Adams",
+        "age": "27",
+        "gender": "male",
+        "type": 0,
+        "groupid": 0,
+        "wlist": [
+          {
+            "id": "PRO-01",
+            "label": "Pain",
+            "count": -1
+          },
+          {
+            "id": "PRO-02",
+            "label": "Anxiety",
+            "count": 0
+          },
+          {
+            "id": "PRO-03",
+            "label": "Depression",
+            "count": 0
+          },
+          {
+            "id": "PRO-04",
+            "label": "Nausea",
+            "count": -1
+          },
+          {
+            "id": "SM-01",
+            "label": "Smoking CESSATION",
+            "count": -1
+          },
+          {
+            "id": "SM-02",
+            "label": "NUTRITION",
+            "count": 0
+          }
+        ],
+        "layout": [
+          {
+            "x": 0,
+            "y": 0,
+            "w": 6,
+            "h": 6,
+            "i": "0",
+            "c": "PRO-03",
+            "moved": false
+          },
+          {
+            "x": 6,
+            "y": 0,
+            "w": 6,
+            "h": 6,
+            "i": "1",
+            "c": "PRO-02",
+            "moved": false
+          },
+          {
+            "x": 0,
+            "y": 6,
+            "w": 12,
+            "h": 6,
+            "i": "2",
+            "c": "SM-02",
+            "moved": false
+          }
+        ],
+        "widgetSettings": [
+          {
+            "id": "PRO-03",
+            "datasettings": {
+              "instruments": [
+                {
+                  "name": "GAD-7 Questionnaire",
+                  "value": 1
+                },
+                {
+                  "name": "Hilbert-Thad Questionnaire",
+                  "value": 2
+                },
+                {
+                  "name": "Penta-PLU Pain Probe",
+                  "value": 3
+                }
+              ],
+              "selectedinstrument": {
+                "name": "GAD-7 Questionnaire",
+                "value": 1
+              },
+              "dailyfreq": 1,
+              "notifythresh": 6,
+              "notifymin": 6,
+              "notifymax": 9
+            }
+          },
+          {
+            "id": "PRO-02",
+            "datasettings": {
+              "instruments": [
+                {
+                  "name": "GAD-7 Questionnaire",
+                  "value": 1
+                },
+                {
+                  "name": "Hilbert-Thad Questionnaire",
+                  "value": 2
+                },
+                {
+                  "name": "Penta-PLU Pain Probe",
+                  "value": 3
+                }
+              ],
+              "selectedinstrument": {
+                "name": "GAD-7 Questionnaire",
+                "value": 1
+              },
+              "dailyfreq": 1,
+              "notifythresh": 6,
+              "notifymin": 6,
+              "notifymax": 9
+            }
+          },
+          {
+            "id": "SM-02",
+            "datasettings": {
+              "instruments": [
+                {
+                  "name": "SPLN Course",
+                  "value": 1
+                },
+                {
+                  "name": "Pheen Questionnaire",
+                  "value": 2
+                },
+                {
+                  "name": "Norbert-Ralph SM",
+                  "value": 3
+                }
+              ],
+              "selectedinstrument": {
+                "name": "SPLN Course",
+                "value": 1
+              },
+              "weeklyfreq": 4,
+              "minutespermodule": 30,
+              "notifythresh": 3,
+              "notifymin": 1
+            }
+          }
+        ],
+        "timestamp": "2017-10-05T14:08:40-04:00"
+      },
+      "id": 1
+    }
+  ]
+}

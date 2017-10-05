@@ -16,6 +16,7 @@ export default new Vuex.Store({
   state:{
       init:{},
       debugEnabled:true,
+      loggerURL:'http://localhost:3003/dashboardlog',
       currentStation:{id:0,"label":"Colon Cancer"},
       currentGroup:{id:0,"color":"#0075bc"},
       currentPatientIndex: -1,
@@ -24,6 +25,7 @@ export default new Vuex.Store({
   mutations: {
     init(state, obj){
       state.init=JSON.parse(JSON.stringify(obj));
+      state.loggerURL=state.init.loggerURL;
       var ptlist=state.init.patientMasterList;
       ptlist.forEach(function(e){
         var pid=e.id;
@@ -140,6 +142,9 @@ export default new Vuex.Store({
     }
   },
   getters: {
+    getLoggerURL: state=> {
+      return state.loggerURL
+    },
     testResetState: state =>{
       return state.patientlist[7].wlist[1].count
     },

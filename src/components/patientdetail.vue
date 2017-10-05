@@ -110,6 +110,8 @@ import applayout from './applayout.vue';
 import eventBus from '../eventBus.js';
 import kotile from './kotile.vue'
 import kocard from './kocard.vue'
+import axios from 'axios';
+
 export default {
     name: 'patientdetail',
 	data : function() {
@@ -166,6 +168,9 @@ export default {
 	updated: function() {
 	  },
 	computed : {
+		loggerurl:function(){
+			return this.$store.getters.getLoggerURL;
+		},
 		currentGroup: function(){
 			return this.$store.getters.getcurrentGroup;
 		},
@@ -275,8 +280,9 @@ export default {
 			this.updateLayoutContent();
 			this.cleanupLayout();
 	    var pid=this.$route.params.id;
-			this.$store.commit('saveConfig',{'id':pid,'group':this.currentGroup.id,'layout':this.layout});      
       eventBus.$emit("saveSettings",{'id':pid,'group':this.currentGroup.id});
+			this.$store.commit('saveConfig',{'id':pid,'group':this.currentGroup.id,'layout':this.layout});
+			if(true) this.updateLog(this.patient);
 			this.isInEdit = false;
     },
 		getHeight:function(i){
@@ -304,6 +310,20 @@ export default {
 				}
 			})
 			this.cleanupLayout();
+		},
+		updateLog:function(obj){
+			var t = moment().format();
+			var payload={};
+			obj.timestamp=t;
+			payload.entry=obj;
+			axios.post(this.loggerurl, payload)
+				.then(function (response) {
+    			console.log(response);
+  			})
+  			.catch(function (error) {
+    			console.log(error);
+  			});
+
 		},
     dragWidget:function(ev){
       ev.stopPropagation();
