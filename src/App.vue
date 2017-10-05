@@ -17,12 +17,7 @@ export default {
     };
   },
   created: function () {
-    var self=this;
-    axios.get("./static/json/default.json").then( response=> {
-      self.$store.commit('init', response.data)
-      }).catch(e=>{
-        console.log(e)
-      });
+
   },
   components: {
     navbar
@@ -31,7 +26,12 @@ export default {
 
 	},
 	mounted:function(){
-
+    var self=this;
+    axios.get("./static/json/default.json").then( response=> {
+      self.$store.commit('init', response.data)
+    }).catch(e=>{
+      console.log(e)
+    });
 	},
   methods:{
 

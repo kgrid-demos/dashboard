@@ -6,7 +6,7 @@
 			<nav class='navbar navbar-fixed-top kgl-1 kg-bg-color kg-color'>
 
 						<ul class='nav navbar-nav'>
-							<li :class="{'active': $route.fullPath === '/'}" @click='seeallpatients'><a><span>All Patients</span></a></li>
+							<router-link tag='li':class="{'active': $route.fullPath === '/'}" to='/'><a><span>Patients</span></a></router-link>
 							<router-link tag='li' :class="{'active': $route.fullPath === '/about'}" to='/about'><a><span>Calendar</span></a></router-link>
 							<router-link tag='li' :class="{'active': $route.fullPath === '/about'}" to='/about'><a><span>Notifications</span></a></router-link>
 							<router-link tag='li' :class="{'active': $route.fullPath === '/about'}" to='/about'><a><span>User</span></a></router-link>
@@ -32,6 +32,9 @@ export default {
 	  this.showDropdown=false;
   },
   computed: {
+		debugging: function(){
+			return this.$store.getters.isDebugging;
+		},
 		firstname: function(){
 			return (this.$store.state.currentUser.first_name || "")
 		},
@@ -41,9 +44,9 @@ export default {
 		dashboard: function(){
 			var d= 'Dashboard';
 			if(this.$store.getters.getCurrentStation.label!=""){
-			d = d +" - ";
+						d=this.$store.getters.getCurrentStation.label + ' '+d;
 			}
-			d=d+this.$store.getters.getCurrentStation.label;
+
 			return d;
 			}
   },
@@ -61,7 +64,13 @@ export default {
 			}
 		},
 		stationselector:function(){
-			this.$store.commit('selstation',{value:-1});
+			var r = this.$route.fullPath;
+			if(this.debugging) console.log("Route Path: "+r);
+			if(r!='/'){
+				this.$router.push({ path: '/' });
+			}else{
+				this.$store.commit('selstation',{value:-1});
+			}
 		},
 		seeallpatients:function(){
 			this.$store.commit('setgroupid',{value:-1});

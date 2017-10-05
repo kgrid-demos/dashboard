@@ -37,7 +37,7 @@ export default new Vuex.Store({
             return el.id==pid && el.groupid==gid});
           if(index==-1){
             var temp={};
-            Object.assign(temp,state.init.patientstemplate);
+            temp=JSON.parse(JSON.stringify(state.init.patientstemplate));
             temp.id=pid;
             temp.name=pname;
             temp.age=page;
@@ -52,7 +52,7 @@ export default new Vuex.Store({
     },
     resetState(state,obj){
       state.init=JSON.parse(JSON.stringify(obj));
-      state.patientlist=[];
+      state.patientlist.splice(0, state.patientlist.length);
       var ptlist=state.init.patientMasterList;
       ptlist.forEach(function(e){
         var pid=e.id;
@@ -66,7 +66,7 @@ export default new Vuex.Store({
             return el.id==pid && el.groupid==gid});
           if(index==-1){
             var temp={};
-            Object.assign(temp,state.init.patientstemplate);
+            temp=JSON.parse(JSON.stringify(state.init.patientstemplate));
             temp.id=pid;
             temp.name=pname;
             temp.age=page;
@@ -83,16 +83,16 @@ export default new Vuex.Store({
       console.log("SAVE=>"+obj.id+"   "+index);
       state.patientlist[index].layout=JSON.parse(JSON.stringify(obj.layout));
       //Need to remove when the PRO registration is done , for front debug purpose
+      var objWlist = obj.layout.map(function(ee) {return ee.c});
       state.patientlist[index].wlist.forEach(function(e){
-        var i=obj.layout.map(function(ee) {return ee.c}).indexOf(e.id);
-        console.log("Save widget:"+i)
-        if(i>=0){
-          if(e.count==-1){
+        var i=objWlist.indexOf(e.id);
+
+        if(i!=-1){
             e.count=0;
-          }
         }else {
           e.count=-1;
         }
+
       })
     },
     updateAlert(state,obj){
@@ -125,8 +125,7 @@ export default new Vuex.Store({
       state.currentGroup.id=obj.value;
     },
     saveWidgetSettings(state, obj){
-      var index = state.patientlist.findIndex(function(el) {
-              return el.id==obj.pid && el.groupid==obj.group});
+      var index = state.currentPatientIndex;
       var windex = state.patientlist[index].widgetSettings.map(function(e){return e.id}).indexOf(obj.wid);
       console.log("save widget for=>"+"Pt "+index+"wd "+windex)
       if(windex >= 0) {
@@ -141,6 +140,12 @@ export default new Vuex.Store({
     }
   },
   getters: {
+    testResetState: state =>{
+      return state.patientlist[7].wlist[1].count
+    },
+    isDebugging: state => {
+      return state.debugEnabled;
+    },
     getlayoutbyid:state=>{
       var self=this;
       return function(obj){
@@ -185,7 +190,7 @@ export default new Vuex.Store({
     },
     getPatientList: state=>{
       var l=[];
-      Object.assign(l, state.patientlist);
+      l=JSON.parse(JSON.stringify( state.patientlist));
       if(state.currentStation.id!=-1){
         l=l.filter(function(e) {
           return (e.type==state.currentStation.id)
