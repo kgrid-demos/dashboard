@@ -17,7 +17,7 @@
 			<div class='row' v-if="stationSelected">
 				<div class='col-md-2 col-sm-2 col-xs-2  ht-full'>
 					<div>
-										<p style='text-align:center;margin-bottom:30px;'></p>
+										<p style='text-align:center'></p>
 						<ul class='groupids' ><li v-for='(num,index) in groups' @click='selectgroup(index)' :class="{'active': currentGroup.id==num}">{{num}}</li></ul>
 					</div>
 
@@ -193,25 +193,47 @@ h1 small {
 	font-size:50%;
 }
 ul.groupids li {
+position:relative;
  text-align: center;
  cursor: pointer;
  font-size: 18px;
  font-weight: 400;
  color:#eeeeee;
- margin: 0px 160px 10px 0px;
+ margin: 0px 200px 10px 0px;
  border: 1px dashed #e5e5e5;
+
 	padding: 10px;
 	background-color: #f7f7f7;
-	transition: color 0.3s ease;
+	transition: all 0.3s ease;
 }
 ul.groupids li:hover {
 	color:#555555;
-
 }
 
 ul.groupids li.active {
  font-weight: 800;
  color:#333333;
-
+  border-right: none;
+ margin: 0px 140px 10px 0px;
 }
+
+ul.groupids li.active:after {
+  content: '';
+  position: absolute;
+  top: -1px; right: -50px;
+	border: 1px dashed #e5e5e5;
+  width: 100%; height: 100%;
+  background: #f7f7f7;
+  -webkit-transform-origin: 100% 0;
+  -ms-transform-origin: 100% 0;
+  transform-origin: 100% 0;
+  -webkit-transform: skew(-45deg);
+  -ms-transform: skew(-45deg);
+  transform: skew(-45deg);
+	z-index:-1;
+}
+
+
+
+
 </style>

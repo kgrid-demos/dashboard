@@ -22,8 +22,8 @@
 
 					}
 				};
-				</script>
-				<style scoped>
+	</script>
+		<style scoped>
 
 				.kgl-icon .badge{
 					position: absolute;

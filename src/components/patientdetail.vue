@@ -1,5 +1,13 @@
 <template>
 <div class='content'>
+	<modal v-if="showModal">
+		<h3 slot="header">Registration in Progress</h3>
+		<div slot="body">
+			<ul>
+			<li v-for='entry in registrationstatus'>{{entry}}</li>
+			</ul>
+		</div>
+	</modal>
 	<applayout>
 		<div slot='banner'>
 			<div class='bannercontent' >
@@ -110,12 +118,14 @@ import applayout from './applayout.vue';
 import eventBus from '../eventBus.js';
 import kotile from './kotile.vue'
 import kocard from './kocard.vue'
+import modal from './modal.vue'
 import axios from 'axios';
 
 export default {
     name: 'patientdetail',
 	data : function() {
 		return {
+			registrationstatus:[],
 			widgetList:[],
 			itemWidgetList:[],
 			pwidgetlist:[],
@@ -124,9 +134,7 @@ export default {
 			enableNextArrow:false,
 			defaultw:6,
 			defaulth:6,
-			layout:[
-        {"x":0,"y":0,"w":4,"h":6,"i":"0","c":""},
-    ],
+			layout:[],
 		dragOptions: {
 			animation: 0,
 			group: 'description',
@@ -134,17 +142,21 @@ export default {
 			ghostClass: 'ghost',
 		},
 		dateRange:{starttime:0, endtime: 6},
+
+		showModal:false
 		}
 	},
 	created : function() {
 		var self = this;
 		var lastsunday = moment().day(-7);
 		eventBus.$emit("setdaterange", this.dateRangeLabel);
+		this.$store.commit('setCurrentPatientIndex',{'pid':this.patient.id,'group':this.patient.groupid});
+
 	},
 	mounted:function(){
 		var self = this;
 		this.itemWidgetList=[];
-		this.layout=JSON.parse(JSON.stringify(this.$store.getters.getlayoutbyid({'id':this.$route.params.id,'group':this.currentGroup.id})));
+		this.layout=JSON.parse(JSON.stringify(this.patient.layout));
 		this.pwidgetlist=this.layout.map(function(e){return e.c})
 		this.widgetList = this.widgetMaster.filter(function(e){return (this.indexOf(e.id)<0);},self.pwidgetlist)
 		if(this.layout.length>0){
@@ -277,13 +289,28 @@ export default {
 			this.itemWidgetList=this.itemWidgetList.filter(function(e){return (e.length!=0)});
 		},
     saveconfig:function(){
+			var self = this;
+			this.showModal=true;
 			this.updateLayoutContent();
 			this.cleanupLayout();
 	    var pid=this.$route.params.id;
       eventBus.$emit("saveSettings",{'id':pid,'group':this.currentGroup.id});
 			this.$store.commit('saveConfig',{'id':pid,'group':this.currentGroup.id,'layout':this.layout});
-			if(true) this.updateLog(this.patient);
-			this.isInEdit = false;
+			if(false) this.updateLog(this.patient);
+			self.registrationstatus =[];
+			setTimeout(function(){
+				self.registrationstatus.push("Registering "+self.patient.name+ " for the prescribed interventions ...")
+			},200)
+			setTimeout(function(){
+				self.registrationstatus.push("Registration is successful!!! ")
+			},1500)
+			setTimeout(function(){
+				self.registrationstatus.push("A confirmation email has also been sent to the patient.")
+			},2000)
+			setTimeout(function(){
+				self.showModal=false;
+				self.isInEdit = false;
+				},4000);
     },
 		getHeight:function(i){
 				if(this.$refs.item[i]){
@@ -381,12 +408,13 @@ export default {
 			this.itemWidgetList.forEach(function(item, index) {
 					if(item.length>0)
 						{ self.layout[index].c = item[0].id;}
-						else {
+					else {
 						 self.layout[index].c = "";
 						}
 				}
 			)
 			this.pwidgetlist=this.layout.map(function(e){return e.c})
+
 		}
 	},
 	components:{
@@ -396,6 +424,7 @@ export default {
 		draggable,
 		GridLayout:VueGridLayout.GridLayout,
 		GridItem:VueGridLayout.GridItem,
+		modal,
 		}
 };
 </script>
@@ -464,6 +493,7 @@ flex: auto;
 .widgetTitle .badge {
 	top:5px;
 	right:45px;
+	background-color:#bc2526;
 }
 
 .draggablehandle {

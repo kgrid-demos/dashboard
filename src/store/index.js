@@ -8,10 +8,10 @@ const debug = process.env.NODE_ENV !== 'production'
 const vuexLocal = new VuexPersistence ({
     key:"first",
     storage: window.localStorage,
-    reducer: state => ({patientlist: state.patientlist, currentStation: state.currentStation, currentGroup:state.currentGroup}),
+    // reducer: state => ({patientlist: state.patientlist, currentStation: state.currentStation, currentGroup:state.currentGroup}),
 })
 export default new Vuex.Store({
-  strict: debug,
+  strict: process.env.NODE_ENV !== 'production',
   plugins: [vuexLocal.plugin],
   state:{
       init:{},
@@ -152,12 +152,8 @@ export default new Vuex.Store({
       return state.debugEnabled;
     },
     getlayoutbyid:state=>{
-      var self=this;
-      return function(obj){
-        var index = state.patientlist.findIndex(function(el) {
-          return el.id==obj.id && el.groupid==obj.group});
-        return state.patientlist[index].layout;
-      }
+        return state.patientlist[state.currentPatientIndex].layout;
+
     },
     getDefaultLayout:state=>{
         return state.init.defaultLayout;
