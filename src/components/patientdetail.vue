@@ -48,7 +48,7 @@
 						<div class='col-md-5 col-sm-5 '>
 					<div class='float-r'>
 						<button class='kg-btn-primary ' v-if='isInEdit && pwidgetlist.length==1&&this.pwidgetlist[0]=="" ' @click='loadDefault'> Load Default Layout </button>
-						<button class='kg-btn-primary ' v-if='!isInEdit' @click='toggleEditMode'>Edit</button>
+						<button class='kg-btn-primary ' v-if='!isInEdit && !maximized' @click='toggleEditMode'>Edit</button>
 						<button class='kg-btn-primary ' v-if='isInEdit' @click='saveconfig'>Save Changes</button></div>
 					</div>
 					</div>
@@ -76,16 +76,21 @@
 														<div class='widgetTitle' v-bind:class="{draggablehandle: isInEdit}" v-if='item.c!=""'>
 															<div class='badge' v-if='!isInEdit' v-show='count[item.i]>0'>{{count[item.i]}}</div>
 															<p v-if='itemWidgetList[item.i].length>0'>{{itemWidgetList[item.i][0].label}}</p>
-															<i class='fa fa-plus' v-if='!isInEdit'  style="margin-right:58px;" @click='addAlert(itemWidgetList[item.i][0].id)'></i>
+															<i class='fa fa-plus' v-if='!isInEdit'  style="margin-right:55px;" @click='addAlert(itemWidgetList[item.i][0].id)'></i>
 															<i class='fa fa-minus'  v-if='!isInEdit'  style="margin-right:23px;" @click='removeAlert(itemWidgetList[item.i][0].id)'></i>
 															<i class='fa fa-close' v-if='isInEdit' @click='removeWidget(item.i)'></i>
 															<i class='fa fa-window-maximize' v-if='!isInEdit && !maximized' @click='maximizeWidget(item.i)'></i>
 															<i class='fa fa-window-restore' v-if='!isInEdit && maximized' @click='restoreLayout'></i>
 														</div>
 						<div class='widgetcontainer fill no-drag' @drop='dropped'>
-								<draggable class='wlayout' element="ul" v-model="itemWidgetList[item.i]" :options="dragOptions">
+								<draggable class='wlayout' element="ul" v-model="itemWidgetList[item.i]" :options="customDragOptions(item.i)" >
 														<li v-for='(object,index) in itemWidgetList[item.i]' v-bind:key='index' v-if='itemWidgetList[item.i].length==1|object.type!="NEW"'>
-															<kotile :object='object' :patientid='$route.params.id' :cflag="object.type" :tileindex='index' :containerheight="((item.h-1)*40)" :editmode='isInEdit' :startdate="dateRangeLabel.startDate" draggable='true'  @dragstart='dragWidget'></kotile>
+															<kotile :object='object' :patientid='$route.params.id' :maximized='maximized' :cflag="object.type" :tileindex='index' :containerheight="((item.h-1)*40)" :editmode='isInEdit' :startdate="dateRangeLabel.startDate" draggable='true'  @dragstart='dragWidget'>
+																<div slot='alerts' v-if='maximized' class='widgetalertdisplay'> RECOMMENDATIONS</div>
+																<div slot='notes'  v-if='maximized' class='notesdisplay'>
+																	8.03 am    Submitted {{object.label}} scale
+																</div>
+															</kotile>
 														</li>
 													</draggable></div>
 						</grid-item>
@@ -408,6 +413,12 @@ export default {
 			this.layout=JSON.parse(JSON.stringify(this.temp));
 			this.maximized=false;
 		},
+		customDragOptions: function(i){
+			var op = JSON.parse(JSON.stringify(this.dragOptions));
+			op.disabled=this.itemWidgetList[i].length>0
+			return op;
+
+		},
 		toggleEditMode:function(){
 			this.isInEdit=true;
 			this.dragOptions.disabled=false;
@@ -433,7 +444,7 @@ export default {
 						 self.layout[index].c = "";
 						}
 				}
-			);
+			)
 			this.pwidgetlist=this.layout.map(function(e){return e.c})
 
 		}
@@ -567,7 +578,20 @@ ul.wlayout li {
 	background-color:transparent;
 	display: flex;
 	flex-direction:column;
-	box-shadow: 4px 4px 4px 1px rgba(0, 0, 0, .2);
+
 }
 
+	.widgetalertdisplay, .notesdisplay {
+			height:150px;
+			background-color: #fff;
+			margin:10px 0px;
+			border: 1px solid #b3b3b3;
+			overflow: auto;
+			padding:10px 15px;
+			text-align: left;
+			text-transform: none;
+	}
+.widgetalertdisplay{
+
+}
 </style>

@@ -205,7 +205,7 @@
 
 <style scoped>
   .graph {
-    width: 96%;
+    width: 100%;
     height: 100%;
     padding-top: 25px;
     margin:0 auto;
