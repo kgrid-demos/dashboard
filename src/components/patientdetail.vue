@@ -69,15 +69,18 @@
 														ref='item'
 														v-bind:key="item.i"
                             @resized="resizedEvent"
+
 											 			drag-allow-from=".draggablehandle"
 											 			drag-ignore-from=".no-drag">
 														<div class="draggable-handle" v-show='(item.c=="")&&isInEdit' style="text-align: center; vertical-align: middle; font-size: 16px; font-weight: 700;position:relative;top:50%;transform:translateY(-50%)">Add a widget</div>
 														<div class='widgetTitle' v-bind:class="{draggablehandle: isInEdit}" v-if='item.c!=""'>
 															<div class='badge' v-if='!isInEdit' v-show='count[item.i]>0'>{{count[item.i]}}</div>
 															<p v-if='itemWidgetList[item.i].length>0'>{{itemWidgetList[item.i][0].label}}</p>
-															<i class='fa fa-plus' v-if='!isInEdit'  style="margin-right:70px;" @click='addAlert(itemWidgetList[item.i][0].id)'></i>
-															<i class='fa fa-minus'  v-if='!isInEdit'  style="margin-right:20px;" @click='removeAlert(itemWidgetList[item.i][0].id)'></i>
+															<i class='fa fa-plus' v-if='!isInEdit'  style="margin-right:58px;" @click='addAlert(itemWidgetList[item.i][0].id)'></i>
+															<i class='fa fa-minus'  v-if='!isInEdit'  style="margin-right:23px;" @click='removeAlert(itemWidgetList[item.i][0].id)'></i>
 															<i class='fa fa-close' v-if='isInEdit' @click='removeWidget(item.i)'></i>
+															<i class='fa fa-window-maximize' v-if='!isInEdit && !maximized' @click='maximizeWidget(item.i)'></i>
+															<i class='fa fa-window-restore' v-if='!isInEdit && maximized' @click='restoreLayout'></i>
 														</div>
 						<div class='widgetcontainer fill no-drag' @drop='dropped'>
 								<draggable class='wlayout' element="ul" v-model="itemWidgetList[item.i]" :options="dragOptions">
@@ -135,6 +138,7 @@ export default {
 			defaultw:6,
 			defaulth:6,
 			layout:[],
+			temp:{},
 		dragOptions: {
 			animation: 0,
 			group: 'description',
@@ -142,7 +146,7 @@ export default {
 			ghostClass: 'ghost',
 		},
 		dateRange:{starttime:0, endtime: 6},
-
+		maximized:false,
 		showModal:false
 		}
 	},
@@ -281,12 +285,14 @@ export default {
       }
 		},
 		cleanupLayout: function(){
+			console.log("Cleaning up")
 			this.layout = this.layout.filter(function(e){return (e.c!="")}).map(function(e,index){
 				var item=e;
 				item.i=index+"";
 				return item;
 				});
 			this.itemWidgetList=this.itemWidgetList.filter(function(e){return (e.length!=0)});
+			console.log('Item Widget List Length = '+this.itemWidgetList.length)
 		},
     saveconfig:function(){
 			var self = this;
@@ -297,7 +303,9 @@ export default {
       eventBus.$emit("saveSettings",{'id':pid,'group':this.currentGroup.id});
 			this.$store.commit('saveConfig',{'id':pid,'group':this.currentGroup.id,'layout':this.layout});
 			if(false) this.updateLog(this.patient);
+			self.isInEdit = false;
 			self.registrationstatus =[];
+
 			setTimeout(function(){
 				self.registrationstatus.push("Registering "+self.patient.name+ " for the prescribed interventions ...")
 			},200)
@@ -309,7 +317,7 @@ export default {
 			},2000)
 			setTimeout(function(){
 				self.showModal=false;
-				self.isInEdit = false;
+
 				},4000);
     },
 		getHeight:function(i){
@@ -386,6 +394,19 @@ export default {
 			this.pwidgetlist[i]="";
 			this.cleanupLayout();
 
+		},
+		maximizeWidget: function(i){
+			this.temp =JSON.parse(JSON.stringify(this.layout));
+			this.layout=this.layout.filter(function(e){return e.i==i})
+			this.layout[0].x=0;
+			this.layout[0].y=0;
+			this.layout[0].w=12;
+			this.layout[0].h=18;
+			this.maximized=true;
+		},
+		restoreLayout: function(){
+			this.layout=JSON.parse(JSON.stringify(this.temp));
+			this.maximized=false;
 		},
 		toggleEditMode:function(){
 			this.isInEdit=true;
