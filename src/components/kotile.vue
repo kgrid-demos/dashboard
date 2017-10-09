@@ -3,7 +3,7 @@
 				<slot name='alerts' ></slot>
 				<p>
           <prowidget v-if="cflag === 'PRO'" :patientid='patientid' :chartheight='cHeight' :editmode="editmode" :object="object" :title="object.label" :startdate="startdate"></prowidget>
-          <smwidget v-if="cflag === 'SM'" :patientid='patientid' :editmode="editmode" :object="object" :title="object.label" ></smwidget>
+          <smwidget v-if="cflag === 'SM'" :patientid='patientid' :chartheight='cHeight' :editmode="editmode" :object="object" :title="object.label" ></smwidget>
         </p>
 				<slot name='notes'></slot>
 		</div>
@@ -49,14 +49,13 @@
 				    background-color: #fff;
 			    	color: #696969;
 				    font-weight: 400;
-				    border: none;
+				    border: 1px solid #e5e5e5;
 				    padding: 0px ;
 						text-transform: uppercase;
 						transition: all 0.5s ease;
 				}
 				.kgl-tile.max{
-					background-color: #e5e5e5;
-					border:none;
+						background-color: #e5e5e5;
 					}
 
 				.kgl-tile:hover {
@@ -64,15 +63,20 @@
 					 cursor:pointer;
 				}
 
+				.kgl-tile.max:hover {
+					border: 1px solid transparent;
+					cursor: initial;
+				}
 				.kgl-tile.max p {
 					border:1px solid #b3b3b3;
+					background-color:#fff;
+					min-height:200px;
 				}
 
-
-.kgl-id {
-	text-align: right;
-	padding-right: 0px;
-	right:-10px;
-}
+				.kgl-id {
+					text-align: right;
+					padding-right: 0px;
+					right:-10px;
+				}
 
 				</style>

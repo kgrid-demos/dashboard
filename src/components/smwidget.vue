@@ -107,6 +107,7 @@
       widgetStyle() {
         return {
           width: `${100 / this.datasettings.weeklyfreq}%`,
+          position: 'relative'
         }
       }
     },
@@ -181,6 +182,7 @@
   .moduleContainer {
     margin: 3em;
     text-transform: none;
+    background-color: #fff;
   }
   .moduleList {
   }
