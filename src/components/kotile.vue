@@ -1,31 +1,26 @@
 <template>
 		<div class="container kgl-tile" v-bind:id="object.label">
 				<p>
-          <prowidget v-if="cflag === 'PRO'" :chartheight='(containerheight-30)' :editmode="editmode" :object="object" :title="object.label" :startdate="startdate"></prowidget>
-          <smwidget v-if="cflag === 'SM'" :editmode="editmode" :object="object" :title="object.label" ></smwidget>
+          <prowidget v-if="cflag === 'PRO'" :patientid='patientid' :chartheight='(containerheight-30)' :editmode="editmode" :object="object" :title="object.label" :startdate="startdate"></prowidget>
+          <smwidget v-if="cflag === 'SM'" :patientid='patientid' :editmode="editmode" :object="object" :title="object.label" ></smwidget>
         </p>
 
 		</div>
 	</template>
 	<script>
-	import moment from 'moment';
 	import eventBus from '../eventBus.js';
 	import prowidget from './prowidget.vue';
 	import smwidget from './smwidget.vue';
 	export default {
   	name:	"kotile",
-		props : [ 'object', 'cflag' ,'tileindex', 'containerheight', 'editmode', 'startdate'],
+		props : [ 'object', 'patientid', 'cflag' ,'tileindex', 'containerheight', 'editmode', 'startdate'],
 		created: function(){
-
 		},
 		computed : {
 
 					},
 		methods : {
-		  sliderdrag () {
-		    this.$emit("sliderdrag");
-      }
-					},
+		},
 		components : {
 		  prowidget,
       smwidget

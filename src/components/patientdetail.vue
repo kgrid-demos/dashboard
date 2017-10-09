@@ -85,7 +85,7 @@
 						<div class='widgetcontainer fill no-drag' @drop='dropped'>
 								<draggable class='wlayout' element="ul" v-model="itemWidgetList[item.i]" :options="dragOptions">
 														<li v-for='(object,index) in itemWidgetList[item.i]' v-bind:key='index' v-if='itemWidgetList[item.i].length==1|object.type!="NEW"'>
-															<kotile :object='object'  :cflag="object.type" :tileindex='index' :containerheight="((item.h-1)*40)" :editmode='isInEdit' :startdate="dateRangeLabel.startDate" draggable='true'  @dragstart='dragWidget'></kotile>
+															<kotile :object='object' :patientid='$route.params.id' :cflag="object.type" :tileindex='index' :containerheight="((item.h-1)*40)" :editmode='isInEdit' :startdate="dateRangeLabel.startDate" draggable='true'  @dragstart='dragWidget'></kotile>
 														</li>
 													</draggable></div>
 						</grid-item>
@@ -433,7 +433,7 @@ export default {
 						 self.layout[index].c = "";
 						}
 				}
-			)
+			);
 			this.pwidgetlist=this.layout.map(function(e){return e.c})
 
 		}

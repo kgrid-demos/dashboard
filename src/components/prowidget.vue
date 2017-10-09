@@ -39,19 +39,22 @@
   import vueSlider from 'vue-slider-component';
   import eventBus from '../eventBus.js';
   import moment from 'moment';
+  import axios from 'axios';
 
   export default {
-    props: ['chartheight', 'editmode', 'object','title', 'startdate'],
+    props: ['chartheight', 'editmode', 'object', 'title', 'startdate', 'patientid'],
     components: {
       linechart,
       vueSlider
     },
     data () {
       return {
+        alldata: [],
+        weeklydata: [],
+        weeklylabels: [],
+        pointColors: [],
         datacollection: null,
         datasettings: null,
-        labels: null,
-        data: null,
         date: null,
         chartOptions: {
           maintainAspectRatio: false,
@@ -63,8 +66,16 @@
               top: 15
             }
           },
+          animation: {
+            duration: 500,
+            easing: 'easeOutSine'
+          },
           scales: {
             yAxes: [{
+              ticks: {
+                min: 0,
+                max: 10
+              },
               gridLines: {
                 display: true,
                 color: '#f2f2f2',
@@ -81,7 +92,7 @@
       this.date = this.startdate;
       eventBus.$on('setdaterange', function (obj) {
         self.date = obj.startDate;
-        self.changeWeek();
+        self.changeWeek(obj.startDate);
       });
       eventBus.$on('saveSettings', function (obj) {
         self.saveoptions(obj);
@@ -117,21 +128,21 @@
    }
     },
     mounted () {
-      this.fillData()
+      this.getChartDataFromJSONServer();
     },
     methods: {
       fillData () {
         this.datacollection = {
-          labels: this.labels,
+          labels: this.weeklylabels,
           datasets: [
             {
               label: this.title,
+              data: this.weeklydata,
               backgroundColor:'rgba(255, 255, 255, 1)',
-              data: this.data,
               fill: false,
               lineTension: 0,
               borderColor: '#bfbfbf',
-              pointBorderColor: this.determinecolor(),
+              pointBorderColor: this.pointColors,
               pointBorderWidth: 3,
               pointStyle: 'circle',
               pointRadius: 7,
@@ -151,7 +162,7 @@
       determinecolor() {
         var colors = [];
         var self = this;
-        this.data.forEach( function (e) {
+        this.weeklydata.forEach( function (e) {
           if (e >= self.datasettings.notifythresh) {
             colors.push('red');
           } else if (e >= self.datasettings.notifythresh / 2 + 1) {
@@ -162,32 +173,32 @@
         });
         return colors;
       },
-      changeWeek() {
-        const dayFormat = 'MMM. D';
-        const hourFormat = 'MMM. D H:mm';
-        const sDate = moment(this.date).set({'hour': 0, 'minute': 0});
-        this.data = [];
-        this.labels = [];
-        for(let i = 0; i < this.datasettings.dailyfreq * 7; i++) {
-          this.data.push(this.getRandomInt());
-          switch(this.datasettings.dailyfreq) {
-            case 1:
-              this.labels.push(moment(sDate).add(i, 'd').format(dayFormat));
-              break;
-            case 2:
-              this.labels.push(moment(sDate).add(i * 12, 'h').format(hourFormat));
-              break;
-            case 3:
-              this.labels.push(moment(sDate).add(i * 6, 'h').format(hourFormat));
-              break;
-            case 4:
-              this.labels.push(moment(sDate).add(i * 3, 'h').format(hourFormat));
-              break;
+      changeWeek(startdate) {
+        this.weeklydata = [];
+        this.weeklylabels = [];
+        let that = this;
+        this.alldata.forEach(function (el) {
+          if(el.date > moment(startdate).subtract(1, 'd').unix() && el.date < moment(startdate).add(6, 'd').unix()) {
+            that.weeklydata.push(el.value);
+            that.weeklylabels.push(moment.unix(el.date).format('MMM. D'));
           }
-        }
+        });
+        this.pointColors = this.determinecolor();
         this.fillData();
-      }
+      },
+      getChartDataFromJSONServer() {
+        const baseDataUrl = 'http://localhost:3001/patients/';
+        this.alldata = [];
+        let that = this;
+        const objectURL = baseDataUrl + this.patientid;
+        axios.get(objectURL).then(response => {
+          response.data[that.object.id + "-data"].forEach(function(dataEl) {
+            that.alldata.push(dataEl);
+          });
+          that.changeWeek(moment().set({'hour': 0, 'minute': 0, 'second': 0}).subtract(1, 'h'));
 
+        });
+      }
     }
   }
 </script>

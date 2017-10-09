@@ -51,19 +51,19 @@
 </template>
 
 <script>
-  import linechart from './linechart.js';
   import vueSlider from 'vue-slider-component';
   import eventBus from '../eventBus.js';
   import moment from 'moment';
+  import axios from 'axios';
 
   export default {
-    props: ['chartheight', 'editmode', 'object','title', 'startdate', 'totalminutes', 'minutescompleted'],
+    props: ['chartheight', 'patientid', 'editmode', 'object','title', 'startdate', 'totalminutes', 'minutescompleted'],
     components: {
-      linechart,
       vueSlider
     },
     data () {
       return {
+        allmodules: [],
         weeklymodules: [],
         datasettings: null
       }
@@ -93,13 +93,12 @@
           notifymin: 1
         };
       }
-      this.getweeklymodules(this.startdate);
     },
     computed : {
-    currentGroup:function(){
-      return this.$store.getters.getcurrentGroup;
-    },
-          myStyles () {
+      currentGroup:function(){
+        return this.$store.getters.getcurrentGroup;
+      },
+      myStyles () {
         return {
           height: `${this.chartheight}px`,
           position: 'relative'
@@ -112,41 +111,45 @@
       }
     },
     mounted () {
-      this.getweeklymodules(moment())
+      this.getChartDataFromJSONServer();
     },
     methods: {
       getweeklymodules (startDate) {
         this.weeklymodules = [];
-        let modStatus;
-        let moduleCompleteDate = moment(startDate);
-        for (let i = 1; i <= this.datasettings.weeklyfreq; i++) {
-          if (startDate < moment().subtract(1, 'w')) {
-            modStatus = this.getRandomStatus(2);
-          } else if(startDate > moment() || modStatus === "☐"){
-            modStatus = "☐";
-          } else {
-            modStatus = this.getRandomStatus(3);
+        let i = 1;
+        let that = this;
+        this.allmodules.sort(function(a, b) {
+          return a.date - b.date;
+        });
+        this.allmodules.forEach( function (module) {
+          //console.log("startdate: " + startDate.unix() + " moduledate: " + module.date);
+          if(module.date > startDate.unix() && module.date < moment(startDate).add(7, 'd').unix()) {
+            let mod = {id: i, status: that.convertNumToStatus(module.value), datecompleted: moment.unix(module.date).format('MMM. D')};
+            that.weeklymodules.push(mod);
+            i++;
           }
-          if(modStatus === "☑") {
-            moduleCompleteDate = moduleCompleteDate.add(Math.floor(Math.random() * 3), 'd');
+        });
+        while(i <= this.datasettings.weeklyfreq) {
+          let status = 1;
+          if(startDate.unix() > moment().subtract(6, 'd').unix()) {
+            status = 3;
           }
-          this.weeklymodules.push({id: i, status: modStatus, datecompleted: moduleCompleteDate.format('MMM. D')});
+          this.weeklymodules.push({id: i, status: this.convertNumToStatus(status), datecompleted: null});
+          i++;
+        }
+      },
+      convertNumToStatus: function(statusint) {
+        switch (statusint) {
+          case 1:
+            return "☒";
+          case 2:
+            return "☑";
+          case 3:
+            return "☐";
         }
       },
       saveoptions :function ()  {
           this.$store.commit('saveWidgetSettings', {'pid': this.$route.params.id, "group":this.currentGroup.id, "wid":this.object.id,'datasettings':this.datasettings});
-        //this.getweeklymodules();
-      },
-      getRandomStatus (availableStatuses) {
-        const statusint = Math.floor(Math.random() * (availableStatuses ? availableStatuses : 3));
-        switch (statusint) {
-          case 0:
-            return "☒";
-          case 1:
-            return "☑";
-          case 2:
-            return "☐";
-        }
       },
       getMinutesCompleted() {
         let minutescompleted = 0;
@@ -157,6 +160,17 @@
           }
         });
         return minutescompleted;
+      },
+      getChartDataFromJSONServer() {
+        const baseDataUrl = 'http://localhost:3001/patients/';
+        let that = this;
+        const objectURL = baseDataUrl + this.patientid;
+        axios.get(objectURL).then(response => {
+          response.data[that.object.id + "-data"].forEach(function(dataEl) {
+            that.allmodules.push(dataEl);
+          });
+          that.getweeklymodules(moment());
+        });
       }
     }
   }

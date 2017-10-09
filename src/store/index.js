@@ -200,6 +200,9 @@ export default new Vuex.Store({
       var ll=[];
       return l ;
     },
+    getPatientMasterList: state=>{
+      return state.init.patientMasterList;
+    }
   },
   actions: {
     initStore({commit}){

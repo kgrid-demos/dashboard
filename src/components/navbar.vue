@@ -11,6 +11,7 @@
 							<router-link tag='li' :class="{'active': $route.fullPath === '/about'}" to='/about'><a><span>Notifications</span></a></router-link>
 							<router-link tag='li' :class="{'active': $route.fullPath === '/about'}" to='/about'><a><span>User</span></a></router-link>
 							<li class='test' @click='resetstore'><a><span>Reset</span></a></li>
+							<li class="test" @click="genpatientdata"><a>Generate Patient Data</a></li>
 													</ul>
 
 			</nav>
@@ -18,8 +19,10 @@
 </template>
 
 <script>
-import eventBus from '../eventBus.js'
+import eventBus from '../eventBus.js';
 import axios from 'axios';
+import moment from 'moment';
+
 export default {
   name: 'navbar',
   data: function () {
@@ -75,6 +78,51 @@ export default {
 		seeallpatients:function(){
 			this.$store.commit('setgroupid',{value:-1});
 			this.$router.push({ path: '/' });
+		},
+
+		genpatientdata: function(){
+			const patientList = this.$store.getters.getPatientMasterList;
+			const widgetList = this.$store.getters.getwidgetMaster;
+			const basedataurl = 'http://localhost:3001/patients/';
+			let that = this;
+      let url;
+			console.log(patientList);
+			patientList.forEach(function(patient) {
+			  if(patient.id) {
+			    url = basedataurl + patient.id;
+          let data = {};
+			    widgetList.forEach(function(widget){
+            const widgetDataID = widget.id + "-data";
+			      if(widget.id.startsWith("PRO")) {
+			        const proMaxVal = 10;
+			        const proFreq = 14; // Data points per week
+			        const weeksToGenerate = 2;
+              data = that.genrandomdata(widgetDataID, data, proMaxVal, proFreq, weeksToGenerate);
+            } else {
+			        const smMaxVal = 2;
+			        const smFreq = 4;
+			        const weeksToGenerate = 2;
+              data = that.genrandomdata(widgetDataID, data, smMaxVal, smFreq, weeksToGenerate);
+						}
+			  	});
+          axios.put(url, data).catch(function (ex) {
+            if(ex.response.status === 404) {
+            }
+          });
+				}
+			});
+		},
+		genrandomdata: function(widgetDataID, data, maxVal, freq, weeks){
+		  let recordDate = moment().set({'hour': 0, 'minute': 0, 'second': 0}).subtract(7 * weeks, 'd');
+      data[widgetDataID] = [];
+		  for(let i = 0; i < freq * weeks; i++) {
+        recordDate.add(((7.0/freq) * 24), 'h');
+        data[widgetDataID].push({"date": moment(recordDate).unix(), "value": this.getRandomValue(maxVal)});
+			}
+			return data;
+		},
+		getRandomValue: function(max) {
+			return Math.floor(Math.random() * (max)) + 1;
 		}
   }
 };
