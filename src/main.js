@@ -37,7 +37,7 @@ const routes = [
                 { path : '/PRO/:id', name : 'pro', component : require('./components/pro.vue'), data: function(){
                     	   	console.log("current PRO ID:"+ this.$route.params.id);
                         }	},
-
+                { path : '/notification', component: require('./components/notification.vue') },
                       	    ];
 
 const router = new VueRouter({

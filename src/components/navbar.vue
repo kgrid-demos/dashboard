@@ -8,7 +8,7 @@
 						<ul class='nav navbar-nav'>
 							<router-link tag='li':class="{'active': $route.fullPath === '/'}" to='/'><a><span>Patients</span></a></router-link>
 							<router-link tag='li' :class="{'active': $route.fullPath === '/about'}" to='/about'><a><span>Calendar</span></a></router-link>
-							<router-link tag='li' :class="{'active': $route.fullPath === '/about'}" to='/about'><a><span>Notifications</span></a></router-link>
+							<router-link tag='li' :class="{'active': $route.fullPath === '/notification'}" to='/notification'><a><span>Notifications</span><div style='color:#bc2526;top:0px;right:-10px;position:absolute;font-size:10px;'><i class='fa fa-circle' v-if='notifCount>0'></i></div></a></router-link>
 							<router-link tag='li' :class="{'active': $route.fullPath === '/about'}" to='/about'><a><span>User</span></a></router-link>
 							<li class='test' @click='resetstore'><a><span>Reset</span></a></li>
 							<li class="test" @click="genpatientdata"><a>Generate Patient Data</a></li>
@@ -51,6 +51,9 @@ export default {
 			}
 
 			return d;
+			},
+			notifCount: function() {
+				return this.$store.getters.getNotificationList.length;
 			}
   },
   methods: {
@@ -289,7 +292,14 @@ transform: scaleY(1);
     font-weight: 400;
 min-width: 200px;
 }
-
+nav .alertbadge{
+	position: absolute;
+	right: -15px;
+	top: 5px;
+	color: #fff;
+	background-color:#bc2526;
+	border-radius:100%;
+}
 
 .login-link {
 		cursor:pointer;

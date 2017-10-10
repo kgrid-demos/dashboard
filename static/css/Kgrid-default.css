@@ -151,6 +151,14 @@ a, a:hover, a:visited, a:focus {
 .pad-t-2 {
   padding-top: 2px;
 }
+
+.pad-t-5 {
+  padding-top: 5px;
+}
+
+.pad-t-10 {
+  padding-top: 10px;
+}
 .pad-t-15{
     padding-top:15px;
  }

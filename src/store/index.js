@@ -158,6 +158,11 @@ export default new Vuex.Store({
     getDefaultLayout:state=>{
         return state.init.defaultLayout;
     },
+    getNotificationList:state=> {
+      return [ {patient:{name:"Bridget Kearns", age:52, gender:"Female"}, timestamp: '2017-10-09',notes:[{"type":-1,"text":"Pain rating scale has decreased from 7 to 3 in last 24 hours"},{"type":0,"text":"Anxiety remains at 13 each of the last 13 days"}]},
+      {patient:{name:"Tyler Durden", age:55, gender:"Male"}, timestamp: '2017-10-09T03:00:04Z',notes:[{"type":1,"text":"Pain rating scale has increased from 2 to 8 in last 24 hours"}]}
+            ]
+    },
     getDataSettings:state=>{
       return function(obj){
         var index = state.patientlist.findIndex(function(el) {
