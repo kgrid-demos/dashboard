@@ -2,19 +2,25 @@
 		<div class="container kgl-tile" :class="{max:maximized}" v-bind:id="object.label">
 				<slot name='alerts' ></slot>
 				<p>
-          <prowidget v-if="cflag === 'PRO'" :patientid='patientid' :chartheight='cHeight' :editmode="editmode" :object="object" :title="object.label" :startdate="startdate"></prowidget>
-          <smwidget v-if="cflag === 'SM'" :patientid='patientid' :chartheight='cHeight' :editmode="editmode" :object="object" :title="object.label" ></smwidget>
+          <prowidget v-if="cflag === 'PRO'" :alldata='chartdata' :patientid='patientid' :chartheight='cHeight' :editmode="editmode" :object="object" :title="object.label" :startdate="startdate"></prowidget>
+          <smwidget v-if="cflag === 'SM'" :allmodules='chartdata' :patientid='patientid' :chartheight='cHeight' :editmode="editmode" :object="object" :title="object.label" ></smwidget>
         </p>
 				<slot name='notes'></slot>
 		</div>
 	</template>
 	<script>
 	import moment from 'moment';
+  import axios from 'axios';
 	import eventBus from '../eventBus.js';
 	import prowidget from './prowidget.vue';
 	import smwidget from './smwidget.vue';
 	export default {
   	name:	"kotile",
+		data () {
+  	  return {
+  	    chartdata: []
+			}
+		},
 		props : [ 'object', 'patientid','cflag' ,'maximized','tileindex', 'containerheight', 'editmode', 'startdate'],
 		created: function(){
 
@@ -28,11 +34,23 @@
 					return h
 				}
 				},
+		mounted () {
+		  this.getChartDataFromJSONServer();
+		},
 		methods : {
-		  sliderdrag () {
-		    this.$emit("sliderdrag");
+      getChartDataFromJSONServer() {
+        const baseDataUrl = 'http://localhost:3001/patients/';
+        this.chartdata = [];
+        let that = this;
+        const objectURL = baseDataUrl + this.patientid;
+        axios.get(objectURL).then(response => {
+          response.data[that.object.id + "-data"].forEach(function(dataEl) {
+            that.chartdata.push(dataEl);
+            eventBus.$emit("chartDataReady");
+          });
+        });
       }
-					},
+		},
 		components : {
 		  prowidget,
       smwidget

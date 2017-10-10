@@ -97,12 +97,12 @@ export default {
 			        const proMaxVal = 10;
 			        const proFreq = 14; // Data points per week
 			        const weeksToGenerate = 2;
-              data = that.genrandomdata(widgetDataID, data, proMaxVal, proFreq, weeksToGenerate);
+              data = that.genrandomprodata(widgetDataID, data, proMaxVal, proFreq, weeksToGenerate);
             } else {
-			        const smMaxVal = 2;
-			        const smFreq = 4;
+			        const smMaxVal = 2; // Only allow completed and skipped data
+			        const smFreq = 4; // Self-evals per week
 			        const weeksToGenerate = 2;
-              data = that.genrandomdata(widgetDataID, data, smMaxVal, smFreq, weeksToGenerate);
+              data = that.genrandomsmdata(widgetDataID, data, smMaxVal, smFreq, weeksToGenerate);
 						}
 			  	});
           axios.put(url, data).catch(function (ex) {
@@ -112,7 +112,7 @@ export default {
 				}
 			});
 		},
-		genrandomdata: function(widgetDataID, data, maxVal, freq, weeks){
+    genrandomsmdata: function(widgetDataID, data, maxVal, freq, weeks){
 		  let recordDate = moment().set({'hour': 0, 'minute': 0, 'second': 0}).subtract(7 * weeks, 'd');
       data[widgetDataID] = [];
 		  for(let i = 0; i < freq * weeks; i++) {
@@ -121,8 +121,42 @@ export default {
 			}
 			return data;
 		},
+    genrandomprodata: function(widgetDataID, data, maxVal, freq, weeks){
+      let recordDate = moment().set({'hour': 0, 'minute': 0, 'second': 0}).subtract(7 * weeks, 'd');
+      let priorVal = 3;
+      let note = "";
+      console.log("Prior val: " + priorVal);
+      data[widgetDataID] = [];
+      for(let i = 0; i < freq * weeks; i++) {
+        recordDate.add(((7.0/freq) * 24), 'h');
+        priorVal = this.getRandomPROValue(maxVal, priorVal);
+        note = this.genNote(priorVal, maxVal);
+        data[widgetDataID].push({"date": moment(recordDate).unix(), "value": priorVal, "note": note});
+      }
+      return data;
+    },
 		getRandomValue: function(max) {
 			return Math.floor(Math.random() * (max)) + 1;
+		},
+    getRandomPROValue: function(max, priorVal) {
+      // Random walk from the prior value
+      let val = Math.round((Math.random() * Math.random() - 0.26) * 14.25) + priorVal;
+      if(val > max) {
+        return max;
+			}
+			if(val < 0) {
+        return 0;
+			}
+			return val;
+    },
+		genNote: function(value, maxVal) {
+      if(value < maxVal/3) {
+        return "";
+			}
+			if(value < (maxVal/3)*2) {
+        return "I'm feeling a little distressed";
+			}
+			return "I'm not feeling well at all";
 		}
   }
 };

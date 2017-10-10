@@ -42,14 +42,13 @@
   import axios from 'axios';
 
   export default {
-    props: ['chartheight', 'editmode', 'object', 'title', 'startdate', 'patientid'],
+    props: ['chartheight', 'alldata', 'editmode', 'object', 'title', 'startdate', 'patientid'],
     components: {
       linechart,
       vueSlider
     },
     data () {
       return {
-        alldata: [],
         weeklydata: [],
         weeklylabels: [],
         pointColors: [],
@@ -97,6 +96,9 @@
       eventBus.$on('saveSettings', function (obj) {
         self.saveoptions(obj);
       });
+      eventBus.$on('chartDataReady', function () {
+        self.changeWeek(null);
+      });
       const obj = {"id":this.$route.params.id,"group":this.currentGroup.id,"wid": this.object.id};
       if (this.$store.getters.getDataSettings(obj)) {
         this.datasettings = Object.assign({}, this.$store.getters.getDataSettings(obj).datasettings);
@@ -114,7 +116,6 @@
           notifymax: 9
         };
       }
-      this.changeWeek();
     },
     computed : {
     currentGroup:function(){
@@ -128,7 +129,7 @@
    }
     },
     mounted () {
-      this.getChartDataFromJSONServer();
+      this.changeWeek(null);
     },
     methods: {
       fillData () {
@@ -174,9 +175,13 @@
         return colors;
       },
       changeWeek(startdate) {
+
         this.weeklydata = [];
         this.weeklylabels = [];
         let that = this;
+        if (startdate === null) {
+          startdate = moment().startOf('week').add(12, 'h');
+        }
         this.alldata.forEach(function (el) {
           if(el.date > moment(startdate).subtract(1, 'd').unix() && el.date < moment(startdate).add(6, 'd').unix()) {
             that.weeklydata.push(el.value);
@@ -185,19 +190,6 @@
         });
         this.pointColors = this.determinecolor();
         this.fillData();
-      },
-      getChartDataFromJSONServer() {
-        const baseDataUrl = 'http://localhost:3001/patients/';
-        this.alldata = [];
-        let that = this;
-        const objectURL = baseDataUrl + this.patientid;
-        axios.get(objectURL).then(response => {
-          response.data[that.object.id + "-data"].forEach(function(dataEl) {
-            that.alldata.push(dataEl);
-          });
-          that.changeWeek(moment().set({'hour': 0, 'minute': 0, 'second': 0}).subtract(1, 'h'));
-
-        });
       }
     }
   }

@@ -57,13 +57,12 @@
   import axios from 'axios';
 
   export default {
-    props: ['chartheight', 'patientid', 'editmode', 'object','title', 'startdate', 'totalminutes', 'minutescompleted'],
+    props: ['chartheight', 'allmodules', 'patientid', 'editmode', 'object','title', 'startdate', 'totalminutes', 'minutescompleted'],
     components: {
       vueSlider
     },
     data () {
       return {
-        allmodules: [],
         weeklymodules: [],
         datasettings: null
       }
@@ -75,6 +74,9 @@
       });
       eventBus.$on('saveSettings', function () {
         self.saveoptions();
+      });
+      eventBus.$on('chartDataReady', function() {
+        self.getweeklymodules(null);
       });
       const obj = {"id":this.$route.params.id,"group":this.currentGroup.id,"wid": this.object.id};
       if (this.$store.getters.getDataSettings(obj)) {
@@ -112,13 +114,16 @@
       }
     },
     mounted () {
-      this.getChartDataFromJSONServer();
+      this.getweeklymodules(null);
     },
     methods: {
       getweeklymodules (startDate) {
         this.weeklymodules = [];
         let i = 1;
         let that = this;
+        if(startDate === null) {
+          startDate = moment().startOf('week');
+        }
         this.allmodules.sort(function(a, b) {
           return a.date - b.date;
         });
@@ -155,23 +160,12 @@
       getMinutesCompleted() {
         let minutescompleted = 0;
         let that = this;
-        this.weeklymodules.forEach( function(module) {
-          if(module.status === '☑') {
+        this.weeklymodules.forEach(function (module) {
+          if (module.status === '☑') {
             minutescompleted += that.datasettings.minutespermodule;
           }
         });
         return minutescompleted;
-      },
-      getChartDataFromJSONServer() {
-        const baseDataUrl = 'http://localhost:3001/patients/';
-        let that = this;
-        const objectURL = baseDataUrl + this.patientid;
-        axios.get(objectURL).then(response => {
-          response.data[that.object.id + "-data"].forEach(function(dataEl) {
-            that.allmodules.push(dataEl);
-          });
-          that.getweeklymodules(moment());
-        });
       }
     }
   }
