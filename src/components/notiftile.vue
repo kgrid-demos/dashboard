@@ -42,7 +42,7 @@
 					}
 				};
 </script>
-<style>
+<style scoped>
 	.kgl-tile {
 	    text-align: left;
 	    width: 99%;
