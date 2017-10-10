@@ -87,9 +87,7 @@
 														<li v-for='(object,index) in itemWidgetList[item.i]' v-bind:key='index' v-if='itemWidgetList[item.i].length==1|object.type!="NEW"'>
 															<kotile :object='object' :patientid='$route.params.id' :maximized='maximized' :cflag="object.type" :tileindex='index' :containerheight="((item.h-1)*40)" :editmode='isInEdit' :startdate="dateRangeLabel.startDate" draggable='true'  @dragstart='dragWidget'>
 																<div slot='alerts' v-if='maximized' class='widgetalertdisplay'> RECOMMENDATIONS</div>
-																<div slot='notes'  v-if='maximized' class='notesdisplay'>
-																	8.03 am    Submitted {{object.label}} scale
-																</div>
+
 															</kotile>
 														</li>
 													</draggable></div>
@@ -591,7 +589,4 @@ ul.wlayout li {
 			text-align: left;
 			text-transform: none;
 	}
-.widgetalertdisplay{
-
-}
 </style>

@@ -5,7 +5,12 @@
           <prowidget v-if="cflag === 'PRO'" :alldata='chartdata' :patientid='patientid' :chartheight='cHeight' :editmode="editmode" :object="object" :title="object.label" :startdate="startdate"></prowidget>
           <smwidget v-if="cflag === 'SM'" :allmodules='chartdata' :patientid='patientid' :chartheight='cHeight' :editmode="editmode" :object="object" :title="object.label" ></smwidget>
         </p>
-				<slot name='notes'></slot>
+				<div class='notesdisplay' v-if='maximized'>
+				<ul>
+					<li v-for='(object,index) in weeklynotes' v-bind:key='index'>
+						<span v-if='object.note!=""'>{{formatted(object.date*1000)}} - {{object.note}}</span></li>
+			</ul>
+				</div>
 		</div>
 	</template>
 	<script>
@@ -32,8 +37,16 @@
 						h=h*0.5;
 					}
 					return h
-				}
 				},
+
+				weeklynotes:function(){
+					var starttime = moment(this.startdate).valueOf()/1000;
+					console.log(starttime);
+					var l = this.chartdata.filter(function(e){ return(e.date>=starttime && e.date<=(starttime+604800))});
+					console.log(l);
+					return l;
+				}
+							},
 		mounted () {
 		  this.getChartDataFromJSONServer();
 		},
@@ -49,7 +62,11 @@
             eventBus.$emit("chartDataReady");
           });
         });
-      }
+      },
+			formatted:function(t){
+				return moment(t).format("dddd, MMMM Do YYYY, h:mm:ss a");
+
+			}
 		},
 		components : {
 		  prowidget,
@@ -96,5 +113,14 @@
 					padding-right: 0px;
 					right:-10px;
 				}
-
+				.notesdisplay {
+						height:150px;
+						background-color: #fff;
+						margin:10px 0px;
+						border: 1px solid #b3b3b3;
+						overflow: auto;
+						padding:10px 15px;
+						text-align: left;
+						text-transform: none;
+				}
 				</style>
