@@ -155,10 +155,7 @@
       saveoptions:function (obj) {
         var payload  = {'pid': obj.id, "group":obj.group, "wid":this.object.id,'datasettings':this.datasettings}
         this.$store.commit('saveWidgetSettings', payload);
-        this.changeWeek();
-      },
-      getRandomInt () {
-        return Math.floor(Math.random() * (10)) + 1;
+        this.changeWeek(null);
       },
       determinecolor() {
         var colors = [];
@@ -175,17 +172,24 @@
         return colors;
       },
       changeWeek(startdate) {
-
         this.weeklydata = [];
         this.weeklylabels = [];
         let that = this;
         if (startdate === null) {
           startdate = moment().startOf('week').add(12, 'h');
         }
+        let i = 1;
         this.alldata.forEach(function (el) {
           if(el.date > moment(startdate).subtract(1, 'd').unix() && el.date < moment(startdate).add(6, 'd').unix()) {
-            that.weeklydata.push(el.value);
-            that.weeklylabels.push(moment.unix(el.date).format('MMM. D'));
+            // This inserts only data of the selected frequency into the chart given that the stored data has 4 points per day
+            if( (that.datasettings.dailyfreq === 1 && i % 4 === 0) || // Once a day is
+                (that.datasettings.dailyfreq === 2 && i % 2 === 0) || // Twice a day
+                (that.datasettings.dailyfreq === 3 && i % 4 !== 0) || // Three times per day
+                (that.datasettings.dailyfreq === 4)) {                // All four times per day
+              that.weeklydata.push(el.value);
+              that.weeklylabels.push(moment.unix(el.date).format('MMM. D'));
+            }
+            i++;
           }
         });
         this.pointColors = this.determinecolor();

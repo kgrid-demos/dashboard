@@ -100,10 +100,10 @@ export default {
 			        const proMaxVal = 10;
 			        const proFreq = 14; // Data points per week
 			        const weeksToGenerate = 2;
-              data = that.genrandomprodata(widgetDataID, data, proMaxVal, proFreq, weeksToGenerate);
+              data = that.genrandomprodata(widgetDataID, data, proMaxVal, weeksToGenerate);
             } else {
 			        const smMaxVal = 2; // Only allow completed and skipped data
-			        const smFreq = 4; // Self-evals per week
+			        const smFreq = 7; // Self-evals per week
 			        const weeksToGenerate = 2;
               data = that.genrandomsmdata(widgetDataID, data, smMaxVal, smFreq, weeksToGenerate);
 						}
@@ -116,33 +116,47 @@ export default {
 			});
 		},
     genrandomsmdata: function(widgetDataID, data, maxVal, freq, weeks){
-		  let recordDate = moment().set({'hour': 0, 'minute': 0, 'second': 0}).subtract(7 * weeks, 'd');
+		  let recordDate = moment().set({'hour': 12, 'minute': 0, 'second': 0}).subtract(7 * weeks, 'd');
       data[widgetDataID] = [];
 		  for(let i = 0; i < freq * weeks; i++) {
-        recordDate.add(((7.0/freq) * 24), 'h');
-        data[widgetDataID].push({"date": moment(recordDate).unix(), "value": this.getRandomValue(maxVal)});
+		    // Once per day
+        recordDate.add(1, 'd');
+        data[widgetDataID].push({"date": moment(recordDate).unix(), "value": this.getRandomSMValue(maxVal)});
 			}
 			return data;
 		},
-    genrandomprodata: function(widgetDataID, data, maxVal, freq, weeks){
+    genrandomprodata: function(widgetDataID, data, maxVal, weeks){
       let recordDate = moment().set({'hour': 0, 'minute': 0, 'second': 0}).subtract(7 * weeks, 'd');
       let priorVal = 3;
       let note = "";
-      console.log("Prior val: " + priorVal);
       data[widgetDataID] = [];
-      for(let i = 0; i < freq * weeks; i++) {
-        recordDate.add(((7.0/freq) * 24), 'h');
+      for(let i = 0; i < 28 * weeks; i++) {
+
+        recordDate.add(360, 'm');
         priorVal = this.getRandomPROValue(maxVal, priorVal);
         note = this.genNote(priorVal, maxVal);
-        data[widgetDataID].push({"date": moment(recordDate).unix(), "value": priorVal, "note": note});
+
+        let randomTime = this.getRandomMinutes();
+        data[widgetDataID].push({"date": moment(recordDate).add(randomTime, 'm').unix(), "value": priorVal, "note": note});
+
       }
       return data;
     },
-		getRandomValue: function(max) {
-			return Math.floor(Math.random() * (max)) + 1;
+		getRandomSMValue: function(max) {
+      // Bias the data slightly towards completions
+			let val =  Math.floor(Math.random() * (max) * 2) + 1;
+			if (val > 2) {
+			  val = 2;
+      }
+      return val;
 		},
+		getRandomMinutes: function() {
+      // A random number of minutes between -2.5 hrs and + 2.5 hrs to add from the usual 6-hour increments
+      return Math.floor(Math.random() * 300) - 150;
+    },
     getRandomPROValue: function(max, priorVal) {
-      // Random walk from the prior value
+
+      // Wiener process-style random walk from the prior value
       let val = Math.round((Math.random() * Math.random() - 0.26) * 14.25) + priorVal;
       if(val > max) {
         return max;

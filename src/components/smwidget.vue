@@ -128,10 +128,15 @@
           return a.date - b.date;
         });
         this.allmodules.forEach( function (module) {
-          //console.log("startdate: " + startDate.unix() + " moduledate: " + module.date);
           if(module.date > startDate.unix() && module.date < moment(startDate).add(7, 'd').unix()) {
-            let mod = {id: i, status: that.convertNumToStatus(module.value), datecompleted: moment.unix(module.date).format('MMM. D')};
-            that.weeklymodules.push(mod);
+            if(i <= that.datasettings.weeklyfreq) {
+              let mod = {
+                id: i,
+                status: that.convertNumToStatus(module.value),
+                datecompleted: moment.unix(module.date).format('MMM. D')
+              };
+              that.weeklymodules.push(mod);
+            }
             i++;
           }
         });
