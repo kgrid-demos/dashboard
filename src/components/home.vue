@@ -50,6 +50,8 @@
 import applayout from './applayout.vue';
 import eventBus from '../eventBus.js';
 import kogrid from './kogrid.vue';
+import axios from 'axios';
+
 export default {
     name: 'home',
 	data : function() {
@@ -58,14 +60,14 @@ export default {
 			gridColumns: ['id','name', 'age','gender'],
 			gridData: [],
 			groups:[0,1,2,3,4,5,6,7,8,9],
-
+			patientdata: []
 		}
 	},
 
 	created : function() {
 		var self=this;
 		self.gridData=[];
-
+		this.loadPatientDataIntoStorage();
 	},
 	mounted:function(){
 
@@ -112,7 +114,16 @@ export default {
 		},
 		selectgroup: function(index){
 			this.$store.commit('setgroupid',{value:index});
-		}
+		},
+    loadPatientDataIntoStorage: function() {
+		  if(!this.$store.getters.hasLoadedPatientData) {
+        const baseDataUrl = 'http://localhost:3001/patients/';
+        let that = this;
+        axios.get(baseDataUrl).then(response => {
+          that.$store.commit("loadPatientData", response.data);
+        });
+      }
+    }
 	},
 	components:{
 		applayout,

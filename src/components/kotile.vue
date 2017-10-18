@@ -2,8 +2,8 @@
 		<div class="container kgl-tile" :class="{max:maximized}" v-bind:id="object.label">
 				<slot name='alerts' ></slot>
 				<p>
-          <prowidget v-if="cflag === 'PRO'" :alldata='chartdata' :patientid='patientid' :chartheight='cHeight' :editmode="editmode" :object="object" :title="object.label" :startdate="startdate"></prowidget>
-          <smwidget v-if="cflag === 'SM'" :allmodules='chartdata' :patientid='patientid' :chartheight='cHeight' :editmode="editmode" :object="object" :title="object.label" ></smwidget>
+          <prowidget v-if="cflag === 'PRO'" ref="widget" :patientid='patientid' :chartheight='cHeight' :editmode="editmode" :object="object" :title="object.label" :startdate="startdate"></prowidget>
+          <smwidget v-if="cflag === 'SM'" :patientid='patientid' :chartheight='cHeight' :editmode="editmode" :object="object" :title="object.label" ></smwidget>
         </p>
 				<div class='notesdisplay' v-if='maximized'>
 				<ul>
@@ -21,11 +21,6 @@
 	import smwidget from './smwidget.vue';
 	export default {
   	name:	"kotile",
-		data () {
-  	  return {
-  	    chartdata: []
-			}
-		},
 		props : [ 'object', 'patientid','cflag' ,'maximized','tileindex', 'containerheight', 'editmode', 'startdate'],
 		created: function(){
 
@@ -48,21 +43,8 @@
 				}
 							},
 		mounted () {
-		  this.getChartDataFromJSONServer();
 		},
 		methods : {
-      getChartDataFromJSONServer() {
-        const baseDataUrl = 'http://localhost:3001/patients/';
-        this.chartdata = [];
-        let that = this;
-        const objectURL = baseDataUrl + this.patientid;
-        axios.get(objectURL).then(response => {
-          response.data[that.object.id + "-data"].forEach(function(dataEl) {
-            that.chartdata.push(dataEl);
-            eventBus.$emit("chartDataReady");
-          });
-        });
-      },
 			formatted:function(t){
 				return moment(t).format("dddd, MMMM Do YYYY, h:mm:ss a");
 

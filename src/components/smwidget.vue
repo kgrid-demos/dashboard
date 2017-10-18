@@ -57,14 +57,15 @@
   import axios from 'axios';
 
   export default {
-    props: ['chartheight', 'allmodules', 'patientid', 'editmode', 'object','title', 'startdate', 'totalminutes', 'minutescompleted'],
+    props: ['chartheight', 'patientid', 'editmode', 'object','title', 'startdate', 'totalminutes', 'minutescompleted'],
     components: {
       vueSlider
     },
     data () {
       return {
         weeklymodules: [],
-        datasettings: null
+        datasettings: null,
+        alldata: []
       }
     },
     created: function() {
@@ -74,9 +75,6 @@
       });
       eventBus.$on('saveSettings', function () {
         self.saveoptions();
-      });
-      eventBus.$on('chartDataReady', function() {
-        self.getweeklymodules(null);
       });
       const obj = {"id":this.$route.params.id,"group":this.currentGroup.id,"wid": this.object.id};
       if (this.$store.getters.getDataSettings(obj)) {
@@ -114,6 +112,7 @@
       }
     },
     mounted () {
+      this.getPatientDataForWidget();
       this.getweeklymodules(null);
     },
     methods: {
@@ -124,10 +123,10 @@
         if(startDate === null) {
           startDate = moment().startOf('week');
         }
-        this.allmodules.sort(function(a, b) {
+        this.alldata.sort(function(a, b) {
           return a.date - b.date;
         });
-        this.allmodules.forEach( function (module) {
+        this.alldata.forEach( function (module) {
           if(module.date > startDate.unix() && module.date < moment(startDate).add(7, 'd').unix()) {
             if(i <= that.datasettings.weeklyfreq) {
               let mod = {
@@ -171,6 +170,10 @@
           }
         });
         return minutescompleted;
+      },
+      getPatientDataForWidget() {
+        // Use slice to copy the values so we're not changing data in local storage
+        this.alldata = this.$store.getters.getPatientData(this.patientid)[this.object.id + "-data"].slice();
       }
     }
   }

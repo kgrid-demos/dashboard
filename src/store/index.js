@@ -112,6 +112,15 @@ export default new Vuex.Store({
         state.patientlist[pindex].wlist[windex].count++;
       }
     },
+    setAlerts(state,obj) {
+      var pindex = state.patientlist.findIndex(function(el) {
+        return el.id===obj.pid && el.groupid===obj.group;
+      });
+      console.log("Setting alerts for " + obj.widget + ", " + pindex + " to " + obj.count);
+      var windex = state.patientlist[pindex].wlist.map(function(e) {return e.id}).indexOf(obj.wid);
+      var value = state.patientlist[pindex].wlist[windex].count;
+      state.patientlist[pindex].wlist[windex].count = obj.count;
+    },
     selstation(state,obj){
       if(obj.value!=-1){
         state.currentStation.id=state.init.cancertypes[obj.value].id;
@@ -139,6 +148,9 @@ export default new Vuex.Store({
     setCurrentPatientIndex(state, obj){
       state.currentPatientIndex =  state.patientlist.findIndex(function(el) {
               return el.id==obj.pid && el.groupid==obj.group});
+    },
+    loadPatientData(state, obj) {
+      state.patientData = obj;
     }
   },
   getters: {
@@ -207,6 +219,17 @@ export default new Vuex.Store({
     },
     getPatientMasterList: state=>{
       return state.init.patientMasterList;
+    },
+    getPatientData: state=>{
+      return function(patientId) {
+        let index = state.patientData.findIndex(function(patient) {
+          return patient.id===patientId
+        });
+        return state.patientData[index];
+      }
+    },
+    hasLoadedPatientData: state=>{
+      return typeof state.patientData !== 'undefined' && state.patientData.length > 0;
     }
   },
   actions: {

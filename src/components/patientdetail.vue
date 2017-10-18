@@ -257,6 +257,15 @@ export default {
 			var index= this.patient.wlist.map(function(e){return e.id}).indexOf(t);
 			return this.patient.wlist[index].count;
 		},
+		setAlerts:function(widget) {
+		  var obj = {};
+		  obj.pid = this.patient.id;
+		  obj.group = this.patient.group;
+		  obj.widget = widget.object.id;
+		  obj.count = widget.redevents.length;
+		  obj.message="Alert!";
+      this.$store.commit("setAlerts",obj);
+		},
 		addAlert:function(id){
 			var obj={};
 			obj.pid=this.patient.id;
@@ -442,7 +451,7 @@ export default {
 						 self.layout[index].c = "";
 						}
 				}
-			)
+			);
 			this.pwidgetlist=this.layout.map(function(e){return e.c})
 
 		}

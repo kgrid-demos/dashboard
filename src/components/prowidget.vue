@@ -42,13 +42,14 @@
   import axios from 'axios';
 
   export default {
-    props: ['chartheight', 'alldata', 'editmode', 'object', 'title', 'startdate', 'patientid'],
+    props: ['chartheight', 'editmode', 'object', 'title', 'startdate', 'patientid'],
     components: {
       linechart,
       vueSlider
     },
     data () {
       return {
+        alldata: [],
         weeklydata: [],
         weeklylabels: [],
         pointColors: [],
@@ -96,9 +97,6 @@
       eventBus.$on('saveSettings', function (obj) {
         self.saveoptions(obj);
       });
-      eventBus.$on('chartDataReady', function () {
-        self.changeWeek(null);
-      });
       const obj = {"id":this.$route.params.id,"group":this.currentGroup.id,"wid": this.object.id};
       if (this.$store.getters.getDataSettings(obj)) {
         this.datasettings = Object.assign({}, this.$store.getters.getDataSettings(obj).datasettings);
@@ -129,7 +127,9 @@
    }
     },
     mounted () {
+      this.getPatientDataForWidget();
       this.changeWeek(null);
+
     },
     methods: {
       fillData () {
@@ -194,6 +194,9 @@
         });
         this.pointColors = this.determinecolor();
         this.fillData();
+      },
+      getPatientDataForWidget() {
+        this.alldata = this.$store.getters.getPatientData(this.patientid)[this.object.id + "-data"];
       }
     }
   }
