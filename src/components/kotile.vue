@@ -5,7 +5,7 @@
 			</div>
 				<slot name="alerts"></slot>
 				<p>
-          <prowidget v-if="cflag === 'PRO' && dataLoaded" v-on:alert='showAlert' v-on:warning='showWarning' ref="widget" :alldata='chartdata' :patientid='patientid' :chartheight='cHeight' :editmode="editmode" :object="object" :title="object.label" :startdate="startdate"></prowidget>
+          <prowidget v-if="cflag === 'PRO' && dataLoaded" v-on:alert='showAlert' ref="widget" :alldata='chartdata' :patientid='patientid' :chartheight='cHeight' :editmode="editmode" :object="object" :title="object.label" :startdate="startdate"></prowidget>
           <smwidget v-if="cflag === 'SM'  && dataLoaded" :patientid='patientid' :chartheight='cHeight' :editmode="editmode" :object="object" :title="object.label" ></smwidget>
         </p>
 				<div class='notesdisplay' v-if='maximized'>
@@ -70,15 +70,12 @@
       getPatientDataForWidget() {
         this.chartdata = this.$store.getters.getPatientData(this.patientid)[this.object.id + "-data"];
         this.dataLoaded = true;
-
+				console.log("Data loaded!")
       },
-      showAlert: function(datapoint, threshold) {
+      showAlert: function(note) {
 			  this.hasAlert = true;
-			  this.$emit("alert", datapoint, threshold, this.tileindex);
-			},
-			showWarning: function(peakValue) {
-			  this.hasAlert = true;
-			  this.$emit("warning", peakValue)
+			  this.$emit("alert", note, this.tileindex);
+			  console.log("Emitting note " + note + " for index " + this.tileindex);
 			}
 		},
 		components : {

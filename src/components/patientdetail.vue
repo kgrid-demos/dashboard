@@ -85,7 +85,7 @@
 						<div class='widgetcontainer fill no-drag' @drop='dropped'>
 								<draggable class='wlayout' element="ul" v-model="itemWidgetList[item.i]" :options="customDragOptions(item.i)" >
 														<li v-for='(object,index) in itemWidgetList[item.i]' v-bind:key='index' v-if='itemWidgetList[item.i].length==1|object.type!="NEW"'>
-															<kotile :object='object' :patientid='$route.params.id' v-on:alert='setAlertText' v-on:warning='setWarningText' :maximized='maximized' :cflag="object.type" :tileindex='item.i' :containerheight="((item.h-1)*40)" :editmode='isInEdit' :startdate="dateRangeLabel.startDate" draggable='true'  @dragstart='dragWidget'>
+															<kotile :object='object' :patientid='$route.params.id' v-on:alert='setAlertText' :maximized='maximized' :cflag="object.type" :tileindex='item.i' :containerheight="((item.h-1)*40)" :editmode='isInEdit' :startdate="dateRangeLabel.startDate" draggable='true'  @dragstart='dragWidget'>
 																<div slot='alerts' v-if='maximized' class='widgetalertdisplay'> RECOMMENDATIONS</div>
 
 															</kotile>
@@ -455,18 +455,14 @@ export default {
 			this.pwidgetlist=this.layout.map(function(e){return e.c})
 
 		},
-    setAlertText(datapoint, threshold, index){
-		  if(datapoint > threshold) {
+    setAlertText(note, index){
+//		  if(note) {
         this.addAlert(this.itemWidgetList[index][0].id);
-        this.itemWidgetList[index][0].alertText = " was reported at " + datapoint
-            + " in the last 24 hours.";
-      } else {
-        this.removeAlert(this.itemWidgetList[index][0].id);
-        this.itemWidgetList[index][0].alertText = "";
-			}
-		},
-		setWarningText(peakValue) {
-
+        this.itemWidgetList[index][0].alertText = note;
+//      } else {
+//        this.removeAlert(this.itemWidgetList[index][0].id);
+//        this.itemWidgetList[index][0].alertText = "";
+//			}
 		}
 	},
 	components:{

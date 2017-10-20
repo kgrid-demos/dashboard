@@ -127,7 +127,6 @@
     },
     mounted () {
       this.changeWeek(null);
-      this.generateAlert();
     },
     methods: {
       fillData () {
@@ -154,7 +153,6 @@
         var payload  = {'pid': obj.id, "group":obj.group, "wid":this.object.id,'datasettings':this.datasettings}
         this.$store.commit('saveWidgetSettings', payload);
         this.changeWeek(this.date);
-        this.generateAlert();
       },
       determinecolor() {
         var colors = [];
@@ -194,13 +192,18 @@
         });
         this.pointColors = this.determinecolor();
         this.fillData();
+        this.generateNotification();
       },
-      generateAlert() {
+      generateNotification() {
         let finalDataPoint = this.weeklydata[this.weeklydata.length - 1];
-        this.$emit("alert", finalDataPoint, this.datasettings.notifythresh);
-      },
-      generateWarning() {
+        let note = "";
         let peakValue = 0;
+        if(finalDataPoint > this.datasettings.notifythresh) {
+          note = " was reported at " + finalDataPoint + " in the last 24 hours.";
+          this.$emit("alert", note);
+          return;
+        }
+
         for(let i = 1; i <= 4; i++) {
           let currentValue = this.weeklydata[this.weeklydata.length - i];
           if(currentValue < this.datasettings.notifythresh / 2 + 1) {
@@ -210,7 +213,8 @@
             peakValue = currentValue;
           }
         }
-        this.$emit("warning", peakValue);
+        note = " has been elevated in the last 24 hours.";
+        this.$emit("alert", note);
       }
     },
   }
