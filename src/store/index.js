@@ -151,6 +151,9 @@ export default new Vuex.Store({
     },
     loadPatientData(state, obj) {
       state.patientData = obj;
+    },
+    resetPatientData(state) {
+      state.patientData = [];
     }
   },
   getters: {

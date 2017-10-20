@@ -42,14 +42,13 @@
   import axios from 'axios';
 
   export default {
-    props: ['chartheight', 'editmode', 'object', 'title', 'startdate', 'patientid'],
+    props: ['chartheight', 'alldata', 'editmode', 'object', 'title', 'startdate', 'patientid'],
     components: {
       linechart,
       vueSlider
     },
     data () {
       return {
-        alldata: [],
         weeklydata: [],
         weeklylabels: [],
         pointColors: [],
@@ -127,9 +126,8 @@
    }
     },
     mounted () {
-      this.getPatientDataForWidget();
       this.changeWeek(null);
-
+      this.generateAlert();
     },
     methods: {
       fillData () {
@@ -155,7 +153,8 @@
       saveoptions:function (obj) {
         var payload  = {'pid': obj.id, "group":obj.group, "wid":this.object.id,'datasettings':this.datasettings}
         this.$store.commit('saveWidgetSettings', payload);
-        this.changeWeek(null);
+        this.changeWeek(this.date);
+        this.generateAlert();
       },
       determinecolor() {
         var colors = [];
@@ -175,13 +174,14 @@
         this.weeklydata = [];
         this.weeklylabels = [];
         let that = this;
-        if (startdate === null) {
-          startdate = moment().startOf('week').add(12, 'h');
+        if (!startdate) {
+          startdate = moment().day(0);
         }
         let i = 1;
         this.alldata.forEach(function (el) {
-          if(el.date > moment(startdate).subtract(1, 'd').unix() && el.date < moment(startdate).add(6, 'd').unix()) {
-            // This inserts only data of the selected frequency into the chart given that the stored data has 4 points per day
+
+          if(el.date > moment(startdate).subtract(24, 'h').unix() && el.date < moment(startdate).add(154, 'h').unix()) {
+            // Inserts only data of the selected frequency into the chart given that the stored data has 4 points per day
             if( (that.datasettings.dailyfreq === 1 && i % 4 === 0) || // Once a day is
                 (that.datasettings.dailyfreq === 2 && i % 2 === 0) || // Twice a day
                 (that.datasettings.dailyfreq === 3 && i % 4 !== 0) || // Three times per day
@@ -195,10 +195,24 @@
         this.pointColors = this.determinecolor();
         this.fillData();
       },
-      getPatientDataForWidget() {
-        this.alldata = this.$store.getters.getPatientData(this.patientid)[this.object.id + "-data"];
+      generateAlert() {
+        let finalDataPoint = this.weeklydata[this.weeklydata.length - 1];
+        this.$emit("alert", finalDataPoint, this.datasettings.notifythresh);
+      },
+      generateWarning() {
+        let peakValue = 0;
+        for(let i = 1; i <= 4; i++) {
+          let currentValue = this.weeklydata[this.weeklydata.length - i];
+          if(currentValue < this.datasettings.notifythresh / 2 + 1) {
+            return;
+          }
+          if(currentValue > peakValue) {
+            peakValue = currentValue;
+          }
+        }
+        this.$emit("warning", peakValue);
       }
-    }
+    },
   }
 </script>
 
@@ -206,7 +220,7 @@
   .graph {
     width: 100%;
     height: 100%;
-    padding-top: 25px;
+    padding-top: 10px;
     margin:0 auto;
     background-color: white;
   }

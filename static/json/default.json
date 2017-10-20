@@ -36,12 +36,12 @@
 		],
 		"patientstemplate":{ "id":"PA-67034-001","name":"Larry Lambert", "age":"54", "gender":"male", "type":0, "groupid": -1,
 			"wlist":[
-				{"id":"PRO-01","label":"Pain","count":-1},
-				{"id":"PRO-02","label":"Anxiety","count":-1},
-				{"id":"PRO-03","label":"Depression","count":-1},
-				{"id":"PRO-04","label":"Nausea","count":-1},
-				{"id":"SM-01","label":"Smoking CESSATION","count":-1},
-				{"id":"SM-02","label":"NUTRITION","count":-1}
+				{"id":"PRO-01","label":"Pain","count":-1,"alertText":""},
+				{"id":"PRO-02","label":"Anxiety","count":-1,"alertText":""},
+				{"id":"PRO-03","label":"Depression","count":-1,"alertText":""},
+				{"id":"PRO-04","label":"Nausea","count":-1,"alertText":""},
+				{"id":"SM-01","label":"Smoking CESSATION","count":-1,"alertText":""},
+				{"id":"SM-02","label":"NUTRITION","count":-1,"alertText":""}
 			],
 			"layout":[],
 			"widgetSettings": []

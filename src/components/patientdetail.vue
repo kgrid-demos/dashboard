@@ -74,18 +74,18 @@
 											 			drag-ignore-from=".no-drag">
 														<div class="draggable-handle" v-show='(item.c=="")&&isInEdit' style="text-align: center; vertical-align: middle; font-size: 16px; font-weight: 700;position:relative;top:50%;transform:translateY(-50%)">Add a widget</div>
 														<div class='widgetTitle' v-bind:class="{draggablehandle: isInEdit}" v-if='item.c!=""'>
-															<div class='badge' v-if='!isInEdit' v-show='count[item.i]>0'>{{count[item.i]}}</div>
-															<p v-if='itemWidgetList[item.i].length>0'>{{itemWidgetList[item.i][0].label}}</p>
-															<i class='fa fa-plus' v-if='!isInEdit'  style="margin-right:55px;" @click='addAlert(itemWidgetList[item.i][0].id)'></i>
-															<i class='fa fa-minus'  v-if='!isInEdit'  style="margin-right:23px;" @click='removeAlert(itemWidgetList[item.i][0].id)'></i>
-															<i class='fa fa-close' v-if='isInEdit' @click='removeWidget(item.i)'></i>
-															<i class='fa fa-window-maximize' v-if='!isInEdit && !maximized' @click='maximizeWidget(item.i)'></i>
-															<i class='fa fa-window-restore' v-if='!isInEdit && maximized' @click='restoreLayout'></i>
+															<span v-if="itemWidgetList[item.i][0].alertText && !isInEdit" class="fa fa-arrow-up alertArrow"></span>
+															<span v-if="!itemWidgetList[item.i][0].alertText"  class="alertArrow">&nbsp;</span>
+															<span class="widgetLabel">{{itemWidgetList[item.i][0].label}}</span>
+															<span v-if="!isInEdit" class="alert-text">{{itemWidgetList[item.i][0].alertText}}</span>
+															<i class='fa fa-close' v-if='isInEdit' style="font-size:11pt" @click='removeWidget(item.i)'></i>
+															<i class='fa fa-window-maximize' v-if='!isInEdit && !maximized' title="maximize" style="font-size:11pt" @click='maximizeWidget(item.i)'></i>
+															<i class='fa fa-window-restore' v-if='!isInEdit && maximized' title="maximize"  style="font-size:11pt" @click='restoreLayout'></i>
 														</div>
 						<div class='widgetcontainer fill no-drag' @drop='dropped'>
 								<draggable class='wlayout' element="ul" v-model="itemWidgetList[item.i]" :options="customDragOptions(item.i)" >
 														<li v-for='(object,index) in itemWidgetList[item.i]' v-bind:key='index' v-if='itemWidgetList[item.i].length==1|object.type!="NEW"'>
-															<kotile :object='object' :patientid='$route.params.id' :maximized='maximized' :cflag="object.type" :tileindex='index' :containerheight="((item.h-1)*40)" :editmode='isInEdit' :startdate="dateRangeLabel.startDate" draggable='true'  @dragstart='dragWidget'>
+															<kotile :object='object' :patientid='$route.params.id' v-on:alert='setAlertText' v-on:warning='setWarningText' :maximized='maximized' :cflag="object.type" :tileindex='item.i' :containerheight="((item.h-1)*40)" :editmode='isInEdit' :startdate="dateRangeLabel.startDate" draggable='true'  @dragstart='dragWidget'>
 																<div slot='alerts' v-if='maximized' class='widgetalertdisplay'> RECOMMENDATIONS</div>
 
 															</kotile>
@@ -454,6 +454,19 @@ export default {
 			);
 			this.pwidgetlist=this.layout.map(function(e){return e.c})
 
+		},
+    setAlertText(datapoint, threshold, index){
+		  if(datapoint > threshold) {
+        this.addAlert(this.itemWidgetList[index][0].id);
+        this.itemWidgetList[index][0].alertText = " was reported at " + datapoint
+            + " in the last 24 hours.";
+      } else {
+        this.removeAlert(this.itemWidgetList[index][0].id);
+        this.itemWidgetList[index][0].alertText = "";
+			}
+		},
+		setWarningText(peakValue) {
+
 		}
 	},
 	components:{
@@ -508,11 +521,10 @@ flex: auto;
 		background-color:yellow;
 }
 .widgetTitle {
-   padding:5px;
-	 background-color:#2362b2;
-	  border: 2px solid transparent;
-		border-bottom:none;
-	 }
+  padding:15px;
+	background: #fff;
+	color: #000;
+}
 .widgetTitle p {
 	font-size:12px;
 	font-weight:700;
@@ -522,7 +534,7 @@ flex: auto;
 .widgetTitle i, .widgetTitle .badge {
 	font-size:12px;
 	font-weight:500;
-	color: #fff;
+	color: #000;
 	float:right;
 	position:absolute;
 	top:10px;
@@ -532,7 +544,16 @@ flex: auto;
 .widgetTitle .badge {
 	top:5px;
 	right:45px;
-	background-color:#bc2526;
+	background-color:#fc1526;
+}
+
+.widgetTitle .fa-arrow-up {
+	color:red;
+}
+
+.widgetTitle .widgetLabel {
+	color:black;
+	font:bold 12pt 'Open Sans', sans-serif;
 }
 
 .draggablehandle {

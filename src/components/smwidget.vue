@@ -151,6 +151,7 @@
       convertNumToStatus: function(statusint) {
         switch (statusint) {
           case 1:
+
             return "☒";
           case 2:
             return "☑";
@@ -174,6 +175,10 @@
       getPatientDataForWidget() {
         // Use slice to copy the values so we're not changing data in local storage
         this.alldata = this.$store.getters.getPatientData(this.patientid)[this.object.id + "-data"].slice();
+      },
+      generateNotification() {
+        let finalDataPoint = this.weeklydata[this.weeklydata.length - 1];
+        this.$emit("alert", finalDataPoint, this.datasettings.notifythresh);
       }
     }
   }

@@ -1,5 +1,5 @@
 <template>
-		<div class="container kgl-tile" v-bind:id="patient.id"">
+		<div class="container kgl-tile" v-bind:id="patient.id">
 				<div class="row kgl-2">
 					<div class="col-md-6 col-sm-6 col-xs-6  kg-fg-color"
 							data-placement="top" style='font-size:22px;font-weight:600;'>

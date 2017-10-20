@@ -114,6 +114,7 @@ export default {
           });
 				}
 			});
+			this.$store.commit("resetPatientData");
 		},
     genrandomsmdata: function(widgetDataID, data, maxVal, freq, weeks){
 		  let recordDate = moment().set({'hour': 12, 'minute': 0, 'second': 0}).subtract(7 * weeks, 'd');
@@ -156,8 +157,8 @@ export default {
     },
     getRandomPROValue: function(max, priorVal) {
 
-      // Wiener process-style random walk from the prior value
-      let val = Math.round((Math.random() * Math.random() - 0.26) * 14.25) + priorVal;
+      // Wiener process-style random walk from the prior value biased towards the bottom of the scale
+      let val = Math.round((Math.random() * Math.random() - 0.4) * 15.25 + 0.5) + priorVal;
       if(val > max) {
         return max;
 			}
