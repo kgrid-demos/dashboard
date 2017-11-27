@@ -12,14 +12,13 @@
 		<div slot='banner'>
 			<div class='bannercontent' >
 				<div class='row'>
-					<div class='col-md-1 col-sm-1 col-xs-1  pad-0' v-if='isInEdit'></div>
-					<div class='col-md-1 col-sm-1 col-xs-1'>
+					<div class='col-md-2 col-sm-2 col-xs-2'>
 						<router-link  class='float-r' to='/'>
 							<i class='fa fa-arrow-left'></i>
 						</router-link>
 					</div>
 					<div class="col-md-10 col-sm-10 col-xs-10 pad-0">
-						<h1 class='pad-l-10'>{{patient.name}}<small class='pad-l-20'>Age {{patient.age}}, {{patient.gender}}</small></h1>
+						<h1 class='pad-l-20'>{{patient.name}}<small class='pad-l-20'>Age {{patient.age}}, {{patient.gender}}</small></h1>
 					</div>
 				</div>
 			</div>
@@ -36,8 +35,8 @@
 					</draggable>
 					</div>
 				</div>
-				<div class='col-md-1 col-sm-1 col-xs-1 ht-full  pad-0' v-else></div>
-				<div class='col-md-10 col-sm-10 col-xs-10 kg-bg-custom-1 ht-full pad-0'>
+				<div class='col-md-2 col-sm-2 col-xs-2 ht-full  pad-0' v-else></div>
+				<div class='col-md-8 col-sm-8 col-xs-8 kg-bg-custom-1 ht-full pad-0'>
 					<div class='row ht-50'>
 					<div class='col-md-7 col-sm-5 pad-0'>
 					<div class="pad-l-15"  v-if='!isInEdit && pwidgetlist.length>=1 '>
@@ -78,7 +77,8 @@
 															<span v-if="itemWidgetList[item.i][0].alertText && !isInEdit" class="fa fa-arrow-up alertArrow"></span>
 															<span v-if="!itemWidgetList[item.i][0].alertText"  class="alertArrow">&nbsp;</span>
 															<span class="widgetLabel">{{itemWidgetList[item.i][0].label}}</span>
-															<span v-if="!isInEdit" class="alert-text">{{itemWidgetList[item.i][0].alertText}}</span>
+															<span v-if="!isInEdit && alertText[item.i]" class="alert-text">{{ alertText[item.i] }}</span>
+															<!--<span v-if="!isInEdit" class="alert-text">{{itemWidgetList[item.i][0].alertText}}</span>-->
 															<i class='fa fa-close' v-if='isInEdit' style="font-size:11pt" @click='removeWidget(item.i)'></i>
 															<i class='fa fa-window-maximize' v-if='!isInEdit && !maximized' title="maximize" style="font-size:11pt" @click='maximizeWidget(item.i)'></i>
 															<i class='fa fa-window-restore' v-if='!isInEdit && maximized' title="maximize"  style="font-size:11pt" @click='restoreLayout'></i>
@@ -95,7 +95,24 @@
 						</grid-item>
 					</grid-layout>
 				</div>
-			</div>
+						<div class='col-md-2 col-sm-2 col-xs-2 pad-0 '  v-if='isInEdit'>
+						<div class='animated ht-full kg-bg-custom-0'>
+							<div class='row ft-sz-16 pad-l-20 pad-t-15'> <i class='fa fa-info-circle fa-2x '></i></div>
+							<div class='row ft-sz-14 pad-l-20 pad-r-20 pad-t-15'>
+								<h3> First time to build the dashboard </h3><p class='mar-top15'> You can manually drag and drop the widgets, or click on "Load Default Layout" to use a predefined layout which can be further customized.   </p>
+								<p class='mar-top30'> </p>
+								<h3> To add a widget </h3><p class='mar-top15'> From the list of available widgets,  drag and drop to an empty slot. </p>
+								<p class='mar-top30'> </p>
+								<h3> To repositon a  widget </h3><p class='mar-top15'> Click on the blue bar of the widget,  move a different location, other widgets might move around as well. </p>
+								<p class='mar-top30'> </p>
+								<h3> To resize a  widget </h3><p class='mar-top15'> Click on the handle at the lower right corner of the widget,  drag to resize the widget, other widgets might move around as well. </p>
+								<p class='mar-top30'> </p>
+								<h3> Finish configuration </h3><p class='mar-top15'> Click on "Save Changes",  the configuration for this patient will be saved and the dashboard will change to view mode. To activate the edit mode, simply click on "Edit". </p>
+								</div>
+								</div>
+						</div>
+						<div class='col-md-2 col-sm-2 col-xs-2  pad-0 ht-full'  v-else></div>
+								</div>
 		</div>
 	</applayout>
 </div>
@@ -109,6 +126,7 @@ import eventBus from '../eventBus.js';
 import kotile from './kotile.vue'
 import kocard from './kocard.vue'
 import modal from './modal.vue'
+import axios from 'axios';
 
 export default {
     name: 'patientdetail',
@@ -116,12 +134,13 @@ export default {
 		return {
 			registrationstatus:[],
 			widgetList:[],
+			alertText:[],
 			itemWidgetList:[],
 			pwidgetlist:[],
 			draggedid:"",
 			isInEdit:false,
 			enableNextArrow:false,
-			defaultw:3,
+			defaultw:6,
 			defaulth:6,
 			layout:[],
 			temp:{},
@@ -145,19 +164,16 @@ export default {
 	},
 	mounted:function(){
 		var self = this;
-			var testlist = this.$store.getters.getwidgetlistbypatient(this.patient);
-			console.log("Test List:");
-			console.log(testlist);
 		this.itemWidgetList=[];
 		this.layout=JSON.parse(JSON.stringify(this.patient.layout));
-		this.pwidgetlist=this.layout.map(function(e){return e.c})
-		this.widgetList = this.widgetMasterList.filter(function(e){return (this.indexOf(e.id)<0);},self.pwidgetlist)
+		this.pwidgetlist=this.layout.map(function(e){return e.c});
+		this.widgetList = this.widgetMaster.filter(function(e){return (this.indexOf(e.id)<0);},self.pwidgetlist);
 		if(this.layout.length>0){
 		this.layout.forEach(function(item){
-			var index= self.widgetMasterList.map(function(e){return e.id}).indexOf(item.c);
+			var index= self.widgetMaster.map(function(e){return e.id}).indexOf(item.c);
 			if(index>=0){
 				var nextwidgetlist=[];
-				nextwidgetlist.push(self.widgetMasterList[index]);
+				nextwidgetlist.push(self.widgetMaster[index]);
 				self.itemWidgetList.push(nextwidgetlist);
 			}else {
 				self.itemWidgetList.push([]);
@@ -192,7 +208,7 @@ export default {
 			return this.$store.getters.getpatientbyid({"id":this.$route.params.id,"group":this.currentGroup.id});
 		},
 		nextitem:function(){
-			var item={x:0,y:20,w:3,h:6,i:"0",c:""};
+			var item={x:0,y:20,w:6,h:6,i:"0",c:""};
 			var x = 0;
 			var y = 0;
 			var self=this;
@@ -215,8 +231,8 @@ export default {
 			item.i=this.layout.length+"";
 			return item
 		},
-		widgetMasterList: function(){
-			return this.$store.getters.getwidgetlistbypatient(this.patient);
+		widgetMaster: function(){
+			return this.$store.getters.getwidgetMaster;
 		},
 		count:function(){
 			var self=this;
@@ -226,7 +242,7 @@ export default {
 					var index = self.patient.wlist.map(function(e){return e.id}).indexOf(item[0].id);
 					c.push(self.patient.wlist[index].count);
 				}
-			})
+			});
 			return c;
 		}
 	},
@@ -331,12 +347,12 @@ export default {
 			this.itemWidgetList.splice(0,1);
 			this.layout=JSON.parse(JSON.stringify(this.$store.getters.getDefaultLayout));
 			this.pwidgetlist=this.layout.map(function(e){return e.c})
-			this.widgetList = this.widgetMasterList.filter(function(e){return (this.indexOf(e.id)<0);},self.pwidgetlist)
+			this.widgetList = this.widgetMaster.filter(function(e){return (this.indexOf(e.id)<0);},self.pwidgetlist)
 			this.layout.forEach(function(item){
-				var index= self.widgetMasterList.map(function(e){return e.id}).indexOf(item.c);
+				var index= self.widgetMaster.map(function(e){return e.id}).indexOf(item.c);
 			if(index>=0){
 					var nextwidgetlist=[];
-					nextwidgetlist.push(self.widgetMasterList[index]);
+					nextwidgetlist.push(self.widgetMaster[index]);
 					self.itemWidgetList.push(nextwidgetlist);
 				}else {
 					self.itemWidgetList.push([]);
@@ -349,7 +365,7 @@ export default {
 			var payload={};
 			obj.timestamp=t;
 			payload.entry=obj;
-			this.$http.post(this.loggerurl, payload)
+			axios.post(this.loggerurl, payload)
 				.then(function (response) {
     			console.log(response);
   			})
@@ -442,13 +458,15 @@ export default {
 
 		},
     setAlertText(note, index){
-//		  if(note) {
+		  if(note) {
         this.addAlert(this.itemWidgetList[index][0].id);
-        this.itemWidgetList[index][0].alertText = note;
-//      } else {
-//        this.removeAlert(this.itemWidgetList[index][0].id);
-//        this.itemWidgetList[index][0].alertText = "";
-//			}
+        this.alertText[index] = note;
+        console.log("Alert text is " + this.alertText);
+      }
+      else {
+        this.removeAlert(this.itemWidgetList[index][0].id);
+        this.itemWidgetList[index][0].alertText = "";
+			}
 		}
 	},
 	components:{
@@ -557,12 +575,11 @@ h1 small {
 	font-size:50%;
 }
 ul.wlist {
-	margin:15px;
+	margin-top:25px;
 	height:100%;
 }
 ul.wlist li {
-	margin: 10px 10px;
-	display: inline-flex;
+	margin: 10px auto;
 }
 ul.wlayout {
 	opacity:1;

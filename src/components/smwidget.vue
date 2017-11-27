@@ -1,13 +1,19 @@
 <template name="smwidget">
   <div>
-    <div class="moduleContainer" v-if="!editmode">
-      {{getMinutesCompleted()}} / {{datasettings.minutespermodule * datasettings.weeklyfreq}} minutes completed
-      <ul class="moduleList">
-        <li class="module" :class="module.status" v-bind:style="widgetStyle" v-for="module in weeklymodules" v-bind:key="module.id">
-          {{module.status}} <br> <span class="moduleLabel">Module {{module.id}}</span> <br>
-          <div v-if="module.status==='☑'">{{datasettings.minutespermodule}} min.<br>{{module.datecompleted}}</div>
-        </li>
-      </ul>
+    <div v-if='!editmode'>
+      <div class="moduleContainer" v-if='maximized'>
+        {{getMinutesCompleted()}} / {{datasettings.minutespermodule * datasettings.weeklyfreq}} minutes completed
+        <ul class="moduleList">
+          <li class="module" :class="module.status" v-bind:style="widgetStyle" v-for="module in weeklymodules" v-bind:key="module.id">
+            {{module.status}} <br> <span class="moduleLabel">Module {{module.id}}</span> <br>
+            <div v-if="module.status==='☑'">{{datasettings.minutespermodule}} min.<br>{{module.datecompleted}}</div>
+          </li>
+        </ul>
+      </div>
+      <div class="progresscont" v-if='!maximized'>
+        <div class="progress" v-bind:style="progressStyle"> </div>
+        <div class="barlabel">Modules completed this week: {{this.numcomplete}} / {{this.weeklymodules.length}}</div>
+      </div>
     </div>
     <div v-if="editmode">
       <div class="optrow">
@@ -56,13 +62,14 @@
   import moment from 'moment';
 
   export default {
-    props: ['chartheight', 'patientid', 'editmode', 'object','title', 'startdate', 'totalminutes', 'minutescompleted'],
+    props: ['chartheight', 'patientid', 'editmode', 'object','title', 'startdate', 'totalminutes', 'minutescompleted', 'maximized'],
     components: {
       vueSlider
     },
     data () {
       return {
         weeklymodules: [],
+        numcomplete: 0,
         datasettings: null,
         alldata: []
       }
@@ -108,6 +115,12 @@
           width: `${100 / this.datasettings.weeklyfreq}%`,
           position: 'relative'
         }
+      },
+      progressStyle() {
+        return {
+          width: `${(this.numcomplete / this.weeklymodules.length) * 100}%`,
+          backgroundColor: '#00aa00'
+        }
       }
     },
     mounted () {
@@ -117,6 +130,7 @@
     methods: {
       getweeklymodules (startDate) {
         this.weeklymodules = [];
+        this.numcomplete = 0;
         let i = 1;
         let that = this;
         if(startDate === null) {
@@ -128,6 +142,9 @@
         this.alldata.forEach( function (module) {
           if(module.date > startDate.unix() && module.date < moment(startDate).add(7, 'd').unix()) {
             if(i <= that.datasettings.weeklyfreq) {
+              if (module.value === 2) {
+                that.numcomplete ++;
+              }
               let mod = {
                 id: i,
                 status: that.convertNumToStatus(module.value),
@@ -228,6 +245,24 @@
   .optrow {
     margin-top: 0.7em;
     clear: both;
+  }
+
+  .progresscont {
+    margin: 10px 5px 0 5px;
+    font-size: 11pt;
+  }
+
+  .barlabel {
+    color: #000;
+    position: absolute;
+    top: 10px;
+    width: 100%;
+    text-align: center;
+    text-shadow:
+    -1px -1px 0 #fff,
+    1px -1px 0 #fff,
+    -1px 1px 0 #fff,
+    1px 1px 0 #fff;
   }
 
 

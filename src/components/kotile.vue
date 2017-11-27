@@ -1,12 +1,11 @@
 <template>
 		<div class="container kgl-tile" :class="{max:maximized}" v-bind:id="object.label">
 			<div class="title">
-
 			</div>
 				<slot name="alerts"></slot>
 				<p>
           <prowidget v-if="cflag === 'PRO' && dataLoaded" v-on:alert='showAlert' ref="widget" :alldata='chartdata' :patientid='patientid' :chartheight='cHeight' :editmode="editmode" :object="object" :title="object.label" :startdate="startdate"></prowidget>
-          <smwidget v-if="cflag === 'SM'  && dataLoaded" :patientid='patientid' :chartheight='cHeight' :editmode="editmode" :object="object" :title="object.label" ></smwidget>
+          <smwidget v-if="cflag === 'SM'  && dataLoaded" :patientid='patientid' :chartheight='cHeight' :editmode="editmode" :object="object" :title="object.label" :maximized="maximized"></smwidget>
         </p>
 				<div class='notesdisplay' v-if='maximized'>
 				<ul>
@@ -31,7 +30,7 @@
 				hasAlert: false
 			}
 		},
-		props : [ 'object', 'patientid','cflag' ,'maximized','tileindex', 'containerheight', 'editmode', 'startdate'],
+		props : [ 'object', 'patientid','cflag', 'maximized','tileindex', 'containerheight', 'editmode', 'startdate'],
 		created: function(){
 
 		},
@@ -74,7 +73,6 @@
       showAlert: function(note) {
 			  this.hasAlert = true;
 			  this.$emit("alert", note, this.tileindex);
-			  console.log("Emitting note " + note + " for index " + this.tileindex);
 			}
 		},
 		components : {
