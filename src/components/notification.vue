@@ -39,8 +39,6 @@ import applayout from './applayout.vue';
 import eventBus from '../eventBus.js';
 import notiftile from './notiftile.vue'
 
-import axios from 'axios';
-
 export default {
     name: 'notification',
 	data : function() {
@@ -179,7 +177,7 @@ export default {
 			var payload={};
 			obj.timestamp=t;
 			payload.entry=obj;
-			axios.post(this.loggerurl, payload)
+			this.$http.post(this.loggerurl, payload)
 				.then(function (response) {
     			console.log(response);
   			})

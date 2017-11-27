@@ -1,7 +1,7 @@
 <template>
 		<div class="container kgl-tile" v-bind:id="object">
-				<p>{{object}}</p>
-				<div class="cornerflag"><p class='ft-sz-12'>{{cflag}}</p></div>
+				<p class='ft-sz-12'>{{object}}</p>
+				<div class="cornerflag"><p class='ft-sz-10'>{{cflag}}</p></div>
 
 			</div>
 	</template>
@@ -25,11 +25,11 @@
 				<style scoped>
 				.cornerflag {
 					position:absolute;
-					top:0;
-					left:0;
+					top:2px;
+					left:-2px;
 					text-align:center;
-					width:30px;
-					height:30px;
+					width:25px;
+					height:25px;
 					border:1px solid transparent;
 					color:#fff;
 					z-index:20;
@@ -54,7 +54,7 @@
 				}
 
 				.kgl-tile::after {
-			    	border-width: 1.35em;
+			    	border-width: 1.15em;
 				    border-left-color: #bbbbbb;
 				    border-top-color: #bbbbbb;
 				}

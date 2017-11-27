@@ -54,7 +54,6 @@
   import vueSlider from 'vue-slider-component';
   import eventBus from '../eventBus.js';
   import moment from 'moment';
-  import axios from 'axios';
 
   export default {
     props: ['chartheight', 'patientid', 'editmode', 'object','title', 'startdate', 'totalminutes', 'minutescompleted'],

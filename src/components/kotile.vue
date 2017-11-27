@@ -18,7 +18,6 @@
 	</template>
 	<script>
 	import moment from 'moment';
-  import axios from 'axios';
 	import eventBus from '../eventBus.js';
 	import prowidget from './prowidget.vue';
 	import smwidget from './smwidget.vue';

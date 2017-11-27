@@ -7,6 +7,7 @@ import VueGridLayout from 'vue-grid-layout';
 import App from './App';
 import store from './store';
 import eventBus from './eventBus.js';
+import axios from 'axios';
 
 require('es6-promise').polyfill();
 // Bootstrap 4
@@ -17,7 +18,7 @@ require('lodash');
 
 // debug mode
 Vue.config.debug = false;
-
+Vue.prototype.$http = axios
 // install router
 Vue.use(VueRouter);
 

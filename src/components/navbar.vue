@@ -20,7 +20,6 @@
 
 <script>
 import eventBus from '../eventBus.js';
-import axios from 'axios';
 import moment from 'moment';
 
 export default {
@@ -60,7 +59,7 @@ export default {
 		resetstore:function(){
 			if (confirm("Datastore will be reset! Are you sure?") == true) {
 				var self=this;
-				axios.get("./static/json/default.json").then( response=> {
+				this.$http.get("./static/json/default.json").then( response=> {
 					self.$store.commit('resetState', response.data)
 				}).catch(e=>{
 					console.log(e)
@@ -108,7 +107,7 @@ export default {
               data = that.genrandomsmdata(widgetDataID, data, smMaxVal, smFreq, weeksToGenerate);
 						}
 			  	});
-          axios.put(url, data).catch(function (ex) {
+          that.$http.put(url, data).catch(function (ex) {
             if(ex.response.status === 404) {
             }
           });

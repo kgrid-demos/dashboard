@@ -35,7 +35,7 @@
 			</div>
 			<div class='row' v-else>
 				<div class='col-md-2 col-sm-2 col-xs-2  ht-full pad-0'></div>
-				<div class='col-md-2 col-sm-2 col-xs-2  ht-full pad-0' @click='selectStation(0)'><div class='station'><p class='ht-full '>Colon Cancer</p></div></div>
+				<div class='col-md-2 col-sm-2 col-xs-2  ht-full pad-0' @click='selectStation(0)'><div class='station'><p class='ht-full '>Breast Cancer</p></div></div>
 				<div class='col-md-2 col-sm-2 col-xs-2  ht-full pad-0' @click='selectStation(1)'><div class='station'><p class='ht-full '>Liver Cancer</p></div></div>
 				<div class='col-md-2 col-sm-2 col-xs-2  ht-full pad-0' @click='selectStation(2)'><div class='station'><p class='ht-full '>Prostate Cancer</p></div></div>
 				<div class='col-md-2 col-sm-2 col-xs-2  ht-full pad-0' @click='selectStation(3)'><div class='station'><p class='ht-full '>Lung Cancer</p></div></div>
@@ -50,7 +50,6 @@
 import applayout from './applayout.vue';
 import eventBus from '../eventBus.js';
 import kogrid from './kogrid.vue';
-import axios from 'axios';
 
 export default {
     name: 'home',
@@ -59,7 +58,6 @@ export default {
 			searchQuery: '',
 			gridColumns: ['id','name', 'age','gender'],
 			gridData: [],
-			groups:[0,1,2,3,4,5,6,7,8,9],
 			patientdata: []
 		}
 	},
@@ -68,6 +66,7 @@ export default {
 		var self=this;
 		self.gridData=[];
 		this.loadPatientDataIntoStorage();
+
 	},
 	mounted:function(){
 
@@ -76,6 +75,14 @@ export default {
 
 	  },
 	computed : {
+		groups:function(){
+				var n = this.$store.getters.getmaxgroupinuse;
+				var arr=[];
+				for(var i=0; i<n; i++){
+					arr.push(i);
+				}
+				return arr
+		},
 		currentGroup: function(){
 			return this.$store.getters.getcurrentGroup;
 		},
@@ -119,7 +126,7 @@ export default {
 		  if(!this.$store.getters.hasLoadedPatientData) {
         const baseDataUrl = 'http://localhost:3001/patients/';
         let that = this;
-        axios.get(baseDataUrl).then(response => {
+        this.$http.get(baseDataUrl).then(response => {
           that.$store.commit("loadPatientData", response.data);
         });
       }

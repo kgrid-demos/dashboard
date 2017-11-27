@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import widgets from './modules/widgets'
 import VuexPersistence from 'vuex-persist'
 
 Vue.use(Vuex)
@@ -13,19 +14,27 @@ const vuexLocal = new VuexPersistence ({
 export default new Vuex.Store({
   strict: process.env.NODE_ENV !== 'production',
   plugins: [vuexLocal.plugin],
+  modules: {
+    widgets
+  },
   state:{
       init:{},
       debugEnabled:true,
+      filterEnabled:true,
       loggerURL:'http://localhost:3003/dashboardlog',
-      currentStation:{id:0,"label":"Colon Cancer"},
+      currentStation:{id:0,"label":"Breast Cancer"},
       currentGroup:{id:0,"color":"#0075bc"},
       currentPatientIndex: -1,
       patientlist:  [],
+      maxgroupinuse:6,
     },
   mutations: {
     init(state, obj){
-      state.init=JSON.parse(JSON.stringify(obj));
+      state.init=obj;
+      console.log(state.init.patientMasterList);
+      state.filterEnabled=state.init.filterenable;
       state.loggerURL=state.init.loggerURL;
+      state.maxgroupinuse=state.init.maxgroupinuse;
       var ptlist=state.init.patientMasterList;
       ptlist.forEach(function(e){
         var pid=e.id;
@@ -157,6 +166,12 @@ export default new Vuex.Store({
     }
   },
   getters: {
+    getfilterEnable: state=>{
+      return state.filterEnabled
+    },
+    getmaxgroupinuse: state=>{
+      return state.maxgroupinuse
+    },
     getLoggerURL: state=> {
       return state.loggerURL
     },
@@ -168,7 +183,6 @@ export default new Vuex.Store({
     },
     getlayoutbyid:state=>{
         return state.patientlist[state.currentPatientIndex].layout;
-
     },
     getDefaultLayout:state=>{
         return state.init.defaultLayout;

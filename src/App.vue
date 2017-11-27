@@ -7,7 +7,7 @@
 <script>
 import navbar from './components/navbar.vue';
 import eventBus from './eventBus.js';
-import axios from 'axios';
+
 
 export default {
   name: 'app1',
@@ -27,7 +27,7 @@ export default {
 	},
 	mounted:function(){
     var self=this;
-    axios.get("./static/json/default.json").then( response=> {
+    this.$http.get("./static/json/default.json").then( response=> {
       self.$store.commit('init', response.data)
     }).catch(e=>{
       console.log(e)

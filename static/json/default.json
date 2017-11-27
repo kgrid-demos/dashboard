@@ -1,7 +1,7 @@
-
-	{
-	  "loggerURL":"http://localhost:3003/dashboardlog",
-  	"defaultLayout":	[
+{
+	"filterenable":true,
+	"loggerURL":"http://localhost:3003/dashboardlog",
+  "defaultLayout":	[
 			{ "x":0,"y":0,"w":4,"h":6,"i":"0","c":"PRO-01"},
 			{ "x":0,"y":6,"w":4,"h":6,"i":"1","c":"SM-01"},
 			{ "x":4,"y":0,"w":4,"h":6,"i":"2","c":"PRO-04"},
@@ -10,31 +10,45 @@
 			{ "x":4,"y":6,"w":8,"h":12,"i":"5","c":"PRO-03"}
  		],
 		"cancertypes": [
-			{ "id":0,"label":"Colon Cancer"},
-			{"id":1,"label":"Liver Cancer"},
+			{"id":0,"label":"Breast Cancer"},
+			{"id":1,"label":"GI Cancer"},
 			{"id":2,"label":"Prostate Cancer"},
 			{"id":3,"label":"Lung Cancer"}
 		],
 		"group":[
 			{"id":0},{"id":1},{"id":2},{"id":3},{"id":4},{"id":5},{"id":6},{"id":7},{"id":8},{"id":9}
 		],
+		"maxgroupinuse":6,
 		"defaultWidgetSetting" :  [ { "id":"PRO-01","label":"Pain", "type":"PRO","dataprop":{"a":"b"}, "datasetting":{"a":"b"}},
 															{ "id":"PRO-02","label":"Anxiety", "type":"PRO", "dataprop":{"a":"b"}, "datasetting":{"a":"b"}},
 														  { "id":"PRO-03","label":"Depression", "type":"PRO", "dataprop":{"a":"b"}, "datasetting":{"a":"b"}},
-														  { "id":"PRO-04","label":"Nausea",  "type":"PRO","dataprop":{"a":"b"}, "datasetting":{"a":"b"}},
-														  { "id":"SM-01","label":"Smoking CESSATION",  "type":"SM","dataprop":{"a":"b"}, "datasetting":{"a":"b"}},
-													    { "id":"SM-02","label":"NUTRITION", "type":"SM", "dataprop":{"a":"b"}, "datasetting":{"a":"b"}}],
+														  { "id":"PRO-04","label":"Nausea/Vomitting",  "type":"PRO","dataprop":{"a":"b"}, "datasetting":{"a":"b"}},
+															{ "id":"PRO-05","label":"Neuropathy", "type":"PRO", "dataprop":{"a":"b"}, "datasetting":{"a":"b"}},
+														  { "id":"PRO-06","label":"Palm/Sole Rash", "type":"PRO", "dataprop":{"a":"b"}, "datasetting":{"a":"b"}},
+														  { "id":"PRO-07","label":"Fatigue",  "type":"PRO","dataprop":{"a":"b"}, "datasetting":{"a":"b"}},
+															{ "id":"PRO-08","label":"Mouth sore", "type":"PRO", "dataprop":{"a":"b"}, "datasetting":{"a":"b"}},
+															{ "id":"PRO-09","label":"Weight", "type":"PRO", "dataprop":{"a":"b"}, "datasetting":{"a":"b"}},
+															{ "id":"PRO-10","label":"Fluid Intake",  "type":"PRO","dataprop":{"a":"b"}, "datasetting":{"a":"b"}},
+															{ "id":"PRO-11","label":"Ostomy Output", "type":"PRO", "dataprop":{"a":"b"}, "datasetting":{"a":"b"}},
+															{ "id":"PRO-12","label":"Fever/Infection", "type":"PRO", "dataprop":{"a":"b"}, "datasetting":{"a":"b"}},
+															{ "id":"PRO-13","label":"Taste/Appetite",  "type":"PRO","dataprop":{"a":"b"}, "datasetting":{"a":"b"}},
+															{ "id":"PRO-14","label":"Fertility", "type":"PRO", "dataprop":{"a":"b"}, "datasetting":{"a":"b"}},
+															{ "id":"PRO-15","label":"Activity for Exercise", "type":"PRO", "dataprop":{"a":"b"}, "datasetting":{"a":"b"}},
+													    { "id":"SM-01","label":"Nutrition Support", "type":"SM", "dataprop":{"a":"b"}, "datasetting":{"a":"b"}},
+															{ "id":"SM-02","label":"IV Pump Care at Home",  "type":"SM","dataprop":{"a":"b"}, "datasetting":{"a":"b"}},
+													    { "id":"SM-03","label":"Ostomy Care", "type":"SM", "dataprop":{"a":"b"}, "datasetting":{"a":"b"}},
+															{ "id":"SM-04","label":"Self-Image",  "type":"SM","dataprop":{"a":"b"}, "datasetting":{"a":"b"}},
+													    { "id":"SM-05","label":"Familial Risk Discussion", "type":"SM", "dataprop":{"a":"b"}, "datasetting":{"a":"b"}},
+															{ "id":"SM-06","label":"Fertility Impact",  "type":"SM","dataprop":{"a":"b"}, "datasetting":{"a":"b"}},
+													    { "id":"SM-07","label":"End of Life Care", "type":"SM", "dataprop":{"a":"b"}, "datasetting":{"a":"b"}},
+															{ "id":"SM-08","label":"Sexual Health",  "type":"SM","dataprop":{"a":"b"}, "datasetting":{"a":"b"}}
+														],
 		"patientMasterList":  [
-			{ "id":"PA-67034-001", "name":"Larry Lambert", "age":"54", "gender":"male", "type":0,"group":[{"id":0},{"id":1},{"id":2},{"id":3},{"id":4}]},
-      { "id":"PA-67034-002", "name":"Alvin Adams", "age":"27", "gender":"male", "type":0,"group":[{"id":0},{"id":1},{"id":2},{"id":3},{"id":4}]},
-			{ "id":"PA-67034-003", "name":"Larry Lambert Jr.", "age":"17", "gender":"male", "type":0,"group":[{"id":0},{"id":1},{"id":2},{"id":3},{"id":5}]},
-			{ "id":"PA-67034-004", "name":"Mary McMahon", "age":"74", "gender":"female", "type":0,"group":[{"id":1},{"id":2},{"id":3},{"id":4},{"id":5}]},
-			{ "id":"PA-67034-005", "name":"Kian Koepp", "age":"71", "gender":"male", "type":0,"group":[{"id":0},{"id":1},{"id":2},{"id":3},{"id":4}]},
-	    { "id":"PA-67034-006", "name":"Ashtyn Schulist", "age":"32", "gender":"male", "type":2,"group":[{"id":0},{"id":1},{"id":2},{"id":3},{"id":4}]},
-			{ "id":"PA-67034-007", "name":"Ralph Yost", "age":"65", "gender":"male", "type":1,"group":[{"id":0},{"id":1},{"id":3},{"id":5},{"id":7}]},
-			{ "id":"PA-67034-008", "name":"Marian Casper", "age":"45", "gender":"female", "type":1,"group":[{"id":1},{"id":2},{"id":3},{"id":4},{"id":5}]}
+			{ "id":"PA-67034-004", "name":"Larry Lambert", "age":"38", "gender":"male", "type":2,"group":[{"id":0},{"id":1},{"id":2},{"id":3},{"id":4},{"id":5}]},
+			{ "id":"PA-67034-001", "name":"Ms. Green", "age":"38", "gender":"female", "type":0,"group":[{"id":0},{"id":1},{"id":2},{"id":3},{"id":4},{"id":5}]},
+			{ "id":"PA-67034-007", "name":"Mr. Brown", "age":"62", "gender":"male", "type":1,"group":[{"id":0},{"id":1},{"id":2},{"id":3},{"id":4},{"id":5}]}
 		],
-		"patientstemplate":{ "id":"PA-67034-001","name":"Larry Lambert", "age":"54", "gender":"male", "type":0, "groupid": -1,
+		"patientstemplate":{ "id":"PA-67034-001","name":"Ms. Green", "age":"38", "gender":"female", "type":0, "groupid": -1,
 			"wlist":[
 				{"id":"PRO-01","label":"Pain","count":-1,"alertText":""},
 				{"id":"PRO-02","label":"Anxiety","count":-1,"alertText":""},
