@@ -209,6 +209,7 @@ a, a:hover, a:visited, a:focus {
   border-right: 1px solid #666666;
 }
 .lh-1 { line-height: 1em; }
+.lh-15 { line-height: 1.5em; }
 .lh-3 { line-height: 3em; }
 .wd-70 { width: 70px;}
 .ht-50 {  height: 50px; }
