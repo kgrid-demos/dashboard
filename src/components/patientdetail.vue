@@ -485,9 +485,10 @@ export default {
 	display:inline-block;
 }
 .wlistctner {
-	height: 100%;
 	overflow:auto;
-		max-height:560px;
+	min-height:560px;
+	max-height:560px;
+	border:1px solid #b5b5b5;
 }
 .btnDisabled {
 	background-color:#eeeeee;

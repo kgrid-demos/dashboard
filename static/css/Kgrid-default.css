@@ -112,12 +112,12 @@ a, a:hover, a:visited, a:focus {
 } /* the new scrollbar will have a flat appearance with the set background color */
 
 ::-webkit-scrollbar-thumb {
-      background-color: #eeeeee;
+      background-color: #b5b5b5;
 } /* this will style the thumb, ignoring the track */
 
 ::-webkit-scrollbar-button {
     display:none;
-    background-color: #e5e5e5;
+    background-color: #b5b5b5;
 } /* optionally, you can style the top and the bottom buttons (left and right for horizontal bars) */
 
 ::-webkit-scrollbar-corner {
