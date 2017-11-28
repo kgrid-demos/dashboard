@@ -21,8 +21,8 @@
 				<style scoped>
 				.cornerflag {
 					position:absolute;
-					top:2px;
-					left:-2px;
+					top:1px;
+					left:-3px;
 					text-align:center;
 					width:25px;
 					height:25px;
@@ -50,9 +50,9 @@
 				}
 
 				.kgl-tile::after {
-			    	border-width: 1.15em;
-				    border-left-color: #bbbbbb;
-				    border-top-color: #bbbbbb;
+			    	border-width: 1em;
+				    border-left-color: #b3b3b3;
+				    border-top-color: #b3b3b3;
 				}
 
 				.cornerflag p {
@@ -66,7 +66,7 @@
 				.kgl-tile {
 				position: relative;
 				    text-align: center;
-				    width: 120px;
+				    width: 80px;
 						height: 60px;
 				    background-color: #fff;
 			    	color: #696969;

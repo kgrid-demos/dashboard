@@ -28,12 +28,14 @@
 			<div class='maincontent'>
 				<div class='col-md-2 col-sm-2 col-xs-2  pad-0' v-if='isInEdit'>
 				<div class='animated ht-full kg-bg-custom-0' @drop='dropped'>
-											<div class='row ft-sz-16 pad-t-15 txtcenter'> <h3>Widget List</h3></div>
-					<draggable class='wlist' element="ul" v-model="widgetList" :options="dragOptions">
-						<li v-for='(object,index) in widgetList' v-bind:key='index'>
-							<kocard :object='object.label' :id='object.label' :cflag="object.type" :tileindex='index' draggable='true'  @dragstart='dragWidget' ></kocard>
-						</li>
-					</draggable>
+					<div class='row ft-sz-16 pad-t-15 txtcenter'> <h3>Widget List</h3></div>
+					<div class='wlistctner'>
+						<draggable class='wlist' element="ul" v-model="widgetList" :options="dragOptions">
+							<li v-for='(object,index) in widgetList' v-bind:key='index'>
+								<kocard :object='object.label' :id='object.label' :cflag="object.type" :tileindex='index' draggable='true'  @dragstart='dragWidget' ></kocard>
+							</li>
+						</draggable>
+					</div>
 					</div>
 				</div>
 				<div class='col-md-1 col-sm-1 col-xs-1 ht-full  pad-0' v-else></div>
@@ -199,7 +201,7 @@ export default {
 				var h0= y-e.y;
 				if( w0<self.defaultw | h0<self.defaulth )	{
 					x = e.x+self.defaultw;
-					if(x>self.defaultw){
+					if(x>3*self.defaultw){
 						x=0;
 						y=y+self.defaulth;
 					}
@@ -482,7 +484,10 @@ export default {
 	margin:10px 10px;
 	display:inline-block;
 }
-
+.wlistctner {
+	height: 100%;
+	overflow:auto;
+}
 .btnDisabled {
 	background-color:#eeeeee;
 	border:1px solid #aaaaaa;
@@ -556,11 +561,11 @@ h1 small {
 	font-size:50%;
 }
 ul.wlist {
-	margin:15px;
+	margin:12px;
 	height:100%;
 }
 ul.wlist li {
-	margin: 10px 10px;
+	margin: 10px;
 	display: inline-flex;
 }
 ul.wlayout {
