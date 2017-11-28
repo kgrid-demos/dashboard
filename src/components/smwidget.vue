@@ -119,6 +119,7 @@
       progressStyle() {
         return {
           width: `${(this.numcomplete / this.weeklymodules.length) * 100}%`,
+          height: '22px',
           backgroundColor: '#00aa00'
         }
       }
@@ -206,6 +207,7 @@
     margin: 3em;
     text-transform: none;
     background-color: #fff;
+    text-align: center;
   }
   .moduleList {
   }
@@ -249,13 +251,17 @@
 
   .progresscont {
     margin: 10px 5px 0 5px;
+    padding: 1px;
     font-size: 11pt;
+    border: 1px solid black;
+    height: 26px;
+    border-radius: 5px;
   }
 
   .barlabel {
     color: #000;
     position: absolute;
-    top: 10px;
+    top: 12px;
     width: 100%;
     text-align: center;
     text-shadow:
