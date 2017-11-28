@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-//import VeeValidate from 'vee-validate';
 import Vuex from 'vuex';
 import draggable from 'vuedraggable';
 import VueGridLayout from 'vue-grid-layout';
@@ -8,6 +7,7 @@ import App from './App';
 import store from './store';
 import eventBus from './eventBus.js';
 import axios from 'axios';
+import moment from 'moment'
 
 require('es6-promise').polyfill();
 // Bootstrap 4
@@ -19,6 +19,8 @@ require('lodash');
 // debug mode
 Vue.config.debug = false;
 Vue.prototype.$http = axios
+Vue.prototype.$moment = moment
+Vue.prototype.$eventBus= eventBus
 // install router
 Vue.use(VueRouter);
 
@@ -35,9 +37,6 @@ const routes = [
                 { path : '/patient/:id', name : 'patient', component : require('./components/patientdetail.vue'), data: function(){
                 	   	console.log("current Patient ID:"+ this.$route.params.id);
                     }	},
-                { path : '/PRO/:id', name : 'pro', component : require('./components/pro.vue'), data: function(){
-                    	   	console.log("current PRO ID:"+ this.$route.params.id);
-                        }	},
                 { path : '/notification', component: require('./components/notification.vue') },
                       	    ];
 
@@ -87,13 +86,13 @@ var vm = new Vue({
 	created: function(){
 		var self=this;
     console.log('Dashboard Web Application');
-  	eventBus.$on("return", function(){
+  	this.$eventBus.$on("return", function(){
 			router.push({ path: '/' });
 		});
-		eventBus.$on("patientSelected", function(patient){
+		this.$eventBus.$on("patientSelected", function(patient){
 			router.push({ name:'patient' ,params: { id: patient.id}});
 		});
-	  eventBus.$on("patientRemoved", function(obj){
+	  this.$eventBus.$on("patientRemoved", function(obj){
 			router.push({ path: '/' });
 	  });
 

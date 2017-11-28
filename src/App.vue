@@ -6,24 +6,18 @@
 </template>
 <script>
 import navbar from './components/navbar.vue';
-import eventBus from './eventBus.js';
-
 
 export default {
   name: 'app1',
   data: function () {
-    return {
-
-    };
+    return {};
   },
   created: function () {
-
   },
   components: {
     navbar
   },
 	computed:{
-
 	},
 	mounted:function(){
     var self=this;
@@ -34,7 +28,6 @@ export default {
     });
 	},
   methods:{
-
 	}
 };
 </script>

@@ -34,9 +34,7 @@
 </div>
 </template>
 <script>
-import moment from 'moment';
 import applayout from './applayout.vue';
-import eventBus from '../eventBus.js';
 import notiftile from './notiftile.vue'
 
 export default {
@@ -51,7 +49,7 @@ export default {
 	},
 	created : function() {
 		var self = this;
-		var lastsunday = moment().day(-7);
+		var lastsunday = this.$moment().day(-7);
 
 	},
 	mounted:function(){
@@ -100,14 +98,14 @@ export default {
 			this.dateRange.starttime=this.dateRange.starttime-7;
 			this.dateRange.endtime=this.dateRange.endtime-7;
 			this.enableNextArrow = true;
-			eventBus.$emit("setdaterange", this.dateRangeLabel);
+			this.$eventBus.$emit("setdaterange", this.dateRangeLabel);
 		},
 		gonextweek:function(){
 		  if(this.enableNextArrow) {
         this.dateRange.starttime = this.dateRange.starttime + 7;
         this.dateRange.endtime = this.dateRange.endtime + 7;
-        this.enableNextArrow = this.dateRangeLabel.endDate.isBefore(moment());
-        eventBus.$emit("setdaterange", this.dateRangeLabel);
+        this.enableNextArrow = this.dateRangeLabel.endDate.isBefore(this.$moment());
+        this.$eventBus.$emit("setdaterange", this.dateRangeLabel);
       }
 		},
 		cleanupLayout: function(){
@@ -126,7 +124,7 @@ export default {
 			this.updateLayoutContent();
 			this.cleanupLayout();
 	    var pid=this.$route.params.id;
-      eventBus.$emit("saveSettings",{'id':pid,'group':this.currentGroup.id});
+      this.$eventBus.$emit("saveSettings",{'id':pid,'group':this.currentGroup.id});
 			this.$store.commit('saveConfig',{'id':pid,'group':this.currentGroup.id,'layout':this.layout});
 			if(false) this.updateLog(this.patient);
 			self.isInEdit = false;
@@ -173,7 +171,7 @@ export default {
 			this.cleanupLayout();
 		},
 		updateLog:function(obj){
-			var t = moment().format();
+			var t = this.$moment().format();
 			var payload={};
 			obj.timestamp=t;
 			payload.entry=obj;

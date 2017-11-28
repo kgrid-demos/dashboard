@@ -58,8 +58,6 @@
 
 <script>
   import vueSlider from 'vue-slider-component';
-  import eventBus from '../eventBus.js';
-  import moment from 'moment';
 
   export default {
     props: ['chartheight', 'patientid', 'editmode', 'object','title', 'startdate', 'totalminutes', 'minutescompleted', 'maximized'],
@@ -76,10 +74,10 @@
     },
     created: function() {
       var self = this;
-      eventBus.$on('setdaterange', function (obj) {
+      this.$eventBus.$on('setdaterange', function (obj) {
         self.getweeklymodules(obj.startDate);
       });
-      eventBus.$on('saveSettings', function () {
+      this.$eventBus.$on('saveSettings', function () {
         self.saveoptions();
       });
       const obj = {"id":this.$route.params.id,"group":this.currentGroup.id,"wid": this.object.id};
@@ -135,13 +133,13 @@
         let i = 1;
         let that = this;
         if(startDate === null) {
-          startDate = moment().startOf('week');
+          startDate = this.$moment().startOf('week');
         }
         this.alldata.sort(function(a, b) {
           return a.date - b.date;
         });
         this.alldata.forEach( function (module) {
-          if(module.date > startDate.unix() && module.date < moment(startDate).add(7, 'd').unix()) {
+          if(module.date > startDate.unix() && module.date < that.$moment(startDate).add(7, 'd').unix()) {
             if(i <= that.datasettings.weeklyfreq) {
               if (module.value === 2) {
                 that.numcomplete ++;
@@ -149,7 +147,7 @@
               let mod = {
                 id: i,
                 status: that.convertNumToStatus(module.value),
-                datecompleted: moment.unix(module.date).format('MMM. D')
+                datecompleted: that.$moment.unix(module.date).format('MMM. D')
               };
               that.weeklymodules.push(mod);
             }
@@ -158,7 +156,7 @@
         });
         while(i <= this.datasettings.weeklyfreq) {
           let status = 1;
-          if(startDate.unix() > moment().subtract(6, 'd').unix()) {
+          if(startDate.unix() > that.$moment().subtract(6, 'd').unix()) {
             status = 3;
           }
           this.weeklymodules.push({id: i, status: this.convertNumToStatus(status), datecompleted: null});

@@ -2,7 +2,7 @@
 <div class='content'>
 	<applayout>
 		<div slot='banner'>
-			<div class='row' v-show='stationSelected'>
+			<div class='row' v-show='stationSelected && !filterEnabled'>
 				<div class='col-md-2 col-sm-2 col-xs-2 '></div>
 				<div class='col-md-8 col-sm-8 col-xs-8 '>
 					<form id="search">
@@ -14,11 +14,11 @@
 			</div>
 		</div>
 		<div slot='main'>
-			<div class='row' v-if="stationSelected">
+			<div class='row' v-if="stationSelected && !filterEnabled">
 				<div class='col-md-2 col-sm-2 col-xs-2  ht-full'>
 					<div>
 										<p style='text-align:center'></p>
-						<ul class='groupids' ><li v-for='(num,index) in groups' @click='selectgroup(index)' :class="{'active': currentGroup.id==num}">{{num}}</li></ul>
+						<ul class='groupids'><li v-for='(num,index) in groups' @click='selectgroup(index)' :class="{'active': currentGroup.id==num}">{{num}}</li></ul>
 					</div>
 
 				</div>
@@ -35,10 +35,10 @@
 			</div>
 			<div class='row' v-else>
 				<div class='col-md-2 col-sm-2 col-xs-2  ht-full pad-0'></div>
+				<div class='col-md-2 col-sm-2 col-xs-2  ht-full pad-0' @click='selectStation(-1)'><div class='station'><p class='ht-full '>All Patient</p></div></div>
 				<div class='col-md-2 col-sm-2 col-xs-2  ht-full pad-0' @click='selectStation(0)'><div class='station'><p class='ht-full '>Breast Cancer</p></div></div>
-				<div class='col-md-2 col-sm-2 col-xs-2  ht-full pad-0' @click='selectStation(1)'><div class='station'><p class='ht-full '>Liver Cancer</p></div></div>
-				<div class='col-md-2 col-sm-2 col-xs-2  ht-full pad-0' @click='selectStation(2)'><div class='station'><p class='ht-full '>Prostate Cancer</p></div></div>
-				<div class='col-md-2 col-sm-2 col-xs-2  ht-full pad-0' @click='selectStation(3)'><div class='station'><p class='ht-full '>Lung Cancer</p></div></div>
+				<div class='col-md-2 col-sm-2 col-xs-2  ht-full pad-0' @click='selectStation(1)'><div class='station'><p class='ht-full '>GI Cancer</p></div></div>
+				<div class='col-md-2 col-sm-2 col-xs-2  ht-full pad-0' @click='selectStation(2)'><div class='station'><p class='ht-full '>Lung Cancer</p></div></div>
 				<div class='col-md-2 col-sm-2 col-xs-2  ht-full pad-0'></div>
 			</div>
 		</div>
@@ -48,7 +48,6 @@
 <script>
 
 import applayout from './applayout.vue';
-import eventBus from '../eventBus.js';
 import kogrid from './kogrid.vue';
 
 export default {
@@ -56,15 +55,12 @@ export default {
 	data : function() {
 		return {
 			searchQuery: '',
-			gridColumns: ['id','name', 'age','gender'],
-			gridData: [],
-			patientdata: []
+			gridColumns: ['id','name', 'age','gender','type'],
 		}
 	},
 
 	created : function() {
 		var self=this;
-		self.gridData=[];
 		this.loadPatientDataIntoStorage();
 
 	},
@@ -75,6 +71,9 @@ export default {
 
 	  },
 	computed : {
+		filterEnabled : function(){
+			return this.$store.getters.getfilterEnable
+		},
 		groups:function(){
 				var n = this.$store.getters.getmaxgroupinuse;
 				var arr=[];
@@ -104,7 +103,7 @@ export default {
 			return this.$store.getters.getDataLength;
 			},
 		stationSelected: function(){
-			return this.$store.getters.getCurrentStation.id!=-1
+			return true
 		},
 		currentGroup: function(){
 		  return this.$store.getters.getcurrentGroup;
@@ -114,7 +113,7 @@ export default {
 		selected: function(t){
 			console.log(this.patients[t].id+this.patients[t].groupid);
 			this.$store.commit('setCurrentPatientIndex',{'pid':this.patients[t].id,'group':this.patients[t].groupid});
-			eventBus.$emit("patientSelected",this.patients[t]);
+			this.$eventBus.$emit("patientSelected",this.patients[t]);
 		},
 		selectStation: function(i){
 			this.$store.commit('selstation',{value:i});

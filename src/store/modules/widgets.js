@@ -81,8 +81,6 @@ const state = {
 const getters = {
   getwidgetlistbycancerid:state=>{
     return function(id){
-      console.log("Vuex Store => Module Widget ");
-      console.log("Input Cancer type:" +id)
       var arr=[]
       _widgets.forEach(function(el){
         if(el.cancertype){
@@ -91,16 +89,12 @@ const getters = {
           }
       }
       })
-      console.log("Input Cancer type:" +id + "  List Size:"+arr.length)
       return arr
-
     }
   },
   getwidgetlistbypatient:state=>{
     return function(pt){
       var id = pt.type
-      console.log("Vuex Store => Module Widget ");
-      console.log("Input Cancer type:" +id)
       var arr=[]
       _widgets.forEach(function(el){
         var bool = true
@@ -121,7 +115,6 @@ const getters = {
         }
         if(bool)  arr.push(el)
       })
-      console.log("Input Cancer type:" +id + "  List Size:"+arr.length)
       return arr
     }
   }

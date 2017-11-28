@@ -7,8 +7,7 @@
 		</div>
 </template>
 	<script>
-	import moment from 'moment'
-	import eventBus from '../eventBus.js';
+
 	export default {
   		name:	"koicon",
 		props : [ 'object', 'cflag' ,'tileindex'],

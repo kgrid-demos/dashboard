@@ -24,8 +24,6 @@
 			</div>
 	</template>
 	<script>
-	import moment from 'moment'
-	import eventBus from '../eventBus.js';
 	export default {
   		name:	"notiftile",
 		props : [ 'patient', 'timestamp' ,'notifications'],
@@ -33,7 +31,7 @@
 		},
 		computed : {
 			formattedtime: function(){
-				var t=moment(this.timestamp).format("MMM Do YYYY, h:mm:ss a");
+				var t=this.$moment(this.timestamp).format("MMM Do YYYY, h:mm:ss a");
 				return t
 			}
 		},

@@ -22,7 +22,7 @@ export default new Vuex.Store({
       debugEnabled:true,
       filterEnabled:true,
       loggerURL:'http://localhost:3003/dashboardlog',
-      currentStation:{id:0,"label":"Breast Cancer"},
+      currentStation:{id:-1,"label":""},
       currentGroup:{id:0,"color":"#0075bc"},
       currentPatientIndex: -1,
       patientlist:  [],
@@ -31,8 +31,11 @@ export default new Vuex.Store({
   mutations: {
     init(state, obj){
       state.init=obj;
-      console.log(state.init.patientMasterList);
       state.filterEnabled=state.init.filterenable;
+      if(state.filterEnabled){
+        state.currentStation.id=0;
+        state.currentStation.label="Breast Cancer"
+      }
       state.loggerURL=state.init.loggerURL;
       state.maxgroupinuse=state.init.maxgroupinuse;
       var ptlist=state.init.patientMasterList;
@@ -200,15 +203,6 @@ export default new Vuex.Store({
         return state.patientlist[index].widgetSettings[windex];
       }
     },
-    getwidgetMaster: state => {
-      var l=[];
-      if(state.init.defaultWidgetSetting){
-        l=state.init.defaultWidgetSetting.map(function(e){
-           return {'id':e.id,'label':e.label, 'type':e.type}
-        })
-      }
-       return l
-    },
     getpatientbyid:state => {
       var self=this;
       return function(obj){
@@ -231,7 +225,6 @@ export default new Vuex.Store({
           return (e.type==state.currentStation.id)
         })
       }
-      var ll=[];
       return l ;
     },
     getPatientMasterList: state=>{

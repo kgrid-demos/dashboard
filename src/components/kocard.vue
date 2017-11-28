@@ -6,22 +6,18 @@
 			</div>
 	</template>
 	<script>
-	import moment from 'moment'
-	import eventBus from '../eventBus.js';
+
 	export default {
   		name:	"kocard",
 		props : [ 'object', 'cflag' ,'tileindex'],
 		created: function(){
-
 		},
 		computed : {
-
-					},
+		},
 		methods : {
-
-					}
-				};
-				</script>
+		}
+	};
+	</script>
 				<style scoped>
 				.cornerflag {
 					position:absolute;

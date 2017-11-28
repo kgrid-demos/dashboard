@@ -31,6 +31,10 @@ p     { font-size: 14px; }
 .ft-sz-10   { font-size: 10px; }
 
 .ft-sz-12    { font-size: 12px; }
+.ft-sz-16    { font-size: 16px; }
+.ft-sz-18    { font-size: 18px; }
+.ft-sz-20    { font-size: 20px; }
+.ft-sz-22    { font-size: 22px; }
 .ft-sz-28    { font-size: 28px; }
 small { font-size:  70%; }
 
@@ -184,6 +188,10 @@ a, a:hover, a:visited, a:focus {
 }
 .pad-0 {
   padding:0px;
+}
+.mar-0{
+  margin-left:0;
+  margin-right:0;
 }
 .mar-r-30 {
   margin-right:30px;

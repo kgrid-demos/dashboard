@@ -16,8 +16,6 @@
 		</div>
 	</template>
 	<script>
-	import moment from 'moment';
-	import eventBus from '../eventBus.js';
 	import prowidget from './prowidget.vue';
 	import smwidget from './smwidget.vue';
 	export default {
@@ -50,7 +48,7 @@
 				return 'none';
       },
 			weeklynotes:function(){
-				var starttime = moment(this.startdate).valueOf()/1000;
+				var starttime = this.$moment(this.startdate).valueOf()/1000;
 				console.log(starttime);
 				var l = this.chartdata.filter(function(e){ return(e.date>=starttime && e.date<=(starttime+604800))});
 				console.log(l);
@@ -62,7 +60,7 @@
 		},
 		methods : {
 			formatted:function(t){
-				return moment(t).format("dddd, MMMM Do YYYY, h:mm:ss a");
+				return this.$moment(t).format("dddd, MMMM Do YYYY, h:mm:ss a");
 
 			},
       getPatientDataForWidget() {

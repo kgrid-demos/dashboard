@@ -1,27 +1,21 @@
 <template id='navbar'>
 	<div class='kgl-nav'>
-			<a class='navbar-brand kgl-1' @click='stationselector'>
-						<span>{{dashboard}}</span>
-			</a>
-			<nav class='navbar navbar-fixed-top kgl-1 kg-bg-color kg-color'>
-
-						<ul class='nav navbar-nav'>
-							<router-link tag='li':class="{'active': $route.fullPath === '/'}" to='/'><a><span>Patients</span></a></router-link>
-							<router-link tag='li' :class="{'active': $route.fullPath === '/about'}" to='/about'><a><span>Calendar</span></a></router-link>
-							<router-link tag='li' :class="{'active': $route.fullPath === '/notification'}" to='/notification'><a><span>Notifications</span><div style='color:#bc2526;top:0px;right:-10px;position:absolute;font-size:10px;'><i class='fa fa-circle' v-if='notifCount>0'></i></div></a></router-link>
-							<router-link tag='li' :class="{'active': $route.fullPath === '/about'}" to='/about'><a><span>User</span></a></router-link>
-							<li class='test' @click='resetstore'><a><span>Reset</span></a></li>
-							<li class="test" @click="genpatientdata"><a>Generate Patient Data</a></li>
-													</ul>
-
-			</nav>
-		</div>
+		<a class='navbar-brand kgl-1' @click='stationselector'>
+			<span>{{dashboard}}</span>
+		</a>
+		<nav class='navbar navbar-fixed-top kgl-1 kg-bg-color kg-color'>
+			<ul class='nav navbar-nav'>
+				<router-link tag='li':class="{'active': $route.fullPath === '/'}" to='/'><a><span>Patients</span></a></router-link>
+				<router-link tag='li' :class="{'active': $route.fullPath === '/notification'}" to='/notification'><a><span>Notifications</span><div style='color:#bc2526;top:0px;right:-10px;position:absolute;font-size:10px;'><i class='fa fa-circle' v-if='notifCount>0'></i></div></a></router-link>
+				<router-link tag='li' :class="{'active': $route.fullPath === '/about'}" to='/about'><a><span>Administrator</span></a></router-link>
+				<li class='test' @click='resetstore'><a><span>Reset</span></a></li>
+				<li class="test" @click="genpatientdata"><a>Generate Patient Data</a></li>
+			</ul>
+		</nav>
+	</div>
 </template>
 
 <script>
-import eventBus from '../eventBus.js';
-import moment from 'moment';
-
 export default {
   name: 'navbar',
   data: function () {
@@ -84,13 +78,14 @@ export default {
 
 		genpatientdata: function(){
 			const patientList = this.$store.getters.getPatientMasterList;
-			const widgetList = this.$store.getters.getwidgetMaster;
+			var widgetList = [];
 			const basedataurl = 'http://localhost:3001/patients/';
 			let that = this;
       let url;
 			console.log(patientList);
 			patientList.forEach(function(patient) {
 			  if(patient.id) {
+				 	widgetList=this.$store.getters.getwidgetlistbypatient(patient)
 			    url = basedataurl + patient.id;
           let data = {};
 			    widgetList.forEach(function(widget){
@@ -116,17 +111,17 @@ export default {
 			this.$store.commit("resetPatientData");
 		},
     genrandomsmdata: function(widgetDataID, data, maxVal, freq, weeks){
-		  let recordDate = moment().set({'hour': 12, 'minute': 0, 'second': 0}).subtract(7 * weeks, 'd');
+		  let recordDate = this.$moment().set({'hour': 12, 'minute': 0, 'second': 0}).subtract(7 * weeks, 'd');
       data[widgetDataID] = [];
 		  for(let i = 0; i < freq * weeks; i++) {
 		    // Once per day
         recordDate.add(1, 'd');
-        data[widgetDataID].push({"date": moment(recordDate).unix(), "value": this.getRandomSMValue(maxVal)});
+        data[widgetDataID].push({"date": this.$moment(recordDate).unix(), "value": this.getRandomSMValue(maxVal)});
 			}
 			return data;
 		},
     genrandomprodata: function(widgetDataID, data, maxVal, weeks){
-      let recordDate = moment().set({'hour': 0, 'minute': 0, 'second': 0}).subtract(7 * weeks, 'd');
+      let recordDate = this.$moment().set({'hour': 0, 'minute': 0, 'second': 0}).subtract(7 * weeks, 'd');
       let priorVal = 3;
       let note = "";
       data[widgetDataID] = [];
@@ -137,7 +132,7 @@ export default {
         note = this.genNote(priorVal, maxVal);
 
         let randomTime = this.getRandomMinutes();
-        data[widgetDataID].push({"date": moment(recordDate).add(randomTime, 'm').unix(), "value": priorVal, "note": note});
+        data[widgetDataID].push({"date": this.$moment(recordDate).add(randomTime, 'm').unix(), "value": priorVal, "note": note});
 
       }
       return data;

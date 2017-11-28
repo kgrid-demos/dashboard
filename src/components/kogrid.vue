@@ -1,5 +1,5 @@
 <template>
-
+<div>
   <table class='group0'>
     <thead>
       <tr>
@@ -10,20 +10,27 @@
           <span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'">
           </span>
         </th>
-        <th><span v-if='groupid!=-1'>Interventions</span></th>
       </tr>
     </thead>
     <tbody>
-      <tr v-for="entry, key in filteredData" @click='selectRow(key)'>
+      <tr v-for="(entry, index) in filteredData" @click='selectRow(index)' @mouseover='selrow(index)' @mouseout='selrow(-1)'>
         <td v-for="key in columns">
           {{entry[key]}}
-        </td>
-        <td>
-          <ul v-if='groupid!=-1'><li v-for='widget in entry.wlist'><koicon :object='widget' ></koicon></li></ul>
         </td>
       </tr>
     </tbody>
   </table>
+  <div class='patientsummary' v-if='hoverrow!=-1'>
+    <div class='patientinfo row mar-0 ft-sz-22'>
+      <div class='col-md-4 '> <small>NAME:</small> {{filteredData[hoverrow].name}} </div>
+      <div class='col-md-4 '>  <small>GENDER:</small> {{filteredData[hoverrow].gender}} </div>
+      <div class='col-md-4'> <small> Age:</small> {{filteredData[hoverrow].age}} </div>
+    </div>
+    <div class='row treatmentinfo mar-0 '><p class='ft-sz-18'>Diagnosis and Treatment Plan</p></div>
+    <div class='row interventionlisting mar-0' ><p class='ft-sz-18'>Interventions</p>
+     <ul v-if='groupid!=-1'><li v-for='widget in filteredData[hoverrow].wlist'><koicon :object='widget' ></koicon></li></ul></div>
+  </div>
+</div>
 </template>
 
 <script>
@@ -44,7 +51,8 @@ export default {
     })
     return {
       sortKey: '',
-      sortOrders: sortOrders
+      sortOrders: sortOrders,
+      hoverrow:-1
     }
   },
   computed: {
@@ -90,13 +98,20 @@ export default {
       this.sortOrders[key] = this.sortOrders[key] * -1
     },
     selectRow: function(key){
+      console.log(key)
       if(this.groupid!=-1)
         this.$emit("selected", key)
+    },
+    selrow: function(index){
+      this.hoverrow =index
     }
   }
 }
 </script>
 <style scoped>
+small {
+  font-size:50%;
+}
 ul li {
   display: table-cell;
 }
@@ -191,7 +206,7 @@ th:nth-child(1){  width: 300px;}
 th:nth-child(2){  width: 400px;}
 th:nth-child(3){  width: 200px;}
 th:nth-child(4){  width: 200px;}
-
+th:nth-child(5){  width: 200px;}
 th.active {
   color: #fff;
 }
@@ -208,10 +223,35 @@ tr {
     border:1px solid transparent;
     transition: background 0.5s ease, color 0.5s ease;
     cursor:pointer;
+    position: relative;
 }
 tr:hover{
     background:#7d948e;
     color: #fff
+}
+div.patientsummary {
+  display:block;
+  position:relative;
+  top:80px;
+  left:0px;
+  min-height:400px;
+  width:100%;
+  border-top:1px solid #f5f5f5;
+}
+div.patientinfo {
+  verticle-align: bottom;
+  padding:10px 0px;
+  line-height: 1.35em;
+  border-bottom:1px solid #f5f5f5;
+}
+div.interventionlisting, div.treatmentinfo {
+  padding:10px 15px;
+  line-height: 1.35em;
+  border-bottom:1px solid #f5f5f5;
+  min-height:120px;
+}
+div.interventionlisting ul {
+  margin-top:20px;
 }
 .arrow {
   display: inline-block;
