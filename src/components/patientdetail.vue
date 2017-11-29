@@ -77,15 +77,19 @@
 											 			drag-ignore-from=".no-drag">
 														<div class="draggable-handle" v-show='(item.c=="")&&isInEdit' style="text-align: center; vertical-align: middle; font-size: 16px; font-weight: 700;position:relative;top:50%;transform:translateY(-50%)">Add a widget</div>
 														<div class='widgetTitle' v-bind:class="{draggablehandle: isInEdit}" v-if='item.c!=""'>
-															<span v-if="itemWidgetList[item.i][0].alertText && !isInEdit" class="fa fa-arrow-up alertArrow"></span>
-															<span v-if="!itemWidgetList[item.i][0].alertText"  class="alertArrow">&nbsp;</span>
-															<span class="widgetLabel">{{itemWidgetList[item.i][0].label}}</span>
-															<span v-if="!isInEdit && alertText[item.i]" class="alert-text">{{ alertText[item.i] }}</span>
-															<!--<span v-if="!isInEdit" class="alert-text">{{itemWidgetList[item.i][0].alertText}}</span>-->
-															<i class='fa fa-close' v-if='isInEdit' style="font-size:11pt" @click='removeWidget(item.i)'></i>
-															<i class='fa fa-window-maximize' v-if='!isInEdit && !maximized' title="maximize" style="font-size:11pt" @click='maximizeWidget(item.i)'></i>
-															<i class='fa fa-window-restore' v-if='!isInEdit && maximized' title="maximize"  style="font-size:11pt" @click='restoreLayout'></i>
+															<div class='row mar-0'>
+																<span class="widgetLabel">{{itemWidgetList[item.i][0].label}}</span>
+																<span v-if="alertText[item.i] && !isInEdit" class="fa fa-arrow-up alertArrow pad-l-5"></span>
+																<span v-if="!alertText[item.i]"  class="alertArrow">&nbsp;</span>
+																<i class='fa fa-close' v-if='isInEdit' style="font-size:11pt" @click='removeWidget(item.i)'></i>
+																<i class='fa fa-window-maximize' v-if='!isInEdit && !maximized' title="maximize" style="font-size:11pt" @click='maximizeWidget(item.i)'></i>
+																<i class='fa fa-window-restore' v-if='!isInEdit && maximized' title="maximize"  style="font-size:11pt" @click='restoreLayout'></i>
+															</div>
+															<div class='row mar-0 ht-20'>
+																<span v-if="!isInEdit && alertText[item.i]" class="alert-text">{{ alertText[item.i] }}</span>
+															</div>
 														</div>
+
 						<div class='widgetcontainer fill no-drag' @drop='dropped'>
 								<draggable class='wlayout' element="ul" v-model="itemWidgetList[item.i]" :options="customDragOptions(item.i)" >
 														<li v-for='(object,index) in itemWidgetList[item.i]' v-bind:key='index' v-if='itemWidgetList[item.i].length==1|object.type!="NEW"'>
@@ -519,7 +523,7 @@ flex: auto;
 		background-color:yellow;
 }
 .widgetTitle {
-  padding:15px;
+  padding:5px 8px;
 	background: #fff;
 	color: #000;
 }
@@ -606,9 +610,10 @@ ul.wlayout li {
 	background-color:transparent;
 	display: flex;
 	flex-direction:column;
-
 }
-
+.vue-grid-item:hover {
+	border: 1px solid #0075bc;
+}
 	.widgetalertdisplay, .notesdisplay {
 			height:150px;
 			background-color: #fff;

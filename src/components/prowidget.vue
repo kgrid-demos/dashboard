@@ -221,7 +221,7 @@
   .graph {
     width: 100%;
     height: 100%;
-    padding-top: 10px;
+    padding-top: 2px;
     margin:0 auto;
     background-color: white;
   }

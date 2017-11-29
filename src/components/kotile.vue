@@ -1,7 +1,5 @@
 <template>
 		<div class="container kgl-tile" :class="{max:maximized}" v-bind:id="object.label">
-			<div class="title">
-			</div>
 				<slot name="alerts"></slot>
 				<p>
           <prowidget v-if="cflag === 'PRO' && dataLoaded" v-on:alert='showAlert' ref="widget" :alldata='chartdata' :patientid='patientid' :chartheight='cHeight' :editmode="editmode" :object="object" :title="object.label" :startdate="startdate"></prowidget>
@@ -88,7 +86,7 @@
 				    background-color: #fff;
 			    	color: #696969;
 				    font-weight: 400;
-				    border: 1px solid #e5e5e5;
+				    border: none;
 				    padding: 0px ;
 						transition: all 0.5s ease;
 				}
@@ -97,7 +95,6 @@
 					}
 
 				.kgl-tile:hover {
-				   border: 1px solid #0075bc;
 					 cursor:pointer;
 				}
 

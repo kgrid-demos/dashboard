@@ -251,13 +251,13 @@
     margin: 10px 5px 0 5px;
     padding: 1px;
     font-size: 11pt;
-    border: 1px solid black;
+    border: 1px solid green;
     height: 26px;
     border-radius: 5px;
   }
 
   .barlabel {
-    color: #000;
+    color: green;
     position: absolute;
     top: 12px;
     width: 100%;

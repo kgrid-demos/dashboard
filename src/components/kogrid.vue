@@ -113,8 +113,7 @@ small {
   font-size:50%;
 }
 ul li {
-  display: table-cell;
-  	display: inline-flex;
+	display: inline-flex;
 }
 table {
   border-radius: 3px;
