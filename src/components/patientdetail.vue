@@ -56,7 +56,7 @@
 					</div>
 					</div>
 					<grid-layout		:layout.sync="layout"
-													:col-num="12"
+													:col-num="colnum"
 													:row-height="30"
 													:is-draggable="isInEdit"
 													:is-resizable="isInEdit"
@@ -115,6 +115,7 @@ export default {
     name: 'patientdetail',
 	data : function() {
 		return {
+			colnum:12,
 			registrationstatus:[],
 			widgetList:[],
 			alertText:[],
@@ -132,6 +133,7 @@ export default {
 			group: 'description',
 			disabled: true,
 			ghostClass: 'ghost',
+
 		},
 		dateRange:{starttime:0, endtime: 6},
 		maximized:false,
@@ -195,18 +197,22 @@ export default {
 			var x = 0;
 			var y = 0;
 			var self=this;
-			var layout = this.layout.sort(function(a,b){return a.y-b.y})
+			var layout = this.layout.sort(function(a,b){return (a.y+a.h)-(b.y+b.h)})
 			layout.forEach(function(e){
 				var w0 = x-e.x;
 				var h0= y-e.y;
+
 				if( w0<self.defaultw | h0<self.defaulth )	{
-					x = e.x+self.defaultw;
-					if(x>3*self.defaultw){
+					x = e.x+e.w;
+					if((x+self.defaultw)>self.colnum){
 						x=0;
-						y=y+self.defaulth;
+						y=e.y+e.h;
 					}
 				}
+				console.log('id='+e.c+" ex="+e.x+" ey="+e.y+"  w0="+w0+" h0="+h0+" ===>x="+x+" y="+y)
+
 			})
+			console.log("x="+x+" y="+y)
 			item.x=x;
 			item.y=y;
 			item.w=this.defaultw;
@@ -303,6 +309,7 @@ export default {
 			self.isInEdit = false;
 			self.registrationstatus =[];
 
+			if(false){
 			setTimeout(function(){
 				self.registrationstatus.push("Registering "+self.patient.name+ " for the prescribed interventions ...")
 			},200)
@@ -316,6 +323,8 @@ export default {
 				self.showModal=false;
 
 				},4000);
+				}
+			self.showModal=false;
     },
 		getHeight:function(i){
 				if(this.$refs.item[i]){
@@ -359,6 +368,7 @@ export default {
 		},
     dragWidget:function(ev){
       ev.stopPropagation();
+			 ev.preventDefault();
 			console.log("Start Dragging ");
 			console.log(ev.target);
       return true;

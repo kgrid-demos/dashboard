@@ -85,7 +85,7 @@ export default {
 			console.log(patientList);
 			patientList.forEach(function(patient) {
 			  if(patient.id) {
-				 	widgetList=this.$store.getters.getwidgetlistbypatient(patient)
+				 	widgetList=that.$store.getters.getwidgetlistbypatient(patient)
 			    url = basedataurl + patient.id;
           let data = {};
 			    widgetList.forEach(function(widget){

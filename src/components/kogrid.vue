@@ -114,6 +114,7 @@ small {
 }
 ul li {
   display: table-cell;
+  	display: inline-flex;
 }
 table {
   border-radius: 3px;

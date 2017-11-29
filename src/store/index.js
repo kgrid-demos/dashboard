@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import widgets from './modules/widgets'
+import patients from './modules/patients'
 import VuexPersistence from 'vuex-persist'
 
 Vue.use(Vuex)
@@ -15,7 +16,8 @@ export default new Vuex.Store({
   strict: process.env.NODE_ENV !== 'production',
   plugins: [vuexLocal.plugin],
   modules: {
-    widgets
+    widgets,
+    patients
   },
   state:{
       init:{},

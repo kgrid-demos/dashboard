@@ -113,6 +113,7 @@ export default {
 		selected: function(t){
 			console.log(this.patients[t].id+this.patients[t].groupid);
 			this.$store.commit('setCurrentPatientIndex',{'pid':this.patients[t].id,'group':this.patients[t].groupid});
+			this.$store.commit('setcurrentpatientid',this.patients[t]);
 			this.$eventBus.$emit("patientSelected",this.patients[t]);
 		},
 		selectStation: function(i){
@@ -120,6 +121,7 @@ export default {
 		},
 		selectgroup: function(index){
 			this.$store.commit('setgroupid',{value:index});
+			this.$store.commit('setcurrentgroupid',{value:index});
 		},
     loadPatientDataIntoStorage: function() {
 		  if(!this.$store.getters.hasLoadedPatientData) {
