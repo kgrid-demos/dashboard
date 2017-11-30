@@ -152,7 +152,7 @@ export default new Vuex.Store({
     saveWidgetSettings(state, obj){
       var index = state.currentPatientIndex;
       var windex = state.patientlist[index].widgetSettings.map(function(e){return e.id}).indexOf(obj.wid);
-      console.log("save widget for=>"+"Pt "+index+"wd "+windex)
+      // console.log("save widget for=>"+"Pt "+index+"wd "+windex)
       if(windex >= 0) {
         state.patientlist[index].widgetSettings[windex].datasettings=JSON.parse(JSON.stringify(obj.datasettings));
       } else {

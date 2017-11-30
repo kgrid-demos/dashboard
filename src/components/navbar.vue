@@ -21,7 +21,6 @@ export default {
   data: function () {
     return {
  			showDropdown : false,
-
     };
   },
   created: function() {
@@ -31,21 +30,14 @@ export default {
 		debugging: function(){
 			return this.$store.getters.isDebugging;
 		},
-		firstname: function(){
-			return (this.$store.state.currentUser.first_name || "")
-		},
-		isAdmin: function(){
-			return this.$store.getters.isAdmin;
-		},
 		dashboard: function(){
 			var d= 'Dashboard';
 			if(this.$store.getters.getCurrentStation.label!=""){
 						d=this.$store.getters.getCurrentStation.label + ' '+d;
 			}
-
 			return d;
-			},
-			notifCount: function() {
+		},
+		notifCount: function() {
 				return this.$store.getters.getNotificationList.length;
 			}
   },
@@ -71,11 +63,6 @@ export default {
 				this.$store.commit('selstation',{value:-1});
 			}
 		},
-		seeallpatients:function(){
-			this.$store.commit('setgroupid',{value:-1});
-			this.$router.push({ path: '/' });
-		},
-
 		genpatientdata: function(){
 			const patientList = this.$store.getters.getPatientMasterList;
 			var widgetList = [];

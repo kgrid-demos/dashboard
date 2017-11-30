@@ -201,11 +201,11 @@ export default {
 			var x = 0;
 			var y = 0;
 			var self=this;
-			var layout = this.layout.sort(function(a,b){return (a.y+a.h)-(b.y+b.h)})
+			var temp = JSON.parse(JSON.stringify(this.layout))
+			var layout = temp.sort(function(a,b){return (a.y+a.h)-(b.y+b.h)})
 			layout.forEach(function(e){
 				var w0 = x-e.x;
 				var h0= y-e.y;
-
 				if( w0<self.defaultw | h0<self.defaulth )	{
 					x = e.x+e.w;
 					if((x+self.defaultw)>self.colnum){
@@ -213,11 +213,8 @@ export default {
 						y=e.y+e.h;
 					}
 				}
-				console.log('id='+e.c+" ex="+e.x+" ey="+e.y+"  w0="+w0+" h0="+h0+" ===>x="+x+" y="+y)
-
-			})
-			console.log("x="+x+" y="+y)
-			item.x=x;
+				})
+				item.x=x;
 			item.y=y;
 			item.w=this.defaultw;
 			item.h=this.defaulth;
@@ -292,14 +289,12 @@ export default {
       }
 		},
 		cleanupLayout: function(){
-			console.log("Cleaning up")
-			this.layout = this.layout.filter(function(e){return (e.c!="")}).map(function(e,index){
+		this.layout = this.layout.filter(function(e){return (e.c!="")}).map(function(e,index){
 				var item=e;
 				item.i=index+"";
 				return item;
 				});
 			this.itemWidgetList=this.itemWidgetList.filter(function(e){return (e.length!=0)});
-			console.log('Item Widget List Length = '+this.itemWidgetList.length)
 		},
     saveconfig:function(){
 			var self = this;
@@ -431,11 +426,13 @@ export default {
 			this.addEmptySlot();
 		},
 		addEmptySlot: function(){
+
 			var zeroitem=this.itemWidgetList.filter(function(e){return (e.length==0)});
 			if(zeroitem.length==0 && this.widgetList.length>=1){
 				this.layout.push(this.nextitem)
 				this.itemWidgetList.push([])
 				}
+
 		},
     resizedEvent: function(i, newH, newW, newHPx, newWPx){
       var msg = "RESIZED i=" + i + ", H=" + newH + ", W=" + newW + ", H(px)=" + newHPx + ", W(px)=" + newWPx;
@@ -443,6 +440,7 @@ export default {
     },
 		updateLayoutContent:function(){
 			var self = this;
+
 			this.itemWidgetList.forEach(function(item, index) {
 					if(item.length>0)
 						{ self.layout[index].c = item[0].id;}
@@ -452,8 +450,7 @@ export default {
 				}
 			);
 			this.pwidgetlist=this.layout.map(function(e){return e.c})
-
-		},
+			},
     setAlertText(note, index){
 		  if(note) {
         this.addAlert(this.itemWidgetList[index][0].id);

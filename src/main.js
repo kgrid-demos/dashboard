@@ -89,8 +89,8 @@ var vm = new Vue({
   	this.$eventBus.$on("return", function(){
 			router.push({ path: '/' });
 		});
-		this.$eventBus.$on("patientSelected", function(patient){
-			router.push({ name:'patient' ,params: { id: patient.id}});
+		this.$eventBus.$on("patientSelected", function(id){
+			router.push({ name:'patient' ,params: { id: id}});
 		});
 	  this.$eventBus.$on("patientRemoved", function(obj){
 			router.push({ path: '/' });

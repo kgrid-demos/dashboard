@@ -46,7 +46,6 @@
 </div>
 </template>
 <script>
-
 import applayout from './applayout.vue';
 import kogrid from './kogrid.vue';
 
@@ -58,18 +57,14 @@ export default {
 			gridColumns: ['id','name', 'age','gender','type'],
 		}
 	},
-
 	created : function() {
 		var self=this;
 		this.loadPatientDataIntoStorage();
-
 	},
 	mounted:function(){
-
 	},
 	updated: function() {
-
-	  },
+  },
 	computed : {
 		filterEnabled : function(){
 			return this.$store.getters.getfilterEnable
@@ -99,9 +94,6 @@ export default {
 			}
 
 		},
-		datalength:function(){
-			return this.$store.getters.getDataLength;
-			},
 		stationSelected: function(){
 			return true
 		},
@@ -114,7 +106,7 @@ export default {
 			console.log(this.patients[t].id+this.patients[t].groupid);
 			this.$store.commit('setCurrentPatientIndex',{'pid':this.patients[t].id,'group':this.patients[t].groupid});
 			this.$store.commit('setcurrentpatientid',this.patients[t]);
-			this.$eventBus.$emit("patientSelected",this.patients[t]);
+			this.$eventBus.$emit("patientSelected",this.patients[t].id);
 		},
 		selectStation: function(i){
 			this.$store.commit('selstation',{value:i});
@@ -193,15 +185,12 @@ padding:20px;
 	border-radius: 15px;
 }
 
-
 .station p{
 font-size: 28px;
 font-weight: 700;
 color:#fff;
     transform: translateY(35%);
 		}
-
-
 		.station:hover {
 		 background-color:#fff;
 		}
@@ -251,8 +240,5 @@ ul.groupids li.active:after {
   transform: skew(-45deg);
 	z-index:-1;
 }
-
-
-
 
 </style>
