@@ -22,7 +22,7 @@
         </div>
         <div class="options">
           <select v-model="datasettings.selectedinstrument.name">
-            <option v-for="instrument in datasettings.instruments" v-bind:value="instrument.name">
+            <option v-for="instrument in instruments" v-bind:value="instrument.name">
               {{ instrument.name }}
             </option>
           </select>
@@ -85,20 +85,21 @@
         this.datasettings = Object.assign({}, this.$store.getters.getDataSettings(obj).datasettings);
       } else {
         this.datasettings = {
-          instruments: [
-            { name: "SPLN Course", value: 1},
-            { name: "Pheen Questionnaire", value: 2},
-            { name: "Norbert-Ralph SM", value: 3}
-          ],
           selectedinstrument: {name: "SPLN Course", value: 1},
           weeklyfreq: 4,
           minutespermodule: 15,
           notifythresh: 1,
           notifymin: 1
         };
+        if(this.instruments.length>0){
+          this.datasettings.selected=this.instruments[0]
+          }
       }
     },
     computed : {
+      instruments: function(){
+        return this.$store.getters.getwidgetinstruments(this.object.id)
+        },
       currentGroup:function(){
         return this.$store.getters.getcurrentGroup;
       },

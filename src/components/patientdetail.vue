@@ -305,7 +305,7 @@ export default {
 	    var pid=this.$route.params.id;
       this.$eventBus.$emit("saveSettings",{'id':pid,'group':this.currentGroup.id});
 			this.$store.commit('saveConfig',{'id':pid,'group':this.currentGroup.id,'layout':this.layout});
-			if(false) this.updateLog(this.patient);
+			if(true) this.updateLog(this.patient);
 			self.isInEdit = false;
 			self.registrationstatus =[];
 
@@ -355,7 +355,7 @@ export default {
 		updateLog:function(obj){
 			var t = this.$moment().format();
 			var payload={};
-			obj.timestamp=t;
+			payload.timestamp=t;
 			payload.entry=obj;
 			this.$http.post(this.loggerurl, payload)
 				.then(function (response) {

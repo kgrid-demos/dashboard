@@ -151,25 +151,6 @@ export default {
 					return 120;
 				}
 		},
-		loadDefault:function(){
-			var self = this;
-			this.layout.splice(0,1);
-			this.itemWidgetList.splice(0,1);
-			this.layout=JSON.parse(JSON.stringify(this.$store.getters.getDefaultLayout));
-			this.pwidgetlist=this.layout.map(function(e){return e.c})
-			this.widgetList = this.widgetMaster.filter(function(e){return (this.indexOf(e.id)<0);},self.pwidgetlist)
-			this.layout.forEach(function(item){
-				var index= self.widgetMaster.map(function(e){return e.id}).indexOf(item.c);
-			if(index>=0){
-					var nextwidgetlist=[];
-					nextwidgetlist.push(self.widgetMaster[index]);
-					self.itemWidgetList.push(nextwidgetlist);
-				}else {
-					self.itemWidgetList.push([]);
-				}
-			})
-			this.cleanupLayout();
-		},
 		updateLog:function(obj){
 			var t = this.$moment().format();
 			var payload={};

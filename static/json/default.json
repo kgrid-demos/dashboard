@@ -1,15 +1,7 @@
 {
 	"filterenable":false,
 	"loggerURL":"http://localhost:3003/dashboardlog",
-  "defaultLayout":	[
-			{ "x":0,"y":0,"w":4,"h":6,"i":"0","c":"PRO-01"},
-			{ "x":0,"y":6,"w":4,"h":6,"i":"1","c":"SM-01"},
-			{ "x":4,"y":0,"w":4,"h":6,"i":"2","c":"PRO-04"},
-			{ "x":0,"y":12,"w":4,"h":6,"i":"3","c":"SM-04"},
-			{ "x":8,"y":0,"w":4,"h":6,"i":"4","c":"PRO-02"},
-			{ "x":4,"y":6,"w":8,"h":12,"i":"5","c":"PRO-03"}
- 		],
-		"cancertypes": [
+	"cancertypes": [
 			{"id":0,"label":"Breast Cancer"},
 			{"id":1,"label":"GI Cancer"},
 			{"id":2,"label":"Lung Cancer"},
