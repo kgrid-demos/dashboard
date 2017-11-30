@@ -122,6 +122,7 @@ ul li {
 table {
   border-radius: 3px;
   background-color: #fff;
+  width: 100%;
 }
 
 table.default {
@@ -206,11 +207,11 @@ th, td {
   text-overflow: ellipsis;
 }
 
-th:nth-child(1){  width: 300px;}
-th:nth-child(2){  width: 400px;}
-th:nth-child(3){  width: 200px;}
-th:nth-child(4){  width: 200px;}
-th:nth-child(5){  width: 200px;}
+th:nth-child(1){  width: 20%;}
+th:nth-child(2){  width: 20%;}
+th:nth-child(3){  width: 20%;}
+th:nth-child(4){  width: 25%;}
+th:nth-child(5){  width: 25%;}
 th.active {
   color: #fff;
 }

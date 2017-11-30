@@ -5,11 +5,15 @@
 		</a>
 		<nav class='navbar navbar-fixed-top kgl-1 kg-bg-color kg-color'>
 			<ul class='nav navbar-nav'>
-				<router-link tag='li':class="{'active': $route.fullPath === '/'}" to='/'><a><span>Patients</span></a></router-link>
-				<router-link tag='li' :class="{'active': $route.fullPath === '/notification'}" to='/notification'><a><span>Notifications</span><div style='color:#bc2526;top:0px;right:-10px;position:absolute;font-size:10px;'><i class='fa fa-circle' v-if='notifCount>0'></i></div></a></router-link>
-				<router-link tag='li' :class="{'active': $route.fullPath === '/about'}" to='/about'><a><span>Administrator</span></a></router-link>
+				<router-link tag='li':class="{'active': $route.fullPath === '/'}" to='/' v-show='false'><a><span>Patients</span></a></router-link>
+				<router-link tag='li' :class="{'active': $route.fullPath === '/notification'}" to='/notification' v-show='false'><a><span>Notifications</span><div style='color:#bc2526;top:0px;right:-10px;position:absolute;font-size:10px;'><i class='fa fa-circle' v-if='notifCount>0'></i></div></a></router-link>
+				<li class='test'>	<div class='dropdown' id="userDropdown" >
+					<a><span v-on:mouseenter='trigDropdown' v-on:mouseleave='checkDropdown'>Administrator</span></a>
+							<ul class='dropdown-menu' v-if='showDropdown' v-on:mouseleave='leaveDropdown'>
 				<li class='test' @click='resetstore'><a><span>Reset</span></a></li>
 				<li class="test" @click="genpatientdata"><a>Generate Patient Data</a></li>
+				</ul>
+							</div></li>
 			</ul>
 		</nav>
 	</div>
@@ -42,6 +46,15 @@ export default {
 			}
   },
   methods: {
+		trigDropdown: function(){
+			this.showDropdown=true;
+			},
+		checkDropdown: function(){
+			this.showDropdown=true;
+			},
+		leaveDropdown:function(){
+			this.showDropdown=false;
+			},
 		resetstore:function(){
 			if (confirm("Datastore will be reset! Are you sure?") == true) {
 				var self=this;
@@ -202,10 +215,11 @@ export default {
 	padding: 14px 0px;
 	z-index:400;
 	top:0;
-	width:350px;
-	left:40px;
+	width:110px;
+	left:20px;
 	height:56px;
 	border:none;
+	font-weight: 800;
 }
 
 

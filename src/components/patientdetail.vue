@@ -11,7 +11,7 @@
 	<applayout>
 		<div slot='banner'>
 			<div class='bannercontent' >
-				<div class='row'>
+				<div class='row mar-0'>
 					<div class='col-md-1 col-sm-1 col-xs-1  pad-0' v-if='isInEdit'></div>
 					<div class='col-md-1 col-sm-1 col-xs-1'>
 						<router-link  class='float-r' to='/'>
@@ -477,13 +477,13 @@ export default {
 </script>
 <style scoped>
 .bannercontent {
-    margin-top: 75px;
+    margin-top: 60px;
     text-align: left;
     margin-bottom: 20px;
     margin: 0 auto;
     line-height: 2em;
 		letter-spacing: 0.1em;
-    padding-top: 35px;
+    padding-top: 0px;
     background: transparent;
 }
 .bannercontent h1 {
