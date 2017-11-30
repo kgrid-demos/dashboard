@@ -289,7 +289,8 @@ export default {
       }
 		},
 		cleanupLayout: function(){
-		this.layout = this.layout.filter(function(e){return (e.c!="")}).map(function(e,index){
+			console.log("Starting cleaning up the layout... ")
+			this.layout = this.layout.filter(function(e){return (e.c!="")}).map(function(e,index){
 				var item=e;
 				item.i=index+"";
 				return item;
@@ -336,7 +337,7 @@ export default {
 			var self = this;
 			this.layout.splice(0,1);
 			this.itemWidgetList.splice(0,1);
-			this.layout=JSON.parse(JSON.stringify(this.$store.getters.getDefaultLayout));
+			this.layout=JSON.parse(JSON.stringify(this.$store.getters.getdefaultlayoutbycancerid(this.patient.type)));
 			this.pwidgetlist=this.layout.map(function(e){return e.c})
 			this.widgetList = this.widgetMasterList.filter(function(e){return (this.indexOf(e.id)<0);},self.pwidgetlist)
 			this.layout.forEach(function(item){

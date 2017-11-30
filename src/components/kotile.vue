@@ -64,7 +64,6 @@
       getPatientDataForWidget() {
         this.chartdata = this.$store.getters.getPatientData(this.patientid)[this.object.id + "-data"];
         this.dataLoaded = true;
-				console.log("Data loaded!")
       },
       showAlert: function(note) {
 			  this.hasAlert = true;
