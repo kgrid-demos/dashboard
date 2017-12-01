@@ -11,7 +11,7 @@
 					<a><span v-on:mouseenter='trigDropdown' v-on:mouseleave='checkDropdown'>Administrator</span></a>
 							<ul class='dropdown-menu' v-if='showDropdown' v-on:mouseleave='leaveDropdown'>
 				<li class='test' @click='resetstore'><a><span>Reset</span></a></li>
-				<li class="test" @click="genpatientdata"><a>Generate Patient Data</a></li>
+                <router-link tag='li' :class="{'active': $route.fullPath === '/datagenerator'}" to='/datagenerator'><a><span>Generate Data</span></a></router-link>
 				</ul>
 							</div></li>
 			</ul>

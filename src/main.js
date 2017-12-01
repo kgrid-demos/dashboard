@@ -34,6 +34,7 @@ Vue.use(Vuex);
 const routes = [
                 { path : '/', component : require('./components/home.vue')	},
                 { path : '/about', component: require('./components/about.vue') },
+                { path : '/datagenerator', component: require('./components/datagenerator.vue') },
                 { path : '/patient/:id', name : 'patient', component : require('./components/patientdetail.vue'), data: function(){
                 	   	console.log("current Patient ID:"+ this.$route.params.id);
                     }	},

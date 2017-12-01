@@ -173,19 +173,11 @@
         if (!startdate) {
           startdate = this.$moment().day(0);
         }
-        let i = 1;
         this.alldata.forEach(function (el) {
-
           if(el.date > that.$moment(startdate).subtract(24, 'h').unix() && el.date < that.$moment(startdate).add(154, 'h').unix()) {
-            // Inserts only data of the selected frequency into the chart given that the stored data has 4 points per day
-            if( (that.datasettings.dailyfreq === 1 && i % 4 === 0) || // Once a day is
-                (that.datasettings.dailyfreq === 2 && i % 2 === 0) || // Twice a day
-                (that.datasettings.dailyfreq === 3 && i % 4 !== 0) || // Three times per day
-                (that.datasettings.dailyfreq === 4)) {                // All four times per day
-              that.weeklydata.push(el.value);
-              that.weeklylabels.push(that.$moment.unix(el.date).format('MMM. D'));
-            }
-            i++;
+            // TODO: Add code to insert frequency fluctuations
+            that.weeklydata.push(el.value);
+            that.weeklylabels.push(that.$moment.unix(el.date).format('MMM. D'));
           }
         });
         this.pointColors = this.determinecolor();
@@ -211,6 +203,7 @@
             peakValue = currentValue;
           }
         }
+        console.log("the final data point is " + finalDataPoint);
         note = " has been elevated in the last 24 hours.";
         this.$emit("alert", note);
       }

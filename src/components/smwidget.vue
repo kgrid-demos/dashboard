@@ -38,14 +38,6 @@
       </div>
       <div class="optrow">
         <div class="options">
-          Minutes Per Module:
-        </div>
-        <div class="options">
-          <vue-slider ref="slider" :min=15 :max=60 tooltip="hover" :interval=15 :piecewise=true v-model="datasettings.minutespermodule"></vue-slider>
-        </div>
-      </div>
-      <div class="optrow">
-        <div class="options">
           Notification Threshold:
         </div>
         <div class="options">
@@ -263,6 +255,7 @@
     top: 12px;
     width: 100%;
     text-align: center;
+    left: 0;
     text-shadow:
     -1px -1px 0 #fff,
     1px -1px 0 #fff,
