@@ -2,7 +2,7 @@
 <div class='content'>
 	<applayout>
 		<div slot='banner'>
-			<div class='row mar-0' v-show='stationSelected && !filterEnabled'>
+			<div class='row mar-0' v-show='stationSelected'>
 				<div class='col-md-2 col-sm-2 col-xs-2 '></div>
 				<div class='col-md-8 col-sm-8 col-xs-8 '>
 					<form id="search">
@@ -14,7 +14,7 @@
 			</div>
 		</div>
 		<div slot='main'>
-			<div class='row mar-0' v-if="stationSelected && !filterEnabled">
+			<div class='row mar-0' v-if="stationSelected">
 				<div class='col-md-2 col-sm-2 col-xs-2  ht-full'>
 					<div>
 										<p style='text-align:center'></p>
@@ -95,7 +95,15 @@ export default {
 
 		},
 		stationSelected: function(){
-			return true
+
+				if(this.filterEnabled){
+					var t=this.$store.getters.getCurrentStation.id
+					console.log(t)
+					return (t!=-1)
+				}else{
+					return true
+				}
+
 		},
 		currentGroup: function(){
 		  return this.$store.getters.getcurrentGroup;

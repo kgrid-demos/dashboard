@@ -3,11 +3,12 @@
     <linechart v-if="!editmode" :chart-data="datacollection" :options="chartOptions" :styles='myStyles'></linechart>
     <div v-if="editmode">
       <div class="optrow">
-        <div class="options">
-          Measurement Instrument:
+        <div class="optionslabel">
+          Instrument
         </div>
         <div class="options">
-          <select v-model="datasettings.selectedinstrument.name">
+          <select v-model="selectedinstrname">
+          <option disabled value="">(Please select one)</option>
             <option v-for="instrument in instruments" v-bind:value="instrument.name">
               {{ instrument.name }}
             </option>
@@ -15,35 +16,57 @@
         </div>
       </div>
       <div class="optrow">
-        <div class="options">
-          Daily Frequency:
+        <div class="optionslabel pad-l-20">
+          Frequency
         </div>
-        <div class="options">
-          <vue-slider ref="slider" :min=1 :max=4 tooltip="hover" :piecewise=true v-model="datasettings.dailyfreq"></vue-slider>
+        <div class="options pad-l-20" v-if='selectedinstr'>
+          <select v-model="custfreq">
+            <option v-for="freq in freqops" v-bind:value="freq.label">
+              {{ freq.label }}
+            </option>
+          </select>
         </div>
       </div>
       <div class="optrow">
-        <div class="options">
-          Notification Threshold:
+        <div class="optionslabel pad-l-20">
+          Range
         </div>
-        <div class="options">
-          <vue-slider ref="slider" :min="datasettings.notifymin" :max="datasettings.notifymax" tooltip="hover" :piecewise=true v-model="datasettings.notifythresh"></vue-slider>
+        <div class="options pad-l-20"  v-if='selectedinstr'>
+          {{selectedinstr.range.min}} to {{ selectedinstr.range.max}} with increment of {{selectedinstr.range.inc}}
         </div>
       </div>
+      <div class="optrow">
+        <div class="optionslabel pad-l-20">
+          Indicators
+        </div>
+        <div class="options pad-l-20"  v-if='selectedinstr'>
+          <div v-for='range in selectedinstr.ryg' class="thres" :class="range.color">
+            <span v-if='range.min<range.max'>{{range.min}}-{{range.max}}</span>
+            <span v-else>{{range.min}}</span>
+          </div>
+        </div>
+      </div>
+      <div class="optrow">
+        <div class="optionslabel">
+          Send Notification?
+        </div>
+        <div class="options">
+              <input type="checkbox" id="checkbox" v-model="sendnotification">
+        </div>
+      </div>
+
     </div>
   </div>
 </template>
 
 <script>
   import linechart from './linechart.js';
-  import vueSlider from 'vue-slider-component';
 
   export default {
     props: ['chartheight', 'alldata', 'editmode', 'object', 'title', 'startdate', 'patientid'],
     components: {
       linechart,
-      vueSlider
-    },
+  },
     data () {
       return {
         weeklydata: [],
@@ -51,6 +74,9 @@
         pointColors: [],
         datacollection: null,
         datasettings: null,
+        selectedinstrname: "",
+        custfreq:"",
+        sendnotification:false,
         date: null,
         chartOptions: {
           maintainAspectRatio: false,
@@ -68,6 +94,10 @@
           },
           scales: {
             yAxes: [{
+              scaleLabel: {
+                display: true,
+                labelString: 'probability'
+                },
               ticks: {
                 min: 0,
                 max: 10
@@ -96,22 +126,56 @@
       const obj = {"id":this.$route.params.id,"group":this.currentGroup.id,"wid": this.object.id};
       if (this.$store.getters.getDataSettings(obj)) {
         this.datasettings = Object.assign({}, this.$store.getters.getDataSettings(obj).datasettings);
-      } else {
-        this.datasettings = {
-          selectedinstrument: {name: "GAD-7 Questionnaire", value: 1},
-          dailyfreq: 1,
-          notifythresh: 6,
-          notifymin: 6,
-          notifymax: 9
-        };
-        if(this.instruments.length>0){
-          this.datasettings.selected=this.instruments[0]
-          }
+        this.selectedinstrname = this.datasettings.selectedinstrument.name;
+        this.custfreq = this.selectedfreq
+        this.chartOptions.scales.yAxes[0].ticks.min = this.selectedinstr.range.min
+        this.chartOptions.scales.yAxes[0].ticks.max = this.selectedinstr.range.max
+        this.chartOptions.scales.yAxes[0].scaleLabel.labelString = this.selectedinstr.unit
+      }
+    },
+    watch: {
+      selectedfreq: function(){
+        this.custfreq = this.selectedfreq
+        this.chartOptions.scales.yAxes[0].ticks.min = this.selectedinstr.range.min
+        this.chartOptions.scales.yAxes[0].ticks.max = this.selectedinstr.range.max
+        this.chartOptions.scales.yAxes[0].scaleLabel.labelString = this.selectedinstr.unit
+        this.datasettings.selectedinstrument = this.selectedinstr
+        this.datasettings.sendnotification = this.sendnotification
       }
     },
     computed : {
       instruments: function(){
         return this.$store.getters.getwidgetinstruments(this.object.id)
+      },
+      freqops:function(){
+        return this.$store.getters.getfrequencyops
+      },
+      selectedfreq:function(){
+        if(this.selectedinstr){
+          var freq = this.selectedinstr.bwfreq
+          var index = this.freqops.map(function(e){return e.bwdatapt}).indexOf(freq)
+          console.log("Freq="+freq)
+          console.log(" Index="+index)
+          if(index!=-1){
+            return this.freqops[index].label
+            }else {
+              return ""
+              }
+          }else{
+              return "none"
+          }
+      },
+      selectedinstr: function(){
+        if(this.selectedinstrname!=""){
+          var index = this.instruments.map(function(e){return e.name}).indexOf(this.selectedinstrname)
+          if(index!=-1){
+            return this.instruments[index]
+          }else {
+            return null
+          }
+        } else {
+          return null
+        }
       },
     currentGroup:function(){
       return this.$store.getters.getcurrentGroup;
@@ -141,7 +205,7 @@
               pointBorderColor: this.pointColors,
               pointBorderWidth: 3,
               pointStyle: 'circle',
-              pointRadius: 7,
+              pointRadius: 6,
               borderWidth: 2
             }
           ]
@@ -152,17 +216,22 @@
         this.$store.commit('saveWidgetSettings', payload);
         this.changeWeek(this.date);
       },
+      getcolorfordata: function(value){
+        var thresholds = this.selectedinstr.ryg
+        var check= thresholds.filter(function(e){
+          return (value>=e.min & value<=e.max)})
+        if(check.length==1){
+          return check[0].color
+        }else {
+          return "white"
+        }
+      },
       determinecolor() {
         var colors = [];
         var self = this;
         this.weeklydata.forEach( function (e) {
-          if (e >= self.datasettings.notifythresh) {
-            colors.push('red');
-          } else if (e >= self.datasettings.notifythresh / 2 + 1) {
-            colors.push('orange')
-          }else {
-            colors.push('green');
-          }
+          var c = self.getcolorfordata(e)
+          colors.push(c)
         });
         return colors;
       },
@@ -176,13 +245,13 @@
         this.alldata.forEach(function (el) {
           if(el.date > that.$moment(startdate).subtract(24, 'h').unix() && el.date < that.$moment(startdate).add(154, 'h').unix()) {
             // TODO: Add code to insert frequency fluctuations
-            that.weeklydata.push(el.value);
-            that.weeklylabels.push(that.$moment.unix(el.date).format('MMM. D'));
+            that.weeklydata.unshift(el.value);
+            that.weeklylabels.unshift(that.$moment.unix(el.date).format('MM/D'));
           }
         });
         this.pointColors = this.determinecolor();
         this.fillData();
-        this.generateNotification();
+
       },
       generateNotification() {
         let finalDataPoint = this.weeklydata[this.weeklydata.length - 1];
@@ -243,21 +312,38 @@
     padding: 0.5ex 1ex;
   }
 
-  .options {
-    padding: 0.7em;
-    width: 50%;
+  .options, .optionslabel {
     height: 100%;
     float: left;
   }
-
+  .optionslabel{
+    width: 40%;
+  }
+  .options {
+    width:60%;
+  }
   .options select {
     width:100%;
   }
 
   .optrow {
-    margin-top: 0.7em;
+    padding: 12px 10px;
     clear: both;
   }
 
-
+.thres {
+  display:inline-block;
+  min-width:33%;
+  text-align: center;
+  color: #fff;
+}
+.thres.green {
+  background-color: green
+}
+.thres.orange {
+  background-color: orange
+}
+.thres.red {
+  background-color: red
+}
 </style>
