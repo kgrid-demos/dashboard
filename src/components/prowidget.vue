@@ -133,17 +133,6 @@
         this.chartOptions.scales.yAxes[0].scaleLabel.labelString = this.selectedinstr.unit
       }
     },
-    updated:function(){
-      const obj = {"id":this.$route.params.id,"group":this.currentGroup.id,"wid": this.object.id};
-      if (this.$store.getters.getDataSettings(obj)) {
-        this.datasettings = Object.assign({}, this.$store.getters.getDataSettings(obj).datasettings);
-        this.selectedinstrname = this.datasettings.selectedinstrument.name;
-        this.custfreq = this.selectedfreq
-        this.chartOptions.scales.yAxes[0].ticks.min = this.selectedinstr.range.min
-        this.chartOptions.scales.yAxes[0].ticks.max = this.selectedinstr.range.max
-        this.chartOptions.scales.yAxes[0].scaleLabel.labelString = this.selectedinstr.unit
-        }
-    },
     beforeDestroy() {
   	 this.$eventBus.$off("saveSettings");
      },

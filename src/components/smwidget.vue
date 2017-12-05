@@ -2,48 +2,50 @@
   <div>
     <div v-if='!editmode'>
       <div class="moduleContainer" v-if='maximized'>
-        {{getMinutesCompleted()}} / {{datasettings.minutespermodule * datasettings.weeklyfreq}} minutes completed
+
         <ul class="moduleList">
           <li class="module" :class="module.status" v-bind:style="widgetStyle" v-for="module in weeklymodules" v-bind:key="module.id">
-            {{module.status}} <br> <span class="moduleLabel">Module {{module.id}}</span> <br>
-            <div v-if="module.status==='☑'">{{datasettings.minutespermodule}} min.<br>{{module.datecompleted}}</div>
+            {{module.status}} <br> <span class="moduleLabel">Module {{module.value}}</span> <br>
+            <div v-if="module.status==='☑'"><br>{{module.datecompleted}}</div>
           </li>
         </ul>
       </div>
       <div class="progresscont" v-if='!maximized'>
         <div class="progress" v-bind:style="progressStyle"> </div>
-        <div class="barlabel">Modules completed this week: {{this.numcomplete}} / {{this.weeklymodules.length}}</div>
+        <div class="barlabel">Modules completed: {{numcomplete}} / {{selectedinstr.modulecount}}</div>
       </div>
     </div>
     <div v-if="editmode">
+
       <div class="optrow">
-        <div class="options">
-          Measurement Instrument:
+        <div class="optionslabel pad-l-20">
+          Description
         </div>
-        <div class="options">
-          <select v-model="datasettings.selectedinstrument.name">
-            <option v-for="instrument in instruments" v-bind:value="instrument.name">
-              {{ instrument.name }}
+        <div class="options pad-l-20">
+          <span>{{selectedinstr.description}}</span>
+        </div>
+      </div>
+      <div class="optrow">
+        <div class="optionslabel pad-l-20">
+          Frequency
+        </div>
+        <div class="options pad-l-20" v-if='selectedinstr'>
+          <select v-model="custfreq">
+            <option v-for="freq in freqops" v-bind:value="freq.label">
+              {{ freq.label }}
             </option>
           </select>
         </div>
       </div>
       <div class="optrow">
-        <div class="options">
-          Weekly Frequency:
+        <div class="optionslabel pad-l-20">
+          Number of Modules
         </div>
-        <div class="options">
-          <vue-slider ref="slider" :min=1 :max=7 tooltip="hover" :piecewise=true v-model="datasettings.weeklyfreq"></vue-slider>
-        </div>
-      </div>
-      <div class="optrow">
-        <div class="options">
-          Notification Threshold:
-        </div>
-        <div class="options">
-          <vue-slider ref="slider" :min="datasettings.notifymin" :max="datasettings.weeklyfreq" tooltip="hover" :piecewise=true v-model="datasettings.notifythresh"></vue-slider>
+        <div class="options pad-l-20">
+          <span>{{selectedinstr.modulecount}}</span>
         </div>
       </div>
+
     </div>
   </div>
 </template>
@@ -58,35 +60,29 @@
     },
     data () {
       return {
-        weeklymodules: [],
-        numcomplete: 0,
-        datasettings: null,
+        datasettings: {},
+        selectedinstrname: "",
+        custfreq:"",
+        sendnotification:false,
         alldata: []
       }
     },
     created: function() {
       var self = this;
-      this.$eventBus.$on('setdaterange', function (obj) {
-        self.getweeklymodules(obj.startDate);
-      });
       this.$eventBus.$on('saveSettings', function () {
         self.saveoptions();
       });
       const obj = {"id":this.$route.params.id,"group":this.currentGroup.id,"wid": this.object.id};
       if (this.$store.getters.getDataSettings(obj)) {
         this.datasettings = Object.assign({}, this.$store.getters.getDataSettings(obj).datasettings);
-      } else {
-        this.datasettings = {
-          selectedinstrument: {name: "SPLN Course", value: 1},
-          weeklyfreq: 4,
-          minutespermodule: 15,
-          notifythresh: 1,
-          notifymin: 1
-        };
-        if(this.instruments.length>0){
-          this.datasettings.selected=this.instruments[0]
-          }
+        this.selectedinstrname = this.datasettings.selectedinstrument.name;
       }
+      this.custfreq = this.selectedfreq
+      this.datasettings.selectedinstrument = this.selectedinstr
+      this.datasettings.sendnotification = this.sendnotification
+    },
+    beforeDestroy() {
+     this.$eventBus.$off("saveSettings");
     },
     computed : {
       instruments: function(){
@@ -94,6 +90,23 @@
         },
       currentGroup:function(){
         return this.$store.getters.getcurrentGroup;
+      },
+      freqops:function(){
+        return this.$store.getters.getfrequencyops
+      },
+      selectedfreq:function(){
+          var freq = this.selectedinstr.bwfreq
+          var index = this.freqops.map(function(e){return e.bwdatapt}).indexOf(freq)
+          console.log("Freq="+freq)
+          console.log(" Index="+index)
+          if(index!=-1){
+            return this.freqops[index].label
+            }else {
+              return ""
+              }
+      },
+      selectedinstr: function(){
+        return this.instruments[0]
       },
       myStyles () {
         return {
@@ -109,57 +122,47 @@
       },
       progressStyle() {
         return {
-          width: `${(this.numcomplete / this.weeklymodules.length) * 100}%`,
+          width: `${(this.numcomplete / this.selectedinstr.modulecount) * 100}%`,
           height: '22px',
           backgroundColor: '#00aa00'
         }
+      },
+      starttimestamp:function(){
+        return this.$moment(this.startdate).unix()
+      },
+      weeklymodules:function(){
+        var self = this;
+        var arr=[];
+        self.alldata.forEach(function(e){
+          var obj={value:1, status:"", timestamp:-1}
+          obj.value=e.value;
+          obj.timestamp=e.date;
+          obj.status="☐"
+          if((obj.timestamp!=-1) && (obj.timestamp<self.starttimestamp)){
+              obj.status="☑"
+            }
+          arr.push(obj)
+        })
+        return arr
+      },
+      numcomplete: function(){
+        var self =this;
+        var count = 0;
+        this.weeklymodules.forEach(function(e){
+          if(e.status=="☑"){
+            count=count + 1;
+          }
+        })
+        return count
       }
     },
     mounted () {
       this.getPatientDataForWidget();
-      this.getweeklymodules(null);
     },
     methods: {
-      getweeklymodules (startDate) {
-        this.weeklymodules = [];
-        this.numcomplete = 0;
-        let i = 1;
-        let that = this;
-        if(startDate === null) {
-          startDate = this.$moment().startOf('week');
-        }
-        this.alldata.sort(function(a, b) {
-          return a.date - b.date;
-        });
-        this.alldata.forEach( function (module) {
-          if(module.date > startDate.unix() && module.date < that.$moment(startDate).add(7, 'd').unix()) {
-            if(i <= that.datasettings.weeklyfreq) {
-              if (module.value === 2) {
-                that.numcomplete ++;
-              }
-              let mod = {
-                id: i,
-                status: that.convertNumToStatus(module.value),
-                datecompleted: that.$moment.unix(module.date).format('MMM. D')
-              };
-              that.weeklymodules.push(mod);
-            }
-            i++;
-          }
-        });
-        while(i <= this.datasettings.weeklyfreq) {
-          let status = 1;
-          if(startDate.unix() > that.$moment().subtract(6, 'd').unix()) {
-            status = 3;
-          }
-          this.weeklymodules.push({id: i, status: this.convertNumToStatus(status), datecompleted: null});
-          i++;
-        }
-      },
       convertNumToStatus: function(statusint) {
         switch (statusint) {
           case 1:
-
             return "☒";
           case 2:
             return "☑";
@@ -169,16 +172,6 @@
       },
       saveoptions :function ()  {
           this.$store.commit('saveWidgetSettings', {'pid': this.$route.params.id, "group":this.currentGroup.id, "wid":this.object.id,'datasettings':this.datasettings});
-      },
-      getMinutesCompleted() {
-        let minutescompleted = 0;
-        let that = this;
-        this.weeklymodules.forEach(function (module) {
-          if (module.status === '☑') {
-            minutescompleted += that.datasettings.minutespermodule;
-          }
-        });
-        return minutescompleted;
       },
       getPatientDataForWidget() {
         // Use slice to copy the values so we're not changing data in local storage
@@ -193,7 +186,6 @@
 </script>
 
 <style scoped>
-
   .moduleContainer {
     margin: 3em;
     text-transform: none;
@@ -224,29 +216,34 @@
   .moduleLabel {
     font-size: 10pt;
   }
-  .options {
-    padding: 0.7em;
-    width: 50%;
-    height: 100%;
-    float: left;
-  }
 
-  .options select {
-    width:100%;
-  }
+    .options, .optionslabel {
+      height: 100%;
+      float: left;
+    }
+    .optionslabel{
+      width: 40%;
+    }
+    .options {
+      width:60%;
+    }
+    .options select {
+      width:90%;
+    }
 
-  .optrow {
-    margin-top: 0.7em;
-    clear: both;
-  }
+    .optrow {
+      padding: 12px 10px;
+      clear: both;
+    }
 
   .progresscont {
-    margin: 10px 5px 0 5px;
+    margin: 10px auto;
     padding: 1px;
     font-size: 11pt;
     border: 1px solid green;
     height: 26px;
     border-radius: 5px;
+    width: 90%;
   }
 
   .barlabel {
@@ -262,6 +259,5 @@
     -1px 1px 0 #fff,
     1px 1px 0 #fff;
   }
-
 
 </style>

@@ -3,7 +3,7 @@
 				<slot name="alerts"></slot>
 				<p>
           <prowidget v-if="cflag === 'PRO' && dataLoaded" v-on:alert='showAlert' ref="widget" :alldata='chartdata' :patientid='patientid' :chartheight='cHeight' :editmode="editmode" :object="object" :title="object.label" :startdate="startdate"></prowidget>
-          <smwidget v-if="cflag === 'SM'  && dataLoaded" :patientid='patientid' :chartheight='cHeight' :editmode="editmode" :object="object" :title="object.label" :maximized="maximized"></smwidget>
+          <smwidget v-if="cflag === 'SM'  && dataLoaded" :patientid='patientid' :chartheight='cHeight' :editmode="editmode" :object="object" :title="object.label" :maximized="maximized" :startdate="startdate"></smwidget>
         </p>
 				<div class='notesdisplay' v-if='maximized'>
 				<ul>

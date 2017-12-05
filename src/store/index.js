@@ -211,9 +211,15 @@ export default new Vuex.Store({
     },
     getDataSettings:state=>{
       return function(obj){
+        if(debug){
+          console.log("Vuex GET datasettings")
+          console.log(obj)
+        }
         var index = state.patientlist.findIndex(function(el) {
           return el.id==obj.id && el.groupid==obj.group});
+          console.log("Index: "+index)
           var windex = state.patientlist[index].widgetSettings.map(function(e){return e.id}).indexOf(obj.wid);
+          console.log("Widget Index: "+windex)
         return state.patientlist[index].widgetSettings[windex];
       }
     },
