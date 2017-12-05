@@ -23,7 +23,8 @@
   	    notificationDatapoint: -1,
 				chartdata: [],
 				dataLoaded: false,
-				hasAlert: false
+				hasAlert: false,
+				hasNotes: false
 			}
 		},
 		props : [ 'object', 'patientid','cflag', 'maximized','tileindex', 'containerheight', 'editmode', 'startdate'],

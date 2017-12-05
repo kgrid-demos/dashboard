@@ -101,50 +101,42 @@ const _widgets= [
   "cancertype":[ {id:1}],
   "instruments":[ { name: "GAD-7 Questionnaire", value: 1},
                   { name: "Hilbert-Thad Questionnaire", value: 2},
-                  { name: "Penta-PLU Pain Probe", value: 3} ],
-    "dataprop":{"a":"b"}, "datasetting":{"a":"b"}},
+                  { name: "Penta-PLU Pain Probe", value: 3} ]},
   { "id":"SM-02","label":"Conlon Cancer & Self Image",  "type":"SM",    "constraint":{},
   "cancertype":[  {id:1}],
   "instruments":[ { name: "GAD-7 Questionnaire", value: 1},
                   { name: "Hilbert-Thad Questionnaire", value: 2},
-                  { name: "Penta-PLU Pain Probe", value: 3} ],
-    "dataprop":{"a":"b"}, "datasetting":{"a":"b"}},
+                  { name: "Penta-PLU Pain Probe", value: 3} ]},
   { "id":"SM-03","label":"Ostomy Care", "type":"SM",    "constraint":{},
   "cancertype":[ {id:1}],
   "instruments":[ { name: "GAD-7 Questionnaire", value: 1},
                   { name: "Hilbert-Thad Questionnaire", value: 2},
-                  { name: "Penta-PLU Pain Probe", value: 3} ],
-    "dataprop":{"a":"b"}, "datasetting":{"a":"b"}},
+                  { name: "Penta-PLU Pain Probe", value: 3} ]},
   { "id":"SM-04","label":"Body Image",  "type":"SM",    "constraint":{},
   "cancertype":[  {id:0},{id:2}],
   "instruments":[ { name: "GAD-7 Questionnaire", value: 1},
                   { name: "Hilbert-Thad Questionnaire", value: 2},
-                  { name: "Penta-PLU Pain Probe", value: 3} ],
-    "dataprop":{"a":"b"}, "datasetting":{"a":"b"}},
+                  { name: "Penta-PLU Pain Probe", value: 3} ]},
   { "id":"SM-05","label":"Familial Talk About Cancer Risk", "type":"SM",    "constraint":{},
   "cancertype":[  {id:0}, {id:1},{id:2}],
   "instruments":[ { name: "GAD-7 Questionnaire", value: 1},
                   { name: "Hilbert-Thad Questionnaire", value: 2},
-                  { name: "Penta-PLU Pain Probe", value: 3} ],
-    "dataprop":{"a":"b"}, "datasetting":{"a":"b"}},
+                  { name: "Penta-PLU Pain Probe", value: 3} ]},
   { "id":"SM-06","label":"Chemo and Fertility",  "type":"SM",    "constraint":{},
   "cancertype":[  {id:0},{id:2}],
   "instruments":[ { name: "GAD-7 Questionnaire", value: 1},
                   { name: "Hilbert-Thad Questionnaire", value: 2},
-                  { name: "Penta-PLU Pain Probe", value: 3} ],
-    "dataprop":{"a":"b"}, "datasetting":{"a":"b"}},
+                  { name: "Penta-PLU Pain Probe", value: 3} ]},
   { "id":"SM-07","label":"Advance Directive", "type":"SM",    "constraint":{},
   "cancertype":[  {id:1}],
   "instruments":[ { name: "GAD-7 Questionnaire", value: 1},
                   { name: "Hilbert-Thad Questionnaire", value: 2},
-                  { name: "Penta-PLU Pain Probe", value: 3} ],
-    "dataprop":{"a":"b"}, "datasetting":{"a":"b"}},
+                  { name: "Penta-PLU Pain Probe", value: 3} ]},
   { "id":"SM-08","label":"Sexual Health",  "type":"SM",    "constraint":{},
   "cancertype":[  {id:0}, {id:1},{id:2}],
   "instruments":[ { name: "GAD-7 Questionnaire", value: 1},
                   { name: "Hilbert-Thad Questionnaire", value: 2},
-                  { name: "Penta-PLU Pain Probe", value: 3} ],
-    "dataprop":{"a":"b"}, "datasetting":{"a":"b"}}
+                  { name: "Penta-PLU Pain Probe", value: 3} ]}
                         ]
 
 const _freqOptions = [
@@ -156,7 +148,7 @@ const _freqOptions = [
 ]
 // initial state
 const state = {
-  widgetslist:[]
+
 }
 
 // getters

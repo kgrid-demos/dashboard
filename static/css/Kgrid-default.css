@@ -135,6 +135,12 @@ a, a:hover, a:visited, a:focus {
 .e5backing {
 	background-color:#e5e5e5;
 }
+.warning {
+  color: red;
+}
+.notes {
+  color: orange;
+}
 .mar-top10 {
   margin-top:10px;
 }

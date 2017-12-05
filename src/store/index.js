@@ -31,6 +31,7 @@ export default new Vuex.Store({
       currentPatientIndex: -1,
       patientlist:  [],
       maxgroupinuse:6,
+      patientData:[]
     },
   mutations: {
     init(state, obj){
@@ -152,6 +153,10 @@ export default new Vuex.Store({
       state.currentGroup.id=obj.value;
     },
     saveWidgetSettings(state, obj){
+      if(false){
+        console.log("Save Widget Settings =>")
+        console.log(obj)
+      }
       var index = state.currentPatientIndex;
       var windex = state.patientlist[index].widgetSettings.map(function(e){return e.id}).indexOf(obj.wid);
       // console.log("save widget for=>"+"Pt "+index+"wd "+windex)
@@ -162,6 +167,10 @@ export default new Vuex.Store({
       }
     },
     setCurrentPatientIndex(state, obj){
+      if(debug){
+        console.log("Set Current Patient Index =>")
+        console.log(obj)
+      }
       state.currentPatientIndex =  state.patientlist.findIndex(function(el) {
               return el.id==obj.pid && el.groupid==obj.group});
     },
@@ -189,7 +198,11 @@ export default new Vuex.Store({
       return state.debugEnabled;
     },
     getlayoutbyid:state=>{
+      if(state.currentPatientIndex!=-1){
         return state.patientlist[state.currentPatientIndex].layout;
+      }else {
+        return []
+      }
     },
     getNotificationList:state=> {
       return [ {patient:{name:"Bridget Kearns", age:52, gender:"Female"}, timestamp: '2017-10-09',notes:[{"type":-1,"text":"Pain rating scale has decreased from 7 to 3 in last 24 hours"},{"type":0,"text":"Anxiety remains at 13 each of the last 13 days"}]},
@@ -240,7 +253,7 @@ export default new Vuex.Store({
       }
     },
     hasLoadedPatientData: state=>{
-      return typeof state.patientData !== 'undefined' && state.patientData.length > 0;
+      return  (state.patientData.length > 0);
     }
   },
   actions: {

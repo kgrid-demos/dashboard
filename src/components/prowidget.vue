@@ -73,7 +73,7 @@
         weeklylabels: [],
         pointColors: [],
         datacollection: null,
-        datasettings: null,
+        datasettings: {},
         selectedinstrname: "",
         custfreq:"",
         sendnotification:false,
@@ -133,14 +133,30 @@
         this.chartOptions.scales.yAxes[0].scaleLabel.labelString = this.selectedinstr.unit
       }
     },
+    updated:function(){
+      const obj = {"id":this.$route.params.id,"group":this.currentGroup.id,"wid": this.object.id};
+      if (this.$store.getters.getDataSettings(obj)) {
+        this.datasettings = Object.assign({}, this.$store.getters.getDataSettings(obj).datasettings);
+        this.selectedinstrname = this.datasettings.selectedinstrument.name;
+        this.custfreq = this.selectedfreq
+        this.chartOptions.scales.yAxes[0].ticks.min = this.selectedinstr.range.min
+        this.chartOptions.scales.yAxes[0].ticks.max = this.selectedinstr.range.max
+        this.chartOptions.scales.yAxes[0].scaleLabel.labelString = this.selectedinstr.unit
+        }
+    },
+    beforeDestroy() {
+  	 this.$eventBus.$off("saveSettings");
+     },
     watch: {
       selectedfreq: function(){
+      if(this.selectedfreq!=""){
         this.custfreq = this.selectedfreq
         this.chartOptions.scales.yAxes[0].ticks.min = this.selectedinstr.range.min
         this.chartOptions.scales.yAxes[0].ticks.max = this.selectedinstr.range.max
         this.chartOptions.scales.yAxes[0].scaleLabel.labelString = this.selectedinstr.unit
         this.datasettings.selectedinstrument = this.selectedinstr
         this.datasettings.sendnotification = this.sendnotification
+        }
       }
     },
     computed : {
@@ -212,7 +228,10 @@
         }
       },
       saveoptions:function (obj) {
+
         var payload  = {'pid': obj.id, "group":obj.group, "wid":this.object.id,'datasettings':this.datasettings}
+        console.log("PRO Widget : "+this.title)
+        console.log(payload)
         this.$store.commit('saveWidgetSettings', payload);
         this.changeWeek(this.date);
       },

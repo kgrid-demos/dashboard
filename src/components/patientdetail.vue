@@ -79,13 +79,15 @@
 														<div class='widgetTitle' v-bind:class="{draggablehandle: isInEdit}" v-if='item.c!=""'>
 															<div class='row mar-0'>
 																<span class="widgetLabel">{{itemWidgetList[item.i][0].label}}</span>
-																<span v-if="alertText[item.i] && !isInEdit" class="fa fa-arrow-up alertArrow pad-l-5"></span>
-																<span v-if="!alertText[item.i]"  class="alertArrow">&nbsp;</span>
+																<span v-if="!isInEdit" class="fa fa-exclamation-circle warning pad-l-5"></span>
+																<span v-if="!isInEdit" class="fa fa-file-text-o notes pad-l-5"></span>
 																<i class='fa fa-close' v-if='isInEdit' style="font-size:11pt" @click='removeWidget(item.i)'></i>
 																<i class='fa fa-window-maximize' v-if='!isInEdit && !maximized' title="maximize" style="font-size:11pt" @click='maximizeWidget(item.i)'></i>
 																<i class='fa fa-window-restore' v-if='!isInEdit && maximized' title="maximize"  style="font-size:11pt" @click='restoreLayout'></i>
 															</div>
 															<div class='row mar-0 ht-20'>
+																<span v-if="alertText[item.i] && !isInEdit" class="fa fa-arrow-up alertArrow pad-l-5"></span>
+																<span v-if="!alertText[item.i]"  class="alertArrow">&nbsp;</span>
 																<span v-if="!isInEdit && alertText[item.i]" class="alert-text">{{ alertText[item.i] }}</span>
 															</div>
 														</div>
