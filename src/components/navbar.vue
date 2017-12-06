@@ -3,7 +3,7 @@
 		<a class='navbar-brand kgl-1' @click='stationselector'>
 			<span>{{dashboard}}</span>
 		</a>
-		<nav class='navbar navbar-fixed-top kgl-1 kg-bg-color kg-color'>
+		<nav class='navbar kgl-1 kg-bg-color kg-color'>
 			<ul class='nav navbar-nav'>
 				<router-link tag='li':class="{'active': $route.fullPath === '/'}" to='/' v-show='false'><a><span>Patients</span></a></router-link>
 				<router-link tag='li' :class="{'active': $route.fullPath === '/notification'}" to='/notification' v-show='false'><a><span>Notifications</span><div style='color:#bc2526;top:0px;right:-10px;position:absolute;font-size:10px;'><i class='fa fa-circle' v-if='notifCount>0'></i></div></a></router-link>
@@ -35,7 +35,7 @@ export default {
 			return this.$store.getters.isDebugging;
 		},
 		dashboard: function(){
-			var d= 'Dashboard';
+			var d= 'Patient Data Dashboard';
 			if(this.$store.getters.getCurrentStation.label!=""){
 						d=this.$store.getters.getCurrentStation.label + ' '+d;
 			}
@@ -210,19 +210,17 @@ export default {
 }
 .navbar-brand{
 	background-color:#fff;
-	position:fixed;
+	position:absolute;
 	margin: 1px 0px;
 	padding: 14px 0px;
 	z-index:400;
 	top:0;
-	width:110px;
+	width:280px;
 	left:20px;
 	height:56px;
 	border:none;
 	font-weight: 800;
 }
-
-
 
 .kgl-1 .navbar-right {
 	margin-right: 0px;

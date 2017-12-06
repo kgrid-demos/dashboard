@@ -63,7 +63,7 @@
   import linechart from './linechart.js';
 
   export default {
-    props: ['chartheight', 'alldata', 'editmode', 'object', 'title', 'startdate', 'patientid'],
+    props: ['chartheight', 'editmode', 'object', 'title', 'startdate', 'patientid', 'maximized'],
     components: {
       linechart,
   },
@@ -71,13 +71,12 @@
       return {
         weeklydata: [],
         weeklylabels: [],
-        pointColors: [],
-        datacollection: null,
         datasettings: {},
         selectedinstrname: "",
         custfreq:"",
         sendnotification:false,
         date: null,
+        sdate:null,
         chartOptions: {
           maintainAspectRatio: false,
           legend: {
@@ -149,6 +148,9 @@
       }
     },
     computed : {
+      alldata:function(){
+            return this.$store.getters.getPatientData(this.patientid)[this.object.id + "-data"].slice()
+      },
       instruments: function(){
         return this.$store.getters.getwidgetinstruments(this.object.id)
       },
@@ -186,38 +188,56 @@
       return this.$store.getters.getcurrentGroup;
     },
     myStyles () {
-     return {
-       height: `${this.chartheight}px`,
-       position: 'relative'
-     }
-   }
+      return {
+        height: `${this.chartheight}px`,
+        position: 'relative'
+      }
+    },
+    datacollection: function(){
+      var obj = {
+        labels: this.displaydata.labels,
+        datasets: [
+          {
+            label: this.title,
+            data: this.displaydata.values,
+            backgroundColor:'rgba(255, 255, 255, 1)',
+            fill: false,
+            lineTension: 0,
+            borderColor: '#bfbfbf',
+            pointBorderColor: this.displaydata.colors,
+            pointBorderWidth: 3,
+            pointStyle: 'circle',
+            pointRadius: 6,
+            borderWidth: 2
+          }
+        ]
+      }
+      return obj
+    },
+    displaydata: function(){
+      var obj={values:[],labels:[],colors:[]};
+      var self = this;
+      var s0=1;
+      var s1=168;
+      if(this.maximized){
+        s1=672
+      }
+      this.alldata.forEach(function (el) {
+        if(el.date > self.$moment(self.sdate).subtract(s0, 'h').unix() && el.date < self.$moment(self.sdate).add(s1, 'h').unix()) {
+          // TODO: Add code to insert frequency fluctuations
+          obj.values.unshift(el.value);
+          obj.labels.unshift(self.$moment.unix(el.date).format('MM/D'));
+          obj.colors.unshift(self.getcolorfordata(el.value))
+        }
+      });
+      return obj
+    }
     },
     mounted () {
-      this.changeWeek(null);
+      this.sdate=this.$moment().day(0);
     },
     methods: {
-      fillData () {
-        this.datacollection = {
-          labels: this.weeklylabels,
-          datasets: [
-            {
-              label: this.title,
-              data: this.weeklydata,
-              backgroundColor:'rgba(255, 255, 255, 1)',
-              fill: false,
-              lineTension: 0,
-              borderColor: '#bfbfbf',
-              pointBorderColor: this.pointColors,
-              pointBorderWidth: 3,
-              pointStyle: 'circle',
-              pointRadius: 6,
-              borderWidth: 2
-            }
-          ]
-        }
-      },
       saveoptions:function (obj) {
-
         var payload  = {'pid': obj.id, "group":obj.group, "wid":this.object.id,'datasettings':this.datasettings}
         console.log("PRO Widget : "+this.title)
         console.log(payload)
@@ -234,56 +254,35 @@
           return "white"
         }
       },
-      determinecolor() {
-        var colors = [];
-        var self = this;
-        this.weeklydata.forEach( function (e) {
-          var c = self.getcolorfordata(e)
-          colors.push(c)
-        });
-        return colors;
-      },
       changeWeek(startdate) {
-        this.weeklydata = [];
-        this.weeklylabels = [];
-        let that = this;
         if (!startdate) {
           startdate = this.$moment().day(0);
         }
-        this.alldata.forEach(function (el) {
-          if(el.date > that.$moment(startdate).subtract(24, 'h').unix() && el.date < that.$moment(startdate).add(154, 'h').unix()) {
-            // TODO: Add code to insert frequency fluctuations
-            that.weeklydata.unshift(el.value);
-            that.weeklylabels.unshift(that.$moment.unix(el.date).format('MM/D'));
-          }
-        });
-        this.pointColors = this.determinecolor();
-        this.fillData();
-
+        this.sdate=startdate
       },
-      generateNotification() {
-        let finalDataPoint = this.weeklydata[this.weeklydata.length - 1];
-        let note = "";
-        let peakValue = 0;
-        if(finalDataPoint > this.datasettings.notifythresh) {
-          note = " was reported at " + finalDataPoint + " in the last 24 hours.";
-          this.$emit("alert", note);
-          return;
-        }
-
-        for(let i = 1; i <= 4; i++) {
-          let currentValue = this.weeklydata[this.weeklydata.length - i];
-          if(currentValue < this.datasettings.notifythresh / 2 + 1) {
-            return;
-          }
-          if(currentValue > peakValue) {
-            peakValue = currentValue;
-          }
-        }
-        console.log("the final data point is " + finalDataPoint);
-        note = " has been elevated in the last 24 hours.";
-        this.$emit("alert", note);
-      }
+      // generateNotification() {
+      //   let finalDataPoint = this.weeklydata[this.weeklydata.length - 1];
+      //   let note = "";
+      //   let peakValue = 0;
+      //   if(finalDataPoint > this.datasettings.notifythresh) {
+      //     note = " was reported at " + finalDataPoint + " in the last 24 hours.";
+      //     this.$emit("alert", note);
+      //     return;
+      //   }
+      //
+      //   for(let i = 1; i <= 4; i++) {
+      //     let currentValue = this.weeklydata[this.weeklydata.length - i];
+      //     if(currentValue < this.datasettings.notifythresh / 2 + 1) {
+      //       return;
+      //     }
+      //     if(currentValue > peakValue) {
+      //       peakValue = currentValue;
+      //     }
+      //   }
+      //   console.log("the final data point is " + finalDataPoint);
+      //   note = " has been elevated in the last 24 hours.";
+      //   this.$emit("alert", note);
+      // }
     },
   }
 </script>

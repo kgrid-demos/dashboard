@@ -16,7 +16,6 @@
       </div>
     </div>
     <div v-if="editmode">
-
       <div class="optrow">
         <div class="optionslabel pad-l-20">
           Description
@@ -63,8 +62,7 @@
         datasettings: {},
         selectedinstrname: "",
         custfreq:"",
-        sendnotification:false,
-        alldata: []
+        sendnotification:false
       }
     },
     created: function() {
@@ -82,7 +80,7 @@
       this.datasettings.sendnotification = this.sendnotification
     },
     beforeDestroy() {
-     this.$eventBus.$off("saveSettings");
+      this.$eventBus.$off("saveSettings");
     },
     computed : {
       instruments: function(){
@@ -154,28 +152,14 @@
           }
         })
         return count
+      },
+      alldata:function(){
+        return this.$store.getters.getPatientData(this.patientid)[this.object.id + "-data"].slice()
       }
     },
-    mounted () {
-      this.getPatientDataForWidget();
-    },
     methods: {
-      convertNumToStatus: function(statusint) {
-        switch (statusint) {
-          case 1:
-            return "☒";
-          case 2:
-            return "☑";
-          case 3:
-            return "☐";
-        }
-      },
       saveoptions :function ()  {
           this.$store.commit('saveWidgetSettings', {'pid': this.$route.params.id, "group":this.currentGroup.id, "wid":this.object.id,'datasettings':this.datasettings});
-      },
-      getPatientDataForWidget() {
-        // Use slice to copy the values so we're not changing data in local storage
-        this.alldata = this.$store.getters.getPatientData(this.patientid)[this.object.id + "-data"].slice();
       },
       generateNotification() {
         let finalDataPoint = this.weeklydata[this.weeklydata.length - 1];
@@ -197,18 +181,14 @@
   display: table;
       margin: 2.5em auto;
   }
-
   .☑ {
     color: green;
   }
-
   .☒ {
     color: red;
   }
-
   .module {
     font-size:24pt;
-  
     line-height: 14pt;
     display: table-cell;
   }
@@ -219,26 +199,23 @@
   .moduleLabel {
     font-size: 10pt;
   }
-
-    .options, .optionslabel {
+  .options, .optionslabel {
       height: 100%;
       float: left;
-    }
-    .optionslabel{
+  }
+  .optionslabel{
       width: 40%;
-    }
-    .options {
+  }
+  .options {
       width:60%;
-    }
-    .options select {
-      width:90%;
-    }
-
-    .optrow {
+  }
+  .options select {
+    width:90%;
+  }
+  .optrow {
       padding: 12px 10px;
       clear: both;
-    }
-
+  }
   .progresscont {
     margin: 10px auto;
     padding: 1px;
@@ -248,7 +225,6 @@
     border-radius: 5px;
     width: 90%;
   }
-
   .barlabel {
     color: green;
     position: absolute;
@@ -262,5 +238,4 @@
     -1px 1px 0 #fff,
     1px 1px 0 #fff;
   }
-
 </style>
