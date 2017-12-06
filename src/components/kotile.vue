@@ -99,7 +99,7 @@
 				}
 
 				.kgl-tile.max:hover {
-					border: 1px solid transparent;
+					border: none;
 					cursor: initial;
 				}
 				.kgl-tile.max p {

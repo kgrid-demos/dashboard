@@ -2,7 +2,7 @@
   <div>
     <div v-if='!editmode'>
       <div class="moduleContainer" v-if='maximized'>
-
+        <p>Progress on Self Management Modules </p>
         <ul class="moduleList">
           <li class="module" :class="module.status" v-bind:style="widgetStyle" v-for="module in weeklymodules" v-bind:key="module.id">
             {{module.status}} <br> <span class="moduleLabel">Module {{module.value}}</span> <br>
@@ -193,6 +193,9 @@
     text-align: center;
   }
   .moduleList {
+  width: 100%;
+  display: table;
+      margin: 2.5em auto;
   }
 
   .☑ {
@@ -205,9 +208,9 @@
 
   .module {
     font-size:24pt;
-    float: left;
-    margin: 0.7em auto 0;
+  
     line-height: 14pt;
+    display: table-cell;
   }
   .module div {
     color: gray;
