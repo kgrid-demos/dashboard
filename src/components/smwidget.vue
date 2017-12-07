@@ -136,7 +136,7 @@
           obj.value=e.value;
           obj.timestamp=e.date;
           obj.status="☐"
-          if((obj.timestamp!=-1) && (obj.timestamp<self.daterange.starttime)){
+          if((obj.timestamp!=-1) && (obj.timestamp<self.daterange.endtime)){
               obj.status="☑"
             }
           arr.push(obj)

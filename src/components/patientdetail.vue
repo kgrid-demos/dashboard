@@ -273,16 +273,16 @@ export default {
 		gopreviousweek:function(){
 			var obj= {}
 			obj.days=this.daterange.days;
-			obj.start= this.daterange.starttime-this.daterange.days*24*3600;
-			obj.end=this.daterange.endtime-this.daterange.days*24*3600;
+			obj.start= this.daterange.starttime-7*24*3600;
+			obj.end=this.daterange.endtime-7*24*3600;
 			this.$store.commit('setcurrentdaterange',obj);
 		},
 
 		gonextweek:function(){
 				var obj={}
 				obj.days=this.daterange.days;
-				obj.start= this.daterange.starttime+this.daterange.days*24*3600;
-				obj.end=this.daterange.endtime+this.daterange.days*24*3600;
+				obj.start= this.daterange.starttime+7*24*3600;
+				obj.end=this.daterange.endtime+7*24*3600;
 				this.$store.commit('setcurrentdaterange',obj);
 			},
 		cleanupLayout: function(){

@@ -10,7 +10,25 @@ const patienttemplate = { "id":"PA-67034-001","name":"Ms. Green", "age":"38", "g
     "widgetSettings": []
 }
 
-var ptdatalist=[]
+var alertlist=[
+	{"pid":"PA-67034-001",
+		"PRO-10-warn":[
+			{"alertid":"PRO10W001","text":"Discuss drinking of fluids with patient","checked":false}
+		],
+		"PRO-13-warn":[
+			{"alertid":"PRO13W001","text":"Discuss eating habits with patient","checked":false}
+		]
+	},
+	{"pid":"PA-67034-007",
+		"PRO-02-warn":[
+			{"alertid":"PRO02W001","text":"Discuss patient's worries and concerns and consider treatment for anxiety if needed.","checked":false}
+		],
+		"PRO-09-warn":[
+			{"alertid":"PRO09W001","text":"Patient's weight has been declining since starting chemotherapy. Discuss with patient","checked":false}
+		]
+	},
+
+]
 
 // initial state
 const state = {
@@ -32,6 +50,21 @@ const getters = {
       else {
         return {}
       }
+    }
+  },
+	getpatientalert:state=>{
+    return function(id) {
+      var index = alertlist.map(function(e){return e.pid}).indexOf(state.patientid)
+			var alist={}
+			var wid = id+'-warn'
+      if(index!=-1){
+	      alist=JSON.parse(JSON.stringify(alertlist[index]))
+			}
+      if(alist[wid]){
+				return alist[wid]
+			}else{
+				return []
+			}
     }
   }
 }

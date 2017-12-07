@@ -4,15 +4,21 @@
     <div class="widgetalert" v-if="!maximized ">
       <div class="ft-sz-12 pad-l-8" >
         <span>{{selectedinstr.unit}}</span>
-        <span v-if="!editmode" class="fa fa-exclamation-circle warning pad-l-5"></span>
-        <span v-if="!editmode" class="fa fa-file-text-o notes pad-l-5"></span>
+        <span v-if="hasalert" class="fa fa-exclamation-circle warning pad-l-5"></span>
+        <span v-if="hasnotes" class="fa fa-file-text-o notes pad-l-5"></span>
       </div>
     </div>
     <div v-else class="widgetalertdisplay">
       <span class=""> ALERT </span>
+      <ul>
+        <li v-for='alert in allalert'>
+          <span style="font-weight:700;"> {{alert.text}}</span></li>
+    </ul>
     </div>
   </div>
   <div class="graph">
+    <span v-if="maximized" class='pad-l-10'>{{selectedinstr.unit}}</span>
+    <span v-if="maximized" class='float-r pad-r-10'>Patient Report Frequency: {{selectedfreq}}</span>
     <linechart v-if="!editmode" :chart-data="datacollection" :options="chartOptions" :styles='myStyles'></linechart>
     <div v-if="editmode">
       <div class="optrow">
@@ -72,8 +78,8 @@
   <div class='notesdisplay' v-if='maximized'>
     <span> PATIENT NOTES </span>
   <ul>
-    <li v-for='(object,index) in weeklynotes' v-bind:key='index'>
-      <span v-if='object.note!=""'>{{formatted(object.date*1000)}} - {{object.note}}</span></li>
+    <li v-for='note in allnotes' >
+      <span style="font-style:italic;">{{formatted(note.date*1000)}} - {{note.note}}</span></li>
 </ul>
   </div>
 </div>
@@ -175,11 +181,32 @@
       }
     },
     computed : {
+      hasalert:function(){
+        var b= false;
+        this.allalert.forEach(function(e){
+          b = b || (e.checked==false)
+        })
+        return b
+      },
+      hasnotes: function(){
+        return this.allnotes.length>0
+      },
       daterange:function(){
         return this.$store.getters.getcurrentdaterange
       },
       alldata:function(){
-            return this.$store.getters.getPatientData(this.patientid)[this.object.id + "-data"].slice()
+        return this.$store.getters.getPatientData(this.patientid)[this.object.id + "-data"].slice()
+      },
+      allnotes:function(){
+        var data = this.$store.getters.getPatientData(this.patientid)
+        if(data[this.object.id + "-notes"]){
+          return data[this.object.id + "-notes"]
+        } else {
+          return []
+        }
+      },
+      allalert:function(){
+        return this.$store.getters.getpatientalert(this.object.id).slice()
       },
       instruments: function(){
         return this.$store.getters.getwidgetinstruments(this.object.id)
@@ -191,8 +218,6 @@
         if(this.selectedinstr){
           var freq = this.selectedinstr.bwfreq
           var index = this.freqops.map(function(e){return e.bwdatapt}).indexOf(freq)
-          console.log("Freq="+freq)
-          console.log(" Index="+index)
           if(index!=-1){
             return this.freqops[index].label
             }else {
@@ -247,18 +272,24 @@
     displaydata: function(){
       var obj={values:[],labels:[],colors:[]};
       var self = this;
-      this.alldata.forEach(function (el) {
+      var dp = 14/self.selectedinstr.bwfreq;              // If all data frequency is daily
+      this.alldata.forEach(function (el,index) {
+        var nth=Math.round(index/dp)*dp-index;           // If all data frequency is daily
         if(el.date > self.daterange.starttime && el.date < self.daterange.endtime) {
-          // TODO: Add code to insert frequency fluctuations
-          obj.values.unshift(el.value);
-          obj.labels.unshift(self.$moment.unix(el.date).format('MM/D'));
-          obj.colors.unshift(self.getcolorfordata(el.value))
+          if(nth==0){                                    // If all data frequency is daily
+            obj.values.unshift(el.value);
+            obj.labels.unshift(self.$moment.unix(el.date).format('MM/D'));
+            obj.colors.unshift(self.getcolorfordata(el.value))
+          }
         }
       });
       return obj
     }
     },
     methods: {
+      formatted:function(t){
+				return this.$moment(t).format("dddd, MMMM Do YYYY, h:mm:ss a");
+			},
       saveoptions:function (obj) {
         var payload  = {'pid': obj.id, "group":obj.group, "wid":this.object.id,'datasettings':this.datasettings}
         console.log("PRO Widget : "+this.title)
@@ -360,7 +391,7 @@
     clear: both;
   }
   .widgetalertdisplay {
-      height:150px;
+      height:130px;
       background-color: #fff;
       margin:15px 0px;
       overflow: auto;

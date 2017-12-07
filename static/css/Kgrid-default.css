@@ -177,6 +177,10 @@ a, a:hover, a:visited, a:focus {
 .pad-l-30 {
   padding-left:30px;
 }
+
+.pad-r-10 {
+  padding-right:10px;
+}
 .pad-r-20 {
   padding-right:20px;
 }
