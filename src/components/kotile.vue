@@ -1,16 +1,9 @@
 <template>
 		<div class="container kgl-tile" :class="{max:maximized}" v-bind:id="object.label">
-				<slot name="alerts"></slot>
 				<p>
-          <prowidget v-if="cflag === 'PRO' && dataLoaded" v-on:alert='showAlert' ref="widget" :patientid='patientid' :chartheight='cHeight' :editmode="editmode" :object="object" :maximized="maximized" :title="object.label" :startdate="startdate"></prowidget>
-          <smwidget v-if="cflag === 'SM'  && dataLoaded" :patientid='patientid' :chartheight='cHeight' :editmode="editmode" :object="object" :title="object.label" :maximized="maximized" :startdate="startdate"></smwidget>
+          <prowidget v-if="cflag === 'PRO' " ref="widget" :patientid='patientid' :chartheight='cHeight' :editmode="editmode" :object="object" :maximized="maximized" :title="object.label" ></prowidget>
+          <smwidget v-if="cflag === 'SM'  " :patientid='patientid' :chartheight='cHeight' :editmode="editmode" :object="object" :title="object.label" :maximized="maximized" ></smwidget>
         </p>
-				<div class='notesdisplay' v-if='maximized'>
-				<ul>
-					<li v-for='(object,index) in weeklynotes' v-bind:key='index'>
-						<span v-if='object.note!=""'>{{formatted(object.date*1000)}} - {{object.note}}</span></li>
-			</ul>
-				</div>
 		</div>
 	</template>
 	<script>
@@ -19,18 +12,9 @@
 	export default {
   	name:	"kotile",
 		data() {
-  	  return {
-  	    notificationDatapoint: -1,
-				chartdata: [],
-				dataLoaded: false,
-				hasAlert: false,
-				hasNotes: false
-			}
+  	  return {}
 		},
-		props : [ 'object', 'patientid','cflag', 'maximized','tileindex', 'containerheight', 'editmode', 'startdate'],
-		created: function(){
-
-		},
+		props : [ 'object', 'patientid','cflag', 'maximized','tileindex', 'containerheight', 'editmode'],
 		computed : {
 			cHeight: function(){
 				var h = (this.containerheight-30)
@@ -38,44 +22,13 @@
 					h=h*0.5;
 				}
 				return h
-			},
-			displayNotification: function () {
-				if (this.notificationDatapoint > 0) {
-				  console.log("block style!")
-				  return 'block';
-				}
-				return 'none';
-      },
-			weeklynotes:function(){
-				var starttime = this.$moment(this.startdate).valueOf()/1000;
-				console.log(starttime);
-				var l = this.chartdata.filter(function(e){ return(e.date>=starttime && e.date<=(starttime+604800))});
-				console.log(l);
-				return l;
-			}
-		},
-		mounted () {
-      this.getPatientDataForWidget();
-		},
-		methods : {
-			formatted:function(t){
-				return this.$moment(t).format("dddd, MMMM Do YYYY, h:mm:ss a");
-
-			},
-      getPatientDataForWidget() {
-        this.chartdata = this.$store.getters.getPatientData(this.patientid)[this.object.id + "-data"];
-        this.dataLoaded = true;
-      },
-      showAlert: function(note) {
-			  this.hasAlert = true;
-			  this.$emit("alert", note, this.tileindex);
 			}
 		},
 		components : {
 		  prowidget,
       smwidget
 		}
-				};
+	};
 				</script>
 				<style scoped>
 
@@ -103,7 +56,7 @@
 					cursor: initial;
 				}
 				.kgl-tile.max p {
-					border:1px solid #b3b3b3;
+					border:none;
 					background-color:#fff;
 					min-height:200px;
 				}
@@ -113,16 +66,7 @@
 					padding-right: 0px;
 					right:-10px;
 				}
-				.notesdisplay {
-						height:150px;
-						background-color: #fff;
-						margin:10px 0px;
-						border: 1px solid #b3b3b3;
-						overflow: auto;
-						padding:10px 15px;
-						text-align: left;
-						text-transform: none;
-				}
+
 				.alert {
 					color:red;
 					margin:14px 0 0 20px;

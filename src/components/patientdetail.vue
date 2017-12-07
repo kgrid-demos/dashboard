@@ -4,7 +4,7 @@
 		<h3 slot="header">Registration in Progress</h3>
 		<div slot="body">
 			<ul>
-			<li v-for='entry in registrationstatus'>{{entry}}</li>
+				<li v-for='entry in registrationstatus'>{{entry}}</li>
 			</ul>
 		</div>
 	</modal>
@@ -14,7 +14,7 @@
 				<div class='row mar-0'>
 					<div class='col-md-1 col-sm-1 col-xs-1  pad-0' v-if='isInEdit'></div>
 					<div class='col-md-1 col-sm-1 col-xs-1'>
-						<router-link  class='float-r' to='/'>
+						<router-link  class='float-r' to='/' v-if='!maximized'>
 							<i class='fa fa-arrow-left'></i>
 						</router-link>
 					</div>
@@ -27,35 +27,35 @@
 		<div slot='main'>
 			<div class='maincontent'>
 				<div class='col-md-2 col-sm-2 col-xs-2  pad-0' v-if='isInEdit'>
-				<div class='animated ht-full kg-bg-custom-0' @drop='dropped'>
-					<div class='row ft-sz-16 lh-3 txtcenter'> <h3>Widget List</h3></div>
-					<div class='wlistctner'>
-						<draggable class='wlist' element="ul" v-model="widgetList" :options="dragOptions">
-							<li v-for='(object,index) in widgetList' v-bind:key='index'>
-								<kocard :object='object.label' :id='object.label' :cflag="object.type" :tileindex='index' draggable='true'  @dragstart='dragWidget' ></kocard>
-							</li>
-						</draggable>
-					</div>
+					<div class='animated ht-full kg-bg-custom-0' @drop='dropped'>
+						<div class='row ft-sz-16 lh-3 txtcenter'> <h3>Widget List</h3></div>
+						<div class='wlistctner'>
+							<draggable class='wlist' element="ul" v-model="widgetList" :options="dragOptions">
+								<li v-for='(object,index) in widgetList' v-bind:key='index'>
+									<kocard :object='object.label' :id='object.label' :cflag="object.type" :tileindex='index' draggable='true'  @dragstart='dragWidget' ></kocard>
+								</li>
+							</draggable>
+						</div>
 					</div>
 				</div>
 				<div class='col-md-1 col-sm-1 col-xs-1 ht-full  pad-0' v-else></div>
 				<div class='col-md-10 col-sm-10 col-xs-10 kg-bg-custom-1 ht-full pad-0'>
 					<div class='row ht-50'>
-					<div class='col-md-7 col-sm-5 pad-0'>
-					<div class="pad-l-15"  v-if='!isInEdit && pwidgetlist.length>=1 '>
-							<button class='kg-btn-primary ' @click='gopreviousweek'> <i class='fa fa-angle-left fa-lg'></i></button>
-							<button class='kg-btn-primary ' style='width:240px;'> {{dateRangeLabel.start}} - {{ dateRangeLabel.end}} </button>
-							<button class='kg-btn-primary ' v-bind:class="{btnDisabled: !enableNextArrow}" @click='gonextweek'> <i class='fa fa-angle-right fa-lg'></i></button>
+						<div class='col-md-7 col-sm-5 pad-0'>
+							<div class="pad-l-15"  v-if='!isInEdit && pwidgetlist.length>=1 '>
+								<button class='kg-btn-primary ' @click='gopreviousweek'> <i class='fa fa-angle-left fa-lg'></i></button>
+								<button class='kg-btn-primary ' style='width:240px;'> {{dateRangeLabel.start}} - {{ dateRangeLabel.end}} </button>
+								<button class='kg-btn-primary ' :disabled="!enableNextArrow" @click='gonextweek'> <i class='fa fa-angle-right fa-lg'></i></button>
 							</div>
-					</div>
+						</div>
 						<div class='col-md-5 col-sm-5 '>
-					<div class='float-r'>
-						<button class='kg-btn-primary ' v-if='isInEdit && pwidgetlist.length==1&&this.pwidgetlist[0]=="" ' @click='loadDefault'> Load Default Layout </button>
-						<button class='kg-btn-primary ' v-if='!isInEdit && !maximized' @click='toggleEditMode'>Edit</button>
-						<button class='kg-btn-primary ' v-if='isInEdit' @click='saveconfig'>Save Changes</button></div>
-					</div>
-					</div>
-					<grid-layout		:layout.sync="layout"
+							<div class='float-r'>
+								<button class='kg-btn-primary ' v-if='isInEdit && pwidgetlist.length==1&&this.pwidgetlist[0]=="" ' @click='loadDefault'> Load Default Layout </button>
+								<button class='kg-btn-primary ' v-if='!isInEdit && !maximized' @click='toggleEditMode'>Edit</button>
+								<button class='kg-btn-primary ' v-if='isInEdit'  @click='saveconfig'>Save Changes</button></div>
+							</div>
+						</div>
+						<grid-layout		:layout.sync="layout"
 													:col-num="colnum"
 													:row-height="30"
 													:is-draggable="isInEdit"
@@ -63,7 +63,7 @@
 													:vertical-compact="true"
 													:margin="[10, 10]"
 													:use-css-transforms="true">
-						<grid-item v-for="item in layout"
+							<grid-item v-for="item in layout"
 													 	:x.sync="item.x"
 														:y.sync="item.y"
 														:w.sync="item.w"
@@ -72,37 +72,27 @@
 														ref='item'
 														v-bind:key="item.i"
                             @resized="resizedEvent"
-
 											 			drag-allow-from=".draggablehandle"
 											 			drag-ignore-from=".no-drag">
-														<div class="draggable-handle" v-show='(item.c=="")&&isInEdit' style="text-align: center; vertical-align: middle; font-size: 16px; font-weight: 700;position:relative;top:50%;transform:translateY(-50%)">Add a widget</div>
-														<div class='widgetTitle' v-bind:class="{draggablehandle: isInEdit}" v-if='item.c!=""'>
-															<div class='row mar-0'>
-																<span class="widgetLabel">{{itemWidgetList[item.i][0].label}}</span>
-																<span v-if="!isInEdit" class="fa fa-exclamation-circle warning pad-l-5"></span>
-																<span v-if="!isInEdit" class="fa fa-file-text-o notes pad-l-5"></span>
-																<i class='fa fa-close' v-if='isInEdit' style="font-size:11pt" @click='removeWidget(item.i)'></i>
-																<i class='fa fa-window-maximize' v-if='!isInEdit && !maximized' title="maximize" style="font-size:11pt" @click='maximizeWidget(item.i)'></i>
-																<i class='fa fa-window-restore' v-if='!isInEdit && maximized' title="maximize"  style="font-size:11pt" @click='restoreLayout'></i>
-															</div>
-															<div class='row mar-0 ht-20'>
-																<span v-if="alertText[item.i] && !isInEdit" class="fa fa-arrow-up alertArrow pad-l-5"></span>
-																<span v-if="!alertText[item.i]"  class="alertArrow">&nbsp;</span>
-																<span v-if="!isInEdit && alertText[item.i]" class="alert-text">{{ alertText[item.i] }}</span>
-															</div>
-														</div>
-
-						<div class='widgetcontainer fill no-drag' @drop='dropped'>
-								<draggable class='wlayout' element="ul" v-model="itemWidgetList[item.i]" :options="customDragOptions(item.i)" >
-														<li v-for='(object,index) in itemWidgetList[item.i]' v-bind:key='index' v-if='itemWidgetList[item.i].length==1|object.type!="NEW"'>
-															<kotile :object='object' :patientid='$route.params.id' v-on:alert='setAlertText' :maximized='maximized' :cflag="object.type" :tileindex='item.i' :containerheight="((item.h-1)*40)" :editmode='isInEdit' :startdate="dateRangeLabel.startDate" draggable='true'  @dragstart='dragWidget'>
-																<div slot='alerts' v-if='maximized' class='widgetalertdisplay'> RECOMMENDATIONS</div>
-
-															</kotile>
-														</li>
-													</draggable></div>
-						</grid-item>
-					</grid-layout>
+															<div class="draggable-handle" v-show='(item.c=="")&&isInEdit' style="text-align: center; vertical-align: middle; font-size: 16px; font-weight: 700;position:relative;top:50%;transform:translateY(-50%)">Add a widget</div>
+																<div class='widgetTitle' v-bind:class="{draggablehandle: isInEdit}" v-if='item.c!=""'>
+																	<div class='row mar-0'>
+																		<span class="widgetLabel">{{itemWidgetList[item.i][0].label}}</span>
+																		<i class='fa fa-close' v-if='isInEdit' style="font-size:11pt" @click='removeWidget(item.i)'></i>
+																		<i class='fa fa-window-maximize' v-if='!isInEdit && !maximized' title="maximize" style="font-size:11pt" @click='maximizeWidget(item.i)'></i>
+																		<i class='fa fa-window-restore' v-if='!isInEdit && maximized' title="maximize"  style="font-size:11pt" @click='restoreLayout'></i>
+																	</div>
+																</div>
+																<div class='widgetcontainer fill no-drag' @drop='dropped'>
+																	<draggable class='wlayout' element="ul" v-model="itemWidgetList[item.i]" :options="customDragOptions(item.i)" >
+																		<li v-for='(object,index) in itemWidgetList[item.i]' v-bind:key='index' v-if='itemWidgetList[item.i].length==1|object.type!="NEW"'>
+																			<kotile :object='object' :patientid='$route.params.id' v-on:alert='setAlertText' :maximized='maximized' :cflag="object.type" :tileindex='item.i' :containerheight="((item.h-1)*40)" :editmode='isInEdit' draggable='true'  @dragstart='dragWidget'>
+																			</kotile>
+																		</li>
+																	</draggable>
+																</div>
+							</grid-item>
+						</grid-layout>
 				</div>
 			</div>
 		</div>
@@ -129,21 +119,19 @@ export default {
 			pwidgetlist:[],
 			draggedid:"",
 			isInEdit:false,
-			enableNextArrow:false,
 			defaultw:3,
 			defaulth:6,
 			layout:[],
 			temp:{},
-		dragOptions: {
-			animation: 0,
-			group: 'description',
-			disabled: true,
-			ghostClass: 'ghost',
+			dragOptions: {
+				animation: 0,
+				group: 'description',
+				disabled: true,
+				ghostClass: 'ghost',
+			},
+			maximized:false,
+			showModal:false
 
-		},
-		dateRange:{starttime:0, endtime: 6},
-		maximized:false,
-		showModal:false
 		}
 	},
 	created : function() {
@@ -186,12 +174,15 @@ export default {
 		currentGroup: function(){
 			return this.$store.getters.getcurrentGroup;
 		},
+		daterange:function(){
+			return this.$store.getters.getcurrentdaterange
+		},
 		dateRangeLabel: function(){
 			var obj ={};
-			obj.start=this.$moment().day(this.dateRange.starttime).format("MMM. D, YYYY")
-			obj.end=this.$moment().day(this.dateRange.endtime).format("MMM. D, YYYY")
-			obj.startDate=this.$moment().day(this.dateRange.starttime)
-			obj.endDate=this.$moment().day(this.dateRange.endtime)
+			obj.start=this.$moment.unix(this.daterange.starttime).format("MMM. D, YYYY")
+			obj.end=this.$moment.unix(this.daterange.endtime).format("MMM. D, YYYY")
+			obj.startDate=this.$moment.unix(this.daterange.starttime)
+			obj.endDate=this.$moment.unix(this.daterange.endtime)
 			return obj
 		},
 		patient: function(){
@@ -236,6 +227,9 @@ export default {
 				}
 			});
 			return c;
+		},
+		enableNextArrow:function(){
+			return this.dateRangeLabel.endDate.isBefore(this.$moment())
 		}
 	},
 	watch:{
@@ -277,19 +271,20 @@ export default {
 		 	this.$store.commit("updateAlert",obj);
 		},
 		gopreviousweek:function(){
-			this.dateRange.starttime=this.dateRange.starttime-7;
-			this.dateRange.endtime=this.dateRange.endtime-7;
-			this.enableNextArrow = true;
-			this.$eventBus.$emit("setdaterange", this.dateRangeLabel);
+			var obj= {}
+			obj.days=this.daterange.days;
+			obj.start= this.daterange.starttime-this.daterange.days*24*3600;
+			obj.end=this.daterange.endtime-this.daterange.days*24*3600;
+			this.$store.commit('setcurrentdaterange',obj);
 		},
+
 		gonextweek:function(){
-		  if(this.enableNextArrow) {
-        this.dateRange.starttime = this.dateRange.starttime + 7;
-        this.dateRange.endtime = this.dateRange.endtime + 7;
-        this.enableNextArrow = this.dateRangeLabel.endDate.isBefore(this.$moment());
-        this.$eventBus.$emit("setdaterange", this.dateRangeLabel);
-      }
-		},
+				var obj={}
+				obj.days=this.daterange.days;
+				obj.start= this.daterange.starttime+this.daterange.days*24*3600;
+				obj.end=this.daterange.endtime+this.daterange.days*24*3600;
+				this.$store.commit('setcurrentdaterange',obj);
+			},
 		cleanupLayout: function(){
 			console.log("Starting cleaning up the layout... ")
 			this.layout = this.layout.filter(function(e){return (e.c!="")}).map(function(e,index){
@@ -412,6 +407,7 @@ export default {
 			this.layout[0].w=12;
 			this.layout[0].h=18;
 			this.maximized=true;
+			console.log("Widget "+i)
 		},
 		restoreLayout: function(){
 			this.layout=JSON.parse(JSON.stringify(this.temp));
@@ -443,7 +439,6 @@ export default {
     },
 		updateLayoutContent:function(){
 			var self = this;
-
 			this.itemWidgetList.forEach(function(item, index) {
 					if(item.length>0)
 						{ self.layout[index].c = item[0].id;}
@@ -498,6 +493,10 @@ export default {
 	margin:10px 10px;
 	display:inline-block;
 }
+.kg-btn-primary:disabled {
+		border:1px solid #c7c7c7;
+		color:#c7c7c7
+}
 .wlistctner {
 	overflow:auto;
 	min-height:560px;
@@ -510,7 +509,6 @@ export default {
 	color:#aaaaaa;
 	cursor: not-allowed;
 }
-
 .maincontent{
 	min-height:500px;
 }
@@ -548,21 +546,16 @@ flex: auto;
 	right:45px;
 	background-color:#fc1526;
 }
-
 .widgetTitle .fa-arrow-up {
 	color:red;
 }
-
 .widgetTitle .widgetLabel {
 	color:black;
 	font:bold 12pt 'Open Sans', sans-serif;
 }
-
 .draggablehandle {
 	cursor: pointer;
 }
-
-
 .kg-bg-custom-0 {
 	background-color:#f5f5f5;
 }
@@ -579,7 +572,6 @@ h1 small {
 ul.wlist {
 	margin:12px;
 	height:100%;
-
 }
 ul.wlist li {
 	margin: 10px;
@@ -611,17 +603,5 @@ ul.wlayout li {
 	display: flex;
 	flex-direction:column;
 }
-.vue-grid-item:hover {
-	border: 1px solid #0075bc;
-}
-	.widgetalertdisplay, .notesdisplay {
-			height:150px;
-			background-color: #fff;
-			margin:10px 0px;
-			border: 1px solid #b3b3b3;
-			overflow: auto;
-			padding:10px 15px;
-			text-align: left;
-			text-transform: none;
-	}
+
 </style>

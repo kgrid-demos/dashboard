@@ -1,4 +1,17 @@
 <template name="prowidget">
+  <div class="widgetcontainer">
+    <div v-if="!editmode" >
+    <div class="widgetalert" v-if="!maximized ">
+      <div class="ft-sz-12 pad-l-8" >
+        <span>{{selectedinstr.unit}}</span>
+        <span v-if="!editmode" class="fa fa-exclamation-circle warning pad-l-5"></span>
+        <span v-if="!editmode" class="fa fa-file-text-o notes pad-l-5"></span>
+      </div>
+    </div>
+    <div v-else class="widgetalertdisplay">
+      <span class=""> ALERT </span>
+    </div>
+  </div>
   <div class="graph">
     <linechart v-if="!editmode" :chart-data="datacollection" :options="chartOptions" :styles='myStyles'></linechart>
     <div v-if="editmode">
@@ -54,29 +67,31 @@
               <input type="checkbox" id="checkbox" v-model="sendnotification">
         </div>
       </div>
-
     </div>
   </div>
+  <div class='notesdisplay' v-if='maximized'>
+    <span> PATIENT NOTES </span>
+  <ul>
+    <li v-for='(object,index) in weeklynotes' v-bind:key='index'>
+      <span v-if='object.note!=""'>{{formatted(object.date*1000)}} - {{object.note}}</span></li>
+</ul>
+  </div>
+</div>
 </template>
 
 <script>
   import linechart from './linechart.js';
-
   export default {
-    props: ['chartheight', 'editmode', 'object', 'title', 'startdate', 'patientid', 'maximized'],
+    props: ['chartheight', 'editmode', 'object', 'title','patientid', 'maximized'],
     components: {
       linechart,
   },
     data () {
       return {
-        weeklydata: [],
-        weeklylabels: [],
         datasettings: {},
         selectedinstrname: "",
         custfreq:"",
         sendnotification:false,
-        date: null,
-        sdate:null,
         chartOptions: {
           maintainAspectRatio: false,
           legend: {
@@ -94,7 +109,7 @@
           scales: {
             yAxes: [{
               scaleLabel: {
-                display: true,
+                display: false,
                 labelString: 'probability'
                 },
               ticks: {
@@ -114,11 +129,6 @@
     },
     created: function() {
       var self = this;
-      this.date = this.startdate;
-      this.$eventBus.$on('setdaterange', function (obj) {
-        self.date = obj.startDate;
-        self.changeWeek(obj.startDate);
-      });
       this.$eventBus.$on('saveSettings', function (obj) {
         self.saveoptions(obj);
       });
@@ -145,9 +155,29 @@
         this.datasettings.selectedinstrument = this.selectedinstr
         this.datasettings.sendnotification = this.sendnotification
         }
+      },
+      maximized:function(){
+        var obj={};
+        obj.end=this.daterange.endtime;
+        console.log("Max watch")
+        console.log(obj)
+        if(this.maximized){
+          if(this.selectedinstr.bwfreq<5){
+              obj.days=56
+          }else {
+            obj.days=28
+          }
+        }else {
+          obj.days=7
+        }
+        obj.start= this.daterange.endtime-obj.days*24*3600;;
+        this.$store.commit('setcurrentdaterange',obj)
       }
     },
     computed : {
+      daterange:function(){
+        return this.$store.getters.getcurrentdaterange
+      },
       alldata:function(){
             return this.$store.getters.getPatientData(this.patientid)[this.object.id + "-data"].slice()
       },
@@ -217,13 +247,8 @@
     displaydata: function(){
       var obj={values:[],labels:[],colors:[]};
       var self = this;
-      var s0=1;
-      var s1=168;
-      if(this.maximized){
-        s1=672
-      }
       this.alldata.forEach(function (el) {
-        if(el.date > self.$moment(self.sdate).subtract(s0, 'h').unix() && el.date < self.$moment(self.sdate).add(s1, 'h').unix()) {
+        if(el.date > self.daterange.starttime && el.date < self.daterange.endtime) {
           // TODO: Add code to insert frequency fluctuations
           obj.values.unshift(el.value);
           obj.labels.unshift(self.$moment.unix(el.date).format('MM/D'));
@@ -233,16 +258,12 @@
       return obj
     }
     },
-    mounted () {
-      this.sdate=this.$moment().day(0);
-    },
     methods: {
       saveoptions:function (obj) {
         var payload  = {'pid': obj.id, "group":obj.group, "wid":this.object.id,'datasettings':this.datasettings}
         console.log("PRO Widget : "+this.title)
         console.log(payload)
         this.$store.commit('saveWidgetSettings', payload);
-        this.changeWeek(this.date);
       },
       getcolorfordata: function(value){
         var thresholds = this.selectedinstr.ryg
@@ -253,12 +274,6 @@
         }else {
           return "white"
         }
-      },
-      changeWeek(startdate) {
-        if (!startdate) {
-          startdate = this.$moment().day(0);
-        }
-        this.sdate=startdate
       },
       // generateNotification() {
       //   let finalDataPoint = this.weeklydata[this.weeklydata.length - 1];
@@ -288,10 +303,17 @@
 </script>
 
 <style scoped>
+  .widgetcontainer{
+    width:100%;
+    height:100%;
+    background-color: #e5e5e5;
+  }
+  .widgetalert{
+    height: 20px;
+    background-color: white;
+  }
   .graph {
-    width: 100%;
-    height: 100%;
-    padding-top: 2px;
+    padding-top: 5px;
     margin:0 auto;
     background-color: white;
   }
@@ -337,7 +359,25 @@
     padding: 12px 10px;
     clear: both;
   }
-
+  .widgetalertdisplay {
+      height:150px;
+      background-color: #fff;
+      margin:15px 0px;
+      overflow: auto;
+      padding:10px 15px;
+      text-align: left;
+      text-transform: none;
+  }
+  .notesdisplay {
+      height:150px;
+      background-color: #fff;
+      margin:15px 0px 0px 0px;
+      border: none;
+      overflow: auto;
+      padding:10px 15px;
+      text-align: left;
+      text-transform: none;
+  }
 .thres {
   display:inline-block;
   min-width:33%;

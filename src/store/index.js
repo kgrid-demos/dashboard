@@ -29,6 +29,7 @@ export default new Vuex.Store({
       currentStation:{id:-1,"label":""},
       currentGroup:{id:0,"color":"#0075bc"},
       currentPatientIndex: -1,
+      currentdaterange:{starttime:0,endtime:0,days:7},
       patientlist:  [],
       maxgroupinuse:6,
       patientData:[]
@@ -179,6 +180,11 @@ export default new Vuex.Store({
     },
     resetPatientData(state) {
       state.patientData = [];
+    },
+    setcurrentdaterange(state,obj){
+      state.currentdaterange.starttime=obj.start
+      state.currentdaterange.endtime=obj.end
+      state.currentdaterange.days=obj.days
     }
   },
   getters: {
@@ -260,6 +266,9 @@ export default new Vuex.Store({
     },
     hasLoadedPatientData: state=>{
       return  (state.patientData.length > 0);
+    },
+    getcurrentdaterange: state =>{
+      return state.currentdaterange
     }
   },
   actions: {

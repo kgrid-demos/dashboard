@@ -164,25 +164,13 @@ a, a:hover, a:visited, a:focus {
   padding-top: 2px;
 }
 
-.pad-t-5 {
-  padding-top: 5px;
-}
-
-.pad-t-10 {
-  padding-top: 10px;
-}
-.pad-t-15{
-    padding-top:15px;
- }
- .pad-l-5 {
-   padding-left:5px;
- }
-.pad-l-10 {
-  padding-left:10px;
-}
-.pad-l-20 {
-  padding-left:20px;
-}
+.pad-t-5 {  padding-top: 5px;}
+.pad-t-10 {  padding-top: 10px;}
+.pad-t-15{    padding-top:15px; }
+ .pad-l-5 {   padding-left:5px; }
+ .pad-l-8 {   padding-left:8px; }
+.pad-l-10 {  padding-left:10px;}
+.pad-l-20 {  padding-left:20px;}
 .pad-l-15 {
   padding-left:15px;
 }
@@ -223,6 +211,8 @@ a, a:hover, a:visited, a:focus {
 .ht-30 {  height: 30px; }
 .ht-20 {  height: 20px; }
 .ht-10 {  height: 10px; }
+
+.float-l {  float: left; }
 .float-r {  float: right; }
 .txtcenter {	text-align:center; }
 .kgl-banner {

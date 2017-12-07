@@ -60,6 +60,13 @@ export default {
 	created : function() {
 		var self=this;
 		this.loadPatientDataIntoStorage();
+		var lastsunday = this.$moment().day(-7);
+		var obj={start:0,end:0, days:7};
+		obj.end=this.$moment().day(6).endOf('day').unix()-1;   //next Saturday
+		obj.start=this.$moment().day(obj.days-7).startOf('day').unix() //last Sunday
+		console.log("Start at: "+obj.start+"  End at:"+obj.end)
+		console.log("Start at: "+this.$moment.unix(obj.start).format()+"  End at:"+this.$moment.unix(obj.end).format())
+		this.$store.commit("setcurrentdaterange",obj)
 	},
 	mounted:function(){
 	},
@@ -95,7 +102,6 @@ export default {
 
 		},
 		stationSelected: function(){
-
 				if(this.filterEnabled){
 					var t=this.$store.getters.getCurrentStation.id
 					console.log(t)
@@ -103,7 +109,6 @@ export default {
 				}else{
 					return true
 				}
-
 		},
 		currentGroup: function(){
 		  return this.$store.getters.getcurrentGroup;
@@ -154,13 +159,12 @@ form#search input {
 }
 
 .bannercontent {
-    margin-top: 75px;
     text-align: left;
     margin-bottom: 20px;
     margin: 0 auto;
     line-height: 2em;
 		letter-spacing: 0.1em;
-    padding-top: 65px;
+    padding-top: 5px;
     background: transparent;
 		height: 40px;
 }

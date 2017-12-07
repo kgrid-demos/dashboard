@@ -53,7 +53,7 @@
   import vueSlider from 'vue-slider-component';
 
   export default {
-    props: ['chartheight', 'patientid', 'editmode', 'object','title', 'startdate', 'totalminutes', 'minutescompleted', 'maximized'],
+    props: ['chartheight', 'patientid', 'editmode', 'object','title', 'totalminutes', 'minutescompleted', 'maximized'],
     components: {
       vueSlider
     },
@@ -83,6 +83,9 @@
       this.$eventBus.$off("saveSettings");
     },
     computed : {
+      daterange:function(){
+        return this.$store.getters.getcurrentdaterange
+      },
       instruments: function(){
         return this.$store.getters.getwidgetinstruments(this.object.id)
         },
@@ -125,9 +128,6 @@
           backgroundColor: '#00aa00'
         }
       },
-      starttimestamp:function(){
-        return this.$moment(this.startdate).unix()
-      },
       weeklymodules:function(){
         var self = this;
         var arr=[];
@@ -136,7 +136,7 @@
           obj.value=e.value;
           obj.timestamp=e.date;
           obj.status="☐"
-          if((obj.timestamp!=-1) && (obj.timestamp<self.starttimestamp)){
+          if((obj.timestamp!=-1) && (obj.timestamp<self.daterange.starttime)){
               obj.status="☑"
             }
           arr.push(obj)
@@ -172,6 +172,7 @@
 <style scoped>
   .moduleContainer {
     margin: 3em;
+    padding-top: 2.5em;
     text-transform: none;
     background-color: #fff;
     text-align: center;
