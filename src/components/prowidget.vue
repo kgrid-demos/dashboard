@@ -9,16 +9,35 @@
       </div>
     </div>
     <div v-else class="widgetalertdisplay">
-      <span class=""> ALERT </span>
+       <span class="pad-l-5"> ALERT </span>
       <ul>
         <li v-for='alert in allalert'>
-          <span style="font-weight:700;"> {{alert.text}}</span></li>
+          <span class="fa fa-exclamation-circle warning pad-l-5"></span><span class="pad-l-5" style="font-weight:700;"> {{alert.text}}</span></li>
     </ul>
     </div>
   </div>
   <div class="graph">
-    <span v-if="maximized" class='pad-l-10'>{{selectedinstr.unit}}</span>
-    <span v-if="maximized" class='float-r pad-r-10'>Patient Report Frequency: {{selectedfreq}}</span>
+    <div class='row' v-if="maximized" >
+      <div class="col-md-4 col-sm-4 ft-sz-18">
+        <span class='pad-l-10'>{{selectedinstr.unit}}</span>
+      </div>
+      <div class="col-md-4 col-sm-4 txtcenter ">
+        <span class="pad-r-10">{{viewmode}}</span>
+      </div>
+      <div class="col-md-4 col-sm-4">
+        <div class="float-r inline" >
+          <span class= "pad-r-10">Patient Report Frequency: {{selectedfreq}}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- <div class="pad-l-20 min"  v-if='selectedinstr'>
+      <div v-for='range in selectedinstr.ryg' class="thres" :class="range.color">
+        <span v-if='range.min<range.max'>{{range.min}}-{{range.max}}</span>
+        <span v-else>{{range.min}}</span>
+      </div>
+    </div> -->
+
     <linechart v-if="!editmode" :chart-data="datacollection" :options="chartOptions" :styles='myStyles'></linechart>
     <div v-if="editmode">
       <div class="optrow">
@@ -76,15 +95,14 @@
     </div>
   </div>
   <div class='notesdisplay' v-if='maximized'>
-    <span> PATIENT NOTES </span>
+    <span class="pad-l-5"> PATIENT NOTES </span>
   <ul>
     <li v-for='note in allnotes' >
-      <span style="font-style:italic;">{{formatted(note.date*1000)}} - {{note.note}}</span></li>
+        <span class="fa fa-file-text-o notes pad-l-5"></span><span class="pad-l-5" style="font-style:italic;">{{formatted(note.date*1000)}} - {{note.note}}</span></li>
 </ul>
   </div>
 </div>
 </template>
-
 <script>
   import linechart from './linechart.js';
   export default {
@@ -100,6 +118,7 @@
         sendnotification:false,
         chartOptions: {
           maintainAspectRatio: false,
+
           legend: {
             display: false
           },
@@ -120,7 +139,9 @@
                 },
               ticks: {
                 min: 0,
-                max: 10
+                max: 10,
+                stepSize:1,
+                maxTicksLimit: 6
               },
               gridLines: {
                 display: true,
@@ -145,6 +166,7 @@
         this.custfreq = this.selectedfreq
         this.chartOptions.scales.yAxes[0].ticks.min = this.selectedinstr.range.min
         this.chartOptions.scales.yAxes[0].ticks.max = this.selectedinstr.range.max
+        this.chartOptions.scales.yAxes[0].ticks.stepSize = this.selectedinstr.range.step
         this.chartOptions.scales.yAxes[0].scaleLabel.labelString = this.selectedinstr.unit
       }
     },
@@ -181,6 +203,13 @@
       }
     },
     computed : {
+      viewmode:function(){
+        var t= "4-Week View"
+        if(this.selectedinstr.bwfreq<5){
+          t="8-Week View"
+        }
+        return t
+      },
       hasalert:function(){
         var b= false;
         this.allalert.forEach(function(e){
@@ -277,9 +306,11 @@
         var nth=Math.round(index/dp)*dp-index;           // If all data frequency is daily
         if(el.date > self.daterange.starttime && el.date < self.daterange.endtime) {
           if(nth==0){                                    // If all data frequency is daily
-            obj.values.unshift(el.value);
+            var v =el.value/10*(self.selectedinstr.range.max-self.selectedinstr.range.min)+self.selectedinstr.range.min  // If the raw data remains in 0-10
+            // var v= el.value
+            obj.values.unshift(v);
             obj.labels.unshift(self.$moment.unix(el.date).format('MM/D'));
-            obj.colors.unshift(self.getcolorfordata(el.value))
+            obj.colors.unshift(self.getcolorfordata(v))
           }
         }
       });
@@ -414,6 +445,11 @@
   min-width:33%;
   text-align: center;
   color: #fff;
+}
+div.min {
+  min-width:240px;
+  max-width:300px;
+  display:inline-block;
 }
 .thres.green {
   background-color: green

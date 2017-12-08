@@ -12,7 +12,8 @@
       </div>
       <div class="progresscont" v-if='!maximized'>
         <div class="progress" v-bind:style="progressStyle"> </div>
-        <div class="barlabel">Modules completed: {{numcomplete}} / {{selectedinstr.modulecount}}</div>
+        <div class="barlabel" ref="thelabel">Modules completed: {{numcomplete}} / {{selectedinstr.modulecount}}</div>
+        <!-- <div class="barlabelw" v-bind:style="wlabel" >Modules completed: {{numcomplete}} / {{selectedinstr.modulecount}}</div> -->
       </div>
     </div>
     <div v-if="editmode">
@@ -24,18 +25,7 @@
           <span>{{selectedinstr.description}}</span>
         </div>
       </div>
-      <div class="optrow">
-        <div class="optionslabel pad-l-20">
-          Frequency
-        </div>
-        <div class="options pad-l-20" v-if='selectedinstr'>
-          <select v-model="custfreq">
-            <option v-for="freq in freqops" v-bind:value="freq.label">
-              {{ freq.label }}
-            </option>
-          </select>
-        </div>
-      </div>
+    
       <div class="optrow">
         <div class="optionslabel pad-l-20">
           Number of Modules
@@ -83,6 +73,10 @@
       this.$eventBus.$off("saveSettings");
     },
     computed : {
+      labelmargin:function(){
+        var el = this.$refs.thelabel
+        return el.style.length
+      },
       daterange:function(){
         return this.$store.getters.getcurrentdaterange
       },
@@ -98,8 +92,8 @@
       selectedfreq:function(){
           var freq = this.selectedinstr.bwfreq
           var index = this.freqops.map(function(e){return e.bwdatapt}).indexOf(freq)
-          console.log("Freq="+freq)
-          console.log(" Index="+index)
+          // console.log("Freq="+freq)
+          // console.log(" Index="+index)
           if(index!=-1){
             return this.freqops[index].label
             }else {
@@ -126,6 +120,12 @@
           width: `${(this.numcomplete / this.selectedinstr.modulecount) * 100}%`,
           height: '22px',
           backgroundColor: '#00aa00'
+        }
+      },
+      wlabel(){
+        return {
+          width: `${(this.numcomplete / this.selectedinstr.modulecount) * 100}%`,
+          marginLeft: `10%`
         }
       },
       weeklymodules:function(){
@@ -227,16 +227,32 @@
     width: 90%;
   }
   .barlabel {
-    color: green;
+    color: aqua;
     position: absolute;
     top: 12px;
     width: 100%;
     text-align: center;
     left: 0;
-    text-shadow:
-    -1px -1px 0 #fff,
-    1px -1px 0 #fff,
-    -1px 1px 0 #fff,
-    1px 1px 0 #fff;
+    font-weight:700;
+    mix-blend-mode:difference;
   }
+  .barlabelw {
+    color: #fff;
+    position: absolute;
+    top: 12px;
+    text-align: left;
+    left: 0;
+    font-weight:700;
+    height:26px;
+    overflow:hidden;
+    white-space:nowrap
+  }
+  .barlabelw div{
+    position: absolute;
+    color:yellow;
+    font-weight:700;
+    overflow:hidden;
+    white-space:nowrap
+  }
+
 </style>

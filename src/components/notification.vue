@@ -98,14 +98,12 @@ export default {
 			this.dateRange.starttime=this.dateRange.starttime-7;
 			this.dateRange.endtime=this.dateRange.endtime-7;
 			this.enableNextArrow = true;
-			this.$eventBus.$emit("setdaterange", this.dateRangeLabel);
 		},
 		gonextweek:function(){
 		  if(this.enableNextArrow) {
         this.dateRange.starttime = this.dateRange.starttime + 7;
         this.dateRange.endtime = this.dateRange.endtime + 7;
         this.enableNextArrow = this.dateRangeLabel.endDate.isBefore(this.$moment());
-        this.$eventBus.$emit("setdaterange", this.dateRangeLabel);
       }
 		},
 		cleanupLayout: function(){

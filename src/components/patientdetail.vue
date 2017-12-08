@@ -14,7 +14,7 @@
 				<div class='row mar-0'>
 					<div class='col-md-1 col-sm-1 col-xs-1  pad-0' v-if='isInEdit'></div>
 					<div class='col-md-1 col-sm-1 col-xs-1'>
-						<router-link  class='float-r' to='/' v-if='!maximized'>
+						<router-link  class='float-r' to='/' v-if='!maximized & !isInEdit'>
 							<i class='fa fa-arrow-left'></i>
 						</router-link>
 					</div>
@@ -137,9 +137,7 @@ export default {
 	created : function() {
 		var self = this;
 		var lastsunday = this.$moment().day(-7);
-		this.$eventBus.$emit("setdaterange", this.dateRangeLabel);
 		this.$store.commit('setCurrentPatientIndex',{'pid':this.patient.id,'group':this.patient.groupid});
-
 	},
 	mounted:function(){
 		var self = this;
