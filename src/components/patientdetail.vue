@@ -55,7 +55,7 @@
 								<button class='kg-btn-primary ' v-if='isInEdit' :disabled='!configready' @click='saveconfig'>Save Changes</button></div>
 							</div>
 						</div>
-						<grid-layout		:layout.sync="layout"
+						<grid-layout	:layout.sync="layout"
 													:col-num="colnum"
 													:row-height="30"
 													:is-draggable="isInEdit"
@@ -229,7 +229,7 @@ export default {
 			return item
 		},
 		widgetMasterList: function(){
-			return this.$store.getters.getwidgetlistbypatient(this.patient);
+			return JSON.parse(JSON.stringify(this.$store.getters.getwidgetlistbypatient(this.patient)));
 		},
 		count:function(){
 			var self=this;

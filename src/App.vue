@@ -30,6 +30,9 @@ export default {
     });
 	},
   methods:{
+    mouseprev:function(e){
+      e.preventDefault()
+    }
 	}
 };
 </script>
