@@ -32,9 +32,13 @@ export default new Vuex.Store({
       currentdaterange:{starttime:0,endtime:0,days:7},
       patientlist:  [],
       maxgroupinuse:6,
-      patientData:[]
+      patientData:[],
+      today:0
     },
   mutations: {
+    settoday(state,timestamp){
+      state.today=timestamp
+    },
     init(state, obj){
       state.init=obj;
       state.filterEnabled=state.init.filterenable;
@@ -188,6 +192,9 @@ export default new Vuex.Store({
     }
   },
   getters: {
+    gettoday:state=>{
+      return state.today
+    },
     getfilterEnable: state=>{
       return state.filterEnabled
     },
@@ -262,6 +269,14 @@ export default new Vuex.Store({
           return patient.id===patientId
         });
         return state.patientData[index];
+      }
+    },
+    getPatientDataTimestamp: state=>{
+      return function(patientId) {
+        let index = state.patientData.findIndex(function(patient) {
+          return patient.id===patientId
+        });
+        return state.patientData[index].timestamp;
       }
     },
     hasLoadedPatientData: state=>{

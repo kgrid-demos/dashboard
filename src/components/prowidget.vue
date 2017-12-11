@@ -223,6 +223,16 @@
       daterange:function(){
         return this.$store.getters.getcurrentdaterange
       },
+      initdate:function(){
+        if(this.$route.params.id=='PA-67034-007'){
+          return	this.$moment.unix(this.today).day(-7*7).startOf('day').unix()
+        }else {
+          return	this.$moment.unix(this.today).day(-11*7).startOf('day').unix()
+        }
+      },
+      timeoffset:function(){
+        return this.$store.getters.getPatientDataTimestamp(this.patientid)
+      },
       alldata:function(){
         return this.$store.getters.getPatientData(this.patientid)[this.object.id + "-data"].slice()
       },

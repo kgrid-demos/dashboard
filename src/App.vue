@@ -13,6 +13,8 @@ export default {
     return {};
   },
   created: function () {
+    var t = this.$moment().unix()
+    this.$store.commit("settoday", t)
   },
   components: {
     navbar

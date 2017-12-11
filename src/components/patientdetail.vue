@@ -166,6 +166,16 @@ export default {
 	updated: function() {
 	  },
 	computed : {
+		today:function(){
+			return this.$store.getters.gettoday
+		},
+		initdate:function(){
+			if(this.$route.params.id=='PA-67034-007'){
+				return	this.$moment.unix(this.today).day(-7*7).startOf('day').unix()
+			}else {
+				return	this.$moment.unix(this.today).day(-11*7).startOf('day').unix()
+			}
+		},
 		loggerurl:function(){
 			return this.$store.getters.getLoggerURL;
 		},

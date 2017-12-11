@@ -61,7 +61,7 @@ export default {
 		var self=this;
 		this.loadPatientDataIntoStorage();
 		var lastsunday = this.$moment().day(-7);
-		var obj={start:0,end:0, days:7};
+		var obj={start:0, end:0, days:7};
 		obj.end=this.$moment().day(6).endOf('day').unix();   //next Saturday
 		obj.start=this.$moment().day(obj.days-7).startOf('day').unix() //last Sunday
 		console.log("Start at: "+obj.start+"  End at:"+obj.end)

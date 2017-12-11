@@ -1,4 +1,4 @@
-<template name="datagenerator">
+10<template name="datagenerator">
   <applayout>
     <div slot="main" style="margin: 2em">
       Days of data: <input v-model.number="numdays" type="number" placeholder="Number of days:" class="dayInput"/>
@@ -69,7 +69,7 @@
         numdays: 90,
         period: 0,
         variance: 15,
-        range: [0, 100],
+        range: [0, 10],
         trend: "Up",
         connected: false,
         selectedWidget: "",
@@ -79,7 +79,7 @@
           height: 200,
           direction: "vertical",
           min: -1,
-          max: 100,
+          max: 10,
           interval: 1,
           disabled: false,
           show: true,
@@ -106,7 +106,7 @@
           width: 100,
           height: 6,
           min: -1,
-          max: 100,
+          max: 10,
           style: {
             "display": "inline-block",
             "top": "4px"
