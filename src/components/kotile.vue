@@ -1,7 +1,7 @@
 <template>
 		<div class="container kgl-tile" :class="{max:maximized}" v-bind:id="object.label">
 				<p>
-          <prowidget v-if="cflag === 'PRO' " ref="widget" :patientid='patientid' v-on:instrselected='instrselected' :chartheight='cHeight' :editmode="editmode" :object="object" :maximized="maximized" :title="object.label" ></prowidget>
+          <prowidget v-if="cflag === 'PRO' " ref="widget" :patientid='patientid' v-on:instrselected='instrselected' :chartheight='cHeight' v-on:maximizeme='maximizeme':editmode="editmode" :object="object" :maximized="maximized" :title="object.label" ></prowidget>
           <smwidget v-if="cflag === 'SM'  " :patientid='patientid' :chartheight='cHeight' :editmode="editmode" :object="object" :title="object.label" :maximized="maximized" ></smwidget>
         </p>
 		</div>
@@ -31,7 +31,11 @@
 		methods: {
 			instrselected:function(obj){
 				this.$emit('setinstru',obj)
+			},
+			maximizeme:function(id){
+				this.$emit("maximizeme",id)
 			}
+
 		}
 	};
 				</script>
@@ -52,9 +56,9 @@
 						background-color: #e5e5e5;
 					}
 
-				.kgl-tile:hover {
+				/*.kgl-tile:hover {
 					 cursor:pointer;
-				}
+				}*/
 
 				.kgl-tile.max:hover {
 					border: none;

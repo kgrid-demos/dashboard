@@ -4,8 +4,8 @@
     <div class="widgetalert" v-if="!maximized ">
       <div class="ft-sz-12 pad-l-8" >
         <span>{{selectedinstr.unit}}</span>
-        <span v-if="hasalert" class="fa fa-exclamation-circle warning pad-l-5"></span>
-        <span v-if="hasnotes" class="fa fa-file-text-o notes pad-l-5"></span>
+        <i v-if="hasalert"  @click='maximizeWidget' class="fa fa-exclamation-circle warning pad-l-5"></i>
+        <i v-if="hasnotes"  @click='maximizeWidget' class="fa fa-file-text-o notes pad-l-5"></i>
       </div>
     </div>
     <div v-else class="widgetalertdisplay">
@@ -200,8 +200,6 @@
       maximized:function(){
         var obj={};
         obj.end=this.daterange.endtime;
-        console.log("Max watch")
-        console.log(obj)
         if(this.maximized){
           if(this.selectedinstr.bwfreq<5){
               obj.days=56
@@ -357,6 +355,9 @@
     }
     },
     methods: {
+      maximizeWidget:function(){
+        this.$emit("maximizeme",this.object.id)
+      },
       formatted:function(t){
 				return this.$moment(t).format("dddd, MMMM Do YYYY, h:mm:ss a");
 			},
@@ -412,6 +413,9 @@
   .widgetalert{
     height: 20px;
     background-color: white;
+  }
+  .widgetalert i{
+    cursor:pointer;
   }
   .graph {
     padding-top: 5px;

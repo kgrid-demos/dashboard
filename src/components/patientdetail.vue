@@ -43,7 +43,7 @@
 					<div class='row ht-50'>
 						<div class='col-md-7 col-sm-5 pad-0'>
 							<div class="pad-l-15"  v-if='!isInEdit && pwidgetlist.length>=1 '>
-								<button class='kg-btn-primary ' @click='gopreviousweek'> <i class='fa fa-angle-left fa-lg'></i></button>
+								<button class='kg-btn-primary ' :disabled="!enablePreArrow" @click='gopreviousweek'> <i class='fa fa-angle-left fa-lg'></i></button>
 								<button class='kg-btn-primary ' style='width:240px;'> {{dateRangeLabel.start}} - {{ dateRangeLabel.end}} </button>
 								<button class='kg-btn-primary ' :disabled="!enableNextArrow" @click='gonextweek'> <i class='fa fa-angle-right fa-lg'></i></button>
 							</div>
@@ -86,7 +86,7 @@
 																<div class='widgetcontainer fill no-drag' @drop='dropped'>
 																	<draggable class='wlayout' element="ul" v-model="itemWidgetList[item.i]" :options="customDragOptions(item.i)" >
 																		<li v-for='(object,index) in itemWidgetList[item.i]' v-bind:key='index' v-if='itemWidgetList[item.i].length==1|object.type!="NEW"'>
-																			<kotile :object='object' :patientid='$route.params.id' v-on:setinstru='setinstru' :maximized='maximized' :cflag="object.type" :tileindex='item.i' :containerheight="((item.h-1)*40)" :editmode='isInEdit' draggable='true'  @dragstart='dragWidget'>
+																			<kotile :object='object' :patientid='$route.params.id' v-on:setinstru='setinstru' v-on:maximizeme="maxthis" :maximized='maximized' :cflag="object.type" :tileindex='item.i' :containerheight="((item.h-1)*40)" :editmode='isInEdit' draggable='true'  @dragstart='dragWidget'>
 																			</kotile>
 																		</li>
 																	</draggable>
@@ -254,6 +254,9 @@ export default {
 		},
 		enableNextArrow:function(){
 			return this.dateRangeLabel.endDate.isBefore(this.$moment())
+		},
+		enablePreArrow:function(){
+			return ((this.daterange.starttime-3600)>this.initdate)
 		}
 	},
 	watch:{
@@ -266,7 +269,6 @@ export default {
 	},
 	methods : {
 		setinstru:function(obj){
-			console.log(obj)
 			var index= this.itemWidgetList.map(function(e){
 				if(e.length>0){
 				return e[0].id}
@@ -274,7 +276,6 @@ export default {
 					return ""
 				}
 			}).indexOf(obj.id)
-			console.log(index)
 			this.itemWidgetList[index][0].sel =obj.sel;
 		},
 		getCount:function(t){
@@ -443,7 +444,10 @@ export default {
 			this.layout[0].w=12;
 			this.layout[0].h=18;
 			this.maximized=true;
-			console.log("Widget "+i)
+		},
+		maxthis:function(id){
+			var index=this.itemWidgetList.map(function(e){return e[0].id}).indexOf(id)
+			this.maximizeWidget(index)
 		},
 		restoreLayout: function(){
 			this.layout=JSON.parse(JSON.stringify(this.temp));
@@ -484,18 +488,7 @@ export default {
 				}
 			);
 			this.pwidgetlist=this.layout.map(function(e){return e.c})
-			},
-    setAlertText(note, index){
-		  if(note) {
-        this.addAlert(this.itemWidgetList[index][0].id);
-        this.alertText[index] = note;
-        console.log("Alert text is " + this.alertText);
-      }
-      else {
-        this.removeAlert(this.itemWidgetList[index][0].id);
-        this.itemWidgetList[index][0].alertText = "";
 			}
-		}
 	},
 	components:{
 		applayout,
