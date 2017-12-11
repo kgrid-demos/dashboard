@@ -1,7 +1,7 @@
 <template>
 		<div class="container kgl-tile" :class="{max:maximized}" v-bind:id="object.label">
 				<p>
-          <prowidget v-if="cflag === 'PRO' " ref="widget" :patientid='patientid' :chartheight='cHeight' :editmode="editmode" :object="object" :maximized="maximized" :title="object.label" ></prowidget>
+          <prowidget v-if="cflag === 'PRO' " ref="widget" :patientid='patientid' v-on:instrselected='instrselected' :chartheight='cHeight' :editmode="editmode" :object="object" :maximized="maximized" :title="object.label" ></prowidget>
           <smwidget v-if="cflag === 'SM'  " :patientid='patientid' :chartheight='cHeight' :editmode="editmode" :object="object" :title="object.label" :maximized="maximized" ></smwidget>
         </p>
 		</div>
@@ -27,6 +27,11 @@
 		components : {
 		  prowidget,
       smwidget
+		},
+		methods: {
+			instrselected:function(obj){
+				this.$emit('setinstru',obj)
+			}
 		}
 	};
 				</script>

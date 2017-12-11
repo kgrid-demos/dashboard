@@ -52,7 +52,7 @@
 							<div class='float-r'>
 								<button class='kg-btn-primary ' v-if='isInEdit && pwidgetlist.length==1&&this.pwidgetlist[0]=="" ' @click='loadDefault'> Load Default Layout </button>
 								<button class='kg-btn-primary ' v-if='!isInEdit && !maximized' @click='toggleEditMode'>Edit</button>
-								<button class='kg-btn-primary ' v-if='isInEdit'  @click='saveconfig'>Save Changes</button></div>
+								<button class='kg-btn-primary ' v-if='isInEdit' :disabled='!configready' @click='saveconfig'>Save Changes</button></div>
 							</div>
 						</div>
 						<grid-layout		:layout.sync="layout"
@@ -86,7 +86,7 @@
 																<div class='widgetcontainer fill no-drag' @drop='dropped'>
 																	<draggable class='wlayout' element="ul" v-model="itemWidgetList[item.i]" :options="customDragOptions(item.i)" >
 																		<li v-for='(object,index) in itemWidgetList[item.i]' v-bind:key='index' v-if='itemWidgetList[item.i].length==1|object.type!="NEW"'>
-																			<kotile :object='object' :patientid='$route.params.id' v-on:alert='setAlertText' :maximized='maximized' :cflag="object.type" :tileindex='item.i' :containerheight="((item.h-1)*40)" :editmode='isInEdit' draggable='true'  @dragstart='dragWidget'>
+																			<kotile :object='object' :patientid='$route.params.id' v-on:setinstru='setinstru' :maximized='maximized' :cflag="object.type" :tileindex='item.i' :containerheight="((item.h-1)*40)" :editmode='isInEdit' draggable='true'  @dragstart='dragWidget'>
 																			</kotile>
 																		</li>
 																	</draggable>
@@ -242,6 +242,16 @@ export default {
 			});
 			return c;
 		},
+		configready:function(){
+			var b = true;
+			this.itemWidgetList.forEach(function(e){
+				if(e.length>0){
+					if(e[0].type=="PRO")
+						b=e[0].sel && b
+				}
+			})
+			return b
+		},
 		enableNextArrow:function(){
 			return this.dateRangeLabel.endDate.isBefore(this.$moment())
 		}
@@ -255,6 +265,18 @@ export default {
 		}
 	},
 	methods : {
+		setinstru:function(obj){
+			console.log(obj)
+			var index= this.itemWidgetList.map(function(e){
+				if(e.length>0){
+				return e[0].id}
+				else{
+					return ""
+				}
+			}).indexOf(obj.id)
+			console.log(index)
+			this.itemWidgetList[index][0].sel =obj.sel;
+		},
 		getCount:function(t){
 			var index= this.patient.wlist.map(function(e){return e.id}).indexOf(t);
 			return this.patient.wlist[index].count;

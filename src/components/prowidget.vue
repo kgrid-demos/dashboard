@@ -175,14 +175,18 @@
      },
     watch: {
       selectedfreq: function(){
-      if(this.selectedfreq!=""){
-        this.custfreq = this.selectedfreq
-        this.chartOptions.scales.yAxes[0].ticks.min = this.selectedinstr.range.min
-        this.chartOptions.scales.yAxes[0].ticks.max = this.selectedinstr.range.max
-        this.chartOptions.scales.yAxes[0].scaleLabel.labelString = this.selectedinstr.unit
-        this.datasettings.selectedinstrument = this.selectedinstr
-        this.datasettings.sendnotification = this.sendnotification
+        var stat={id:this.object.id,sel:false}
+        if(this.selectedfreq!=""){
+          this.custfreq = this.selectedfreq
+          this.chartOptions.scales.yAxes[0].ticks.min = this.selectedinstr.range.min
+          this.chartOptions.scales.yAxes[0].ticks.max = this.selectedinstr.range.max
+          this.chartOptions.scales.yAxes[0].ticks.stepSize = this.selectedinstr.range.step
+          this.chartOptions.scales.yAxes[0].scaleLabel.labelString = this.selectedinstr.unit
+          this.datasettings.selectedinstrument = this.selectedinstr
+          this.datasettings.sendnotification = this.sendnotification
+          stat.sel=true
         }
+        this.$emit('instrselected',stat)
       },
       maximized:function(){
         var obj={};
