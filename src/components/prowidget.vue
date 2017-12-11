@@ -168,6 +168,15 @@
         this.chartOptions.scales.yAxes[0].ticks.max = this.selectedinstr.range.max
         this.chartOptions.scales.yAxes[0].ticks.stepSize = this.selectedinstr.range.step
         this.chartOptions.scales.yAxes[0].scaleLabel.labelString = this.selectedinstr.unit
+      }else{
+        if(this.object.instruments.length==1){
+          this.selectedinstrname = this.object.instruments[0].name;
+          this.custfreq = this.selectedfreq
+          this.chartOptions.scales.yAxes[0].ticks.min = this.selectedinstr.range.min
+          this.chartOptions.scales.yAxes[0].ticks.max = this.selectedinstr.range.max
+          this.chartOptions.scales.yAxes[0].ticks.stepSize = this.selectedinstr.range.step
+          this.chartOptions.scales.yAxes[0].scaleLabel.labelString = this.selectedinstr.unit
+        }
       }
     },
     beforeDestroy() {
