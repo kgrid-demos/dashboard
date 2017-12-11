@@ -22,11 +22,11 @@
         <span class='pad-l-10'>{{selectedinstr.unit}}</span>
       </div>
       <div class="col-md-4 col-sm-4 txtcenter ">
-        <span class="pad-r-10">{{viewmode}}</span>
+        <span class="ft-sz-12 pad-r-10">{{viewmode}}</span>
       </div>
       <div class="col-md-4 col-sm-4">
         <div class="float-r inline" >
-          <span class= "pad-r-10">Patient Report Frequency: {{selectedfreq}}</span>
+          <span class= "ft-sz-12 pad-r-10">Patient Report Frequency: {{selectedfreq}}</span>
         </div>
       </div>
     </div>
@@ -217,6 +217,9 @@
         })
         return b
       },
+      today:function(){
+        return this.$store.getters.gettoday
+      },
       hasnotes: function(){
         return this.allnotes.length>0
       },
@@ -224,22 +227,35 @@
         return this.$store.getters.getcurrentdaterange
       },
       initdate:function(){
-        if(this.$route.params.id=='PA-67034-007'){
-          return	this.$moment.unix(this.today).day(-7*7).startOf('day').unix()
-        }else {
-          return	this.$moment.unix(this.today).day(-11*7).startOf('day').unix()
-        }
-      },
-      timeoffset:function(){
-        return this.$store.getters.getPatientDataTimestamp(this.patientid)
-      },
+  			if(this.$route.params.id=='PA-67034-007'){
+  				return	this.$moment.unix(this.today).day(-7*7).startOf('day').unix()
+  			}else {
+  				return	this.$moment.unix(this.today).day(-11*7).startOf('day').unix()
+  			}
+  		},
+  		datatimestamp:function(){
+  			return this.$store.getters.getPatientDataTimestamp(this.patientid)
+  		},
+  		timeoffset:function(){
+  			return this.$moment.unix(this.today).startOf('day').unix()-this.datatimestamp
+  		},
       alldata:function(){
-        return this.$store.getters.getPatientData(this.patientid)[this.object.id + "-data"].slice()
+        var self=this
+        var data = JSON.parse(JSON.stringify(this.$store.getters.getPatientData(this.patientid)[this.object.id + "-data"]))
+        data.forEach(function(e){
+          e.date=e.date+self.timeoffset
+        })
+        return data
       },
       allnotes:function(){
+        var self=this;
         var data = this.$store.getters.getPatientData(this.patientid)
         if(data[this.object.id + "-notes"]){
-          return data[this.object.id + "-notes"]
+          var d= JSON.parse(JSON.stringify(data[this.object.id + "-notes"]))
+          d.forEach(function(e){
+            e.date=e.date+self.timeoffset
+          })
+          return d
         } else {
           return []
         }
@@ -316,7 +332,7 @@
         var nth=Math.round(index/dp)*dp-index;           // If all data frequency is daily
         if(el.date > self.daterange.starttime && el.date < self.daterange.endtime) {
           if(nth==0){                                    // If all data frequency is daily
-            var v =el.value/10*(self.selectedinstr.range.max-self.selectedinstr.range.min)+self.selectedinstr.range.min  // If the raw data remains in 0-10
+            var v =Math.round(el.value/10*(self.selectedinstr.range.max-self.selectedinstr.range.min))+self.selectedinstr.range.min  // If the raw data remains in 0-10
             // var v= el.value
             obj.values.unshift(v);
             obj.labels.unshift(self.$moment.unix(el.date).format('MM/D'));

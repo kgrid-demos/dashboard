@@ -176,6 +176,12 @@ export default {
 				return	this.$moment.unix(this.today).day(-11*7).startOf('day').unix()
 			}
 		},
+		datatimestamp:function(){
+			return this.$store.getters.getPatientDataTimestamp(this.patient.id)
+		},
+		timeoffset:function(){
+			return this.$moment.unix(this.today).startOf('day').unix()-this.datatimestamp
+		},
 		loggerurl:function(){
 			return this.$store.getters.getLoggerURL;
 		},
