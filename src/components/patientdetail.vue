@@ -44,7 +44,7 @@
 						<div class='col-md-7 col-sm-5 pad-0'>
 							<div class="pad-l-15"  v-if='!isInEdit && pwidgetlist.length>=1 '>
 								<button class='kg-btn-primary ' :disabled="!enablePreArrow" @click='gopreviousweek'> <i class='fa fa-angle-left fa-lg'></i></button>
-								<button class='kg-btn-primary ' style='width:240px;'> {{dateRangeLabel.start}} - {{ dateRangeLabel.end}} </button>
+								<button class='kg-btn-primary labelonly' style='width:240px;'> {{dateRangeLabel.start}} - {{ dateRangeLabel.end}} </button>
 								<button class='kg-btn-primary ' :disabled="!enableNextArrow" @click='gonextweek'> <i class='fa fa-angle-right fa-lg'></i></button>
 							</div>
 						</div>
@@ -73,7 +73,8 @@
 														v-bind:key="item.i"
                             @resized="resizedEvent"
 											 			drag-allow-from=".draggablehandle"
-											 			drag-ignore-from=".no-drag">
+											 			drag-ignore-from=".no-drag"
+														>
 															<div class="draggable-handle" v-show='(item.c=="")&&isInEdit' style="text-align: center; vertical-align: middle; font-size: 16px; font-weight: 700;position:relative;top:50%;transform:translateY(-50%)">Add a widget</div>
 																<div class='widgetTitle' v-bind:class="{draggablehandle: isInEdit}" v-if='item.c!=""'>
 																	<div class='row mar-0'>
@@ -277,6 +278,7 @@ export default {
 				}
 			}).indexOf(obj.id)
 			this.itemWidgetList[index][0].sel =obj.sel;
+			this.itemWidgetList[index][0].selindex =obj.selindex
 		},
 		getCount:function(t){
 			var index= this.patient.wlist.map(function(e){return e.id}).indexOf(t);
@@ -325,6 +327,7 @@ export default {
 		cleanupLayout: function(){
 			console.log("Starting cleaning up the layout... ")
 			this.layout = this.layout.filter(function(e){return (e.c!="")}).map(function(e,index){
+				console.log("index"+index)
 				var item=e;
 				item.i=index+"";
 				return item;
@@ -428,7 +431,11 @@ export default {
 			this.cleanupLayout();
     },
 		removeWidget:function(i){
+
 			var obj = this.itemWidgetList[i][0];
+			console.log("Removing Widget #"+i);
+
+			console.log(obj)
 			this.itemWidgetList[i].splice(0);
 			this.widgetList.push(obj);
 			this.layout[i].c="";
@@ -525,6 +532,10 @@ export default {
 .kg-btn-primary:disabled {
 		border:1px solid #c7c7c7;
 		color:#c7c7c7
+}
+.kg-btn-primary.labelonly {
+	cursor:default;
+	border:1px solid #f7f7f7;
 }
 .wlistctner {
 	overflow:auto;

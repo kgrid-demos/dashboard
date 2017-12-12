@@ -58,11 +58,12 @@
           Frequency
         </div>
         <div class="options pad-l-20" v-if='selectedinstr'>
-          <select v-model="custfreq">
+          {{custfreq}}
+          <!-- <select v-model="custfreq" disabled>
             <option v-for="freq in freqops" v-bind:value="freq.label">
               {{ freq.label }}
             </option>
-          </select>
+          </select> -->
         </div>
       </div>
       <div class="optrow">
@@ -118,6 +119,7 @@
         sendnotification:false,
         chartOptions: {
           maintainAspectRatio: false,
+
           legend: {
             display: false
           },
@@ -168,8 +170,16 @@
         this.chartOptions.scales.yAxes[0].ticks.stepSize = this.selectedinstr.range.step
         this.chartOptions.scales.yAxes[0].scaleLabel.labelString = this.selectedinstr.unit
       }else{
-        if(this.object.instruments.length==1){
-          this.selectedinstrname = this.object.instruments[0].name;
+        if(this.object.selindex!=-1){
+          this.selectedinstrname = this.object.instruments[this.object.selindex].name;
+          // this.selectedinstr=this.object.instruments[this.object.selindex];
+        }else {
+          if(this.object.instruments.length==1){
+            this.selectedinstrname = this.object.instruments[0].name;
+            // this.selectedinstr=this.object.instruments[0];
+          }
+        }
+        if(this.selectedinstrname!=""){
           this.custfreq = this.selectedfreq
           this.chartOptions.scales.yAxes[0].ticks.min = this.selectedinstr.range.min
           this.chartOptions.scales.yAxes[0].ticks.max = this.selectedinstr.range.max
@@ -177,14 +187,47 @@
           this.chartOptions.scales.yAxes[0].scaleLabel.labelString = this.selectedinstr.unit
         }
       }
+
+    },
+    updated:function(){
+      const obj = {"id":this.$route.params.id,"group":this.currentGroup.id,"wid": this.object.id};
+      if (this.$store.getters.getDataSettings(obj)) {
+        this.datasettings = Object.assign({}, this.$store.getters.getDataSettings(obj).datasettings);
+        this.selectedinstrname = this.datasettings.selectedinstrument.name;
+        this.custfreq = this.selectedfreq
+        this.chartOptions.scales.yAxes[0].ticks.min = this.selectedinstr.range.min
+        this.chartOptions.scales.yAxes[0].ticks.max = this.selectedinstr.range.max
+        this.chartOptions.scales.yAxes[0].ticks.stepSize = this.selectedinstr.range.step
+        this.chartOptions.scales.yAxes[0].scaleLabel.labelString = this.selectedinstr.unit
+      }else{
+        if(this.object.selindex!=-1){
+          this.selectedinstrname = this.object.instruments[this.object.selindex].name;
+          // this.selectedinstr=this.object.instruments[this.object.selindex];
+        }else {
+          if(this.object.instruments.length==1){
+            this.selectedinstrname = this.object.instruments[0].name;
+            // this.selectedinstr=this.object.instruments[0];
+          }else {
+            this.selectedinstrname=""
+          }
+        }
+        if(this.selectedinstrname!=""){
+          this.custfreq = this.selectedfreq
+          this.chartOptions.scales.yAxes[0].ticks.min = this.selectedinstr.range.min
+          this.chartOptions.scales.yAxes[0].ticks.max = this.selectedinstr.range.max
+          this.chartOptions.scales.yAxes[0].ticks.stepSize = this.selectedinstr.range.step
+          this.chartOptions.scales.yAxes[0].scaleLabel.labelString = this.selectedinstr.unit
+        }
+      }
+
     },
     beforeDestroy() {
   	 this.$eventBus.$off("saveSettings");
      },
     watch: {
-      selectedfreq: function(){
-        var stat={id:this.object.id,sel:false}
-        if(this.selectedfreq!=""){
+      selectedinstrname: function(){
+        var stat={id:this.object.id,sel:false,selindex:-1}
+        if(this.selectedinstrname!=""){
           this.custfreq = this.selectedfreq
           this.chartOptions.scales.yAxes[0].ticks.min = this.selectedinstr.range.min
           this.chartOptions.scales.yAxes[0].ticks.max = this.selectedinstr.range.max
@@ -193,30 +236,45 @@
           this.datasettings.selectedinstrument = this.selectedinstr
           this.datasettings.sendnotification = this.sendnotification
           stat.sel=true
+          stat.selindex=this.selectedinstrindex
         }
         this.$emit('instrselected',stat)
       },
       maximized:function(){
         var obj={};
-        obj.end=this.daterange.endtime;
+        obj.end=this.$moment.unix(this.today).day(6).endOf('day').unix();
         if(this.maximized){
-          if(this.selectedinstr.bwfreq<5){
-              obj.days=56
-          }else {
-            obj.days=28
+          switch(this.patientid){
+            case 'PA-67034-001':
+              obj.days=84;
+              break;
+            case 'PA-67034-007':
+              obj.days=56;
+              break;
+            default:
+              obj.days=28;
+              break;
           }
         }else {
           obj.days=7
         }
-        obj.start= this.daterange.endtime-obj.days*24*3600;;
+        obj.start= obj.end-obj.days*24*3600;;
         this.$store.commit('setcurrentdaterange',obj)
       }
     },
     computed : {
       viewmode:function(){
         var t= "4-Week View"
-        if(this.selectedinstr.bwfreq<5){
-          t="8-Week View"
+        switch(this.patientid){
+          case 'PA-67034-001':
+            t='12-week view';
+            break;
+          case 'PA-67034-007':
+            t='8-week view';
+            break;
+          default:
+            t='4-week view';
+            break;
         }
         return t
       },
@@ -229,6 +287,11 @@
       },
       today:function(){
         return this.$store.getters.gettoday
+      },
+      thisweek:function(){
+
+        return this.$store.getters.gettoday
+
       },
       hasnotes: function(){
         return this.allnotes.length>0
@@ -251,11 +314,19 @@
   		},
       alldata:function(){
         var self=this;
-        var data = JSON.parse(JSON.stringify(this.$store.getters.getPatientData(this.patientid)[this.object.id + "-data"]));
-        data.forEach(function(e){
-          e.date=self.$moment().add(e.dateOffset, 'd').unix();
-        });
-        return data
+        var data = JSON.parse(JSON.stringify(this.$store.getters.getPatientData(this.patientid)[this.object.id + "-data"]))
+        if(data){
+          data.forEach(function(e){
+            e.date=self.$moment().add(e.dateOffset, 'd').unix();
+          })
+          if(this.loaddata){
+            return data
+          }else {
+            return []
+          }
+        }else {
+          return []
+        }
       },
       allnotes:function(){
         var self=this;
@@ -292,6 +363,18 @@
               return "none"
           }
       },
+      selectedinstrindex: function(){
+        if(this.selectedinstrname!=""){
+          var index = this.instruments.map(function(e){return e.name}).indexOf(this.selectedinstrname)
+          if(index!=-1){
+            return index
+          }else {
+            return -1
+          }
+        } else {
+          return -1
+        }
+      },
       selectedinstr: function(){
         if(this.selectedinstrname!=""){
           var index = this.instruments.map(function(e){return e.name}).indexOf(this.selectedinstrname)
@@ -304,43 +387,43 @@
           return null
         }
       },
-      currentGroup:function(){
-        return this.$store.getters.getcurrentGroup;
-      },
-      myStyles () {
-        return {
-         height: `${this.chartheight}px`,
-         position: 'relative'
-        }
-      },
-      datacollection: function(){
-        var obj = {
-          labels: this.displaydata.labels,
-          datasets: [
-            {
-              label: this.title,
-              data: this.displaydata.values,
-              backgroundColor:'rgba(255, 255, 255, 1)',
-              fill: false,
-              lineTension: 0,
-              borderColor: '#bfbfbf',
-              pointBorderColor: this.displaydata.colors,
-              pointBorderWidth: 3,
-              pointStyle: 'circle',
-              pointRadius: 2,
-              pointHitRadius: 4,
-              borderWidth: 2
-            }
-          ]
-        };
-        return obj
-      },
-      displaydata: function(){
-        var obj={values:[],labels:[],colors:[]};
-        var self = this;
-        var dp = 14/self.selectedinstr.bwfreq;              // If all data frequency is daily
-        this.alldata.forEach(function (el,index) {
-          var nth=Math.round(index/dp)*dp-index;           // If all data frequency is daily
+    currentGroup:function(){
+      return this.$store.getters.getcurrentGroup;
+    },
+    myStyles () {
+      return {
+        height: `${this.chartheight}px`,
+        position: 'relative'
+      }
+    },
+    datacollection: function(){
+      var obj = {
+        labels: this.displaydata.labels,
+        datasets: [
+          {
+            label: this.title,
+            data: this.displaydata.values,
+            backgroundColor:'rgba(255, 255, 255, 1)',
+            fill: false,
+            lineTension: 0,
+            borderColor: '#bfbfbf',
+            pointBorderColor: this.displaydata.colors,
+            pointBorderWidth: 3,
+            pointStyle: 'circle',
+            pointRadius: 2,
+            pointHitRadius: 4,
+            borderWidth: 2
+          }
+        ]
+      }
+      return obj
+    },
+    displaydata: function(){
+      var obj={values:[],labels:[],colors:[]};
+      var self = this;
+      var dp = 14/self.selectedinstr.bwfreq;              // If all data frequency is daily
+      this.alldata.forEach(function (el,index) {
+        var nth=Math.round(index/dp)*dp-index;           // If all data frequency is daily
         if(el.date > self.daterange.starttime && el.date < self.daterange.endtime) {
             if(nth==0){                                    // If all data frequency is daily
               var v = el.value;
@@ -354,6 +437,7 @@
       }
     },
     methods: {
+
       maximizeWidget:function(){
         this.$emit("maximizeme",this.object.id)
       },
