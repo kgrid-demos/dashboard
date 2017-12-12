@@ -118,7 +118,6 @@
         sendnotification:false,
         chartOptions: {
           maintainAspectRatio: false,
-
           legend: {
             display: false
           },
@@ -251,11 +250,11 @@
   			return this.$moment.unix(this.today).startOf('day').unix()-this.datatimestamp
   		},
       alldata:function(){
-        var self=this
-        var data = JSON.parse(JSON.stringify(this.$store.getters.getPatientData(this.patientid)[this.object.id + "-data"]))
+        var self=this;
+        var data = JSON.parse(JSON.stringify(this.$store.getters.getPatientData(this.patientid)[this.object.id + "-data"]));
         data.forEach(function(e){
-          e.date=e.date+self.timeoffset
-        })
+          e.date=self.$moment().add(e.dateOffset, 'd').unix();
+        });
         return data
       },
       allnotes:function(){
@@ -305,54 +304,54 @@
           return null
         }
       },
-    currentGroup:function(){
-      return this.$store.getters.getcurrentGroup;
-    },
-    myStyles () {
-      return {
-        height: `${this.chartheight}px`,
-        position: 'relative'
-      }
-    },
-    datacollection: function(){
-      var obj = {
-        labels: this.displaydata.labels,
-        datasets: [
-          {
-            label: this.title,
-            data: this.displaydata.values,
-            backgroundColor:'rgba(255, 255, 255, 1)',
-            fill: false,
-            lineTension: 0,
-            borderColor: '#bfbfbf',
-            pointBorderColor: this.displaydata.colors,
-            pointBorderWidth: 3,
-            pointStyle: 'circle',
-            pointRadius: 6,
-            borderWidth: 2
-          }
-        ]
-      }
-      return obj
-    },
-    displaydata: function(){
-      var obj={values:[],labels:[],colors:[]};
-      var self = this;
-      var dp = 14/self.selectedinstr.bwfreq;              // If all data frequency is daily
-      this.alldata.forEach(function (el,index) {
-        var nth=Math.round(index/dp)*dp-index;           // If all data frequency is daily
-        if(el.date > self.daterange.starttime && el.date < self.daterange.endtime) {
-          if(nth==0){                                    // If all data frequency is daily
-            var v =Math.round(el.value/10*(self.selectedinstr.range.max-self.selectedinstr.range.min))+self.selectedinstr.range.min  // If the raw data remains in 0-10
-            // var v= el.value
-            obj.values.unshift(v);
-            obj.labels.unshift(self.$moment.unix(el.date).format('MM/D'));
-            obj.colors.unshift(self.getcolorfordata(v))
-          }
+      currentGroup:function(){
+        return this.$store.getters.getcurrentGroup;
+      },
+      myStyles () {
+        return {
+         height: `${this.chartheight}px`,
+         position: 'relative'
         }
-      });
-      return obj
-    }
+      },
+      datacollection: function(){
+        var obj = {
+          labels: this.displaydata.labels,
+          datasets: [
+            {
+              label: this.title,
+              data: this.displaydata.values,
+              backgroundColor:'rgba(255, 255, 255, 1)',
+              fill: false,
+              lineTension: 0,
+              borderColor: '#bfbfbf',
+              pointBorderColor: this.displaydata.colors,
+              pointBorderWidth: 3,
+              pointStyle: 'circle',
+              pointRadius: 2,
+              pointHitRadius: 4,
+              borderWidth: 2
+            }
+          ]
+        };
+        return obj
+      },
+      displaydata: function(){
+        var obj={values:[],labels:[],colors:[]};
+        var self = this;
+        var dp = 14/self.selectedinstr.bwfreq;              // If all data frequency is daily
+        this.alldata.forEach(function (el,index) {
+          var nth=Math.round(index/dp)*dp-index;           // If all data frequency is daily
+        if(el.date > self.daterange.starttime && el.date < self.daterange.endtime) {
+            if(nth==0){                                    // If all data frequency is daily
+              var v = el.value;
+              obj.values.unshift(v);
+              obj.labels.unshift(self.$moment.unix(el.date).format('MM/D'));
+              obj.colors.unshift(self.getcolorfordata(v));
+            }
+          }
+        });
+        return obj
+      }
     },
     methods: {
       maximizeWidget:function(){

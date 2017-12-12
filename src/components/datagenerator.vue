@@ -13,7 +13,7 @@
         <div v-for="(widget, index) in wlist.widgets">
 
           <div v-if="index === currentWidget">
-            <button v-on:click="prevWidget">◀</button>
+            <button v-on:click="prevWidget(wlist.widgets[index - 1])">◀</button>
             <div style="display:inline-block">
               <select v-model="currentWidget">
                 <option v-for="w in wlist.widgets" v-bind:value="wlist.widgets.indexOf(w)">
@@ -21,7 +21,7 @@
                 </option>
               </select>
             </div>
-            <button v-on:click="nextWidget(wlist.widgets.length)">▶</button>
+            <button v-on:click="nextWidget(wlist.widgets[index + 1], wlist.widgets.length)">▶</button>
             Period length (days):
             <input v-model.number="period" type="number"/>
             Trending:
@@ -31,17 +31,26 @@
             </select>
             Variance:
             <vue-slider ref="variance" v-model="variance" v-bind="varianceSlider"></vue-slider>
+            Bias:
+            <vue-slider ref="variance" v-model="bias" v-bind="biasSlider"></vue-slider>
             Range:
-            <vue-slider ref="range" v-model="range" v-bind="rangeSlider"></vue-slider>
+            <vue-slider ref="range" v-model="generateRange" v-bind="rangeSlider" :min="widget.range[0]" :max="widget.range[1]"></vue-slider>
+
             <button v-on:click="randomizePROData(wlist.patientID, widget)">Randomize This Widget</button>
             <button v-on:click="randomizeAllPROData(wlist.patientID, wlist.widgets)">Randomize All Widgets</button>
-            <label style="margin: 1em 0 0 2em; padding: 0; display: block;">
-              Connect neighbors: <input type="checkbox" id="connected" v-model="connected">
-            </label>
 
-            <div style="width:1120px; margin-left:2em;">
-              <div v-for="n in numdays" style="display:inline-block; width:40px; margin-bottom: 1em; text-align:center;">
-                <vue-slider ref="sliders" v-model="chartdata[wlist.patientID][widget.id + '-data'][n - 1].value" v-bind="dataSliders" v-on:drag-end="magnetize(wlist.patientID, widget, n - 1)"></vue-slider>
+            <div style="margin: 1em 0 0 2em; padding: 0;">
+              <label>
+                Connect neighbors: <input type="checkbox" id="connected" v-model="connected">
+              </label>
+              <label>
+                Show all data points: <input type="checkbox" id="showAllData" v-model="showAllData">
+              </label>
+            </div>
+            <div style="width:1400px; margin-left:2em;">
+              <div v-for="n in numdays" v-if="showpoint(n, widget.freq) || showAllData" style="display:inline-block; width:50px; margin-bottom: 1em; text-align:center;">
+                <vue-slider ref="sliders" v-model="chartdata[wlist.patientID][widget.id + '-data'][n].value"
+                            v-bind="dataSliders" :min="widget.range[0]" :max="widget.range[1]" v-on:drag-end="magnetize(wlist.patientID, widget, n)"></vue-slider>
                 {{n}}
               </div>
             </div>
@@ -69,34 +78,34 @@
         numdays: 90,
         period: 0,
         variance: 15,
-        range: [0, 10],
+        generateRange: [0, 10],
         trend: "Up",
+        bias: 0.25,
         connected: false,
+        showAllData: false,
         selectedWidget: "",
         dataSliders: {
           eventType: "auto",
           width: 6,
           height: 200,
           direction: "vertical",
-          min: -1,
-          max: 10,
-          interval: 1,
+          //interval: 1,
           disabled: false,
           show: true,
           piecewise: false,
           tooltip: "hover",
-          tooltipDir: "right",
+          tooltipDir: "top",
           style: {
             "display": "block",
-            "margin": "auto",
-            "width":"20px"
+            "margin-left": "14px",
+            "width":"50px"
           }
         },
         varianceSlider: {
           width: 100,
           height: 6,
           min: 1,
-          max: 30,
+          max: 50,
           style: {
             "display": "inline-block",
             "top": "4px"
@@ -105,14 +114,22 @@
         rangeSlider: {
           width: 100,
           height: 6,
-          min: -1,
-          max: 10,
           style: {
             "display": "inline-block",
             "top": "4px"
           }
-        }
-
+        },
+        biasSlider: {
+          width: 100,
+          height: 6,
+          min: 0,
+          max: 0.5,
+          interval: 0.05,
+          style: {
+            "display": "inline-block",
+            "top": "4px"
+          }
+        },
       }
     },
     created: function() {
@@ -141,7 +158,13 @@
             let smWidgets = [];
             widgets.forEach(function(widget) {
               if(widget.type === "PRO") {
-                widgetProps.push({"id": widget.id, "label": widget.label})
+                widgetProps.push({
+                  "id": widget.id,
+                  "label": widget.label,
+                  "range": [widget.instruments[0].range.min, widget.instruments[0].range.max],
+                  "inc": widget.instruments[0].range.inc,
+                  "freq": widget.instruments[0].bwfreq
+                })
               } else {
                 smWidgets.push({"id": widget.id, "label": widget.label})
               }
@@ -158,33 +181,38 @@
     mounted () {
     },
     methods: {
-      prevWidget() {
+      prevWidget(widget) {
         this.currentWidget --;
         if(this.currentWidget < 0) {
           this.currentWidget = 0;
+        } else {
+          this.generateRange = widget.range;
         }
       },
-      nextWidget(maxWidgets) {
+      nextWidget(widget, maxWidgets) {
         this.currentWidget++;
         if(this.currentWidget >= maxWidgets) {
           this.currentWidget = maxWidgets - 1;
+        } else {
+          this.generateRange = widget.range;
         }
       },
       randomizePROData(patientID, widget) {
         let rand, priorVal;
-        let recordDate = this.$moment();
+        let dateOffset = 0;
+
         const periodNum = this.period;
-        for(let i = 0; i < this.numdays; i++) {
+        for(let i = 0; i <= this.numdays; i++) {
           if(this.chartdata[patientID][widget.id + "-data"] === undefined) {
             this.chartdata[patientID][widget.id + "-data"] = [];
           }
 
           if(periodNum > 0) {
             if(this.trend === "Up") {
-              priorVal = this.range[0] + (Math.round((i % periodNum)/(periodNum/this.range[1])));
+              priorVal = this.generateRange[0] + (Math.round((i % periodNum)/(periodNum/this.generateRange[1])));
             } else {
-              priorVal = this.range[1] - (Math.round((i % periodNum) / (periodNum
-                  / this.range[1])));
+              priorVal = this.generateRange[1] - (Math.round((i % periodNum) / (periodNum
+                  / this.generateRange[1])));
             }
             rand = this.getRandomPeriodicValue(priorVal);
 
@@ -195,10 +223,12 @@
             rand = this.getRandomPROValue(priorVal);
             priorVal = rand;
           }
+          this.chartdata[patientID][widget.id + "-data"][i] = ({
+            'value': rand,
+            'dateOffset': dateOffset
+          });
 
-          // Add note generation here
-          this.chartdata[patientID][widget.id + "-data"][i] = ({'value': rand, 'note': '', 'date':recordDate.unix()});
-          recordDate = this.$moment(recordDate.subtract(1, 'd'));
+          dateOffset--;
           if(this.$refs.sliders !== undefined && this.$refs.sliders[i]) {
             this.$refs.sliders[i].setValue(rand);
           }
@@ -207,27 +237,29 @@
       randomizeAllPROData(patientID, widgets) {
         let that = this;
         widgets.forEach(function(widget) {
+          that.generateRange = widget.range;
           that.randomizePROData(patientID, widget);
         });
       },
       getRandomPROValue(priorVal) {
-        // Wiener process-style random walk from the prior value biased towards the bottom of the scale
-        let val = Math.round((Math.random() * Math.random() - 0.3) * this.variance) + priorVal;
-        if(val > this.range[1]) {
-          return this.range[1];
+
+        // Wiener process-style random walk from the prior value biased towards either the top or bottom the scale
+        let val = Math.round((Math.random() * Math.random() - (0.5 - this.bias)) * this.variance) + priorVal;
+        if(val > this.generateRange[1]) {
+          return this.generateRange[1];
         }
-        if(val < this.range[0]) {
-          return this.range[0];
+        if(val < this.generateRange[0]) {
+          return this.generateRange[0];
         }
         return val;
       },
       getRandomPeriodicValue(periodFactor) {
-        let val = Math.round((Math.random() * Math.random() - 0.3) * this.variance) + periodFactor;
-        if(val > this.range[1]) {
-          return this.range[1];
+        let val = Math.round((Math.random() * Math.random() - (0.5 - this.bias)) * this.variance) + periodFactor;
+        if(val > this.generateRange[1]) {
+          return this.generateRange[1];
         }
-        if(val < this.range[0]) {
-          return this.range[0];
+        if(val < this.generateRange[0]) {
+          return this.generateRange[0];
         }
         return val;
       },
@@ -240,18 +272,23 @@
               + sliderVal) / 2);
           rightVal = this.chartdata[patientID][widget.id + "-data"][index + 1].value = Math.round(((rightVal ? rightVal : 0)
               + sliderVal) / 2);
-          this.$refs.sliders[(index - 1)].setValue(leftVal);
-          this.$refs.sliders[(index + 1)].setValue(rightVal);
+          if(this.$refs.sliders[(index - 2)] !== undefined) {
+            this.$refs.sliders[(index - 2)].setValue(leftVal);
+          }
+
+          if(this.$refs.sliders[(index)] !== undefined) {
+            this.$refs.sliders[(index)].setValue(rightVal);
+          }
         }
       },
       randomizeAllSMData(patientID, smWidgets) {
         let that = this;
         smWidgets.forEach(function(widget){
-          let recordDate = that.$moment();
+          let dateOffset = 0;
           that.chartdata[patientID][widget.id + "-data"] = [];
           for(let i = 0; i < that.numdays; i++) {
-            that.chartdata[patientID][widget.id + "-data"][i] ={'value' :Math.floor(Math.random() * 2 + 1), 'note': '', 'date':recordDate.unix()}
-            recordDate = that.$moment(recordDate.subtract(1, 'd'));
+            that.chartdata[patientID][widget.id + "-data"][i] ={'value' :Math.floor(Math.random() * 2 + 1), 'dateOffset':dateOffset}
+            dateOffset--;
           }
         });
       },
@@ -262,6 +299,10 @@
           that.$http.put(basedataurl + wlist.patientID, that.chartdata[wlist.patientID]);
         });
 
+      },
+      showpoint (index, freq) {
+        let dp = 14/freq;
+        return Math.round(index/dp)*dp-index === 0;
       }
 
     }
