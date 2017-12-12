@@ -77,7 +77,7 @@ const _widgets= [
                   { name: "Body temperature in Celsius", value: 2,"bwfreq":14,
                     "dow":["Su","Mo","Tu","We","Th","Fr","Sa"], "range":{min:36,max:42,inc:1,step:2},
                     "unit":"Body Temperature (Celsius)","ryg":[{min:36,max:37.3,color:"green"}, {min:37.4,max:42,color:"red"}]}]},
-  { "id":"PRO-13","label":"Appetite",  "type":"PRO",    "constraint":{}, "sel":false,
+  { "id":"PRO-13","label":"Appetite",  "type":"PRO",    "constraint":{}, "sel":false, "selindex":-1,
   "cancertype":[  {id:0}, {id:1},{id:2}],
   "instruments":[ { name: "Visual Analog Scale (VAS)", value: 1, "bwfreq":14,
                     "dow":["Su","Mo","Tu","We","Th","Fr","Sa"], "range":{min:0,max:100,inc:1,step:20},

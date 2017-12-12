@@ -3,7 +3,7 @@
 	<modal v-if="showModal">
 		<h3 slot="header">Registration in Progress</h3>
 		<div slot="body">
-			<ul>
+			<ul class='modalentry'>
 				<li v-for='entry in registrationstatus'>{{entry}}</li>
 			</ul>
 		</div>
@@ -42,17 +42,20 @@
 				<div class='col-md-10 col-sm-10 col-xs-10 kg-bg-custom-1 ht-full pad-0'>
 					<div class='row ht-50'>
 						<div class='col-md-7 col-sm-5 pad-0'>
-							<div class="pad-l-15"  v-if='!isInEdit && pwidgetlist.length>=1 '>
+							<div class="pad-l-15"  v-if='!isInEdit && pwidgetlist.length>=1 && loaddata'>
 								<button class='kg-btn-primary ' :disabled="!enablePreArrow" @click='gopreviousweek'> <i class='fa fa-angle-left fa-lg'></i></button>
 								<button class='kg-btn-primary labelonly' style='width:240px;'> {{dateRangeLabel.start}} - {{ dateRangeLabel.end}} </button>
 								<button class='kg-btn-primary ' :disabled="!enableNextArrow" @click='gonextweek'> <i class='fa fa-angle-right fa-lg'></i></button>
 							</div>
+							<div class="pad-l-15">
+								<button class='kg-btn-primary lg' v-if='!isInEdit && !maximized && !loaddata ' @click='toggleviewmode'> Load Simulated Data</button>
+							</div>
 						</div>
 						<div class='col-md-5 col-sm-5 '>
 							<div class='float-r'>
-								<button class='kg-btn-primary ' v-if='isInEdit && pwidgetlist.length==1&&this.pwidgetlist[0]=="" ' @click='loadDefault'> Load Default Layout </button>
-								<button class='kg-btn-primary ' v-if='!isInEdit && !maximized' @click='toggleEditMode'>Edit</button>
-								<button class='kg-btn-primary ' v-if='isInEdit' :disabled='!configready' @click='saveconfig'>Save Changes</button></div>
+								<button class='kg-btn-primary lg' v-if='isInEdit && pwidgetlist.length==1&&this.pwidgetlist[0]=="" ' @click='loadDefault'> Load Default Layout </button>
+								<button class='kg-btn-primary lg' v-if='!isInEdit && !maximized' @click='toggleEditMode'>Edit</button>
+								<button class='kg-btn-primary attn lg' v-if='isInEdit' :disabled='!configready' @click='saveconfig'>Save Changes</button></div>
 							</div>
 						</div>
 						<grid-layout	:layout.sync="layout"
@@ -87,7 +90,7 @@
 																<div class='widgetcontainer fill no-drag' @drop='dropped'>
 																	<draggable class='wlayout' element="ul" v-model="itemWidgetList[item.i]" :options="customDragOptions(item.i)" >
 																		<li v-for='(object,index) in itemWidgetList[item.i]' v-bind:key='index' v-if='itemWidgetList[item.i].length==1|object.type!="NEW"'>
-																			<kotile :object='object' :patientid='$route.params.id' v-on:setinstru='setinstru' v-on:maximizeme="maxthis" :maximized='maximized' :cflag="object.type" :tileindex='item.i' :containerheight="((item.h-1)*40)" :editmode='isInEdit' draggable='true'  @dragstart='dragWidget'>
+																			<kotile :object='object'  :patientid='$route.params.id' v-on:setinstru='setinstru' v-on:maximizeme="maxthis" :maximized='maximized' :cflag="object.type" :tileindex='item.i' :containerheight="((item.h-1)*40)" :editmode='isInEdit' :viewmode='loaddata' draggable='true'  @dragstart='dragWidget'>
 																			</kotile>
 																		</li>
 																	</draggable>
@@ -120,6 +123,7 @@ export default {
 			pwidgetlist:[],
 			draggedid:"",
 			isInEdit:false,
+			loaddata:false,
 			defaultw:3,
 			defaulth:6,
 			layout:[],
@@ -132,7 +136,6 @@ export default {
 			},
 			maximized:false,
 			showModal:false
-
 		}
 	},
 	created : function() {
@@ -334,9 +337,13 @@ export default {
 				});
 			this.itemWidgetList=this.itemWidgetList.filter(function(e){return (e.length!=0)});
 		},
+		toggleviewmode:function(){
+			this.loaddata=true;
+		},
     saveconfig:function(){
 			var self = this;
 			this.showModal=true;
+			this.loaddata=false;
 			this.updateLayoutContent();
 			this.cleanupLayout();
 	    var pid=this.$route.params.id;
@@ -346,22 +353,22 @@ export default {
 			self.isInEdit = false;
 			self.registrationstatus =[];
 
-			if(false){
+			if(this.showModal){
 			setTimeout(function(){
-				self.registrationstatus.push("Registering "+self.patient.name+ " for the prescribed interventions ...")
+				self.registrationstatus.push("Saving registerations of prescribed interventions for "+self.patient.name+ " ... ")
 			},200)
 			setTimeout(function(){
 				self.registrationstatus.push("Registration is successful!!! ")
-			},1500)
-			setTimeout(function(){
-				self.registrationstatus.push("A confirmation email has also been sent to the patient.")
-			},2000)
+			},500)
+		 	setTimeout(function(){
+			 	self.registrationstatus.push("You can view the simulated data by pressing the Load Simulated Data button.")
+			},1000)
 			setTimeout(function(){
 				self.showModal=false;
 
-				},4000);
+			},6000);
 				}
-			self.showModal=false;
+			// self.showModal=false;
     },
 		getHeight:function(i){
 				if(this.$refs.item[i]){
@@ -529,8 +536,15 @@ export default {
 	margin:10px 10px;
 	display:inline-block;
 }
+.kg-btn-primary.lg{
+	width: 180px;
+}
 .kg-btn-primary:disabled {
 		border:1px solid #c7c7c7;
+		color:#c7c7c7
+}
+.kg-btn-primary.attn:disabled {
+		border:1px dashed red;
 		color:#c7c7c7
 }
 .kg-btn-primary.labelonly {
@@ -608,6 +622,9 @@ flex: auto;
 }
 h1 small {
 	font-size:50%;
+}
+ul.modalentry li {
+	line-height:2.5em;
 }
 ul.wlist {
 	margin:12px;

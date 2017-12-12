@@ -25,7 +25,7 @@
           <span>{{selectedinstr.description}}</span>
         </div>
       </div>
-    
+
       <div class="optrow">
         <div class="optionslabel pad-l-20">
           Number of Modules
@@ -43,7 +43,7 @@
   import vueSlider from 'vue-slider-component';
 
   export default {
-    props: ['chartheight', 'patientid', 'editmode', 'object','title', 'totalminutes', 'minutescompleted', 'maximized'],
+    props: ['chartheight', 'patientid', 'editmode', 'viewmode','object','title', 'totalminutes', 'minutescompleted', 'maximized'],
     components: {
       vueSlider
     },
@@ -154,7 +154,11 @@
         return count
       },
       alldata:function(){
-        return this.$store.getters.getPatientData(this.patientid)[this.object.id + "-data"].slice()
+        if(this.viewmode){
+          return this.$store.getters.getPatientData(this.patientid)[this.object.id + "-data"].slice()
+        }else {
+          return []
+        }
       }
     },
     methods: {

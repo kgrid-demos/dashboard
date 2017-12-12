@@ -22,7 +22,7 @@
         <span class='pad-l-10'>{{selectedinstr.unit}}</span>
       </div>
       <div class="col-md-4 col-sm-4 txtcenter ">
-        <span class="ft-sz-12 pad-r-10">{{viewmode}}</span>
+        <span class="ft-sz-12 pad-r-10">{{viewduration}}</span>
       </div>
       <div class="col-md-4 col-sm-4">
         <div class="float-r inline" >
@@ -44,8 +44,8 @@
         <div class="optionslabel">
           Instrument
         </div>
-        <div class="options">
-          <select v-model="selectedinstrname">
+        <div class="options instru">
+          <select v-model="selectedinstrname" :class="{attn:!object.sel}">
           <option disabled value="">(Please select one)</option>
             <option v-for="instrument in instruments" v-bind:value="instrument.name">
               {{ instrument.name }}
@@ -107,7 +107,7 @@
 <script>
   import linechart from './linechart.js';
   export default {
-    props: ['chartheight', 'editmode', 'object', 'title','patientid', 'maximized'],
+    props: ['chartheight', 'editmode', 'viewmode', 'object', 'title','patientid', 'maximized'],
     components: {
       linechart,
   },
@@ -118,6 +118,7 @@
         selectedinstrname: "",
         custfreq:"",
         sendnotification:false,
+
         chartOptions: {
           maintainAspectRatio: false,
 
@@ -264,7 +265,7 @@
       }
     },
     computed : {
-      viewmode:function(){
+      viewduration:function(){
         var t= "4-Week View"
         switch(this.patientid){
           case 'PA-67034-001':
@@ -331,19 +332,30 @@
       },
       allnotes:function(){
         var self=this;
-        var data = this.$store.getters.getPatientData(this.patientid)
-        if(data[this.object.id + "-notes"]){
-          var d= JSON.parse(JSON.stringify(data[this.object.id + "-notes"]))
-          d.forEach(function(e){
-            e.date=e.date+self.timeoffset
-          })
-          return d
-        } else {
-          return []
-        }
+        var data = [];
+        if(this.object && this.viewmode){
+          var d = JSON.parse(JSON.stringify(this.$store.getters.getPatientData(this.patientid)))
+          if(d[this.object.id + "-notes"]){
+            data = d[this.object.id + "-notes"]
+            data.forEach(function(e){
+              e.date=e.date+self.timeoffset
+           })
+         }
+       }
+       return data
       },
       allalert:function(){
-        return this.$store.getters.getpatientalert(this.object.id).slice()
+        var self=this;
+        var data = [];
+        if(this.object && this.viewmode){
+          data = JSON.parse(JSON.stringify(this.$store.getters.getpatientalert(this.object.id)))
+          if(data){
+            data.forEach(function(e){
+              e.date=e.date+self.timeoffset
+           })
+         }
+       }
+       return data
       },
       instruments: function(){
         return this.$store.getters.getwidgetinstruments(this.object.id)
@@ -506,7 +518,9 @@
     margin:0 auto;
     background-color: white;
   }
-
+  .instru select.attn{
+    border: 1px dashed red;
+  }
   .graph .edit {
     width: 25px;
     height: 25px;
