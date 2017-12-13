@@ -134,10 +134,15 @@
         self.alldata.forEach(function(e){
           var obj={value:1, status:"", timestamp:-1}
           obj.value=e.value;
-          obj.timestamp=e.date;
+          obj.timestamp=self.$moment().add(e.dateOffset, 'd').unix();
           obj.status="☐"
-          if((obj.timestamp!=-1) && (obj.timestamp<self.daterange.endtime)){
-              obj.status="☑"
+          if(obj.timestamp<self.daterange.endtime){
+            if(obj.value === 1){
+              obj.status="☑";
+            } else {
+              obj.status="☐";
+            }
+
             }
           arr.push(obj)
         })

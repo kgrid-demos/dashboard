@@ -127,7 +127,6 @@
             yAxes: [{
               scaleLabel: {
                 display: false,
-                labelString: 'probability'
                 },
               ticks: {
                 min: 0,
@@ -141,8 +140,23 @@
                 lineWidth: 2,
                 drawBorder: false
               }
+            }],
+            xAxes: [{
+              display: true,
+              scaleLabel: {
+                display: false,
+              },
+              ticks: {
+              },
+              gridLines: {
+                stepSize: 7,
+                display: false,
+                color: '#f2f2f2',
+                lineWidth: 2,
+                drawBorder: false
+              }
             }]
-          },
+          }
         }
       }
     },
@@ -391,12 +405,13 @@
             pointBorderColor: this.displaydata.colors,
             pointBorderWidth: 3,
             pointStyle: 'circle',
-            pointRadius: 2,
+            pointRadius: 4,
             pointHitRadius: 4,
-            borderWidth: 2
+            borderWidth: 2,
+            spanGaps: true
           }
         ]
-      }
+      };
       return obj
     },
     displaydata: function(){
@@ -409,11 +424,22 @@
             if(nth==0){                                    // If all data frequency is daily
               var v = el.value;
               obj.values.unshift(v);
-              obj.labels.unshift(self.$moment.unix(el.date).format('MM/D'));
+              obj.labels.unshift(self.$moment.unix(el.date).format('ddd'));
               obj.colors.unshift(self.getcolorfordata(v));
+            } else {
+              obj.values.unshift(null);
+              obj.labels.unshift(self.$moment.unix(el.date).format('ddd'));
+              obj.colors.unshift(null);
             }
           }
+
         });
+      let i = obj.values.length;
+      for(let j = i; j < 7; j++) {
+        obj.values.push(null);
+        obj.labels.push(this.$moment.unix(this.alldata[this.alldata.length - 1].date + 86400 * (j-i)).format('ddd'));
+        obj.colors.push(null);
+      }
         return obj
       }
     },

@@ -32,7 +32,9 @@
             Variance:
             <vue-slider ref="variance" v-model="variance" v-bind="varianceSlider"></vue-slider>
             Bias:
-            <vue-slider ref="variance" v-model="bias" v-bind="biasSlider"></vue-slider>
+            <vue-slider ref="bias" v-model="bias" v-bind="biasSlider"></vue-slider>
+            Starting value:
+            <input v-model.number="initVal" style="width:4em;" :placeholder="widget.range[0]" :min="widget.range[0]" :max="widget.range[1]" :step="widget.inc" type="number"/>
             Range:
             <vue-slider ref="range" v-model="generateRange" v-bind="rangeSlider" :min="widget.range[0]" :max="widget.range[1]"></vue-slider>
 
@@ -50,11 +52,15 @@
             <div style="width:1400px; margin-left:2em;">
               <div v-for="n in numdays" v-if="showpoint(n, widget.freq) || showAllData" style="display:inline-block; width:50px; margin-bottom: 1em; text-align:center;">
                 <vue-slider ref="sliders" v-model="chartdata[wlist.patientID][widget.id + '-data'][n].value"
-                            v-bind="dataSliders" :min="widget.range[0]" :max="widget.range[1]" v-on:drag-end="magnetize(wlist.patientID, widget, n)"></vue-slider>
+                            v-bind="dataSliders" :min="widget.range[0]" :max="widget.range[1]" :interval="widget.inc" v-on:drag-end="magnetize(wlist.patientID, widget, n)"></vue-slider>
                 {{n}}
               </div>
             </div>
           </div>
+        </div>
+        <div class="smcontainer" v-for="smwidget in wlist.smWidgets">
+          <h5>{{smwidget.label}}</h5> <br>
+          <span class="smvals" v-for="(dpoint, n) in chartdata[wlist.patientID][smwidget.id + '-data']" @click="toggleSMVal(wlist.patientID, smwidget, dpoint, n)">{{convertSMVal(chartdata[wlist.patientID][smwidget.id + '-data'][n].value)}} </span>
         </div>
       </div>
     </div>
@@ -64,6 +70,7 @@
 <script>
   import vueSlider from 'vue-slider-component';
   import applayout from "./applayout.vue";
+  import Vue from 'vue';
 
   export default {
     components: {
@@ -77,6 +84,7 @@
         chartdata: {},
         numdays: 90,
         period: 0,
+        initVal: 0,
         variance: 15,
         generateRange: [0, 10],
         trend: "Up",
@@ -89,7 +97,6 @@
           width: 6,
           height: 200,
           direction: "vertical",
-          //interval: 1,
           disabled: false,
           show: true,
           piecewise: false,
@@ -166,7 +173,12 @@
                   "freq": widget.instruments[0].bwfreq
                 })
               } else {
-                smWidgets.push({"id": widget.id, "label": widget.label})
+                smWidgets.push({
+                  id: widget.id,
+                  label: widget.label,
+                  modulecount: widget.instruments[0].modulecount,
+                  inc: widget.instruments[0].inc
+                });
               }
             });
             widgetList.push({"patientName":patient.name,
@@ -214,13 +226,13 @@
               priorVal = this.generateRange[1] - (Math.round((i % periodNum) / (periodNum
                   / this.generateRange[1])));
             }
-            rand = this.getRandomPeriodicValue(priorVal);
+            rand = this.getRandomPeriodicValue(priorVal, widget.inc);
 
           } else {
             if(i === 0) {
-              priorVal = 0;
+              priorVal = this.initVal;
             }
-            rand = this.getRandomPROValue(priorVal);
+            rand = this.getRandomPROValue(priorVal, widget.inc);
             priorVal = rand;
           }
           this.chartdata[patientID][widget.id + "-data"][i] = ({
@@ -241,10 +253,10 @@
           that.randomizePROData(patientID, widget);
         });
       },
-      getRandomPROValue(priorVal) {
+      getRandomPROValue(priorVal, inc) {
 
         // Wiener process-style random walk from the prior value biased towards either the top or bottom the scale
-        let val = Math.round((Math.random() * Math.random() - (0.5 - this.bias)) * this.variance) + priorVal;
+        let val = Math.round(((Math.random() * Math.random() - (0.5 - this.bias)) * this.variance)/inc) * inc + priorVal;
         if(val > this.generateRange[1]) {
           return this.generateRange[1];
         }
@@ -253,7 +265,7 @@
         }
         return val;
       },
-      getRandomPeriodicValue(periodFactor) {
+      getRandomPeriodicValue(periodFactor, inc) {
         let val = Math.round((Math.random() * Math.random() - (0.5 - this.bias)) * this.variance) + periodFactor;
         if(val > this.generateRange[1]) {
           return this.generateRange[1];
@@ -285,12 +297,24 @@
         let that = this;
         smWidgets.forEach(function(widget){
           let dateOffset = 0;
+          let value = 1;
           that.chartdata[patientID][widget.id + "-data"] = [];
-          for(let i = 0; i < that.numdays; i++) {
-            that.chartdata[patientID][widget.id + "-data"][i] ={'value' :Math.floor(Math.random() * 2 + 1), 'dateOffset':dateOffset}
-            dateOffset--;
+          for(let i = 0; i < widget.modulecount; i++) {
+            let completed =  Math.floor(Math.random() * 2 + 1);
+            if(completed === 2) {
+              value = 0;
+            }
+            dateOffset = dateOffset - (Math.floor(Math.random() * that.numdays + 1) + dateOffset - (widget.modulecount - i));
+            that.chartdata[patientID][widget.id + "-data"][i] = {'value': value, 'dateOffset': dateOffset};
+
           }
         });
+      },
+      convertSMVal(value) {
+        if(value === 0) {
+          return '☐';
+        }
+        return '☑';
       },
       saveData() {
         const basedataurl = 'http://localhost:3001/patients/';
@@ -341,5 +365,19 @@
     margin:3px;
     padding:2px;
     cursor: pointer;
+  }
+  .smvals {
+    font-size: 16pt;
+    padding: 0 0 0 2px;
+  }
+  .smcontainer {
+    display: inline-block;
+    margin: 4px;
+    padding: 1px 6px;
+    border: 1px solid gray;
+  }
+  h5 {
+    margin:0;
+    padding: 0;
   }
 </style>
