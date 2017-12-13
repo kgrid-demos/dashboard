@@ -41,27 +41,32 @@
 				<div class='col-md-1 col-sm-1 col-xs-1 ht-full  pad-0' v-else></div>
 				<div class='col-md-10 col-sm-10 col-xs-10 kg-bg-custom-1 pdd-panel ht-full pad-0' :class='{fading:fading}'>
 					<div class='row ht-50'>
-						<div class='col-md-7 col-sm-5 pad-0'>
+						<div class='col-md-4 col-sm-4 pad-0'>
 							<div class="pad-l-30 pad-t-20 ft-sz-18 ft-italic ft-wt-6">Time Point {{timepoint}} - {{timetitle}}</div>
 								<div class="pad-l-15">
 						</div>
 						</div>
-						<div class='col-md-5 col-sm-5 '>
-							<div class='float-r'>
-								<button class='kg-btn-primary lg' v-if='!isInEdit && !maximized && !loaddata & pddready' @click='toggleviewmode'> {{timeff}}</button>
+						<div class='col-md-8 col-sm-8 '>
+							<div class='float-r' v-if='isInEdit'>
 								<button class='kg-btn-primary lg' v-if='isInEdit && pwidgetlist.length==1&&this.pwidgetlist[0]=="" ' @click='loadDefault'> Load Default Layout </button>
-								<button class='kg-btn-primary lg' v-if='!isInEdit && !maximized && !pddready' @click='toggleEditMode'>Edit</button>
-								<button class='kg-btn-primary attn lg' v-if='isInEdit' :disabled='!configready' @click='saveconfig'>Save Changes</button></div>
+								<button class='kg-btn-primary attn lg' v-if='isInEdit' :disabled='!configready' @click='saveconfig'>Save Changes</button>
 							</div>
-							<div class="float-r pad-r-15"  v-if='!isInEdit && pwidgetlist.length>=1 && loaddata && !maximized'>
-								<button class='kg-btn-primary ' :disabled="!enablePreArrow" @click='gopreviousweek'> <i class='fa fa-angle-left fa-lg'></i></button>
-								<button class='kg-btn-primary labelonly' style='width:140px;'> {{dateRangeLabel.week}} </button>
-								<button class='kg-btn-primary ' :disabled="!enableNextArrow" @click='gonextweek'> <i class='fa fa-angle-right fa-lg'></i></button>
-							</div>
-							<div class='float-r pad-r-15' v-if='!isInEdit && pwidgetlist.length>=1 && loaddata && maximized'>
-								<button class='kg-btn-primary labelonly' style='width:240px;'> {{viewduration}} </button>
+							<div class='float-r' v-else>
+								<button class='kg-btn-primary lg' v-if='!maximized && !loaddata & pddready' @click='toggleviewmode'> {{timeff}}</button>
+								<div class="pad-r-15 ht-60 inline"  v-if=' pwidgetlist.length>=1 && loaddata'>
+									<button class='kg-btn-wk '  :disabled="!enablePreArrow" @click='gopreviousweek'> <i v-show="!maximized" class='fa fa-angle-left fa-lg'></i></button>
+									<div class='weektrack'>
+										<button class='wkcursor ft-sz-12' :style='wktracker'></button>
+										<button class='wklabel ft-sz-12' v-for='wk in simuweeks'>Week {{wk}}</button>
+									</div>
+									<!-- <button class='kg-btn-primary labelonly' style='width:140px;'> {{dateRangeLabel.week}} </button> -->
+									<button class='kg-btn-wk ' :disabled="!enableNextArrow" @click='gonextweek'> <i v-show="!maximized" class='fa fa-angle-right fa-lg'></i></button>
+								</div>
+								<button class='kg-btn-primary inline' v-if='!maximized ' @click='toggleEditMode'>Edit</button>
 							</div>
 						</div>
+						</div>
+
 						<grid-layout	:layout.sync="layout"
 													:col-num="colnum"
 													:row-height="30"
@@ -174,8 +179,7 @@ export default {
 		 	this.pddready=false;
 		} else {
 			this.pddready=true;
-		}// 	this.dragOptions.disabled=false;
-		// }
+		}
 	},
 	updated: function() {
 	  },
@@ -190,8 +194,12 @@ export default {
 					return 24
 			}
 		},
-		viewduration:function(){
-			return this.simuweekcount+'-week view'
+		simuweeks:function(){
+			var arr=[]
+			for(var i=1; i<=this.simuweekcount;i++){
+				arr.push(i)
+			}
+			return arr
 		},
 		timetitle: function(){
 			switch (this.timepoint){
@@ -207,13 +215,21 @@ export default {
 					}
 			}
 		},
-		timeff:function(){
-			switch(this.patient.id){
-				case 'PA-67034-001':
-					return '12 weeks later...'
-				default:
-					return '8 weeks later...'
+		wktracker: function(){
+			var x= (this.weekno-1)*60
+			var w=this.simuweekcount*60
+			if(this.maximized){
+				x=0
+			}else{
+				w=60
 			}
+			return {
+	        transform: `translateX(${x}px)`,
+					width:`${w}px`
+	      }
+		},
+		timeff:function(){
+			return this.simuweekcount+' weeks later...'
 		},
 		today:function(){
 			return this.$store.getters.gettoday
@@ -246,7 +262,7 @@ export default {
 			obj.end=this.$moment.unix(this.daterange.endtime).format("MMM. D, YYYY")
 			obj.startDate=this.$moment.unix(this.daterange.starttime)
 			obj.endDate=this.$moment.unix(this.daterange.endtime)
-			obj.week='Week #'+this.weekno
+			obj.week='Week '+this.weekno
 			return obj
 		},
 		weekno:function(){
@@ -540,6 +556,7 @@ export default {
 		},
 		toggleEditMode:function(){
 			this.isInEdit=true;
+			this.timepoint=1;
 			this.dragOptions.disabled=false;
 			this.addEmptySlot();
 		},
@@ -601,6 +618,17 @@ export default {
 	margin:10px 10px;
 	display:inline-block;
 }
+.kg-btn-wk {
+	background-color:#e7e7e7;
+	border:none;
+	color:#0075bc;
+	padding:10px 10px;
+	margin:10px 10px;
+	display:inline-block;
+}
+.kg-btn-wk:disabled {
+	color:#e7e7e7;
+}
 .kg-btn-primary.lg{
 	width: 180px;
 }
@@ -615,6 +643,33 @@ export default {
 .kg-btn-primary.labelonly {
 	cursor:default;
 	border:1px solid #f7f7f7;
+}
+.weektrack {
+	display: inline-block;
+	position:relative;
+	border-bottom:1px solid #0075bc;
+	margin: 20px 0px;
+}
+.wkcursor {
+	position:absolute;
+	height:25px;
+	background-color: #0075bc;
+	z-index:300;
+	transition:transform 0.5s ease;
+}
+.wklabel {
+	position:relative;
+	cursor:default;
+	background-color:transparent;
+	border:none;
+	padding:3px;
+	text-align:center;
+	margin:0px ;
+	width:60px;
+	height: 25px;
+	z-index:350;
+	color: #fff;
+	/* mix-blend-mode: darken; */
 }
 .wlistctner {
 	overflow:auto;
