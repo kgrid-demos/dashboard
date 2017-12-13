@@ -39,23 +39,27 @@
 					</div>
 				</div>
 				<div class='col-md-1 col-sm-1 col-xs-1 ht-full  pad-0' v-else></div>
-				<div class='col-md-10 col-sm-10 col-xs-10 kg-bg-custom-1 ht-full pad-0'>
+				<div class='col-md-10 col-sm-10 col-xs-10 kg-bg-custom-1 pdd-panel ht-full pad-0' :class='{fading:fading}'>
 					<div class='row ht-50'>
 						<div class='col-md-7 col-sm-5 pad-0'>
-							<div class="pad-l-15"  v-if='!isInEdit && pwidgetlist.length>=1 && loaddata'>
-								<button class='kg-btn-primary ' :disabled="!enablePreArrow" @click='gopreviousweek'> <i class='fa fa-angle-left fa-lg'></i></button>
-								<button class='kg-btn-primary labelonly' style='width:240px;'> {{dateRangeLabel.start}} - {{ dateRangeLabel.end}} </button>
-								<button class='kg-btn-primary ' :disabled="!enableNextArrow" @click='gonextweek'> <i class='fa fa-angle-right fa-lg'></i></button>
-							</div>
-							<div class="pad-l-15">
-								<button class='kg-btn-primary lg' v-if='!isInEdit && !maximized && !loaddata ' @click='toggleviewmode'> Load Simulated Data</button>
-							</div>
+							<div class="pad-l-30 pad-t-20 ft-sz-18 ft-italic ft-wt-6">Time Point {{timepoint}} - {{timetitle}}</div>
+								<div class="pad-l-15">
+						</div>
 						</div>
 						<div class='col-md-5 col-sm-5 '>
 							<div class='float-r'>
+								<button class='kg-btn-primary lg' v-if='!isInEdit && !maximized && !loaddata & pddready' @click='toggleviewmode'> {{timeff}}</button>
 								<button class='kg-btn-primary lg' v-if='isInEdit && pwidgetlist.length==1&&this.pwidgetlist[0]=="" ' @click='loadDefault'> Load Default Layout </button>
-								<button class='kg-btn-primary lg' v-if='!isInEdit && !maximized' @click='toggleEditMode'>Edit</button>
+								<button class='kg-btn-primary lg' v-if='!isInEdit && !maximized && !pddready' @click='toggleEditMode'>Edit</button>
 								<button class='kg-btn-primary attn lg' v-if='isInEdit' :disabled='!configready' @click='saveconfig'>Save Changes</button></div>
+							</div>
+							<div class="float-r pad-r-15"  v-if='!isInEdit && pwidgetlist.length>=1 && loaddata && !maximized'>
+								<button class='kg-btn-primary ' :disabled="!enablePreArrow" @click='gopreviousweek'> <i class='fa fa-angle-left fa-lg'></i></button>
+								<button class='kg-btn-primary labelonly' style='width:140px;'> {{dateRangeLabel.week}} </button>
+								<button class='kg-btn-primary ' :disabled="!enableNextArrow" @click='gonextweek'> <i class='fa fa-angle-right fa-lg'></i></button>
+							</div>
+							<div class='float-r pad-r-15' v-if='!isInEdit && pwidgetlist.length>=1 && loaddata && maximized'>
+								<button class='kg-btn-primary labelonly' style='width:240px;'> {{viewduration}} </button>
 							</div>
 						</div>
 						<grid-layout	:layout.sync="layout"
@@ -122,8 +126,10 @@ export default {
 			itemWidgetList:[],
 			pwidgetlist:[],
 			draggedid:"",
+			timepoint:1,
 			isInEdit:false,
 			loaddata:false,
+			pddready:false,
 			defaultw:3,
 			defaulth:6,
 			layout:[],
@@ -135,12 +141,15 @@ export default {
 				ghostClass: 'ghost',
 			},
 			maximized:false,
-			showModal:false
+			showModal:false,
+			fading:false,
+
 		}
 	},
 	created : function() {
 		var self = this;
 		var lastsunday = this.$moment().day(-7);
+		this.pddready=false;
 		this.$store.commit('setCurrentPatientIndex',{'pid':this.patient.id,'group':this.patient.groupid});
 	},
 	mounted:function(){
@@ -162,14 +171,50 @@ export default {
 		})
 		}
 		if(this.pwidgetlist.length==0){
-			this.isInEdit=true;
-			this.dragOptions.disabled=false;
-		}
-
+		 	this.pddready=false;
+		} else {
+			this.pddready=true;
+		}// 	this.dragOptions.disabled=false;
+		// }
 	},
 	updated: function() {
 	  },
 	computed : {
+		simuweekcount:function(){
+			switch(this.patient.id){
+				case 'PA-67034-001':
+					return 12
+				case 'PA-67034-007':
+					return 8
+				default:
+					return 24
+			}
+		},
+		viewduration:function(){
+			return this.simuweekcount+'-week view'
+		},
+		timetitle: function(){
+			switch (this.timepoint){
+				case 1:
+					return 'Initiation of PRO-SM tools'
+				case 2:
+					switch(this.patient.id){
+						case 'PA-67034-001':
+							return 'Twelve weeks into the treatment'
+						default:
+							return 'Eight weeks into the treatment'
+
+					}
+			}
+		},
+		timeff:function(){
+			switch(this.patient.id){
+				case 'PA-67034-001':
+					return '12 weeks later...'
+				default:
+					return '8 weeks later...'
+			}
+		},
 		today:function(){
 			return this.$store.getters.gettoday
 		},
@@ -201,7 +246,19 @@ export default {
 			obj.end=this.$moment.unix(this.daterange.endtime).format("MMM. D, YYYY")
 			obj.startDate=this.$moment.unix(this.daterange.starttime)
 			obj.endDate=this.$moment.unix(this.daterange.endtime)
+			obj.week='Week #'+this.weekno
 			return obj
+		},
+		weekno:function(){
+			var wk = this.simuweekcount;
+			var dt=this.today-this.daterange.starttime
+			console.log(dt)
+
+			while(dt>604800){
+				dt=dt-604800
+				wk=wk-1
+			}
+			return wk
 		},
 		patient: function(){
 			console.log(this.$route.params.id);
@@ -338,12 +395,20 @@ export default {
 			this.itemWidgetList=this.itemWidgetList.filter(function(e){return (e.length!=0)});
 		},
 		toggleviewmode:function(){
-			this.loaddata=true;
+			var self=this;
+			this.fading=true
+			setTimeout(function(){
+				self.loaddata=true;
+				self.timepoint=2;
+				self.fading=false;
+			},1500)
+
 		},
     saveconfig:function(){
 			var self = this;
 			this.showModal=true;
 			this.loaddata=false;
+			this.pddready=true;
 			this.updateLayoutContent();
 			this.cleanupLayout();
 	    var pid=this.$route.params.id;
@@ -361,7 +426,7 @@ export default {
 				self.registrationstatus.push("Registration is successful!!! ")
 			},500)
 		 	setTimeout(function(){
-			 	self.registrationstatus.push("You can view the simulated data by pressing the Load Simulated Data button.")
+			 	self.registrationstatus.push("You are ready for the next step." )
 			},1000)
 			setTimeout(function(){
 				self.showModal=false;
@@ -573,6 +638,13 @@ flex: auto;
 }
 .widgetcontainer.over {
 		background-color:yellow;
+}
+.pdd-panel {
+	opacity: 1;
+	transition: opacity 1s ease;
+}
+.pdd-panel.fading {
+	opacity:0.1;
 }
 .widgetTitle {
   padding:5px 8px;

@@ -22,7 +22,6 @@
         <span class='pad-l-10'>{{selectedinstr.unit}}</span>
       </div>
       <div class="col-md-4 col-sm-4 txtcenter ">
-        <span class="ft-sz-12 pad-r-10">{{viewduration}}</span>
       </div>
       <div class="col-md-4 col-sm-4">
         <div class="float-r inline" >
@@ -113,15 +112,12 @@
   },
     data () {
       return {
-        loaddata: true,
         datasettings: {},
         selectedinstrname: "",
         custfreq:"",
         sendnotification:false,
-
         chartOptions: {
           maintainAspectRatio: false,
-
           legend: {
             display: false
           },
@@ -174,11 +170,9 @@
       }else{
         if(this.object.selindex!=-1){
           this.selectedinstrname = this.object.instruments[this.object.selindex].name;
-          // this.selectedinstr=this.object.instruments[this.object.selindex];
         }else {
           if(this.object.instruments.length==1){
             this.selectedinstrname = this.object.instruments[0].name;
-            // this.selectedinstr=this.object.instruments[0];
           }
         }
         if(this.selectedinstrname!=""){
@@ -189,7 +183,6 @@
           this.chartOptions.scales.yAxes[0].scaleLabel.labelString = this.selectedinstr.unit
         }
       }
-
     },
     updated:function(){
       const obj = {"id":this.$route.params.id,"group":this.currentGroup.id,"wid": this.object.id};
@@ -204,11 +197,9 @@
       }else{
         if(this.object.selindex!=-1){
           this.selectedinstrname = this.object.instruments[this.object.selindex].name;
-          // this.selectedinstr=this.object.instruments[this.object.selindex];
         }else {
           if(this.object.instruments.length==1){
             this.selectedinstrname = this.object.instruments[0].name;
-            // this.selectedinstr=this.object.instruments[0];
           }else {
             this.selectedinstrname=""
           }
@@ -221,7 +212,6 @@
           this.chartOptions.scales.yAxes[0].scaleLabel.labelString = this.selectedinstr.unit
         }
       }
-
     },
     beforeDestroy() {
   	 this.$eventBus.$off("saveSettings");
@@ -265,21 +255,6 @@
       }
     },
     computed : {
-      viewduration:function(){
-        var t= "4-Week View"
-        switch(this.patientid){
-          case 'PA-67034-001':
-            t='12-week view';
-            break;
-          case 'PA-67034-007':
-            t='8-week view';
-            break;
-          default:
-            t='4-week view';
-            break;
-        }
-        return t
-      },
       hasalert:function(){
         var b= false;
         this.allalert.forEach(function(e){
@@ -321,7 +296,7 @@
           data.forEach(function(e){
             e.date=self.$moment().add(e.dateOffset, 'd').unix();
           })
-          if(this.loaddata){
+          if(this.viewmode){
             return data
           }else {
             return []
