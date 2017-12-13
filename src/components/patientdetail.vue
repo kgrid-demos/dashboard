@@ -55,8 +55,10 @@
 								<button class='kg-btn-primary lg' v-if='!maximized && !loaddata & pddready' @click='toggleviewmode'> {{timeff}}</button>
 								<div class="pad-r-15 ht-60 inline"  v-if=' pwidgetlist.length>=1 && loaddata'>
 									<button class='kg-btn-wk '  :disabled="!enablePreArrow" @click='gopreviousweek'> <i v-show="!maximized" class='fa fa-angle-left fa-lg'></i></button>
-									<div class='weektrack'>
-										<button class='wkcursor ft-sz-12' :style='wktracker'></button>
+									<div class='weektrack' ref='wktrack'>
+										<button class='wkcursorbg ft-sz-12' :style='wktracker'></button>
+										<button class='wkcursorfg ft-sz-12' ref='wkcursor' :style='wktracker' ></button>
+
 										<button class='wklabel ft-sz-12' v-for='wk in simuweeks'>Week {{wk}}</button>
 									</div>
 									<!-- <button class='kg-btn-primary labelonly' style='width:140px;'> {{dateRangeLabel.week}} </button> -->
@@ -148,7 +150,11 @@ export default {
 			maximized:false,
 			showModal:false,
 			fading:false,
-
+			weekselector:{
+				currentweek:8,
+				clicked:false,
+				currentoffset:0
+			}
 		}
 	},
 	created : function() {
@@ -215,6 +221,7 @@ export default {
 					}
 			}
 		},
+
 		wktracker: function(){
 			var x= (this.weekno-1)*60
 			var w=this.simuweekcount*60
@@ -224,7 +231,8 @@ export default {
 				w=60
 			}
 			return {
-	        transform: `translateX(${x}px)`,
+	        // transform: `translateX(${x}px)`,
+					left: `${x}px`,
 					width:`${w}px`
 	      }
 		},
@@ -268,8 +276,6 @@ export default {
 		weekno:function(){
 			var wk = this.simuweekcount;
 			var dt=this.today-this.daterange.starttime
-			console.log(dt)
-
 			while(dt>604800){
 				dt=dt-604800
 				wk=wk-1
@@ -277,7 +283,7 @@ export default {
 			return wk
 		},
 		patient: function(){
-			console.log(this.$route.params.id);
+			// console.log(this.$route.params.id);
 			return this.$store.getters.getpatientbyid({"id":this.$route.params.id,"group":this.currentGroup.id});
 		},
 		nextitem:function(){
@@ -403,7 +409,7 @@ export default {
 		cleanupLayout: function(){
 			console.log("Starting cleaning up the layout... ")
 			this.layout = this.layout.filter(function(e){return (e.c!="")}).map(function(e,index){
-				console.log("index"+index)
+				// console.log("index"+index)
 				var item=e;
 				item.i=index+"";
 				return item;
@@ -447,9 +453,8 @@ export default {
 			setTimeout(function(){
 				self.showModal=false;
 
-			},6000);
+			},3000);
 				}
-			// self.showModal=false;
     },
 		getHeight:function(i){
 				if(this.$refs.item[i]){
@@ -484,10 +489,10 @@ export default {
 			payload.entry=obj;
 			this.$http.post(this.loggerurl, payload)
 				.then(function (response) {
-    			console.log(response);
+    			// console.log(response);
   			})
   			.catch(function (error) {
-    			console.log(error);
+    			// console.log(error);
   			});
 
 		},
@@ -495,7 +500,7 @@ export default {
       ev.stopPropagation();
 			 ev.preventDefault();
 			console.log("Start Dragging ");
-			console.log(ev.target);
+			// console.log(ev.target);
       return true;
     },
     denter: function(e){
@@ -511,7 +516,7 @@ export default {
       e.preventDefault();
 			e.stopPropagation();
       console.log("Drag over");
-      console.log(e.target);
+      // console.log(e.target);
     },
     dropped:function(e) {
 			e.preventDefault();
@@ -521,9 +526,9 @@ export default {
 		removeWidget:function(i){
 
 			var obj = this.itemWidgetList[i][0];
-			console.log("Removing Widget #"+i);
+			// console.log("Removing Widget #"+i);
 
-			console.log(obj)
+			// console.log(obj)
 			this.itemWidgetList[i].splice(0);
 			this.widgetList.push(obj);
 			this.layout[i].c="";
@@ -650,13 +655,21 @@ export default {
 	border-bottom:1px solid #0075bc;
 	margin: 20px 0px;
 }
-.wkcursor {
+.wkcursorfg {
+	position:absolute;
+	height:25px;
+	background-color: transparent;
+	z-index:400;
+	transition:left 0.5s ease, width 0.5s ease;
+}
+.wkcursorbg {
 	position:absolute;
 	height:25px;
 	background-color: #0075bc;
 	z-index:300;
-	transition:transform 0.5s ease;
+	transition:left 0.5s ease, width 0.5s ease;
 }
+
 .wklabel {
 	position:relative;
 	cursor:default;

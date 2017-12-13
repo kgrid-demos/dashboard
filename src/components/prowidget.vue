@@ -30,13 +30,6 @@
       </div>
     </div>
 
-    <!-- <div class="pad-l-20 min"  v-if='selectedinstr'>
-      <div v-for='range in selectedinstr.ryg' class="thres" :class="range.color">
-        <span v-if='range.min<range.max'>{{range.min}}-{{range.max}}</span>
-        <span v-else>{{range.min}}</span>
-      </div>
-    </div> -->
-
     <linechart v-if="!editmode" :chart-data="datacollection" :options="chartOptions" :styles='myStyles'></linechart>
     <div v-if="editmode">
       <div class="optrow">
@@ -547,7 +540,7 @@
       text-transform: none;
   }
   .notesdisplay {
-      height:150px;
+      height:120px;
       background-color: #fff;
       margin:15px 0px 0px 0px;
       border: none;
