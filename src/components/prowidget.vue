@@ -415,7 +415,7 @@
       var dp = 14/self.selectedinstr.bwfreq;              // If all data frequency is daily
       if(this.alldata.length>0){
       this.alldata.forEach(function (el,index) {
-        var nth=Math.round(index/dp)*dp-index;           // If all data frequency is daily
+        var nth=Math.round(Math.round(index/dp)*dp)-index;           // If all data frequency is daily
         if(el.date > self.daterange.starttime && el.date < self.daterange.endtime) {
             if(nth==0){                                    // If all data frequency is daily
               var v = el.value;
