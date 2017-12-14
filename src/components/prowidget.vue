@@ -143,14 +143,16 @@
             }],
             xAxes: [{
               display: true,
+              offset: true,
               scaleLabel: {
                 display: false,
               },
               ticks: {
+                maxTicksLimit: 8
               },
               gridLines: {
                 stepSize: 7,
-                display: false,
+                display: true,
                 color: '#f2f2f2',
                 lineWidth: 2,
                 drawBorder: false
@@ -246,9 +248,10 @@
           switch(this.patientid){
             case 'PA-67034-001':
               obj.days=84;
-              break;
+              this.chartOptions.scales.xAxes[0].ticks.maxTicksLimit = obj.days/7;
             case 'PA-67034-007':
               obj.days=56;
+              this.chartOptions.scales.xAxes[0].ticks.maxTicksLimit = obj.days/7;
               break;
             default:
               obj.days=28;
@@ -430,8 +433,12 @@
           }
 
         });
-      let i = obj.values.length;
-      for(let j = i; j < 7; j++) {
+      let i = obj.values.length % 7;
+      let numlabels = 7;
+      if(this.maximized) {
+        numlabels = 8;
+      }
+      for(let j = i; j < numlabels; j++) {
         obj.values.push(null);
         obj.labels.push(this.$moment.unix(this.alldata[this.alldata.length - 1].date + 86400 * (j-i)).format('ddd'));
         obj.colors.push(null);
