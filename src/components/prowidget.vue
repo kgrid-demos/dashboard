@@ -249,6 +249,7 @@
             case 'PA-67034-001':
               obj.days=84;
               this.chartOptions.scales.xAxes[0].ticks.maxTicksLimit = obj.days/7;
+              break;
             case 'PA-67034-007':
               obj.days=56;
               this.chartOptions.scales.xAxes[0].ticks.maxTicksLimit = obj.days/7;
