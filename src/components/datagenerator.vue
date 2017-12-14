@@ -51,7 +51,7 @@
             </div>
             <div style="width:1400px; margin-left:2em;">
               <div v-for="n in numdays" v-if="showpoint(n, widget.freq) || showAllData" style="display:inline-block; width:50px; margin-bottom: 1em; text-align:center;">
-                <vue-slider ref="sliders" v-model="chartdata[wlist.patientID][widget.id + '-data'][n].value"
+                <vue-slider ref="sliders" v-model="chartdata[wlist.patientID][widget.id + '-data'][n-1].value"
                             v-bind="dataSliders" :min="widget.range[0]" :max="widget.range[1]" :interval="widget.inc" v-on:drag-end="magnetize(wlist.patientID, widget, n)"></vue-slider>
                 {{n}}
               </div>
