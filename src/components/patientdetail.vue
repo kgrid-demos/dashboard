@@ -627,8 +627,8 @@ export default {
 	background-color:#e7e7e7;
 	border:none;
 	color:#0075bc;
-	padding:10px 10px;
-	margin:10px 10px;
+	padding:10px 5px;
+	margin:10px 5px;
 	display:inline-block;
 }
 .kg-btn-wk:disabled {

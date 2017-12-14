@@ -1101,7 +1101,7 @@
       ],
       "PRO-04-data": [
         {
-          "value": 0,
+          "value": 2,
           "dateOffset": 0
         },
         {
@@ -1213,7 +1213,7 @@
           "dateOffset": -27
         },
         {
-          "value": 2,
+          "value": 3,
           "dateOffset": -28
         },
         {
@@ -1325,7 +1325,7 @@
           "dateOffset": -55
         },
         {
-          "value": 3,
+          "value": 6,
           "dateOffset": -56
         },
         {
@@ -1381,7 +1381,7 @@
           "dateOffset": -69
         },
         {
-          "value": 6,
+          "value": 8,
           "dateOffset": -70
         },
         {
@@ -1467,7 +1467,7 @@
       ],
       "PRO-05-data": [
         {
-          "value": 0,
+          "value": 39,
           "dateOffset": 0
         },
         {
@@ -2199,139 +2199,139 @@
       ],
       "PRO-07-data": [
         {
-          "value": 6,
+          "value": 17,
           "dateOffset": 0
         },
         {
-          "value": 7,
+          "value": 21,
           "dateOffset": -1
         },
         {
-          "value": 12,
+          "value": 19,
           "dateOffset": -2
         },
         {
-          "value": 14,
+          "value": 19,
           "dateOffset": -3
         },
         {
-          "value": 12,
+          "value": 17,
           "dateOffset": -4
         },
         {
-          "value": 10,
+          "value": 17,
           "dateOffset": -5
         },
         {
-          "value": 7,
+          "value": 17,
           "dateOffset": -6
         },
         {
-          "value": 6,
+          "value": 19,
           "dateOffset": -7
         },
         {
-          "value": 7,
+          "value": 17,
           "dateOffset": -8
         },
         {
-          "value": 6,
+          "value": 21,
           "dateOffset": -9
         },
         {
-          "value": 10,
+          "value": 19,
           "dateOffset": -10
         },
         {
-          "value": 7,
+          "value": 17,
           "dateOffset": -11
         },
         {
-          "value": 7,
+          "value": 17,
           "dateOffset": -12
         },
         {
-          "value": 6,
+          "value": 17,
           "dateOffset": -13
         },
         {
-          "value": 6,
+          "value": 17,
           "dateOffset": -14
         },
         {
-          "value": 13,
+          "value": 18,
           "dateOffset": -15
         },
         {
-          "value": 12,
+          "value": 17,
           "dateOffset": -16
         },
         {
-          "value": 12,
+          "value": 17,
           "dateOffset": -17
         },
         {
-          "value": 16,
+          "value": 21,
           "dateOffset": -18
         },
         {
-          "value": 16,
+          "value": 21,
           "dateOffset": -19
         },
         {
-          "value": 17,
+          "value": 21,
           "dateOffset": -20
         },
         {
-          "value": 18,
+          "value": 21,
           "dateOffset": -21
         },
         {
-          "value": 15,
+          "value": 18,
           "dateOffset": -22
         },
         {
-          "value": 13,
+          "value": 17,
           "dateOffset": -23
         },
         {
-          "value": 11,
+          "value": 17,
           "dateOffset": -24
         },
         {
-          "value": 8,
+          "value": 17,
           "dateOffset": -25
         },
         {
-          "value": 13,
+          "value": 17,
           "dateOffset": -26
         },
         {
-          "value": 14,
+          "value": 17,
           "dateOffset": -27
         },
         {
-          "value": 14,
+          "value": 21,
           "dateOffset": -28
         },
         {
-          "value": 11,
+          "value": 18,
           "dateOffset": -29
         },
         {
-          "value": 10,
+          "value": 20,
           "dateOffset": -30
         },
         {
-          "value": 17,
+          "value": 19,
           "dateOffset": -31
         },
         {
-          "value": 14,
+          "value": 21,
           "dateOffset": -32
         },
         {
-          "value": 15,
+          "value": 18,
           "dateOffset": -33
         },
         {
@@ -2339,75 +2339,75 @@
           "dateOffset": -34
         },
         {
-          "value": 15,
+          "value": 17,
           "dateOffset": -35
         },
         {
-          "value": 19,
+          "value": 17,
           "dateOffset": -36
         },
         {
-          "value": 18,
+          "value": 21,
           "dateOffset": -37
         },
         {
-          "value": 18,
+          "value": 20,
           "dateOffset": -38
         },
         {
-          "value": 16,
+          "value": 21,
           "dateOffset": -39
         },
         {
-          "value": 14,
+          "value": 21,
           "dateOffset": -40
         },
         {
-          "value": 10,
+          "value": 19,
           "dateOffset": -41
         },
         {
-          "value": 9,
+          "value": 21,
           "dateOffset": -42
         },
         {
-          "value": 6,
+          "value": 21,
           "dateOffset": -43
         },
         {
-          "value": 6,
+          "value": 21,
           "dateOffset": -44
         },
         {
-          "value": 6,
+          "value": 18,
           "dateOffset": -45
         },
         {
-          "value": 10,
+          "value": 17,
           "dateOffset": -46
         },
         {
-          "value": 6,
+          "value": 17,
           "dateOffset": -47
         },
         {
-          "value": 6,
+          "value": 17,
           "dateOffset": -48
         },
         {
-          "value": 6,
+          "value": 17,
           "dateOffset": -49
         },
         {
-          "value": 6,
+          "value": 18,
           "dateOffset": -50
         },
         {
-          "value": 11,
+          "value": 18,
           "dateOffset": -51
         },
         {
-          "value": 18,
+          "value": 17,
           "dateOffset": -52
         },
         {
@@ -2415,151 +2415,151 @@
           "dateOffset": -53
         },
         {
-          "value": 25,
+          "value": 17,
           "dateOffset": -54
         },
         {
-          "value": 30,
+          "value": 17,
           "dateOffset": -55
         },
         {
-          "value": 21,
+          "value": 17,
           "dateOffset": -56
         },
         {
-          "value": 30,
+          "value": 17,
           "dateOffset": -57
         },
         {
-          "value": 29,
+          "value": 17,
           "dateOffset": -58
         },
         {
-          "value": 25,
+          "value": 17,
           "dateOffset": -59
         },
         {
-          "value": 23,
+          "value": 17,
           "dateOffset": -60
         },
         {
-          "value": 19,
+          "value": 17,
           "dateOffset": -61
         },
         {
-          "value": 26,
+          "value": 17,
           "dateOffset": -62
         },
         {
-          "value": 23,
+          "value": 17,
           "dateOffset": -63
         },
         {
-          "value": 26,
+          "value": 18,
           "dateOffset": -64
         },
         {
-          "value": 22,
+          "value": 17,
           "dateOffset": -65
         },
         {
-          "value": 23,
+          "value": 17,
           "dateOffset": -66
         },
         {
-          "value": 21,
+          "value": 17,
           "dateOffset": -67
         },
         {
-          "value": 18,
+          "value": 17,
           "dateOffset": -68
         },
         {
-          "value": 18,
+          "value": 17,
           "dateOffset": -69
         },
         {
-          "value": 14,
+          "value": 17,
           "dateOffset": -70
         },
         {
-          "value": 10,
+          "value": 17,
           "dateOffset": -71
         },
         {
-          "value": 6,
+          "value": 20,
           "dateOffset": -72
         },
         {
-          "value": 6,
+          "value": 19,
           "dateOffset": -73
         },
         {
-          "value": 6,
+          "value": 21,
           "dateOffset": -74
         },
         {
-          "value": 6,
+          "value": 21,
           "dateOffset": -75
         },
         {
-          "value": 6,
+          "value": 19,
           "dateOffset": -76
         },
         {
-          "value": 14,
+          "value": 21,
           "dateOffset": -77
         },
         {
-          "value": 11,
+          "value": 21,
           "dateOffset": -78
         },
         {
-          "value": 16,
+          "value": 19,
           "dateOffset": -79
         },
         {
-          "value": 16,
+          "value": 20,
           "dateOffset": -80
         },
         {
-          "value": 13,
+          "value": 18,
           "dateOffset": -81
         },
         {
-          "value": 14,
+          "value": 18,
           "dateOffset": -82
         },
         {
-          "value": 11,
+          "value": 21,
           "dateOffset": -83
         },
         {
-          "value": 12,
+          "value": 20,
           "dateOffset": -84
         },
         {
-          "value": 9,
+          "value": 21,
           "dateOffset": -85
         },
         {
-          "value": 6,
+          "value": 21,
           "dateOffset": -86
         },
         {
-          "value": 6,
+          "value": 21,
           "dateOffset": -87
         },
         {
-          "value": 6,
+          "value": 21,
           "dateOffset": -88
         },
         {
-          "value": 6,
+          "value": 21,
           "dateOffset": -89
         },
         {
-          "value": 8,
+          "value": 19,
           "dateOffset": -90
         }
       ],
@@ -5124,6 +5124,69 @@
           "value": 5,
           "dateOffset": -90
         }
+      ],      "SM-01-data": [],
+      "SM-02-data": [],
+      "SM-03-data": [],
+      "SM-04-data": [
+        {
+          "value": 1,"dateOffset": -63
+        },
+        {
+          "value": 2,"dateOffset": -48
+        },
+        {
+          "value": 3,"dateOffset": -38
+        },
+        {
+          "value": 4,"dateOffset": -28
+        }
+      ],
+      "SM-05-data": [
+        {
+          "value": 1,"dateOffset": 10
+        }
+      ],
+      "SM-06-data": [
+        {
+          "value": 1,"dateOffset": 10
+        },
+        {
+          "value": 2,"dateOffset": 10
+        },
+        {
+          "value": 3,"dateOffset": 10
+        },
+        {
+          "value": 4,"dateOffset": 10
+        },
+        {
+          "value": 5,"dateOffset": 10
+        },
+        {
+          "value": 6,"dateOffset": 10
+        }
+      ],
+      "SM-07-data": [],
+      "SM-08-data": [
+        {
+          "value": 1,"dateOffset": -58
+        },
+        {
+          "value": 2,"dateOffset": -48
+        },
+        {
+          "value": 3,"dateOffset": -26
+        },
+        {
+          "value": 4,"dateOffset": -18
+        }
+      ],
+       "PRO-05-notes":[
+       {
+ "value": 0,
+ "note": "I am having difficulty buttoning my blouse due to constant tingling pain to my fingertips.",
+ "date": -30
+}
       ],
       "id": "PA-67034-001"
     },
@@ -10623,7 +10686,7 @@
       ],
       "PRO-02-data": [
         {
-          "value": 3,
+          "value": 18,
           "dateOffset": 0
         },
         {
@@ -10679,7 +10742,7 @@
           "dateOffset": -13
         },
         {
-          "value": 17,
+          "value": 13,
           "dateOffset": -14
         },
         {
@@ -10735,7 +10798,7 @@
           "dateOffset": -27
         },
         {
-          "value": 12,
+          "value": 11,
           "dateOffset": -28
         },
         {
@@ -10791,7 +10854,7 @@
           "dateOffset": -41
         },
         {
-          "value": 10,
+          "value": 6,
           "dateOffset": -42
         },
         {
@@ -12453,291 +12516,291 @@
       ],
       "PRO-07-data": [
         {
-          "value": 6,
+          "value": 8,
           "dateOffset": 0
         },
         {
-          "value": 15,
+          "value": 7,
           "dateOffset": -1
         },
         {
-          "value": 14,
+          "value": 6,
           "dateOffset": -2
         },
         {
-          "value": 16,
+          "value": 6,
           "dateOffset": -3
         },
         {
-          "value": 16,
+          "value": 6,
           "dateOffset": -4
         },
         {
-          "value": 13,
+          "value": 10,
           "dateOffset": -5
         },
         {
-          "value": 15,
+          "value": 7,
           "dateOffset": -6
         },
         {
-          "value": 21,
+          "value": 8,
           "dateOffset": -7
         },
         {
-          "value": 19,
+          "value": 7,
           "dateOffset": -8
         },
         {
-          "value": 16,
+          "value": 7,
           "dateOffset": -9
         },
         {
-          "value": 16,
+          "value": 7,
           "dateOffset": -10
         },
         {
-          "value": 21,
+          "value": 10,
           "dateOffset": -11
         },
         {
-          "value": 25,
+          "value": 7,
           "dateOffset": -12
         },
         {
-          "value": 22,
+          "value": 9,
           "dateOffset": -13
         },
         {
-          "value": 23,
+          "value": 6,
           "dateOffset": -14
         },
         {
-          "value": 25,
+          "value": 6,
           "dateOffset": -15
         },
         {
-          "value": 22,
+          "value": 8,
           "dateOffset": -16
         },
         {
-          "value": 23,
+          "value": 10,
           "dateOffset": -17
         },
         {
-          "value": 20,
+          "value": 8,
           "dateOffset": -18
         },
         {
-          "value": 21,
+          "value": 14,
           "dateOffset": -19
         },
         {
-          "value": 19,
+          "value": 12,
           "dateOffset": -20
         },
         {
-          "value": 21,
+          "value": 12,
           "dateOffset": -21
         },
         {
-          "value": 28,
+          "value": 14,
           "dateOffset": -22
         },
         {
-          "value": 28,
+          "value": 14,
           "dateOffset": -23
         },
         {
-          "value": 25,
+          "value": 14,
           "dateOffset": -24
         },
         {
-          "value": 29,
+          "value": 14,
           "dateOffset": -25
         },
         {
-          "value": 26,
+          "value": 14,
           "dateOffset": -26
         },
         {
-          "value": 30,
+          "value": 14,
           "dateOffset": -27
         },
         {
-          "value": 27,
+          "value": 14,
           "dateOffset": -28
         },
         {
-          "value": 30,
+          "value": 12,
           "dateOffset": -29
         },
         {
-          "value": 30,
+          "value": 14,
           "dateOffset": -30
         },
         {
-          "value": 29,
+          "value": 12,
           "dateOffset": -31
         },
         {
-          "value": 28,
+          "value": 9,
           "dateOffset": -32
         },
         {
-          "value": 27,
+          "value": 7,
           "dateOffset": -33
         },
         {
-          "value": 23,
+          "value": 7,
           "dateOffset": -34
         },
         {
-          "value": 21,
+          "value": 12,
           "dateOffset": -35
         },
         {
-          "value": 23,
+          "value": 12,
           "dateOffset": -36
         },
         {
-          "value": 26,
+          "value": 9,
           "dateOffset": -37
         },
         {
-          "value": 26,
+          "value": 6,
           "dateOffset": -38
         },
         {
-          "value": 26,
+          "value": 6,
           "dateOffset": -39
         },
         {
-          "value": 30,
+          "value": 6,
           "dateOffset": -40
         },
         {
-          "value": 29,
+          "value": 6,
           "dateOffset": -41
         },
         {
-          "value": 25,
+          "value": 7,
           "dateOffset": -42
         },
         {
-          "value": 25,
+          "value": 8,
           "dateOffset": -43
         },
         {
-          "value": 25,
+          "value": 9,
           "dateOffset": -44
         },
         {
-          "value": 21,
+          "value": 14,
           "dateOffset": -45
         },
         {
-          "value": 30,
+          "value": 11,
           "dateOffset": -46
         },
         {
-          "value": 30,
+          "value": 10,
           "dateOffset": -47
         },
         {
-          "value": 30,
+          "value": 7,
           "dateOffset": -48
         },
         {
-          "value": 28,
+          "value": 11,
           "dateOffset": -49
         },
         {
-          "value": 24,
+          "value": 8,
           "dateOffset": -50
         },
         {
-          "value": 28,
+          "value": 8,
           "dateOffset": -51
         },
         {
-          "value": 30,
+          "value": 6,
           "dateOffset": -52
         },
         {
-          "value": 29,
+          "value": 7,
           "dateOffset": -53
         },
         {
-          "value": 28,
+          "value": 9,
           "dateOffset": -54
         },
         {
-          "value": 26,
+          "value": 9,
           "dateOffset": -55
         },
         {
-          "value": 23,
+          "value": 6,
           "dateOffset": -56
         },
         {
-          "value": 22,
+          "value": 6,
           "dateOffset": -57
         },
         {
-          "value": 23,
+          "value": 10,
           "dateOffset": -58
         },
         {
-          "value": 26,
+          "value": 7,
           "dateOffset": -59
         },
         {
-          "value": 23,
+          "value": 9,
           "dateOffset": -60
         },
         {
-          "value": 23,
+          "value": 6,
           "dateOffset": -61
         },
         {
-          "value": 22,
+          "value": 6,
           "dateOffset": -62
         },
         {
-          "value": 20,
+          "value": 6,
           "dateOffset": -63
         },
         {
-          "value": 17,
+          "value": 6,
           "dateOffset": -64
         },
         {
-          "value": 14,
+          "value": 6,
           "dateOffset": -65
         },
         {
-          "value": 11,
+          "value": 7,
           "dateOffset": -66
         },
         {
-          "value": 7,
+          "value": 9,
           "dateOffset": -67
         },
         {
-          "value": 7,
+          "value": 6,
           "dateOffset": -68
         },
         {
-          "value": 6,
+          "value": 12,
           "dateOffset": -69
         },
         {
-          "value": 14,
+          "value": 11,
           "dateOffset": -70
         },
         {
-          "value": 12,
+          "value": 9,
           "dateOffset": -71
         },
         {
@@ -12745,75 +12808,75 @@
           "dateOffset": -72
         },
         {
-          "value": 6,
+          "value": 11,
           "dateOffset": -73
         },
         {
-          "value": 6,
+          "value": 9,
           "dateOffset": -74
         },
         {
-          "value": 7,
+          "value": 9,
           "dateOffset": -75
         },
         {
-          "value": 8,
+          "value": 6,
           "dateOffset": -76
         },
         {
-          "value": 6,
+          "value": 12,
           "dateOffset": -77
         },
         {
-          "value": 6,
+          "value": 13,
           "dateOffset": -78
         },
         {
-          "value": 8,
+          "value": 14,
           "dateOffset": -79
         },
         {
-          "value": 6,
+          "value": 14,
           "dateOffset": -80
         },
         {
-          "value": 6,
+          "value": 14,
           "dateOffset": -81
         },
         {
-          "value": 6,
+          "value": 14,
           "dateOffset": -82
         },
         {
-          "value": 6,
+          "value": 14,
           "dateOffset": -83
         },
         {
-          "value": 6,
+          "value": 14,
           "dateOffset": -84
         },
         {
-          "value": 6,
+          "value": 11,
           "dateOffset": -85
         },
         {
-          "value": 11,
+          "value": 14,
           "dateOffset": -86
         },
         {
-          "value": 15,
+          "value": 10,
           "dateOffset": -87
         },
         {
-          "value": 12,
+          "value": 8,
           "dateOffset": -88
         },
         {
-          "value": 8,
+          "value": 11,
           "dateOffset": -89
         },
         {
-          "value": 10,
+          "value": 8,
           "dateOffset": -90
         }
       ],
@@ -12847,7 +12910,7 @@
           "dateOffset": -6
         },
         {
-          "value": 4,
+          "value": 3,
           "dateOffset": -7
         },
         {
@@ -12875,7 +12938,7 @@
           "dateOffset": -13
         },
         {
-          "value": 4,
+          "value": 3,
           "dateOffset": -14
         },
         {
@@ -13241,7 +13304,7 @@
           "dateOffset": -13
         },
         {
-          "value": 128.5,
+          "value": 115,
           "dateOffset": -14
         },
         {
@@ -13269,7 +13332,7 @@
           "dateOffset": -20
         },
         {
-          "value": 131,
+          "value": 116.5,
           "dateOffset": -21
         },
         {
@@ -13325,7 +13388,7 @@
           "dateOffset": -34
         },
         {
-          "value": 114,
+          "value": 119.5,
           "dateOffset": -35
         },
         {
@@ -13353,7 +13416,7 @@
           "dateOffset": -41
         },
         {
-          "value": 118,
+          "value": 120.5,
           "dateOffset": -42
         },
         {
@@ -13381,7 +13444,7 @@
           "dateOffset": -48
         },
         {
-          "value": 122,
+          "value": 120.5,
           "dateOffset": -49
         },
         {
@@ -13409,7 +13472,7 @@
           "dateOffset": -55
         },
         {
-          "value": 127.5,
+          "value": 123.5,
           "dateOffset": -56
         },
         {
@@ -13437,7 +13500,7 @@
           "dateOffset": -62
         },
         {
-          "value": 141,
+          "value": 133,
           "dateOffset": -63
         },
         {
@@ -13465,7 +13528,7 @@
           "dateOffset": -69
         },
         {
-          "value": 145.5,
+          "value": 133,
           "dateOffset": -70
         },
         {
@@ -13493,7 +13556,7 @@
           "dateOffset": -76
         },
         {
-          "value": 142.5,
+          "value": 135.5,
           "dateOffset": -77
         },
         {
@@ -13521,7 +13584,7 @@
           "dateOffset": -83
         },
         {
-          "value": 137.5,
+          "value": 137,
           "dateOffset": -84
         },
         {
@@ -15379,6 +15442,83 @@
           "dateOffset": -90
         }
       ],
+      "SM-01-data": [
+  {
+    "value": 1,"dateOffset": 10
+  },
+  {
+    "value": 2,"dateOffset": 10
+  },
+  {
+    "value": 3,"dateOffset": 10
+  }
+],
+"SM-02-data": [
+  {
+    "value": 1,"dateOffset": 10
+  },
+  {
+    "value": 2,"dateOffset": 10
+  },
+  {
+    "value": 3,"dateOffset": 10
+  },
+  {
+    "value": 4,"dateOffset": 10
+  }
+],
+"SM-03-data": [
+  {
+    "value": 1,"dateOffset": -48
+  },
+  {
+    "value": 2,"dateOffset": -40
+  },
+  {
+    "value": 3,"dateOffset": 10
+  },
+  {
+    "value": 4,"dateOffset": 10
+  }
+],
+"SM-04-data": [],
+"SM-05-data": [
+  {
+    "value": 1,"dateOffset": -44
+  }
+],
+"SM-07-data": [
+  {
+    "value": 1,"dateOffset": 10
+  }
+],
+"SM-08-data": [
+  {
+    "value": 1,"dateOffset": 10
+  },
+  {
+    "value": 2,"dateOffset": 10
+  },
+  {
+    "value": 3,"dateOffset": 10
+  },
+  {
+    "value": 4,"dateOffset": 10
+  }
+],  "PRO-06-notes":[
+ {
+"value": 0,
+"note": "My itchiness on palms/soles are worsening. There are red peeling rash despite use of Eucerin",
+"date": -20
+ }
+],
+"PRO-08-notes":[
+ {
+"value": 0,
+"note": "There are pain due to mouth sores/ulcerations descpite using Magic Mouthwash; however the sores and pain get better before the start of each new cycle.",
+"date": -31
+ }
+],
       "id": "PA-67034-007"
     }
   ]
