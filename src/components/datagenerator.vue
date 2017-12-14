@@ -143,15 +143,25 @@
       let that = this;
       this.widgetLists.forEach(function(widgetList) {
         that.chartdata[widgetList.patientID] = {};
-        that.randomizeAllPROData(widgetList.patientID, widgetList.widgets);
-        that.randomizeAllSMData(widgetList.patientID, widgetList.smWidgets);
+        widgetList.widgets.forEach(function (widget){
+          that.chartdata[widgetList.patientID][widget.id + "-data"] =
+              JSON.parse(JSON.stringify(that.$store.getters.getPatientData(widgetList.patientID)[widget.id + "-data"]));
+        });
+
+//        that.randomizeAllPROData(widgetList.patientID, widgetList.widgets);
+//        that.randomizeAllSMData(widgetList.patientID, widgetList.smWidgets);
       });
     },
     computed : {
       patientNameList () {
         let patientNames = [];
         const patients = this.$store.getters.getPatientMasterList;
-        patients.forEach(function (patient) {patientNames.push(patient.name)});
+        patients.forEach(function (patient) {
+          if(patient.id !== "PA-67034-004") {
+            patientNames.push(patient.name)
+          }
+        });
+
         return patientNames;
       },
       widgetLists () {
