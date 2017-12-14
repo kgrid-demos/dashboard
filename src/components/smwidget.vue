@@ -137,13 +137,8 @@
           obj.timestamp=self.$moment().add(e.dateOffset, 'd').unix();
           obj.status="☐"
           if(obj.timestamp<self.daterange.endtime){
-            if(obj.value === 1){
-              obj.status="☑";
-            } else {
-              obj.status="☐";
-            }
-
-            }
+            obj.status="☑";
+          }
           arr.push(obj)
         })
         return arr

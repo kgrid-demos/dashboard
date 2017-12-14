@@ -290,12 +290,6 @@
   				return	this.$moment.unix(this.today).day(-11*7).startOf('day').unix()
   			}
   		},
-  		datatimestamp:function(){
-  			return this.$store.getters.getPatientDataTimestamp(this.patientid)
-  		},
-  		timeoffset:function(){
-  			return this.$moment.unix(this.today).startOf('day').unix()-this.datatimestamp
-  		},
       alldata:function(){
         var self=this;
         var data = JSON.parse(JSON.stringify(this.$store.getters.getPatientData(this.patientid)[this.object.id + "-data"]));
@@ -320,7 +314,7 @@
           if(d[this.object.id + "-notes"]){
             data = d[this.object.id + "-notes"]
             data.forEach(function(e){
-              e.date=e.date+self.timeoffset
+              e.date=self.$moment().add(e.date, 'd').unix();
            })
          }
        }
@@ -333,7 +327,7 @@
           data = JSON.parse(JSON.stringify(this.$store.getters.getpatientalert(this.object.id)))
           if(data){
             data.forEach(function(e){
-              e.date=e.date+self.timeoffset
+              e.date=self.$moment().add(e.date, 'd').unix();
            })
          }
        }
@@ -418,6 +412,7 @@
       var obj={values:[],labels:[],colors:[]};
       var self = this;
       var dp = 14/self.selectedinstr.bwfreq;              // If all data frequency is daily
+      if(this.alldata.length>0){
       this.alldata.forEach(function (el,index) {
         var nth=Math.round(index/dp)*dp-index;           // If all data frequency is daily
         if(el.date > self.daterange.starttime && el.date < self.daterange.endtime) {
@@ -440,6 +435,7 @@
         obj.labels.push(this.$moment.unix(this.alldata[this.alldata.length - 1].date + 86400 * (j-i)).format('ddd'));
         obj.colors.push(null);
       }
+    }
         return obj
       }
     },
