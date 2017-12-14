@@ -758,7 +758,7 @@ flex: auto;
 }
 .ht-full{
 	height: 100%;
-	min-height:608px;
+	min-height:800px;
 }
 h1 small {
 	font-size:50%;

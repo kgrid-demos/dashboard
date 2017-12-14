@@ -29,8 +29,8 @@
         </div>
       </div>
     </div>
-
-    <linechart v-if="!editmode" :chart-data="datacollection" :options="chartOptions" :styles='myStyles'></linechart>
+    <linechartmax v-if="!editmode && maximized " class='max' :chart-data="datacollection" :options="maxchartOption" :styles='myStyles'></linechartmax>
+    <linechart v-if="!editmode && !maximized" :chart-data="datacollection" :options="chartOptions" :styles='myStyles'></linechart>
     <div v-if="editmode">
       <div class="optrow">
         <div class="optionslabel">
@@ -98,10 +98,12 @@
 </template>
 <script>
   import linechart from './linechart.js';
+  import linechartmax from './linechart.js';
   export default {
     props: ['chartheight', 'editmode', 'viewmode', 'object', 'title','patientid', 'maximized'],
     components: {
       linechart,
+      linechartmax
   },
     data () {
       return {
@@ -138,7 +140,8 @@
                 display: true,
                 color: '#f2f2f2',
                 lineWidth: 2,
-                drawBorder: false
+                drawBorder: false,
+                drawTicks:false
               }
             }],
             xAxes: [{
@@ -151,10 +154,9 @@
                 maxTicksLimit: 8
               },
               gridLines: {
-                stepSize: 7,
                 display: true,
                 color: '#f2f2f2',
-                lineWidth: 2,
+                lineWidth: 1,
                 drawBorder: false
               }
             }]
@@ -248,10 +250,11 @@
           switch(this.patientid){
             case 'PA-67034-001':
               obj.days=84;
-              this.chartOptions.scales.xAxes[0].ticks.maxTicksLimit = obj.days/7;
+              // this.chartOptions.scales.xAxes[0].ticks.maxTicksLimit = obj.days/7;
+              break;
             case 'PA-67034-007':
               obj.days=56;
-              this.chartOptions.scales.xAxes[0].ticks.maxTicksLimit = obj.days/7;
+              // this.chartOptions.scales.xAxes[0].ticks.maxTicksLimit = obj.days/7;
               break;
             default:
               obj.days=28;
@@ -262,9 +265,25 @@
         }
         obj.start= obj.end-obj.days*24*3600;;
         this.$store.commit('setcurrentdaterange',obj)
+        this.$nextTick()
       }
     },
     computed : {
+      maxchartOption:function(){
+        var op = JSON.parse(JSON.stringify(this.chartOptions))
+        switch(this.patientid){
+          case 'PA-67034-001':
+            op.scales.xAxes[0].ticks.maxTicksLimit = 12;
+            break;
+          case 'PA-67034-007':
+            op.scales.xAxes[0].ticks.maxTicksLimit = 8;
+            break;
+          default:
+            op.scales.xAxes[0].ticks.maxTicksLimit = 8;
+            break;
+        }
+        return op
+      },
       hasalert:function(){
         var b= false;
         this.allalert.forEach(function(e){
