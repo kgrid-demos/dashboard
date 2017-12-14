@@ -293,6 +293,7 @@
       alldata:function(){
         var self=this;
         var data = JSON.parse(JSON.stringify(this.$store.getters.getPatientData(this.patientid)[this.object.id + "-data"]));
+        // console.log(data)
         if(data){
           data.forEach(function(e){
             e.date=self.$moment().add(e.dateOffset, 'd').unix();

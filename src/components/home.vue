@@ -133,6 +133,8 @@ export default {
         const baseDataUrl = 'http://localhost:3001/patients/';
         let that = this;
         this.$http.get(baseDataUrl).then(response => {
+					console.log("load data...")
+					console.log(response.data)
           that.$store.commit("loadPatientData", response.data);
         });
       }
