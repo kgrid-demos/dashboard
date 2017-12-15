@@ -16,5 +16,6 @@ To run Patient Data Dashboard, your system should have the follwoing required so
 2. Change to the designated folder;
 3. On command line,
     For Windows, run `pdd-start.bat`;
-    For Mac, run `pdd-start.sh`;
+    For Mac, run `./pdd-start.sh`;
 4. Open your browser and go to `http://localhost:8080`
+5. When finished, on command line, run `pdd-stop.bat` for Windows, or run `./pdd-stop.sh` for Mac
