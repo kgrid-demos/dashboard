@@ -423,7 +423,7 @@ export default {
 				self.loaddata=true;
 				self.timepoint=2;
 				self.fading=false;
-			},1500)
+			},1800)
 
 		},
     saveconfig:function(){
@@ -712,7 +712,7 @@ flex: auto;
 	transition: opacity 1s ease;
 }
 .pdd-panel.fading {
-	opacity:0.1;
+	opacity:0.05;
 }
 .widgetTitle {
   padding:5px 8px;
