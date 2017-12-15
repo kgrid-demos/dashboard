@@ -64,38 +64,6 @@ a, a:hover, a:visited, a:focus {
 	margin: 0 auto;
 }
 
-.login-wrapper {
-  position:fixed;
-  top:0px;
-  right:60px;
-  float:right;
-}
-.datagrid {
-	margin:0 auto;
-	position: relative;
-	width: 1024px;
-	overflow: hidden;
-	max-width: 1028px;
-}
-
-.nav .datagrid {
-  	min-height: 58px;
-}
-.e5backing .datagrid {
-  	min-height: 880px;
-    	padding-bottom: 30px;
-}
-
-.middleout a>span:after {
-	content: '';
-	display: block;
-	margin: auto;
-	height: 2px;
-	width: 0px;
-	background: transparent;
-	transition: width .5s ease, background-color .5s ease;
-}
-
 ::-webkit-scrollbar {
     width: 10px;
 }
@@ -240,84 +208,18 @@ a, a:hover, a:visited, a:focus {
 .inline {
 display:inline-block;
 }
-/* Icon Buttons */
-ul.actioniconlist {
-	list-style: none;
-}
-ul.actioniconlist li {
-  display: inline-block;
-	width: 50px;
-	text-align:center;
-	overflow-x:visible;
-}
-ul.actioniconlist li>div {
-  width: 80px;
-  left: -20px;
-  position: relative;
-}
-ul.actioniconlist li div.actioniconcap {
-	font-size: 8px;
-	font-weight:700;
-	opacity: 0;
-	position: relative;
-	height: 18px;
-	width: 65px;
-	transition: opacity 0.5s ease;
-	border-radius:10px;
-	padding:2px 0px;
-	text-align:center;
-	margin:0 auto;
-}
-ul.actioniconlist li a:hover +div.actioniconcap {
-	opacity: 1;
-}
 
-div.actionicon {
-	width:28px;
-	height: 28px;
-	border-radius:100%;
-	margin: 3px auto;
-	position: relative;
-}
-
-div.actionicon i {
-	margin: 6px;
-	font-size: 15px;
-}
-/* Buttons*/
-.kgl-close {
-	position: relative;
-	top: 0px;
-	left: 0px;
-  border: none;
-  width: 55px;
-  height: 55px;
-  line-height: 55px;
-  padding: 0px 0px 0px 0px;
-  background-color: transparent;
-}
-/* Overlay Sidebar */
-
-.sidebar_close {
-    background-color:#fff;
-    position:absolute;
-    height: 100%;
-    width:55px;
-    text-align:center;
-    border-right: 1px solid #e5e5e5;
-		cursor:pointer;
-}
-
-.sidebar_close h3{
-    position:absolute;
-    line-height:60px;
-    vertical-align:middle;
-    top:40px;
-    left:10px;
-    font-size:14px;
-    -webkit-transform: rotate(270deg);
-    -moz-transform: rotate(270deg);
-    -ms-transform: rotate(270deg);
-    -o-transform: rotate(270deg);
-    transform: rotate(270deg);
-	}
+  .kgl-content {
+  	position: absolute;
+  	margin-top: 0px;
+  	width:100%;
+  }
+  label {
+  		font-weight: 400;
+  		margin:10px 0px;
+  }
+  .inline {
+  	display: inline-block;
+  	margin:0px 0px 0px 50px;
+  	vertical-align: middle;
+  }

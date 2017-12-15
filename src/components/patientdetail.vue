@@ -27,7 +27,7 @@
 		<div slot='main'>
 			<div class='maincontent'>
 				<div class='col-md-2 col-sm-2 col-xs-2  pad-0' v-if='isInEdit'>
-					<div class='animated ht-full kg-bg-custom-0' @drop='dropped'>
+					<div class='ht-full kg-bg-custom-0' @drop='dropped'>
 						<div class='row ft-sz-16 lh-3 txtcenter'> <h3>Widget List</h3></div>
 						<div class='wlistctner'>
 							<draggable class='wlist' element="ul" v-model="widgetList" :options="dragOptions">

@@ -163,7 +163,8 @@
                 display: true,
                 color: '#f2f2f2',
                 lineWidth: 1,
-                drawBorder: false
+                drawBorder: false,
+                drawTicks:true
               }
             }]
           }
