@@ -9,7 +9,7 @@
       </div>
     </div>
     <div v-else class="widgetalertdisplay">
-       <span class="pad-l-5"> ALERT </span>
+       <span class="pad-l-15"> ALERT </span>
       <ul>
         <li v-for='alert in allalert'>
           <span class="fa fa-exclamation-circle warning pad-l-5"></span><span class="pad-l-5" style="font-weight:700;"> {{alert.text}}</span></li>
@@ -18,10 +18,16 @@
   </div>
   <div class="graph">
     <div class='row' v-if="maximized" >
-      <div class="col-md-4 col-sm-4 ft-sz-18">
-        <span class='pad-l-10'>{{selectedinstr.unit}}</span>
+      <div class="col-md-5 col-sm-5 ft-sz-18">
+        <span class='pad-l-35'>{{selectedinstr.unit}}</span>
+        <div class=" pad-l-10 ft-sz-12" style="display: inline-block; width:150px;" v-if='selectedinstr'>
+          <div v-for='range in selectedinstr.ryg' class="thres" :class="range.color">
+            <span v-if='range.min<range.max'>{{range.min}}-{{range.max}}</span>
+            <span v-else>{{range.min}}</span>
+          </div>
+        </div>
       </div>
-      <div class="col-md-4 col-sm-4 txtcenter ">
+      <div class="col-md-3 col-sm-3 txtcenter ">
       </div>
       <div class="col-md-4 col-sm-4">
         <div class="float-r inline" >
@@ -88,7 +94,7 @@
     </div>
   </div>
   <div class='notesdisplay' v-if='maximized'>
-    <span class="pad-l-5"> PATIENT NOTES </span>
+    <span class="pad-l-15"> PATIENT NOTES </span>
   <ul>
     <li v-for='note in allnotes' >
         <span class="fa fa-file-text-o notes pad-l-5"></span><span class="pad-l-5" style="font-style:italic;">{{formatted(note.date*1000)}} - {{note.note}}</span></li>
@@ -269,6 +275,9 @@
       }
     },
     computed : {
+      todaysdow:function(){
+        return this.$moment.unix(this.today).day()
+      },
       maxchartOption:function(){
         var op = JSON.parse(JSON.stringify(this.chartOptions))
         switch(this.patientid){
@@ -436,9 +445,9 @@
       var self = this;
       var dp = 14/self.selectedinstr.bwfreq;              // If all data frequency is daily
       if(this.alldata.length>0){
-      this.alldata.forEach(function (el,index) {
-        var nth=Math.round(Math.round(index/dp)*dp)-index;           // If all data frequency is daily
-        if(el.date > self.daterange.starttime && el.date < self.daterange.endtime) {
+        this.alldata.forEach(function (el,index) {
+          var nth=Math.round(Math.round(index/dp)*dp)-index;           // If all data frequency is daily
+          if(el.date > self.daterange.starttime && el.date < self.daterange.endtime) {
             if(nth==0){                                    // If all data frequency is daily
               var v = el.value;
               obj.values.unshift(v);
@@ -450,24 +459,31 @@
               obj.colors.unshift(null);
             }
           }
-
         });
-      let i = obj.values.length % 7;
-      let numlabels = 7;
-      if(this.maximized) {
-        numlabels = 8;
-      }
-      for(let j = i; j < numlabels; j++) {
-        obj.values.push(null);
-        obj.labels.push(this.$moment.unix(this.alldata[this.alldata.length - 1].date + 86400 * (j-i)).format('ddd'));
-        obj.colors.push(null);
-      }
+        let i = obj.values.length % 7;
+        let numlabels = 7;
+        if(this.maximized) {
+          numlabels = 8;
+          for(let j = i; j < numlabels; j++) {
+            obj.values.push(null);
+            obj.labels.push(this.$moment.unix(this.alldata[this.alldata.length - 1].date + 86400 * (j-i)).format('ddd'));
+            obj.colors.push(null);
+          }
+        }else {
+          if(obj.values.length<7){
+            numlabels = 7;
+            for(let j = i; j < numlabels; j++) {
+              obj.values.push(null);
+              obj.labels.push(this.$moment.unix(this.alldata[this.alldata.length - 1].date + 86400 * (j-i)).format('ddd'));
+              obj.colors.push(null);
+            }
+          }
+        }
     }
         return obj
       }
     },
     methods: {
-
       maximizeWidget:function(){
         this.$emit("maximizeme",this.object.id)
       },
