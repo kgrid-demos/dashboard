@@ -58,11 +58,6 @@
         </div>
         <div class="options pad-l-20" v-if='selectedinstr'>
           {{custfreq}}
-          <!-- <select v-model="custfreq" disabled>
-            <option v-for="freq in freqops" v-bind:value="freq.label">
-              {{ freq.label }}
-            </option>
-          </select> -->
         </div>
       </div>
       <div class="optrow">
@@ -328,10 +323,9 @@
       alldata:function(){
         var self=this;
         var data = JSON.parse(JSON.stringify(this.$store.getters.getPatientData(this.patientid)[this.object.id + "-data"]));
-        // console.log(data)
         if(data){
           data.forEach(function(e){
-            e.date=self.$moment().add(e.dateOffset, 'd').unix();
+            e.date=self.$moment().add(e.dateOffset+7-self.todaysdow, 'd').unix();
           })
           if(this.viewmode){
             return data
@@ -377,7 +371,7 @@
       },
       selectedfreq:function(){
         if(this.selectedinstr){
-          var freq = this.selectedinstr.bwfreq
+          var freq = this.selectedinstr.bwpoints
           var index = this.freqops.map(function(e){return e.bwdatapt}).indexOf(freq)
           if(index!=-1){
             return this.freqops[index].label
@@ -445,14 +439,27 @@
     displaydata: function(){
       var obj={values:[],labels:[],colors:[]};
       var self = this;
-      var dp = 14/self.selectedinstr.bwfreq;              // If all data frequency is daily
+      var dp = 14/self.selectedinstr.bwpoints;              // If all data frequency is daily
       if(this.alldata.length>0){
         this.alldata.forEach(function (el,index) {
           var nth=Math.round(Math.round(index/dp)*dp)-index;           // If all data frequency is daily
-          if(el.date > self.daterange.starttime && el.date < self.daterange.endtime) {
+          if(el.date > self.daterange.starttime && el.date < self.daterange.endtime ) {
             var v = {};
             v.x=self.$moment.unix(el.date);
-            if(nth==0){                                    // If all data frequency is daily
+            var val = false;
+          if(el.date<=(self.today+43000)) {
+            if(self.object.id=='PRO-07'){
+              var dow =self.$moment.unix(el.date).day()
+              if(dow==1|dow==5){
+                val=true;
+              }
+            }else {
+              if(nth==0){
+                val=true;
+              }
+            }
+          }
+          if(val){                                    // If all data frequency is daily
               v.y=el.value;
               obj.values.unshift(v);
               obj.colors.unshift(self.getcolorfordata(v.y));
@@ -545,7 +552,6 @@
     width: 10em;
     padding: 0.5ex 1ex;
   }
-
   .options, .optionslabel {
     height: 100%;
     float: left;
@@ -559,7 +565,6 @@
   .options select {
     width:100%;
   }
-
   .optrow {
     padding: 12px 10px;
     clear: both;

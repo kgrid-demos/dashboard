@@ -180,7 +180,7 @@
                   "label": widget.label,
                   "range": [widget.instruments[0].range.min, widget.instruments[0].range.max],
                   "inc": widget.instruments[0].range.inc,
-                  "freq": widget.instruments[0].bwfreq
+                  "freq": widget.instruments[0].bwpoints
                 })
               } else {
                 smWidgets.push({
