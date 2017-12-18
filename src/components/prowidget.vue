@@ -8,8 +8,9 @@
         <i v-if="hasnotes"  @click='maximizeWidget' class="fa fa-file-text-o notes pad-l-5"></i>
       </div>
     </div>
-    <div v-else class="widgetalertdisplay">
-       <span class="pad-l-15"> ALERT </span>
+    <div v-if="maximized" class="widgetalertdisplay">
+      <span class="pad-l-15" v-if='hasalert'> ALERT </span>
+      <span class='pad-l-15' v-else> No alert. </span>
       <ul>
         <li v-for='alert in allalert'>
           <span class="fa fa-exclamation-circle warning pad-l-5"></span><span class="pad-l-5" style="font-weight:700;"> {{alert.text}}</span></li>
@@ -17,7 +18,7 @@
     </div>
   </div>
   <div class="graph">
-    <div class='row' v-if="maximized" >
+    <div class='row ' v-if="maximized" >
       <div class="col-md-5 col-sm-5 ft-sz-18">
         <span class='pad-l-35'>{{selectedinstr.unit}}</span>
         <div class=" pad-l-10 ft-sz-12" style="display: inline-block; width:150px;" v-if='selectedinstr'>
@@ -94,11 +95,12 @@
     </div>
   </div>
   <div class='notesdisplay' v-if='maximized'>
-    <span class="pad-l-15"> PATIENT NOTES </span>
-  <ul>
-    <li v-for='note in allnotes' >
+    <span class="pad-l-15" v-if='hasnotes'> PATIENT NOTES </span>
+    <span class='pad-l-15' v-else> Patient has not posted any notes yet. </span>
+    <ul>
+      <li v-for='note in allnotes' >
         <span class="fa fa-file-text-o notes pad-l-5"></span><span class="pad-l-5" style="font-style:italic;">{{formatted(note.date*1000)}} - {{note.note}}</span></li>
-</ul>
+      </ul>
   </div>
 </div>
 </template>
@@ -203,6 +205,7 @@
       }
     },
     updated:function(){
+      if(this.$route.params.id){
       const obj = {"id":this.$route.params.id,"group":this.currentGroup.id,"wid": this.object.id};
       if (this.$store.getters.getDataSettings(obj)) {
         this.datasettings = Object.assign({}, this.$store.getters.getDataSettings(obj).datasettings);
@@ -230,6 +233,7 @@
           this.chartOptions.scales.yAxes[0].scaleLabel.labelString = this.selectedinstr.unit
         }
       }
+    }
     },
     beforeDestroy() {
   	 this.$eventBus.$off("saveSettings");
@@ -551,6 +555,9 @@
     padding-top: 5px;
     margin:0 auto;
     background-color: white;
+  }
+  .graph.max{
+    margin-top:15px;
   }
   .instru select.attn{
     border: 1px dashed red;

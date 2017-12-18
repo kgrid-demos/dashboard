@@ -89,7 +89,8 @@
 											 			drag-allow-from=".draggablehandle"
 											 			drag-ignore-from=".no-drag"
 														>
-															<div class="draggable-handle" v-show='(item.c=="")&&isInEdit' style="text-align: center; vertical-align: middle; font-size: 16px; font-weight: 700;position:relative;top:50%;transform:translateY(-50%)">Add a widget</div>
+															<div class="draggable-handle" v-show='(item.c=="")&&isInEdit' style="text-align: center; line-height: 2em; vertical-align: middle; font-size: 16px; font-weight: 700;position:relative;top:50%;transform:translateY(-50%)">To add a widget, <br>drag one from the list <br> and drop here.
+															</div>
 																<div class='widgetTitle' v-bind:class="{draggablehandle: isInEdit}" v-if='item.c!=""'>
 																	<div class='row mar-0'>
 																		<span class="widgetLabel">{{itemWidgetList[item.i][0].label}}</span>
@@ -210,7 +211,7 @@ export default {
 		timetitle: function(){
 			switch (this.timepoint){
 				case 1:
-					return 'Initiation of PRO-SM tools'
+					return 'Initialization of PRO-SM tools'
 				case 2:
 					switch(this.patient.id){
 						case 'PA-67034-001':
@@ -221,14 +222,13 @@ export default {
 					}
 			}
 		},
-
 		wktracker: function(){
-			var x= (this.weekno-1)*60
-			var w=this.simuweekcount*60
+			var x= (this.weekno-1)*54
+			var w=this.simuweekcount*54
 			if(this.maximized){
 				x=0
 			}else{
-				w=60
+				w=54
 			}
 			return {
 	        // transform: `translateX(${x}px)`,
@@ -678,7 +678,7 @@ export default {
 	padding:3px;
 	text-align:center;
 	margin:0px ;
-	width:60px;
+	width:54px;
 	height: 25px;
 	z-index:350;
 	color: #fff;
@@ -686,8 +686,8 @@ export default {
 }
 .wlistctner {
 	overflow:auto;
-	min-height:560px;
-	max-height:560px;
+	min-height:752px;
+	max-height:752px;
 	border:1px solid #b5b5b5;
 }
 .btnDisabled {

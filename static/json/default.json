@@ -21,7 +21,7 @@
 				{"id":"PRO-01","label":"Pain","count":-1,"alertText":""},
 				{"id":"PRO-02","label":"Anxiety","count":-1,"alertText":""},
 				{"id":"PRO-03","label":"Depression","count":-1,"alertText":""},
-				{"id":"PRO-04","label":"Nausea / Vomitting","count":-1,"alertText":""},
+				{"id":"PRO-04","label":"Nausea / Vomiting","count":-1,"alertText":""},
 				{"id":"PRO-05","label":"Neuropathy","count":-1,"alertText":""},
 				{"id":"PRO-06","label":"Palm/Sole Rash","count":-1,"alertText":""},
 				{"id":"PRO-07","label":"Fatigue","count":-1,"alertText":""},
