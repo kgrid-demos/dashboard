@@ -13,6 +13,7 @@ const vuexLocal = new VuexPersistence ({
     storage: window.localStorage,
     // reducer: state => ({patientlist: state.patientlist, currentStation: state.currentStation, currentGroup:state.currentGroup}),
 })
+
 export default new Vuex.Store({
   strict: process.env.NODE_ENV !== 'production',
   plugins: [vuexLocal.plugin],
@@ -293,3 +294,5 @@ export default new Vuex.Store({
   }
   // plugins: debug ? [createLogger()] : []
 })
+
+// export default store

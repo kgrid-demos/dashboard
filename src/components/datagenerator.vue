@@ -1,4 +1,4 @@
-10<template name="datagenerator">
+<template name="datagenerator">
   <applayout>
     <div slot="main" style="margin: 2em">
       Days of data: <input v-model.number="numdays" type="number" placeholder="Number of days:" class="dayInput"/>
@@ -11,7 +11,6 @@
         <hr/>
         <span class="pname">{{wlist.patientName}}</span>
         <div v-for="(widget, index) in wlist.widgets">
-
           <div v-if="index === currentWidget">
             <button v-on:click="prevWidget(wlist.widgets[index - 1])">◀</button>
             <div style="display:inline-block">
