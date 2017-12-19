@@ -190,11 +190,7 @@
       if (this.$store.getters.getDataSettings(obj)) {
         this.datasettings = Object.assign({}, this.$store.getters.getDataSettings(obj).datasettings);
         this.selectedinstrname = this.datasettings.selectedinstrument.name;
-        this.custfreq = this.selectedfreq
-        this.chartOptions.scales.yAxes[0].ticks.min = this.selectedinstr.range.min
-        this.chartOptions.scales.yAxes[0].ticks.max = this.selectedinstr.range.max
-        this.chartOptions.scales.yAxes[0].ticks.stepSize = this.selectedinstr.range.step
-        this.chartOptions.scales.yAxes[0].scaleLabel.labelString = this.selectedinstr.unit
+        this.initChartOption()
       }else{
         if(this.object.selindex!=-1){
           this.selectedinstrname = this.object.instruments[this.object.selindex].name;
@@ -204,11 +200,7 @@
           }
         }
         if(this.selectedinstrname!=""){
-          this.custfreq = this.selectedfreq
-          this.chartOptions.scales.yAxes[0].ticks.min = this.selectedinstr.range.min
-          this.chartOptions.scales.yAxes[0].ticks.max = this.selectedinstr.range.max
-          this.chartOptions.scales.yAxes[0].ticks.stepSize = this.selectedinstr.range.step
-          this.chartOptions.scales.yAxes[0].scaleLabel.labelString = this.selectedinstr.unit
+          this.initChartOption()
         }
       }
     },
@@ -218,11 +210,7 @@
       if (this.$store.getters.getDataSettings(obj)) {
         this.datasettings = Object.assign({}, this.$store.getters.getDataSettings(obj).datasettings);
         this.selectedinstrname = this.datasettings.selectedinstrument.name;
-        this.custfreq = this.selectedfreq
-        this.chartOptions.scales.yAxes[0].ticks.min = this.selectedinstr.range.min
-        this.chartOptions.scales.yAxes[0].ticks.max = this.selectedinstr.range.max
-        this.chartOptions.scales.yAxes[0].ticks.stepSize = this.selectedinstr.range.step
-        this.chartOptions.scales.yAxes[0].scaleLabel.labelString = this.selectedinstr.unit
+        this.initChartOption()
       }else{
         if(this.object.selindex!=-1){
           this.selectedinstrname = this.object.instruments[this.object.selindex].name;
@@ -234,11 +222,7 @@
           }
         }
         if(this.selectedinstrname!=""){
-          this.custfreq = this.selectedfreq
-          this.chartOptions.scales.yAxes[0].ticks.min = this.selectedinstr.range.min
-          this.chartOptions.scales.yAxes[0].ticks.max = this.selectedinstr.range.max
-          this.chartOptions.scales.yAxes[0].ticks.stepSize = this.selectedinstr.range.step
-          this.chartOptions.scales.yAxes[0].scaleLabel.labelString = this.selectedinstr.unit
+          this.initChartOption()
         }
       }
     }
@@ -250,11 +234,7 @@
       selectedinstrname: function(){
         var stat={id:this.object.id,sel:false,selindex:-1}
         if(this.selectedinstrname!=""){
-          this.custfreq = this.selectedfreq
-          this.chartOptions.scales.yAxes[0].ticks.min = this.selectedinstr.range.min
-          this.chartOptions.scales.yAxes[0].ticks.max = this.selectedinstr.range.max
-          this.chartOptions.scales.yAxes[0].ticks.stepSize = this.selectedinstr.range.step
-          this.chartOptions.scales.yAxes[0].scaleLabel.labelString = this.selectedinstr.unit
+          this.initChartOption()
           this.datasettings.selectedinstrument = this.selectedinstr
           this.datasettings.sendnotification = this.sendnotification
           stat.sel=true
@@ -302,9 +282,6 @@
         return b
       },
       today:function(){
-        return this.$store.getters.gettoday
-      },
-      thisweek:function(){
         return this.$store.getters.gettoday
       },
       hasnotes: function(){
@@ -479,22 +456,18 @@
         obj.values.push(v);
         obj.colors.push(null);
       }
-        // let i = obj.values.length % 7;
-        // let numlabels = 8;
-        // if( this.maximized | (!this.maximized && obj.values.length<7)) {
-        //   for(let j = i; j < numlabels; j++) {
-        //     var v={};
-        //     v.x=this.$moment.unix(this.alldata[0].date + 86400 * (j-i));
-        //     v.y=null
-        //     obj.values.push(v);
-        //     obj.colors.push(null);
-        //   }
-        // }
     }
         return obj
       }
     },
     methods: {
+      initChartOption:function(){
+        this.custfreq = this.selectedfreq
+        this.chartOptions.scales.yAxes[0].ticks.min = this.selectedinstr.range.min
+        this.chartOptions.scales.yAxes[0].ticks.max = this.selectedinstr.range.max
+        this.chartOptions.scales.yAxes[0].ticks.stepSize = this.selectedinstr.range.step
+        this.chartOptions.scales.yAxes[0].scaleLabel.labelString = this.selectedinstr.unit
+      },
       maximizeWidget:function(){
         this.$emit("maximizeme",this.object.id)
       },
