@@ -443,16 +443,16 @@
       if(this.alldata.length>0){
         this.alldata.forEach(function (el,index) {
           var nth=Math.round(Math.round(index/dp)*dp)-index;           // If all data frequency is daily
-          if(el.date > self.daterange.starttime && el.date < self.daterange.endtime ) {
+          if(el.date > self.daterange.starttime && el.date <= self.daterange.endtime ) {
             var v = {};
             v.x=self.$moment.unix(el.date);
             var val = false;
-          if(el.date<=(self.today+1500)) {
-            if(self.object.id=='PRO-07'){
-              var dow =self.$moment.unix(el.date).day()
-              if(dow==1|dow==5){
-                val=true;
-              }
+            if(el.date<=(self.today+3500)) {
+              if(self.object.id=='PRO-07'){
+                var dow =self.$moment.unix(el.date).day()
+                if(dow==1|dow==5){
+                  val=true;
+                }
             }else {
               if(nth==0){
                 val=true;
@@ -469,18 +469,27 @@
               obj.colors.unshift(null);
             }
           }
-        });
-        let i = obj.values.length % 7;
-        let numlabels = 8;
-        if( this.maximized | (!this.maximized && obj.values.length<7)) {
-          for(let j = i; j < numlabels; j++) {
-            var v={};
-            v.x=this.$moment.unix(this.alldata[0].date + 86400 * (j-i));
-            v.y=null
-            obj.values.push(v);
-            obj.colors.push(null);
-          }
         }
+
+      );
+      if(this.maximized){
+        var v={};
+        v.x=this.$moment.unix(this.alldata[0].date + 86400);
+        v.y=null
+        obj.values.push(v);
+        obj.colors.push(null);
+      }
+        // let i = obj.values.length % 7;
+        // let numlabels = 8;
+        // if( this.maximized | (!this.maximized && obj.values.length<7)) {
+        //   for(let j = i; j < numlabels; j++) {
+        //     var v={};
+        //     v.x=this.$moment.unix(this.alldata[0].date + 86400 * (j-i));
+        //     v.y=null
+        //     obj.values.push(v);
+        //     obj.colors.push(null);
+        //   }
+        // }
     }
         return obj
       }
