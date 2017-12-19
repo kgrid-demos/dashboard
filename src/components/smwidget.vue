@@ -150,7 +150,7 @@
       },
       alldata:function(){
         if(this.viewmode){
-          return this.$store.getters.getPatientData(this.patientid)[this.object.id + "-data"].slice()
+          return this.$store.getters.getpatientsmdata(this.object.id)
         }else {
           return []
         }

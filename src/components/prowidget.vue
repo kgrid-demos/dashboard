@@ -340,10 +340,9 @@
         var self=this;
         var data = [];
         if(this.object && this.viewmode){
-          var d = JSON.parse(JSON.stringify(this.$store.getters.getPatientData(this.patientid)))
-          if(d[this.object.id + "-notes"]){
-            data = d[this.object.id + "-notes"]
-            data.forEach(function(e){
+          data = JSON.parse(JSON.stringify(this.$store.getters.getpatientnotes(this.object.id)))
+          if(data){
+              data.forEach(function(e){
               e.date=self.$moment().add(e.date, 'd').unix();
            })
          }
@@ -355,6 +354,7 @@
         var data = [];
         if(this.object && this.viewmode){
           data = JSON.parse(JSON.stringify(this.$store.getters.getpatientalert(this.object.id)))
+
           if(data){
             data.forEach(function(e){
               e.date=self.$moment().add(e.date, 'd').unix();
@@ -503,8 +503,8 @@
 			},
       saveoptions:function (obj) {
         var payload  = {'pid': obj.id, "group":obj.group, "wid":this.object.id,'datasettings':this.datasettings}
-        console.log("PRO Widget : "+this.title)
-        console.log(payload)
+        // console.log("PRO Widget : "+this.title)
+        // console.log(payload)
         this.$store.commit('saveWidgetSettings', payload);
       },
       getcolorfordata: function(value){

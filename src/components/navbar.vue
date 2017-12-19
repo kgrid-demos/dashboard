@@ -58,6 +58,7 @@ export default {
 		resetstore:function(){
 			if (confirm("Datastore will be reset! Are you sure?") == true) {
 				var self=this;
+				window.localStorage.setItem("first", {})
 				this.$http.get("./static/json/default.json").then( response=> {
 					self.$store.commit('resetState', response.data)
 				}).catch(e=>{
