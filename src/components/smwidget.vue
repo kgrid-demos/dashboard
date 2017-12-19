@@ -13,7 +13,6 @@
       <div class="progresscont" v-if='!maximized'>
         <div class="progress" v-bind:style="progressStyle"> </div>
         <div class="barlabel" ref="thelabel">Modules completed: {{numcomplete}} / {{selectedinstr.modulecount}}</div>
-        <!-- <div class="barlabelw" v-bind:style="wlabel" >Modules completed: {{numcomplete}} / {{selectedinstr.modulecount}}</div> -->
       </div>
     </div>
     <div v-if="editmode">
@@ -25,7 +24,6 @@
           <span>{{selectedinstr.description}}</span>
         </div>
       </div>
-
       <div class="optrow">
         <div class="optionslabel pad-l-20">
           Number of Modules
@@ -34,7 +32,6 @@
           <span>{{selectedinstr.modulecount}}</span>
         </div>
       </div>
-
     </div>
   </div>
 </template>
@@ -90,10 +87,8 @@
         return this.$store.getters.getfrequencyops
       },
       selectedfreq:function(){
-          var freq = this.selectedinstr.bwfreq
+          var freq = this.selectedinstr.bwpoints
           var index = this.freqops.map(function(e){return e.bwdatapt}).indexOf(freq)
-          // console.log("Freq="+freq)
-          // console.log(" Index="+index)
           if(index!=-1){
             return this.freqops[index].label
             }else {

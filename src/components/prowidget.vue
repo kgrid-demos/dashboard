@@ -58,11 +58,6 @@
         </div>
         <div class="options pad-l-20" v-if='selectedinstr'>
           {{custfreq}}
-          <!-- <select v-model="custfreq" disabled>
-            <option v-for="freq in freqops" v-bind:value="freq.label">
-              {{ freq.label }}
-            </option>
-          </select> -->
         </div>
       </div>
       <div class="optrow">
@@ -149,24 +144,37 @@
                 color: '#f2f2f2',
                 lineWidth: 2,
                 drawBorder: false,
-                drawTicks:false
+                drawTicks:false,
+                tickMarkLength:8
               }
             }],
             xAxes: [{
+              type:'time',
               display: true,
               offset: true,
               scaleLabel: {
                 display: false,
               },
+              time: {
+                unit: 'day',
+                round: 'day',
+                displayFormats: {
+                  day: 'ddd'
+                },
+                stepSize:1,
+                tooltipFormat: 'MMMM Do YYYY'
+              },
               ticks: {
-                maxTicksLimit: 8
+                maxTicksLimit: 8,
+                // source:'labels'
               },
               gridLines: {
                 display: true,
                 color: '#f2f2f2',
                 lineWidth: 1,
                 drawBorder: false,
-                drawTicks:true
+                drawTicks:true,
+                tickMarkLength:5
               }
             }]
           }
@@ -261,11 +269,9 @@
           switch(this.patientid){
             case 'PA-67034-001':
               obj.days=84;
-              // this.chartOptions.scales.xAxes[0].ticks.maxTicksLimit = obj.days/7;
               break;
             case 'PA-67034-007':
               obj.days=56;
-              // this.chartOptions.scales.xAxes[0].ticks.maxTicksLimit = obj.days/7;
               break;
             default:
               obj.days=28;
@@ -285,17 +291,7 @@
       },
       maxchartOption:function(){
         var op = JSON.parse(JSON.stringify(this.chartOptions))
-        switch(this.patientid){
-          case 'PA-67034-001':
-            op.scales.xAxes[0].ticks.maxTicksLimit = 12;
-            break;
-          case 'PA-67034-007':
-            op.scales.xAxes[0].ticks.maxTicksLimit = 8;
-            break;
-          default:
-            op.scales.xAxes[0].ticks.maxTicksLimit = 8;
-            break;
-        }
+        op.scales.xAxes[0].time.stepSize=7;
         return op
       },
       hasalert:function(){
@@ -309,9 +305,7 @@
         return this.$store.getters.gettoday
       },
       thisweek:function(){
-
         return this.$store.getters.gettoday
-
       },
       hasnotes: function(){
         return this.allnotes.length>0
@@ -329,10 +323,9 @@
       alldata:function(){
         var self=this;
         var data = JSON.parse(JSON.stringify(this.$store.getters.getPatientData(this.patientid)[this.object.id + "-data"]));
-        // console.log(data)
         if(data){
           data.forEach(function(e){
-            e.date=self.$moment().add(e.dateOffset, 'd').unix();
+            e.date=self.$moment().add(e.dateOffset+7-self.todaysdow, 'd').unix();
           })
           if(this.viewmode){
             return data
@@ -378,7 +371,7 @@
       },
       selectedfreq:function(){
         if(this.selectedinstr){
-          var freq = this.selectedinstr.bwfreq
+          var freq = this.selectedinstr.bwpoints
           var index = this.freqops.map(function(e){return e.bwdatapt}).indexOf(freq)
           if(index!=-1){
             return this.freqops[index].label
@@ -424,10 +417,8 @@
     },
     datacollection: function(){
       var obj = {
-        labels: this.displaydata.labels,
         datasets: [
           {
-            label: this.title,
             data: this.displaydata.values,
             backgroundColor:'rgba(255, 255, 255, 1)',
             fill: false,
@@ -448,42 +439,57 @@
     displaydata: function(){
       var obj={values:[],labels:[],colors:[]};
       var self = this;
-      var dp = 14/self.selectedinstr.bwfreq;              // If all data frequency is daily
+      var dp = 14/self.selectedinstr.bwpoints;              // If all data frequency is daily
       if(this.alldata.length>0){
         this.alldata.forEach(function (el,index) {
           var nth=Math.round(Math.round(index/dp)*dp)-index;           // If all data frequency is daily
-          if(el.date > self.daterange.starttime && el.date < self.daterange.endtime) {
-            if(nth==0){                                    // If all data frequency is daily
-              var v = el.value;
+          if(el.date > self.daterange.starttime && el.date <= self.daterange.endtime ) {
+            var v = {};
+            v.x=self.$moment.unix(el.date);
+            var val = false;
+            if(el.date<=(self.today+3500)) {
+              if(self.object.id=='PRO-07'){
+                var dow =self.$moment.unix(el.date).day()
+                if(dow==1|dow==5){
+                  val=true;
+                }
+            }else {
+              if(nth==0){
+                val=true;
+              }
+            }
+          }
+          if(val){                                    // If all data frequency is daily
+              v.y=el.value;
               obj.values.unshift(v);
-              obj.labels.unshift(self.$moment.unix(el.date).format('ddd'));
-              obj.colors.unshift(self.getcolorfordata(v));
+              obj.colors.unshift(self.getcolorfordata(v.y));
             } else {
-              obj.values.unshift(null);
-              obj.labels.unshift(self.$moment.unix(el.date).format('ddd'));
+              v.y=null;
+              obj.values.unshift(v);
               obj.colors.unshift(null);
             }
           }
-        });
-        let i = obj.values.length % 7;
-        let numlabels = 7;
-        if(this.maximized) {
-          numlabels = 8;
-          for(let j = i; j < numlabels; j++) {
-            obj.values.push(null);
-            obj.labels.push(this.$moment.unix(this.alldata[this.alldata.length - 1].date + 86400 * (j-i)).format('ddd'));
-            obj.colors.push(null);
-          }
-        }else {
-          if(obj.values.length<7){
-            numlabels = 7;
-            for(let j = i; j < numlabels; j++) {
-              obj.values.push(null);
-              obj.labels.push(this.$moment.unix(this.alldata[this.alldata.length - 1].date + 86400 * (j-i)).format('ddd'));
-              obj.colors.push(null);
-            }
-          }
         }
+
+      );
+      if(this.maximized){
+        var v={};
+        v.x=this.$moment.unix(this.alldata[0].date + 86400);
+        v.y=null
+        obj.values.push(v);
+        obj.colors.push(null);
+      }
+        // let i = obj.values.length % 7;
+        // let numlabels = 8;
+        // if( this.maximized | (!this.maximized && obj.values.length<7)) {
+        //   for(let j = i; j < numlabels; j++) {
+        //     var v={};
+        //     v.x=this.$moment.unix(this.alldata[0].date + 86400 * (j-i));
+        //     v.y=null
+        //     obj.values.push(v);
+        //     obj.colors.push(null);
+        //   }
+        // }
     }
         return obj
       }
@@ -511,29 +517,6 @@
           return "white"
         }
       },
-      // generateNotification() {
-      //   let finalDataPoint = this.weeklydata[this.weeklydata.length - 1];
-      //   let note = "";
-      //   let peakValue = 0;
-      //   if(finalDataPoint > this.datasettings.notifythresh) {
-      //     note = " was reported at " + finalDataPoint + " in the last 24 hours.";
-      //     this.$emit("alert", note);
-      //     return;
-      //   }
-      //
-      //   for(let i = 1; i <= 4; i++) {
-      //     let currentValue = this.weeklydata[this.weeklydata.length - i];
-      //     if(currentValue < this.datasettings.notifythresh / 2 + 1) {
-      //       return;
-      //     }
-      //     if(currentValue > peakValue) {
-      //       peakValue = currentValue;
-      //     }
-      //   }
-      //   console.log("the final data point is " + finalDataPoint);
-      //   note = " has been elevated in the last 24 hours.";
-      //   this.$emit("alert", note);
-      // }
     },
   }
 </script>
@@ -572,19 +555,12 @@
     right: 8px;
     background: none;
   }
-
-  .edit img {
-    height: 25px;
-    width: 25px;
-  }
-
   .graph .save {
     font-size: 1em;
     margin: 1em auto;
     width: 10em;
     padding: 0.5ex 1ex;
   }
-
   .options, .optionslabel {
     height: 100%;
     float: left;
@@ -598,7 +574,6 @@
   .options select {
     width:100%;
   }
-
   .optrow {
     padding: 12px 10px;
     clear: both;
@@ -633,13 +608,7 @@ div.min {
   max-width:300px;
   display:inline-block;
 }
-.thres.green {
-  background-color: green
-}
-.thres.orange {
-  background-color: orange
-}
-.thres.red {
-  background-color: red
-}
+.thres.green {  background-color: green }
+.thres.orange {  background-color: orange }
+.thres.red {  background-color: red }
 </style>
