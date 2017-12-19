@@ -1101,7 +1101,7 @@
       ],
       "PRO-04-data": [
         {
-          "value": 0,
+          "value": 2,
           "dateOffset": 0
         },
         {
@@ -1213,7 +1213,7 @@
           "dateOffset": -27
         },
         {
-          "value": 3,
+          "value": 2,
           "dateOffset": -28
         },
         {
@@ -1325,7 +1325,7 @@
           "dateOffset": -55
         },
         {
-          "value": 6,
+          "value": 3,
           "dateOffset": -56
         },
         {
@@ -1381,7 +1381,7 @@
           "dateOffset": -69
         },
         {
-          "value": 8,
+          "value": 6,
           "dateOffset": -70
         },
         {
@@ -1803,7 +1803,7 @@
           "dateOffset": -83
         },
         {
-          "value": 15,
+          "value": 18,
           "dateOffset": -84
         },
         {
@@ -10742,7 +10742,7 @@
           "dateOffset": -13
         },
         {
-          "value": 13,
+          "value": 16,
           "dateOffset": -14
         },
         {
@@ -10854,7 +10854,7 @@
           "dateOffset": -41
         },
         {
-          "value": 6,
+          "value": 9,
           "dateOffset": -42
         },
         {

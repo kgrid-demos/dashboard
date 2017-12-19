@@ -447,7 +447,7 @@
             var v = {};
             v.x=self.$moment.unix(el.date);
             var val = false;
-          if(el.date<=(self.today+43000)) {
+          if(el.date<=(self.today+1500)) {
             if(self.object.id=='PRO-07'){
               var dow =self.$moment.unix(el.date).day()
               if(dow==1|dow==5){
