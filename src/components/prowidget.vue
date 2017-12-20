@@ -195,9 +195,9 @@
         if(this.object.selindex!=-1){
           this.selectedinstrname = this.object.instruments[this.object.selindex].name;
         }else {
-          if(this.object.instruments.length==1){
+          // if(this.object.instruments.length==1){
             this.selectedinstrname = this.object.instruments[0].name;
-          }
+          // }
         }
         if(this.selectedinstrname!=""){
           this.initChartOption()
@@ -218,7 +218,7 @@
           if(this.object.instruments.length==1){
             this.selectedinstrname = this.object.instruments[0].name;
           }else {
-            this.selectedinstrname=""
+            this.selectedinstrname=this.object.instruments[0].name
           }
         }
         if(this.selectedinstrname!=""){
@@ -331,7 +331,6 @@
         var data = [];
         if(this.object && this.viewmode){
           data = JSON.parse(JSON.stringify(this.$store.getters.getpatientalert(this.object.id)))
-
           if(data){
             data.forEach(function(e){
               e.date=self.$moment().add(e.date, 'd').unix();
@@ -498,7 +497,7 @@
   .widgetcontainer{
     width:100%;
     height:100%;
-    background-color: #e5e5e5;
+    background-color: #fff;
   }
   .widgetalert{
     height: 20px;

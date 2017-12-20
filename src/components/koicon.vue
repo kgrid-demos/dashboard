@@ -1,6 +1,6 @@
 <template>
 		<div class="container kgl-icon" :class="{ active: object.count>=0 }" v-bind:id="object.id">
-			<p class='ft-sz-12'>{{object.label}}</p>
+			<p :style="fontStyles">{{object.label}}</p>
 			<div class="badge" v-show='object.count>0'>
 				<p class='ft-sz-10'>{{object.count}}</p>
 			</div>
@@ -15,6 +15,23 @@
 
 		},
 		computed : {
+			fontStyles () {
+				var l = this.object.label.length;
+				var ftsz='12px';
+			  if (l>9) {
+					ftsz='11px'
+				}
+				if (l>20) {
+				 ftsz='10px'
+			 }
+			 if (l>27) {
+				ftsz='8px'
+			}
+
+				return {
+					'font-size': `${ftsz}`
+				}
+			}
 
 					},
 		methods : {
@@ -45,7 +62,7 @@
 				.kgl-icon {
 						position: relative;
 				    text-align: center;
-						max-width: 75px;
+						max-width: 80px;
 						height: 40px;
 				    background-color: #f7f7f7;
 			    	color: #fff;

@@ -49,6 +49,7 @@
 						<div class='col-md-8 col-sm-8 '>
 							<div class='float-r' v-if='isInEdit'>
 								<button class='kg-btn-primary lg' v-if='isInEdit && pwidgetlist.length==1&&this.pwidgetlist[0]=="" ' @click='loadDefault'> Load Default Layout </button>
+								<button class='kg-btn-primary lg' v-if='isInEdit && pwidgetlist.length>1 ' @click='removeAll'> Remove All </button>
 								<button class='kg-btn-primary attn lg' v-if='isInEdit' :disabled='!configready' @click='saveconfig'>Save Changes</button>
 							</div>
 							<div class='float-r' v-else>
@@ -91,8 +92,8 @@
 														>
 															<div class="draggable-handle" v-show='(item.c=="")&&isInEdit' style="text-align: center; line-height: 2em; vertical-align: middle; font-size: 16px; font-weight: 700;position:relative;top:50%;transform:translateY(-50%)">To add a widget, <br>drag one from the list <br> and drop here.
 															</div>
-																<div class='widgetTitle' v-bind:class="{draggablehandle: isInEdit}" v-if='item.c!=""'>
-																	<div class='row mar-0'>
+																<div class='' v-bind:class="{draggablehandle: isInEdit}" v-if='item.c!=""'>
+																	<div class='row mar-0 widgetTitle' :class='itemWidgetList[item.i][0].type' >
 																		<span class="widgetLabel">{{itemWidgetList[item.i][0].label}}</span>
 																		<i class='fa fa-close' v-if='isInEdit' style="font-size:11pt" @click='removeWidget(item.i)'></i>
 																		<i class='fa fa-window-maximize' v-if='!isInEdit && !maximized' title="maximize" style="font-size:11pt" @click='maximizeWidget(item.i)'></i>
@@ -524,17 +525,20 @@ export default {
 			this.cleanupLayout();
     },
 		removeWidget:function(i){
-
 			var obj = this.itemWidgetList[i][0];
-			// console.log("Removing Widget #"+i);
-
-			// console.log(obj)
 			this.itemWidgetList[i].splice(0);
 			this.widgetList.push(obj);
 			this.layout[i].c="";
 			this.pwidgetlist[i]="";
 			this.cleanupLayout();
 
+		},
+		removeAll:function(){
+			var n=this.pwidgetlist.length;
+			do{
+				n=n-1;
+				this.removeWidget(0)
+			}while(n>1)
 		},
 		maximizeWidget: function(i){
 			this.temp =JSON.parse(JSON.stringify(this.layout));
@@ -618,10 +622,18 @@ export default {
 }
 .kg-btn-primary{
 	background-color:#f7f7f7;
-	border:1px solid #777777;
+	border:1px solid #0075bc;
 	padding:10px 20px;
 	margin:10px 10px;
 	display:inline-block;
+	color:#0075bc;
+	transition:all 0.5s ease;
+	font-weight:600;
+}
+.kg-btn-primary:hover{
+	background-color:#0075bc;
+	color:#fff;
+	border:1px solid #fff;
 }
 .kg-btn-wk {
 	background-color:#e7e7e7;
@@ -702,7 +714,7 @@ export default {
 .widgetcontainer {
 	position:relative;
 	width:100%;
-flex: auto;
+	flex: auto;
 }
 .widgetcontainer.over {
 		background-color:yellow;
@@ -716,8 +728,13 @@ flex: auto;
 }
 .widgetTitle {
   padding:5px 8px;
-	background: #fff;
-	color: #000;
+	color: #fff;
+}
+.widgetTitle.PRO {
+	background-color: #853754;
+}
+.widgetTitle.SM {
+	background-color: #20657e;
 }
 .widgetTitle p {
 	font-size:12px;
@@ -728,7 +745,7 @@ flex: auto;
 .widgetTitle i, .widgetTitle .badge {
 	font-size:12px;
 	font-weight:500;
-	color: #000;
+	color: #fff;
 	float:right;
 	position:absolute;
 	top:10px;
@@ -744,7 +761,7 @@ flex: auto;
 	color:red;
 }
 .widgetTitle .widgetLabel {
-	color:black;
+	color:#fff;
 	font:bold 12pt 'Open Sans', sans-serif;
 }
 .draggablehandle {
@@ -767,11 +784,11 @@ ul.modalentry li {
 	line-height:2.5em;
 }
 ul.wlist {
-	margin:12px;
+	margin:10px;
 	height:100%;
 }
 ul.wlist li {
-	margin: 10px;
+	margin: 2px;
 	display: inline-flex;
 }
 ul.wlayout {
