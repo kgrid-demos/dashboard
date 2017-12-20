@@ -1,6 +1,6 @@
 <template name="smwidget">
-  <div>
-    <div v-if='!editmode'>
+  <div style="height: 100%; position: relative;">
+    <div v-if='!editmode' style="height: 100%; position:relative;">
       <div class="moduleContainer" v-if='maximized'>
         <p>Progress on Self Management Modules </p>
         <ul class="moduleList">
@@ -224,34 +224,20 @@
     height: 26px;
     border-radius: 5px;
     width: 90%;
+    position: relative;
+    top:50%;
+    transform: translateY(-80%);
+    background-color:#fff
   }
   .barlabel {
     color: aqua;
     position: absolute;
-    top: 12px;
+    top: 2px;
     width: 100%;
     text-align: center;
     left: 0;
     font-weight:700;
     mix-blend-mode:difference;
-  }
-  .barlabelw {
-    color: #fff;
-    position: absolute;
-    top: 12px;
-    text-align: left;
-    left: 0;
-    font-weight:700;
-    height:26px;
-    overflow:hidden;
-    white-space:nowrap
-  }
-  .barlabelw div{
-    position: absolute;
-    color:yellow;
-    font-weight:700;
-    overflow:hidden;
-    white-space:nowrap
   }
 
 </style>

@@ -97,7 +97,7 @@ const _widgets= [
   { "id":"SM-01","label":"Colon Cancer Nutrition & Fluids", "type":"SM",    "constraint":{}, "sel":false,"selindex":-1,
   "cancertype":[ {id:1}],
   "instruments":[ { name:"Colon Cancer Nutrition & Fluids",description: "Nutrition support and oral hydration", value: 1, "modulecount": 3, "bwpoints": 1}]},
-  { "id":"SM-02","label":"Conlon Cancer & Self Image",  "type":"SM",    "constraint":{}, "sel":false,"selindex":-1,
+  { "id":"SM-02","label":"Colon Cancer & Self Image",  "type":"SM",    "constraint":{}, "sel":false,"selindex":-1,
   "cancertype":[  {id:1}],
   "instruments":[  { name:"Colon Cancer & Self Image",description: "Self-image self management", value: 1, "modulecount": 4, "bwpoints": 1}]},
   { "id":"SM-03","label":"Ostomy Care", "type":"SM",    "constraint":{}, "sel":false,"selindex":-1,
