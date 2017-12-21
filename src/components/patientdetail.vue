@@ -49,8 +49,9 @@
 						<div class='col-md-8 col-sm-8 '>
 							<div class='float-r' v-if='isInEdit'>
 								<button class='kg-btn-primary lg' v-if='isInEdit && pwidgetlist.length==1&&this.pwidgetlist[0]=="" ' @click='loadDefault'> Load Default Layout </button>
+								<button class='kg-btn-primary lg' v-if='isInEdit && pwidgetlist.length>1' @click='saveDefault'> Save As Default </button>
 								<button class='kg-btn-primary lg' v-if='isInEdit && pwidgetlist.length>1 ' @click='removeAll'> Remove All </button>
-								<button class='kg-btn-primary attn lg' v-if='isInEdit' :disabled='!configready' @click='saveconfig'>Save Changes</button>
+								<button class='kg-btn-primary attn lg' v-if='isInEdit' :disabled='!configready' @click='saveconfig'>Done</button>
 							</div>
 							<div class='float-r' v-else>
 								<button class='kg-btn-primary lg' v-if='!maximized && !loaddata & pddready' @click='toggleviewmode'> {{timeff}}</button>
@@ -482,6 +483,12 @@ export default {
 				}
 			})
 			this.cleanupLayout();
+		},
+		saveDefault:function() {
+			var obj={}
+			obj.cancerid=this.patient.type;
+			obj.layout=this.layout;
+			this.$store.commit('savedefaultlayout', obj )
 		},
 		updateLog:function(obj){
 			var t = this.$moment().format();

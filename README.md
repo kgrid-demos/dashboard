@@ -3,7 +3,7 @@
 The software system of "Patient Data Dashboard" is developed for Genentech PRO-SM Dashboard Project. It will help the clinician to improve the patient experience of cancer care. It features drag-and-drop widgets for various Patient-Report-Outcome and Self-Management modules.
 
 #### Prepare your system
-To run Patient Data Dashboard, your system should have the follwoing required software:
+To run Patient Data Dashboard, your system should have the following required software:
 - [Node.js + npm](https://www.npmjs.com/get-npm) - Note: get the long-term release version.
 - After installing Node.js and `npm`, install the demo server (to run the PDD web app). From the command line:  
   `npm install -g http-server`
@@ -19,3 +19,5 @@ To run Patient Data Dashboard, your system should have the follwoing required so
     For Mac, run `./pdd-start.sh`;
 4. Open your browser and go to `http://localhost:8080`
 5. When finished, on command line, run `pdd-stop.bat` for Windows, or run `./pdd-stop.sh` for Mac
+6. If you are upgrading the software with latest version, the web application will need a reset to clean the persisted local storage.
+After reset, it is recommended to also do a hard reload of the page to clear any cached content.
