@@ -71,7 +71,7 @@ const _widgets= [
                     "unit":"Ostomy Output (Bags)", "ryg":[{min:0,max:5,color:"green"}]} ]},
   { "id":"PRO-12","label":"Temperature & Fever", "type":"PRO",    "constraint":{}, "sel":false,"selindex":-1,
   "cancertype":[  {id:0}, {id:1},{id:2}],
-  "instruments":[{ name: "Body temperature in Fahrenheit", value: 1, "bwpoints":28,
+  "instruments":[{ name: "Body temperature in Fahrenheit", value: 1, "bwpoints":14,
                     "dow":["Su","Mo","Tu","We","Th","Fr","Sa"], "range":{min:97,max:106,inc:0.1,step:3},
                     "unit":"Body Temperature (Fahrenheit)", "ryg":[{min:97,max:99.9,color:"green"}, {min:100,max:106,color:"red"}]} ]},
   { "id":"PRO-13","label":"Appetite",  "type":"PRO",    "constraint":{}, "sel":false, "selindex":-1,
