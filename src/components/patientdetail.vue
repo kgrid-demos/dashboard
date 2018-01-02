@@ -734,6 +734,8 @@ export default {
 	opacity:0.05;
 }
 .widgetTitle {
+	width:100%;
+	margin: 0 auto;
   padding:5px 8px;
 	color: #fff;
 }
