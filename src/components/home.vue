@@ -16,8 +16,8 @@
 		<div slot='main'>
 			<div class='row mar-0' v-if="stationSelected">
 				<div class='col-md-2 col-sm-2 col-xs-2  ht-full'>
-					<div>
-										<p style='text-align:center'></p>
+					<div class='groupselector'>
+						<p style='text-align:center'></p>
 						<ul class='groupids'><li v-for='(num,index) in groups' @click='selectgroup(index)' :class="{'active': currentGroup.id==num}">{{num}}</li></ul>
 					</div>
 
@@ -69,8 +69,10 @@ export default {
 		this.$store.commit("setcurrentdaterange",obj)
 	},
 	mounted:function(){
+		this.$store.commit('setScreenname','Patient List')
 	},
 	updated: function() {
+
   },
 	computed : {
 		filterEnabled : function(){
@@ -198,7 +200,14 @@ padding:20px;
 	cursor:pointer;
 	border-radius: 15px;
 }
-
+div.groupselector {
+	opacity:0.01;
+	transition: opacity 0.5s ease;
+	margin-right:30px;
+}
+div.groupselector:hover {
+	opacity:1;
+}
 .station p{
 font-size: 28px;
 font-weight: 700;
@@ -223,7 +232,7 @@ position:relative;
  color:#eeeeee;
  margin: 0px 200px 10px 0px;
  border: 1px dashed #e5e5e5;
-
+	min-width:60px;
 	padding: 10px;
 	background-color: #f7f7f7;
 	transition: all 0.3s ease;

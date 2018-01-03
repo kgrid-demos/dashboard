@@ -14,7 +14,7 @@
 				<div class='row mar-0'>
 					<div class='col-md-1 col-sm-1 col-xs-1  pad-0' v-if='isInEdit'></div>
 					<div class='col-md-1 col-sm-1 col-xs-1'>
-						<router-link  class='float-r' to='/' v-if='!maximized & !isInEdit'>
+						<router-link  class='float-r' to='/' v-if='!maximized & !isInEdit' data-toggle="tooltip" title="Click to go back to the patient list">
 							<i class='fa fa-arrow-left'></i>
 						</router-link>
 					</div>
@@ -51,7 +51,7 @@
 								<button class='kg-btn-primary lg' v-if='isInEdit && pwidgetlist.length==1&&this.pwidgetlist[0]=="" ' @click='loadDefault'> Load Default Layout </button>
 								<button class='kg-btn-primary lg' v-if='isInEdit && pwidgetlist.length>1' @click='saveDefault'> Save As Default </button>
 								<button class='kg-btn-primary lg' v-if='isInEdit && pwidgetlist.length>1 ' @click='removeAll'> Remove All </button>
-								<button class='kg-btn-primary attn lg' v-if='isInEdit' :disabled='!configready' @click='saveconfig'>Done</button>
+								<button class='kg-btn-primary attn lg' v-if='isInEdit' :disabled='!configready' @click='saveconfig'>Apply Changes</button>
 							</div>
 							<div class='float-r' v-else>
 								<button class='kg-btn-primary lg' v-if='!maximized && !loaddata & pddready' @click='toggleviewmode'> {{timeff}}</button>
@@ -61,7 +61,7 @@
 										<button class='wkcursorbg ft-sz-12' :style='wktracker'></button>
 										<button class='wkcursorfg ft-sz-12' ref='wkcursor' :style='wktracker' ></button>
 
-										<button class='wklabel ft-sz-12' v-for='wk in simuweeks'>Week {{wk}}</button>
+										<button class='wklabel ft-sz-12' v-for='wk in simuweeks'><small>week </small>{{wk}}</button>
 									</div>
 									<!-- <button class='kg-btn-primary labelonly' style='width:140px;'> {{dateRangeLabel.week}} </button> -->
 									<button class='kg-btn-wk ' :disabled="!enableNextArrow" @click='gonextweek'> <i v-show="!maximized" class='fa fa-angle-right fa-lg'></i></button>
@@ -98,7 +98,7 @@
 																		<span class="widgetLabel">{{itemWidgetList[item.i][0].label}}</span>
 																		<i class='fa fa-close' v-if='isInEdit' style="font-size:11pt" @click='removeWidget(item.i)'></i>
 																		<i class='fa fa-window-maximize' v-if='!isInEdit && !maximized' title="maximize" style="font-size:11pt" @click='maximizeWidget(item.i)'></i>
-																		<i class='fa fa-window-restore' v-if='!isInEdit && maximized' title="maximize"  style="font-size:11pt" @click='restoreLayout'></i>
+																		<i class='fa fa-window-restore' v-if='!isInEdit && maximized' title="restore"  style="font-size:11pt" @click='restoreLayout'></i>
 																	</div>
 																</div>
 																<div class='widgetcontainer fill no-drag' @drop='dropped'>
@@ -189,6 +189,7 @@ export default {
 		} else {
 			this.pddready=true;
 		}
+		this.$store.commit('setScreenname','Data View')
 	},
 	updated: function() {
 	  },
@@ -345,6 +346,13 @@ export default {
 		}
 	},
 	watch:{
+		isInEdit:function(){
+			if(this.isInEdit){
+				this.$store.commit('setScreenname','Dashboard Configuration')
+			}else {
+				this.$store.commit('setScreenname','Data View')
+			}
+		},
 		itemWidgetList:function(){
 			this.updateLayoutContent();
 			if(this.isInEdit) {
@@ -447,7 +455,7 @@ export default {
 				self.registrationstatus.push("Saving registerations of prescribed interventions for "+self.patient.name+ " ... ")
 			},200)
 			setTimeout(function(){
-				self.registrationstatus.push("Registration is successful!!! ")
+				self.registrationstatus.push("Registration is successful! ")
 			},500)
 		 	setTimeout(function(){
 			 	self.registrationstatus.push("You are ready for the next step." )
@@ -701,6 +709,8 @@ export default {
 	height: 25px;
 	z-index:350;
 	color: #fff;
+	font-size:14px;
+	font-weight:600;
 	/* mix-blend-mode: darken; */
 }
 .wlistctner {
@@ -791,6 +801,7 @@ h1 small {
 }
 ul.modalentry li {
 	line-height:2.5em;
+	font-size:18px;
 }
 ul.wlist {
 	margin:10px;

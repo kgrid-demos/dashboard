@@ -14,7 +14,7 @@ const vuexLocal = new VuexPersistence ({
     // reducer: state => ({patientlist: state.patientlist, currentStation: state.currentStation, currentGroup:state.currentGroup}),
 })
 
-export default new Vuex.Store({
+const store = new Vuex.Store({
   strict: process.env.NODE_ENV !== 'production',
   plugins: [vuexLocal.plugin],
   modules: {
@@ -34,7 +34,8 @@ export default new Vuex.Store({
       patientlist:  [],
       maxgroupinuse:6,
       patientData:[],
-      today:0
+      today:0,
+      screenname:'Patient List'
     },
   mutations: {
     settoday(state,timestamp){
@@ -190,9 +191,15 @@ export default new Vuex.Store({
       state.currentdaterange.starttime=obj.start
       state.currentdaterange.endtime=obj.end
       state.currentdaterange.days=obj.days
+    },
+    setScreenname(state,s){
+      state.screenname=s
     }
   },
   getters: {
+    getScreenname:state=>{
+      return state.screenname
+    },
     gettoday:state=>{
       return state.today
     },
@@ -295,4 +302,11 @@ export default new Vuex.Store({
   // plugins: debug ? [createLogger()] : []
 })
 
+export default store
+
+const initialStateCopy = JSON.parse(JSON.stringify(store.state))
+
+export function resetState () {
+  store.replaceState(JSON.parse(JSON.stringify(initialStateCopy)))
+}
 // export default store

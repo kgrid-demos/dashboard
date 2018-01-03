@@ -62,11 +62,10 @@
 				.kgl-icon {
 						position: relative;
 				    text-align: center;
-						max-width: 80px;
-						height: 40px;
+						max-width: 92px;
+						height: 50px;
 				    background-color: #f7f7f7;
 			    	color: #fff;
-
 				    font-weight: 400;
 				    border: 1px solid #fff;
 						border-radius: 5px;

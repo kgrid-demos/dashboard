@@ -3,6 +3,7 @@
 		<a class='navbar-brand kgl-1' @click='stationselector'>
 			<span>{{dashboard}}</span>
 		</a>
+		<span class='navbar-label kgl-1'>{{screenname}}</span>
 		<nav class='navbar kgl-1 kg-bg-color kg-color'>
 			<ul class='nav navbar-nav'>
 				<router-link tag='li':class="{'active': $route.fullPath === '/'}" to='/' v-show='false'><a><span>Patients</span></a></router-link>
@@ -20,6 +21,7 @@
 </template>
 
 <script>
+import resetState from '../store/index.js'
 export default {
   name: 'navbar',
   data: function () {
@@ -41,6 +43,9 @@ export default {
 			}
 			return d;
 		},
+		screenname: function(){
+			return this.$store.getters.getScreenname;
+		},
 		notifCount: function() {
 				return this.$store.getters.getNotificationList.length;
 			}
@@ -58,12 +63,14 @@ export default {
 		resetstore:function(){
 			if (confirm("Datastore will be reset! Are you sure?") == true) {
 				var self=this;
-				window.localStorage.setItem("first", {})
-				this.$http.get("./static/json/default.json").then( response=> {
-					self.$store.commit('resetState', response.data)
-				}).catch(e=>{
-					console.log(e)
-				});
+				window.localStorage.removeItem("first")
+				window.location.reload(true)
+				// this.$http.get("./static/json/default.json").then( response=> {
+				// 	self.$store.commit('resetState', response.data)
+				// }).catch(e=>{
+				// 	console.log(e)
+				// });
+				resetState()
 			} else {
 
 			}
@@ -177,6 +184,9 @@ export default {
 
 <!-- Add 'scoped' attribute to limit CSS to this component only -->
 <style scoped>
+.navbar {
+	margin-bottom:0px;
+}
 .navbar-nav {
 	float:right;
 	margin: 0px 40px 0px 0px;
@@ -210,17 +220,32 @@ export default {
     margin: 0px 15px;
 }
 .navbar-brand{
-	background-color:#fff;
+	background-color:#0075bc;
 	position:absolute;
-	margin: 1px 0px;
-	padding: 14px 0px;
+	margin: 14px 0px 0px 0px;
+	padding: 2px 5px 2px 5px;
 	z-index:400;
 	top:0;
-	width:280px;
+	width:250px;
 	left:20px;
-	height:56px;
+	height:26px;
 	border:none;
-	font-weight: 800;
+	font-weight: 700;
+	border:1px solid #0075bc;
+	text-align:center;
+	color:#fff;
+}
+.navbar-label {
+	font-size:14px;
+	margin-left:270px;
+	margin-top:19px;
+	position:absolute;
+	cursor:auto;
+	padding: 0px 18px;
+	text-align: left;
+	border-bottom:1px solid #0075bc;
+	background-color:#fff;
+	color:#0075bc;
 }
 
 .kgl-1 .navbar-right {
