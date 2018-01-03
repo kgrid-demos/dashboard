@@ -9,3 +9,8 @@ export default {
       name: 'applayout'
   };
 </script>
+<style>
+.kgl-content{
+	margin-top:20px;
+}
+</style>

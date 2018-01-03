@@ -79,7 +79,7 @@
           </div>
         </div>
       </div>
-      <div class="optrow">
+      <div class="optrow" data-toggle="tooltip" title="If checked, notifications of every alert will be sent.">
         <div class="optionslabel">
           Send Notification?
         </div>
