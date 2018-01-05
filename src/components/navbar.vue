@@ -8,13 +8,15 @@
 			<ul class='nav navbar-nav'>
 				<router-link tag='li':class="{'active': $route.fullPath === '/'}" to='/' v-show='false'><a><span>Patients</span></a></router-link>
 				<router-link tag='li' :class="{'active': $route.fullPath === '/notification'}" to='/notification' v-show='false'><a><span>Notifications</span><div style='color:#bc2526;top:0px;right:-10px;position:absolute;font-size:10px;'><i class='fa fa-circle' v-if='notifCount>0'></i></div></a></router-link>
-				<li class='test'>	<div class='dropdown' id="userDropdown" >
-					<a><span v-on:mouseenter='trigDropdown' v-on:mouseleave='checkDropdown'>Administrator</span></a>
-							<ul class='dropdown-menu' v-if='showDropdown' v-on:mouseleave='leaveDropdown'>
-				<li class='test' @click='resetstore'><a><span>Reset</span></a></li>
-                <router-link tag='li' :class="{'active': $route.fullPath === '/datagenerator'}" to='/datagenerator'><a><span>Generate Data</span></a></router-link>
-				</ul>
-							</div></li>
+				<li class='test'>
+					<div class='dropdown' id="userDropdown" >
+						<a><span v-on:mouseenter='trigDropdown' v-on:mouseleave='checkDropdown'>Administrator</span></a>
+						<ul class='dropdown-menu' v-if='showDropdown' v-on:mouseleave='leaveDropdown'>
+							<li class='test' @click='resetstore'><a><span>Reset</span></a></li>
+              <router-link tag='li' :class="{'active': $route.fullPath === '/datagenerator'}" to='/datagenerator'><a><span>Generate Data</span></a></router-link>
+						</ul>
+					</div>
+				</li>
 			</ul>
 		</nav>
 	</div>
@@ -181,8 +183,6 @@ export default {
   }
 };
 </script>
-
-<!-- Add 'scoped' attribute to limit CSS to this component only -->
 <style scoped>
 .navbar {
 	margin-bottom:0px;
@@ -215,7 +215,6 @@ export default {
 .kgl-1 {
 	z-index: 250;
 }
-
 .kgl-1 .navbar-nav>li{
     margin: 0px 15px;
 }
@@ -247,36 +246,9 @@ export default {
 	background-color:#fff;
 	color:#0075bc;
 }
-
 .kgl-1 .navbar-right {
 	margin-right: 0px;
 }
-
-#signupBtn {
-	border: 1px solid #e3e3e3;
-    border-radius: 10px;
-    color: #fff;
-	width: 125px;
-	text-align: center;
-}
-
-i#dropdowniconimg {
-	transition: transform 0.5s linear;
-}
-i#dropdowniconimg.up {
--moz-transform: scaleY(-1);
--o-transform: scaleY(-1);
--webkit-transform: scaleY(-1);
-transform: scaleY(-1);
-}
-
-i#dropdowniconimg.down {
--moz-transform: scaleY(1);
--o-transform: scaleY(1);
--webkit-transform: scaleY(1);
-transform: scaleY(1);
-}
-
 #userDropdown.dropdown ul{
 	border-bottom-left-radius: 10px;
 	border-bottom-right-radius: 10px;
@@ -290,7 +262,6 @@ transform: scaleY(1);
 	display:block;
 	min-width:200px;
 }
-
 #userDropdown.dropdown ul li {
     height: 2.7em;
     line-height: 2.8em;
@@ -308,50 +279,10 @@ transform: scaleY(1);
 		background-color:transparent;
 		margin:0;
 	}
-
 #userDropdown.dropdown ul li:hover {
 	background-color:#e5e5e5;
 }
-
 .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
     background-color: #e8e8e8;
-}
-#adduserBtn, #logoutBtn {
-    line-height: 2.5em;
-    text-decoration: none;
-    border: none;
-    cursor: pointer;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 400;
-min-width: 200px;
-}
-nav .alertbadge{
-	position: absolute;
-	right: -15px;
-	top: 5px;
-	color: #fff;
-	background-color:#bc2526;
-	border-radius:100%;
-}
-
-.login-link {
-		cursor:pointer;
-		padding:5px 25px;
-		border:1px solid #0075bc;
-		background-color:#fff;
-		color: #0075bc;
-		transition:all 0.8s ease;
-		list-style:none;
-		margin: 15px 0px;
-	}
-.login-link span{
-	background-color:#fff;
-	color: #0075bc;
-	transition:all 0.8s ease;
-}
-.login-link:hover,  .login-link:hover span{
-		background-color:#0075bc;
-		color: #fff;
 }
 </style>

@@ -32,7 +32,7 @@
       <p class='ft-sz-12'>{{filteredData[hoverrow].treatment}}</p>
     </div> -->
     <div class='row interventionlisting mar-0' ><p class='ft-sz-18'>Interventions</p>
-     <ul v-if='groupid!=-1'><li v-for='widget in filteredData[hoverrow].wlist'><koicon :object='widget' ></koicon></li></ul></div>
+     <ul v-if='groupid!=-1'><li v-for='widget in wlist'><koicon :object='widget' ></koicon></li></ul></div>
   </div>
 </div>
 </template>
@@ -89,7 +89,14 @@ export default {
 
       return data
     },
-
+    wlist:function(){
+      var l=[];
+      if(this.hoverrow!=-1){
+        var id= this.filteredData[this.hoverrow];
+        l = this.$store.getters.getwidgetlistbypatient(id)
+      }
+      return l
+    }
   },
   filters: {
     capitalize: function (str) {

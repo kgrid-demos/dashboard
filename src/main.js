@@ -17,7 +17,7 @@ require('es6-promise').polyfill();
 require('jquery');
 require('tether');
 require('bootstrap');
-require('lodash');
+// require('lodash');
 
 // debug mode
 Vue.config.debug = false;
