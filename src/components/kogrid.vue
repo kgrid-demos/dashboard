@@ -244,7 +244,6 @@ div.patientsummary {
   border-top:1px solid #f5f5f5;
 }
 div.patientinfo {
-  verticle-align: bottom;
   padding:10px 0px;
   line-height: 1.35em;
   border-bottom:1px solid #f5f5f5;
