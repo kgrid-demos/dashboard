@@ -6,7 +6,7 @@
         <ul class="moduleList">
           <li class="module" :class="module.status" v-bind:style="widgetStyle" v-for="module in weeklymodules" v-bind:key="module.id">
             {{module.status}} <br> <span class="moduleLabel">Module {{module.value}}</span> <br>
-            <div v-if="module.status==='☑'"><br>{{module.datecompleted}}</div>
+            <div class='pad-b-20' v-if="module.status==='☑'"><br>Completed on:<br>{{module.date}}</div>
           </li>
         </ul>
       </div>
@@ -70,6 +70,9 @@
       this.$eventBus.$off("saveSettings");
     },
     computed : {
+      today:function(){
+        return this.$store.getters.gettoday
+      },
       labelmargin:function(){
         var el = this.$refs.thelabel
         return el.style.length
@@ -127,9 +130,10 @@
         var self = this;
         var arr=[];
         self.alldata.forEach(function(e){
-          var obj={value:1, status:"", timestamp:-1}
+          var obj={value:1, status:"", timestamp:-1,date:null}
           obj.value=e.value;
           obj.timestamp=self.$moment().add(e.dateOffset, 'd').unix();
+          obj.date=self.$moment.unix(obj.timestamp).format('MMMM DD, YYYY')
           obj.status="☐"
           if(obj.timestamp<self.daterange.endtime){
             obj.status="☑";
@@ -156,7 +160,35 @@
         }
       }
     },
+    watch:{
+      maximized:function(){
+        var obj={};
+        obj.end=this.$moment.unix(this.today).day(6).endOf('day').unix();
+        if(this.maximized){
+          switch(this.patientid){
+            case 'PA-67034-001':
+              obj.days=84;
+              break;
+            case 'PA-67034-007':
+              obj.days=56;
+              break;
+            default:
+              obj.days=28;
+              break;
+          }
+        }else {
+          obj.days=7
+        }
+
+        obj.start= obj.end-obj.days*24*3600;;
+        this.$store.commit('setcurrentdaterange',obj)
+        this.$nextTick()
+      }
+    },
     methods: {
+      maximizeWidget:function(){
+        this.$emit("maximizeme",this.object.id)
+      },
       saveoptions :function ()  {
           this.$store.commit('saveWidgetSettings', {'pid': this.$route.params.id, "group":this.currentGroup.id, "wid":this.object.id,'datasettings':this.datasettings});
       },
@@ -177,9 +209,10 @@
     text-align: center;
   }
   .moduleList {
-  width: 100%;
-  display: table;
-      margin: 2.5em auto;
+    width: 100%;
+    display: table;
+    margin: 2.5em auto;
+    padding: 20px 0px;
   }
   .☑ {
     color: green;

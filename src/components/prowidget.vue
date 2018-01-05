@@ -4,8 +4,9 @@
     <div class="widgetalert" v-if="!maximized ">
       <div class="ft-sz-12 pad-l-8" >
         <span>{{selectedinstr.unit}}</span>
-        <i v-if="hasalert"  @click='maximizeWidget' class="fa fa-exclamation-circle warning pad-l-5"></i>
-        <i v-if="hasnotes"  @click='maximizeWidget' class="fa fa-file-text-o notes pad-l-5"></i>
+        <i v-if="hasalert"  @click='maximizeWidget' title="Click to view alert" class="fa fa-exclamation-circle warning pad-l-5"></i>
+        <i v-if="hasnotes"  @click='maximizeWidget' title="Click to view patient note" class="fa fa-file-text-o notes pad-l-5"></i>
+        <span class= "float-r pad-r-10">{{selectedfreq}}</span>
       </div>
     </div>
     <div v-if="maximized" class="widgetalertdisplay">

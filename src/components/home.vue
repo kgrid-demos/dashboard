@@ -7,7 +7,7 @@
 				<div class='col-md-8 col-sm-8 col-xs-8 '>
 					<form id="search">
 						<i class='fa fa-search'></i>
-						<input name="query" spellcheck=false v-model="searchQuery">
+						<input name="query" spellcheck=false v-model="searchQuery" @keypress.enter="enterPressed">
 					</form>
 				</div>
 				<div class='col-md-1 col-sm-1 col-xs-1 '></div>
@@ -117,6 +117,9 @@ export default {
 		},
 	},
 	methods : {
+		enterPressed: function(e){
+				e.preventDefault();
+		},
 		selected: function(t){
 			console.log(this.patients[t].id+this.patients[t].groupid);
 			this.$store.commit('setCurrentPatientIndex',{'pid':this.patients[t].id,'group':this.patients[t].groupid});
