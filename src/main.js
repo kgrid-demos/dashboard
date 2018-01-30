@@ -7,14 +7,17 @@ import App from './App';
 import store from './store';
 import eventBus from './eventBus.js';
 import axios from 'axios';
-import moment from 'moment'
+import moment from 'moment';
+import $ from 'jquery';
+import 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 require('es6-promise').polyfill();
 // Bootstrap 4
 require('jquery');
 require('tether');
 require('bootstrap');
-require('lodash');
+// require('lodash');
 
 // debug mode
 Vue.config.debug = false;

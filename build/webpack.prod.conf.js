@@ -18,7 +18,7 @@ var webpackConfig = merge(baseWebpackConfig, {
       extract: true
     })
   },
-  devtool: config.build.productionSourceMap ? '#source-map' : false,
+  devtool: config.build.productionSourceMap ? '#cheap-source-map' : false,
   output: {
     path: config.build.assetsRoot,
     filename: utils.assetsPath('js/[name].[chunkhash].js'),
@@ -26,6 +26,7 @@ var webpackConfig = merge(baseWebpackConfig, {
   },
   plugins: [
     // http://vuejs.github.io/vue-loader/en/workflow/production.html
+
     new webpack.DefinePlugin({
       'process.env': env
     }),
@@ -35,6 +36,7 @@ var webpackConfig = merge(baseWebpackConfig, {
       },
       sourceMap: true
     }),
+    new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /de|en/),
     // extract css into its own file
     new ExtractTextPlugin({
       filename: utils.assetsPath('css/[name].[contenthash].css')
