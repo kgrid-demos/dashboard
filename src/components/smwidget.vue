@@ -1,6 +1,6 @@
 <template name="smwidget">
-  <div style="height: 100%; position: relative;">
-    <div v-if='!editmode' style="height: 100%; position:relative;">
+  <div>
+    <div v-if='!editmode' :style='myStyles'>
       <div class="moduleContainer" v-if='maximized'>
         <p>Progress on Self Management Modules </p>
         <ul class="moduleList">

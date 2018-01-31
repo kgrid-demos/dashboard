@@ -13,7 +13,7 @@ module.exports = {
     app: './src/main.js'
   },
   plugins: [
-    new BundleAnalyzerPlugin()
+ 
   ],
   output: {
     path: config.build.assetsRoot,

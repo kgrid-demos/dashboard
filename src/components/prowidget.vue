@@ -476,8 +476,6 @@
 			},
       saveoptions:function (obj) {
         var payload  = {'pid': obj.id, "group":obj.group, "wid":this.object.id,'datasettings':this.datasettings}
-        // console.log("PRO Widget : "+this.title)
-        // console.log(payload)
         this.$store.commit('saveWidgetSettings', payload);
       },
       getcolorfordata: function(value){

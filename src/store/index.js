@@ -109,7 +109,7 @@ const store = new Vuex.Store({
       console.log("SAVE=>"+obj.id+"   "+index);
       state.patientlist[index].layout=JSON.parse(JSON.stringify(obj.layout));
       //Need to remove when the PRO registration is done , for front debug purpose
-      var objWlist = obj.layout.map(function(ee) {return ee.c});
+      var objWlist = obj.layout.map(function(ee) {return ee.c.id});
       state.patientlist[index].wlist.forEach(function(e){
         var i=objWlist.indexOf(e.id);
 

@@ -30,9 +30,9 @@
 					<div class='ht-full kg-bg-custom-0' @drop='dropped'>
 						<div class='row ft-sz-16 lh-3 txtcenter'> <h3>Widget List</h3></div>
 						<div class='wlistctner'>
-							<draggable class='wlist' element="ul" v-model="widgetList" :options="dragOptions">
-								<li v-for='(object,index) in widgetList' v-bind:key='index'>
-									<kocard :object='object.label' :id='object.label' :cflag="object.type" :tileindex='index' draggable='true'  @dragstart='dragWidget' ></kocard>
+							<draggable class='wlist' element="ul" :value="widgetInvetoryList" :options="dragOptions" :move="onMove" @start="isDragging=true" @end="isDragging=false">
+								<li v-for='(object,index) in widgetInvetoryList' v-bind:key='index'  @dragstart="setdrag(object)" >
+									<kocard :object='object.label' :id='object.label' :cflag="object.type" :tileindex='index' draggable='true' ></kocard>
 								</li>
 							</draggable>
 						</div>
@@ -48,9 +48,9 @@
 						</div>
 						<div class='col-md-8 col-sm-8 '>
 							<div class='float-r' v-if='isInEdit'>
-								<button class='kg-btn-primary lg' v-if='isInEdit && pwidgetlist.length==1&&this.pwidgetlist[0]=="" ' @click='loadDefault'> Load Default Layout </button>
-								<button class='kg-btn-primary lg' v-if='isInEdit && pwidgetlist.length>1' @click='saveDefault'> Save As Default </button>
-								<button class='kg-btn-primary lg' v-if='isInEdit && pwidgetlist.length>1 ' @click='removeAll'> Remove All </button>
+								<button class='kg-btn-primary lg' v-if='isInEdit && pwidgetlist.length==0' @click='loadDefault'> Load Default Layout </button>
+								<button class='kg-btn-primary lg' v-if='isInEdit && pwidgetlist.length>0' @click='saveDefault'> Save As Default </button>
+								<button class='kg-btn-primary lg' v-if='isInEdit && pwidgetlist.length>0 ' @click='removeAll'> Remove All </button>
 								<button class='kg-btn-primary attn lg' v-if='isInEdit' :disabled='!configready' @click='saveconfig'>Apply Changes</button>
 							</div>
 							<div class='float-r' v-else>
@@ -70,48 +70,44 @@
 							</div>
 						</div>
 						</div>
-
-						<grid-layout	:layout.sync="layout"
-													:col-num="colnum"
-													:row-height="30"
-													:is-draggable="isInEdit"
-													:is-resizable="isInEdit"
-													:vertical-compact="true"
-													:margin="[10, 10]"
-													:use-css-transforms="true">
-							<grid-item v-for="item in layout"
-													 	:x.sync="item.x"
-														:y.sync="item.y"
-														:w.sync="item.w"
-														:h.sync="item.h"
-														:i="item.i"
-														ref='item'
-														v-bind:key="item.i"
-                            @resized="resizedEvent"
-											 			drag-allow-from=".draggablehandle"
-											 			drag-ignore-from=".no-drag"
-														>
-															<div class="draggable-handle" v-show='(item.c=="")&&isInEdit' style="text-align: center; line-height: 2em; vertical-align: middle; font-size: 16px; font-weight: 700;position:relative;top:50%;transform:translateY(-50%)">To add a widget, <br>drag one from the list <br> and drop here.
+						<div 	ref='gridl' style="min-height:600px;">
+							<grid-layout :layout.sync="layout"
+												:col-num="colnum"
+												:row-height="rowheight"
+												:is-draggable="isInEdit"
+												:is-resizable="isInEdit"
+												:vertical-compact="true"
+												:margin="[10, 10]"
+												:use-css-transforms="true"
+												@dragenter.native='dragin'
+												@dragover.native="hoverin"
+												@dragleave.native='dragout'
+												@drop.native='dropped'>
+								<grid-item v-for="item in layout"
+													:x.sync="item.x"
+													:y.sync="item.y"
+													:w.sync="item.w"
+													:h.sync="item.h"
+													:maxW=6
+													:i="item.i"
+													ref='item'
+													v-bind:key="item.i"	>
+														<div class='' v-bind:class="{draggablehandle: isInEdit}" v-if='item.c!=""'>
+															<div class='row mar-0 widgetTitle' :class='item.c.type' >
+																<span class="widgetLabel">{{item.c.label}}</span>
+																<i class='fa fa-close' v-if='isInEdit' style="font-size:11pt" @click='removeWidget(item.i)'></i>
+																<i class='fa fa-window-maximize' v-if='!isInEdit && !maximized' title="maximize" style="font-size:11pt" @click='maximizeWidget(item.i)'></i>
+																<i class='fa fa-window-restore' v-if='!isInEdit && maximized' title="restore"  style="font-size:11pt" @click='restoreLayout'></i>
 															</div>
-																<div class='' v-bind:class="{draggablehandle: isInEdit}" v-if='item.c!=""'>
-																	<div class='row mar-0 widgetTitle' :class='itemWidgetList[item.i][0].type' >
-																		<span class="widgetLabel">{{itemWidgetList[item.i][0].label}}</span>
-																		<i class='fa fa-close' v-if='isInEdit' style="font-size:11pt" @click='removeWidget(item.i)'></i>
-																		<i class='fa fa-window-maximize' v-if='!isInEdit && !maximized' title="maximize" style="font-size:11pt" @click='maximizeWidget(item.i)'></i>
-																		<i class='fa fa-window-restore' v-if='!isInEdit && maximized' title="restore"  style="font-size:11pt" @click='restoreLayout'></i>
-																	</div>
-																</div>
-																<div class='widgetcontainer fill no-drag' @drop='dropped'>
-																	<draggable class='wlayout' element="ul" v-model="itemWidgetList[item.i]" :options="customDragOptions(item.i)" >
-																		<li v-for='(object,index) in itemWidgetList[item.i]' v-bind:key='index' v-if='itemWidgetList[item.i].length==1|object.type!="NEW"'>
-																			<kotile :object='object'  :patientid='$route.params.id' v-on:setinstru='setinstru' v-on:maximizeme="maxthis" :maximized='maximized' :cflag="object.type" :tileindex='item.i' :containerheight="((item.h-1)*40)" :editmode='isInEdit' :viewmode='loaddata' draggable='true'  @dragstart='dragWidget'>
-																			</kotile>
-																		</li>
-																	</draggable>
-																</div>
-							</grid-item>
-						</grid-layout>
-				</div>
+														</div>
+														<div class='widgetcontainer fill no-drag'>
+																	<kotile :object='item.c'  :patientid='$route.params.id' v-on:setinstru='setinstru' v-on:maximizeme="maxthis" :maximized='maximized' :cflag="item.c['type']" :tileindex='item.i' :containerheight="((item.h)*rowheight-10)" :editmode='isInEdit' :viewmode='loaddata' >
+																	</kotile>
+															</div>
+												</grid-item>
+											</grid-layout>
+										</div>
+					</div>
 			</div>
 		</div>
 	</applayout>
@@ -131,9 +127,7 @@ export default {
 		return {
 			colnum:12,
 			registrationstatus:[],
-			widgetList:[],
 			alertText:[],
-			itemWidgetList:[],
 			pwidgetlist:[],
 			draggedid:"",
 			timepoint:1,
@@ -143,6 +137,7 @@ export default {
 			defaultw:3,
 			defaulth:6,
 			layout:[],
+			layoutdim:{x0:0,y0:0,x1:0,y1:0},
 			temp:{},
 			dragOptions: {
 				animation: 0,
@@ -150,6 +145,7 @@ export default {
 				disabled: true,
 				ghostClass: 'ghost',
 			},
+			rowheight:100,
 			maximized:false,
 			showModal:false,
 			fading:false,
@@ -157,7 +153,8 @@ export default {
 				currentweek:8,
 				clicked:false,
 				currentoffset:0
-			}
+			},
+			contentindrag:''
 		}
 	},
 	created : function() {
@@ -168,32 +165,31 @@ export default {
 	},
 	mounted:function(){
 		var self = this;
-		this.itemWidgetList=[];
+		var l = this.$refs.gridl
 		this.layout=JSON.parse(JSON.stringify(this.patient.layout));
-		this.pwidgetlist=this.layout.map(function(e){return e.c})
-		this.widgetList = this.widgetMasterList.filter(function(e){return (this.indexOf(e.id)<0);},self.pwidgetlist)
-		if(this.layout.length>0){
-		this.layout.forEach(function(item){
-			var index= self.widgetMasterList.map(function(e){return e.id}).indexOf(item.c);
-			if(index>=0){
-				var nextwidgetlist=[];
-				nextwidgetlist.push(self.widgetMasterList[index]);
-				self.itemWidgetList.push(nextwidgetlist);
-			}else {
-				self.itemWidgetList.push([]);
-			}
-		})
-		}
+		this.pwidgetlist=this.layout.map(function(e){return e.c.id})
 		if(this.pwidgetlist.length==0){
 		 	this.pddready=false;
 		} else {
 			this.pddready=true;
 		}
 		this.$store.commit('setScreenname','Data View')
+	 	window.addEventListener('resize', this.checkGriddim)
+	},
+	beforeDestroy: function () {
+  	window.removeEventListener('resize', this.checkGriddim)
 	},
 	updated: function() {
 	  },
 	computed : {
+		widgetInuseList:function(){
+			var self=this;
+			return JSON.parse(JSON.stringify(this.widgetMasterList.filter(function(e){return (this.indexOf(e.id)>=0);},self.pwidgetlist)))
+		},
+		widgetInvetoryList:function(){
+			var self=this;
+			return JSON.parse(JSON.stringify(this.widgetMasterList.filter(function(e){return (this.indexOf(e.id)<0);},self.pwidgetlist)))
+		},
 		simuweekcount:function(){
 			switch(this.patient.id){
 				case 'PA-67034-001':
@@ -317,25 +313,19 @@ export default {
 		widgetMasterList: function(){
 			return JSON.parse(JSON.stringify(this.$store.getters.getwidgetlistbypatient(this.patient)));
 		},
-		count:function(){
-			var self=this;
-			var c =[];
-			this.itemWidgetList.forEach(function(item){
-				if(item.length>0){
-					var index = self.patient.wlist.map(function(e){return e.id}).indexOf(item[0].id);
-					c.push(self.patient.wlist[index].count);
-				}
-			});
-			return c;
-		},
 		configready:function(){
 			var b = true;
-			this.itemWidgetList.forEach(function(e){
-				if(e.length>0){
-					if(e[0].type=="PRO")
-						b=e[0].sel && b
+			var self=this;
+			if(this.layout.length==0){
+				b=false;
+			}else{
+			this.layout.forEach(function(e){
+				var obj = JSON.parse(JSON.stringify(e.c))
+				if(obj.type=="PRO"){
+						b=obj.sel && b
 				}
 			})
+		}
 			return b
 		},
 		enableNextArrow:function(){
@@ -343,7 +333,10 @@ export default {
 		},
 		enablePreArrow:function(){
 			return ((this.daterange.starttime-3600)>this.initdate)
-		}
+		},
+		colwidth:function(){
+			return (this.layoutdim.x1-this.layoutdim.x0)/this.colnum
+		},
 	},
 	watch:{
 		isInEdit:function(){
@@ -352,54 +345,24 @@ export default {
 			}else {
 				this.$store.commit('setScreenname','Data View')
 			}
-		},
-		itemWidgetList:function(){
-			this.updateLayoutContent();
-			if(this.isInEdit) {
-				this.addEmptySlot();
-			}
+			this.checkGriddim()
 		}
 	},
 	methods : {
+		checkGriddim:function(){
+			this.layoutdim.x0=this.$refs.gridl.getBoundingClientRect().left
+			this.layoutdim.y0=this.$refs.gridl.getBoundingClientRect().top
+			this.layoutdim.x1=this.$refs.gridl.getBoundingClientRect().right
+			this.layoutdim.y1=this.$refs.gridl.getBoundingClientRect().bottom
+		},
 		setinstru:function(obj){
-			var index= this.itemWidgetList.map(function(e){
-				if(e.length>0){
-				return e[0].id}
-				else{
-					return ""
-				}
+			var self = this;
+			var index= this.layout.map(function(e){
+				return e.c.id
 			}).indexOf(obj.id)
-			this.itemWidgetList[index][0].sel =obj.sel;
-			this.itemWidgetList[index][0].selindex =obj.selindex
-		},
-		getCount:function(t){
-			var index= this.patient.wlist.map(function(e){return e.id}).indexOf(t);
-			return this.patient.wlist[index].count;
-		},
-		setAlerts:function(widget) {
-		  var obj = {};
-		  obj.pid = this.patient.id;
-		  obj.group = this.patient.group;
-		  obj.widget = widget.object.id;
-		  obj.count = widget.redevents.length;
-		  obj.message="Alert!";
-      this.$store.commit("setAlerts",obj);
-		},
-		addAlert:function(id){
-			var obj={};
-			obj.pid=this.patient.id;
-			obj.group=this.patient.groupid;
-			obj.wid=id;
-			obj.message="Alert!";
-		  this.$store.commit("updateAlert",obj);
-		},
-		removeAlert: function(id){
-			var obj={};
-			obj.pid=this.patient.id;
-			obj.group=this.patient.groupid;
-			obj.wid=id;
-			obj.message="";
-		 	this.$store.commit("updateAlert",obj);
+			self.layout[index].c.sel =obj.sel;
+			self.layout[index].c.selindex =obj.selindex
+
 		},
 		gopreviousweek:function(){
 			var obj= {}
@@ -416,16 +379,6 @@ export default {
 				obj.end=this.daterange.endtime+7*24*3600;
 				this.$store.commit('setcurrentdaterange',obj);
 			},
-		cleanupLayout: function(){
-			console.log("Starting cleaning up the layout... ")
-			this.layout = this.layout.filter(function(e){return (e.c!="")}).map(function(e,index){
-				// console.log("index"+index)
-				var item=e;
-				item.i=index+"";
-				return item;
-				});
-			this.itemWidgetList=this.itemWidgetList.filter(function(e){return (e.length!=0)});
-		},
 		toggleviewmode:function(){
 			var self=this;
 			this.fading=true
@@ -434,22 +387,27 @@ export default {
 				self.timepoint=2;
 				self.fading=false;
 			},1800)
-
+		},
+		parseobj:function(s){
+			var obj={}
+			try {
+				obj=JSON.parse(s)
+			}catch(e) {
+				console.log("JSON Input Error")
+			}
+			return obj
 		},
     saveconfig:function(){
 			var self = this;
 			this.showModal=true;
 			this.loaddata=false;
 			this.pddready=true;
-			this.updateLayoutContent();
-			this.cleanupLayout();
 	    var pid=this.$route.params.id;
       this.$eventBus.$emit("saveSettings",{'id':pid,'group':this.currentGroup.id});
 			this.$store.commit('saveConfig',{'id':pid,'group':this.currentGroup.id,'layout':this.layout});
 			if(true) this.updateLog(this.patient);
 			self.isInEdit = false;
 			self.registrationstatus =[];
-
 			if(this.showModal){
 			setTimeout(function(){
 				self.registrationstatus.push("Saving registerations of prescribed interventions for "+self.patient.name+ " ... ")
@@ -462,7 +420,6 @@ export default {
 			},1000)
 			setTimeout(function(){
 				self.showModal=false;
-
 			},3000);
 				}
     },
@@ -476,21 +433,17 @@ export default {
 		loadDefault:function(){
 			var self = this;
 			this.layout.splice(0,1);
-			this.itemWidgetList.splice(0,1);
-			this.layout=JSON.parse(JSON.stringify(this.$store.getters.getdefaultlayoutbycancerid(this.patient.type)));
-			this.pwidgetlist=this.layout.map(function(e){return e.c})
-			this.widgetList = this.widgetMasterList.filter(function(e){return (this.indexOf(e.id)<0);},self.pwidgetlist)
-			this.layout.forEach(function(item){
-				var index= self.widgetMasterList.map(function(e){return e.id}).indexOf(item.c);
-			if(index>=0){
-					var nextwidgetlist=[];
-					nextwidgetlist.push(self.widgetMasterList[index]);
-					self.itemWidgetList.push(nextwidgetlist);
-				}else {
-					self.itemWidgetList.push([]);
-				}
+			var obj = JSON.parse(JSON.stringify(this.$store.getters.getdefaultlayoutbycancerid(this.patient.type)));
+			this.pwidgetlist=obj.map(function(e){return e.c})
+			obj.forEach(function(e){
+					var c = e.c;
+					var widg = self.widgetMasterList.filter(function(el){return el.id==c})
+					var o = JSON.parse(JSON.stringify(e))
+					if(widg.length>0){
+						o.c=widg[0]
+						self.layout.push(o)
+					}
 			})
-			this.cleanupLayout();
 		},
 		saveDefault:function() {
 			var obj={}
@@ -512,48 +465,17 @@ export default {
   			});
 
 		},
-    dragWidget:function(ev){
-      ev.stopPropagation();
-			 ev.preventDefault();
-			console.log("Start Dragging ");
-			// console.log(ev.target);
-      return true;
-    },
-    denter: function(e){
-        e.preventDefault();
-				e.stopPropagation();
-        console.log("Drag enter");
-    },
-    dexit: function(e){
-        e.preventDefault();
-				e.stopPropagation();
-    },
-    dover:function(e){
-      e.preventDefault();
-			e.stopPropagation();
-      console.log("Drag over");
-      // console.log(e.target);
-    },
-    dropped:function(e) {
-			e.preventDefault();
-			console.log("dropped");
-			this.cleanupLayout();
-    },
 		removeWidget:function(i){
-			var obj = this.itemWidgetList[i][0];
-			this.itemWidgetList[i].splice(0);
-			this.widgetList.push(obj);
-			this.layout[i].c="";
-			this.pwidgetlist[i]="";
-			this.cleanupLayout();
-
+			this.layout.splice(i,1);
+			this.pwidgetlist.splice(i,1);
+			// this.cleanupLayout();
 		},
 		removeAll:function(){
 			var n=this.pwidgetlist.length;
 			do{
 				n=n-1;
 				this.removeWidget(0)
-			}while(n>1)
+			}while(n>0)
 		},
 		maximizeWidget: function(i){
 			this.temp =JSON.parse(JSON.stringify(this.layout));
@@ -561,54 +483,67 @@ export default {
 			this.layout[0].x=0;
 			this.layout[0].y=0;
 			this.layout[0].w=12;
-			this.layout[0].h=18;
+			this.layout[0].h=7;
 			this.maximized=true;
 		},
 		maxthis:function(id){
-			var index=this.itemWidgetList.map(function(e){return e[0].id}).indexOf(id)
+			var index=this.widgetInuseList.map(function(e){return e.id}).indexOf(id)
 			this.maximizeWidget(index)
 		},
 		restoreLayout: function(){
 			this.layout=JSON.parse(JSON.stringify(this.temp));
 			this.maximized=false;
 		},
-		customDragOptions: function(i){
-			var op = JSON.parse(JSON.stringify(this.dragOptions));
-			op.disabled=this.itemWidgetList[i].length>0
-			return op;
-
-		},
 		toggleEditMode:function(){
 			this.isInEdit=true;
 			this.timepoint=1;
 			this.dragOptions.disabled=false;
-			this.addEmptySlot();
-		},
-		addEmptySlot: function(){
-
-			var zeroitem=this.itemWidgetList.filter(function(e){return (e.length==0)});
-			if(zeroitem.length==0 && this.widgetList.length>=1){
-				this.layout.push(this.nextitem)
-				this.itemWidgetList.push([])
-				}
+			this.$nextTick(() => {
+				this.checkGriddim()
+      });
 
 		},
-    resizedEvent: function(i, newH, newW, newHPx, newWPx){
+	  resizedEvent: function(i, newH, newW, newHPx, newWPx){
       var msg = "RESIZED i=" + i + ", H=" + newH + ", W=" + newW + ", H(px)=" + newHPx + ", W(px)=" + newWPx;
 			window.dispatchEvent(new Event('resize'));
     },
-		updateLayoutContent:function(){
-			var self = this;
-			this.itemWidgetList.forEach(function(item, index) {
-					if(item.length>0)
-						{ self.layout[index].c = item[0].id;}
-					else {
-						 self.layout[index].c = "";
-						}
-				}
-			);
-			this.pwidgetlist=this.layout.map(function(e){return e.c})
-			}
+		dragin () {
+			// console.log("in")
+		},
+		dragout () {
+			// console.log("out")
+		},
+		setdrag(element){
+			this.contentindrag=JSON.parse(JSON.stringify(element))
+		},
+		dropped (e) {
+			e.preventDefault();
+			var x =e.clientX-this.layoutdim.x0
+			var y= e.clientY-this.layoutdim.y0
+			var nx = Math.floor(x/(this.colwidth))
+			var ny = Math.floor(y/30)
+			console.log("dropped @ "+e.clientX + " , "+e.clientY+" Grid coord: "+x + " , "+y)
+			console.log("Drop in the grid:"+nx+" "+ny)
+			var item={x:0,y:1,w:3,h:3,i:"0",c:""};
+			if(nx>9){nx=9}
+			item.x=nx;
+			item.y=ny;
+			var obj = JSON.parse(JSON.stringify(this.contentindrag))
+			obj.sel=true;
+			obj.selindex=0; //default to select the first instrument
+			item.c=obj;
+			item.i=this.layout.length+"";
+			this.layout.push(item)
+			this.pwidgetlist.push(obj.id)
+		},
+		hoverin (e) {
+			e.preventDefault();
+		},
+		onMove ({relatedContext, draggedContext}) {
+			const relatedElement = relatedContext.element;
+			const draggedElement = draggedContext.element;
+			return (!relatedElement || !relatedElement.fixed) && !draggedElement.fixed
+		},
 	},
 	components:{
 		applayout,
@@ -618,7 +553,12 @@ export default {
 		GridLayout:VueGridLayout.GridLayout,
 		GridItem:VueGridLayout.GridItem,
 		modal,
-		}
+	},
+	onMove ({relatedContext, draggedContext}) {
+	const relatedElement = relatedContext.element;
+	const draggedElement = draggedContext.element;
+	return (!relatedElement || !relatedElement.fixed) && !draggedElement.fixed
+},
 };
 </script>
 <style scoped>
@@ -824,6 +764,9 @@ ul.wlayout li {
 	height:100%;
 	flex:auto;
 }
+.vue-grid-layout {
+	min-height: 600px;
+}
 .vue-grid-item.vue-resizable {
 	position:relative;
 	border:1px dashed #999999;
@@ -837,5 +780,4 @@ ul.wlayout li {
 	display: flex;
 	flex-direction:column;
 }
-
 </style>

@@ -86,14 +86,12 @@ export default {
           return (a === b ? 0 : a > b ? 1 : -1) * order
         })
       }
-
       return data
     },
     wlist:function(){
       var l=[];
       if(this.hoverrow!=-1){
-        var id= this.filteredData[this.hoverrow];
-        l = this.$store.getters.getwidgetlistbypatient(id)
+        l=JSON.parse(JSON.stringify( this.filteredData[this.hoverrow].wlist));
       }
       return l
     }

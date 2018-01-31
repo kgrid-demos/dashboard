@@ -1,5 +1,5 @@
 <template>
-		<div class="container kgl-icon" :class="{ active: object.count>=0 }" v-bind:id="object.id">
+		<div class="container kgl-icon" :class="{ active: object.count>=0 , pro:object.id.includes('PRO'), sm:object.id.includes('SM')}" v-bind:id="object.id">
 			<p :style="fontStyles">{{object.label}}</p>
 			<div class="badge" v-show='object.count>0'>
 				<p class='ft-sz-10'>{{object.count}}</p>
@@ -10,7 +10,7 @@
 
 	export default {
   		name:	"koicon",
-		props : [ 'object', 'cflag' ,'tileindex'],
+		props : [ 'object'],
 		created: function(){
 
 		},
@@ -74,8 +74,12 @@
 						text-transform: uppercase;
 						transition: all 0.5s ease;
 				}
-				.kgl-icon.active {
-					background-color: #00b5af;
+				.kgl-icon.active.pro {
+					background-color: #853754;
+					color: #fff;
+				}
+				.kgl-icon.active.sm {
+					background-color: #20657e;
 					color: #fff;
 				}
 				.kgl-icon>p {
