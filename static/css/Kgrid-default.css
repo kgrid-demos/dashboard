@@ -155,9 +155,7 @@ a, a:hover, a:visited, a:focus {
     margin: 0 auto;
     padding: 0px 12px;
 }
-.inline {
-display:inline-block;
-}
+.inline {display:inline-block;}
 
   .kgl-content {
   	position: absolute;
@@ -167,4 +165,12 @@ display:inline-block;
   label {
   		font-weight: 400;
   		margin:10px 0px;
+  }
+  .noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+      -webkit-user-select: none; /* Safari */
+       -khtml-user-select: none; /* Konqueror HTML */
+         -moz-user-select: none; /* Firefox */
+          -ms-user-select: none; /* Internet Explorer/Edge */
+              user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
   }

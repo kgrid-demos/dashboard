@@ -1,5 +1,5 @@
 <template id='navbar'>
-	<div class='kgl-nav'>
+	<div class='kgl-nav noselect'>
 		<a class='navbar-brand kgl-1' @click='stationselector'>
 			<span>{{dashboard}}</span>
 		</a>

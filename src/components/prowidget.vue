@@ -1,5 +1,5 @@
 <template name="prowidget">
-  <div class="widgetcontainer">
+  <div class="widgetcontainer noselect">
     <div v-if="!editmode" >
     <div class="widgetalert" v-if="!maximized ">
       <div class="ft-sz-12 pad-l-8" >
@@ -160,7 +160,7 @@
                 unit: 'day',
                 round: 'day',
                 displayFormats: {
-                  day: 'ddd'
+                  day: 'MM/DD'
                 },
                 stepSize:1,
                 tooltipFormat: 'MMMM Do YYYY'

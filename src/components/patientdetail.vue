@@ -10,7 +10,7 @@
 	</modal>
 	<applayout>
 		<div slot='banner'>
-			<div class='bannercontent' >
+			<div class='bannercontent noselect' >
 				<div class='row mar-0'>
 					<div class='col-md-1 col-sm-1 col-xs-1  pad-0' v-if='isInEdit'></div>
 					<div class='col-md-1 col-sm-1 col-xs-1'>
@@ -26,7 +26,7 @@
 		</div>
 		<div slot='main'>
 			<div class='maincontent'>
-				<div class='col-md-2 col-sm-2 col-xs-2  pad-0' v-if='isInEdit'>
+				<div class='col-md-2 col-sm-2 col-xs-2  pad-0 noselect' v-if='isInEdit'>
 					<div class='ht-full kg-bg-custom-0' @drop='dropped'>
 						<div class='row ft-sz-16 lh-3 txtcenter'> <h3>Widget List</h3></div>
 						<div class='wlistctner'>
@@ -39,38 +39,32 @@
 					</div>
 				</div>
 				<div class='col-md-1 col-sm-1 col-xs-1 ht-full  pad-0' v-else></div>
-				<div class='col-md-10 col-sm-10 col-xs-10 kg-bg-custom-1 pdd-panel ht-full pad-0' :class='{fading:fading}'>
+				<div class='col-md-10 col-sm-10 col-xs-10 kg-bg-custom-1 pdd-panel ht-full pad-0' :class='{fading:fading, inedit:isInEdit}'>
 					<div class='row ht-50'>
-						<div class='col-md-4 col-sm-4 pad-0'>
+						<div class='col-md-4 col-sm-4 pad-0 noselect' >
 							<div class="pad-l-30 pad-t-20 ft-sz-18 ft-italic ft-wt-6">Time Point {{timepoint}} - {{timetitle}}</div>
 								<div class="pad-l-15">
 						</div>
 						</div>
-						<div class='col-md-8 col-sm-8 '>
+						<div class='col-md-8 col-sm-8 noselect float-r'>
 							<div class='float-r' v-if='isInEdit'>
 								<button class='kg-btn-primary lg' v-if='isInEdit && pwidgetlist.length==0' @click='loadDefault'> Load Default Layout </button>
 								<button class='kg-btn-primary lg' v-if='isInEdit && pwidgetlist.length>0' @click='saveDefault'> Save As Default </button>
 								<button class='kg-btn-primary lg' v-if='isInEdit && pwidgetlist.length>0 ' @click='removeAll'> Remove All </button>
 								<button class='kg-btn-primary attn lg' v-if='isInEdit' :disabled='!configready' @click='saveconfig'>Apply Changes</button>
 							</div>
-							<div class='float-r' v-else>
-								<button class='kg-btn-primary lg' v-if='!maximized && !loaddata & pddready' @click='toggleviewmode'> {{timeff}}</button>
-								<div class="pad-r-15 ht-60 inline"  v-if=' pwidgetlist.length>=1 && loaddata'>
-									<button class='kg-btn-wk '  :disabled="!enablePreArrow" @click='gopreviousweek'> <i v-show="!maximized" class='fa fa-angle-left fa-lg'></i></button>
-									<div class='weektrack' ref='wktrack'>
-										<button class='wkcursorbg ft-sz-12' :style='wktracker'></button>
-										<button class='wkcursorfg ft-sz-12' ref='wkcursor' :style='wktracker' ></button>
-
-										<button class='wklabel ft-sz-12' v-for='wk in simuweeks'><small>week </small>{{wk}}</button>
+							<div style="width:100%;"  v-else>
+									<button class='kg-btn-primary lg' v-if='!maximized && !loaddata & pddready' @click='toggleviewmode'> {{timeff}}</button>
+									<div class="pad-l-15 inline"  v-if=' pwidgetlist.length>=1 && loaddata'>
+										<button class='kg-btn-primary ' :disabled="!enablePreArrow" @click='gopreviousweek'> <i class='fa fa-angle-left fa-lg'></i></button>
+										<button class='kg-btn-primary labelonly' style='width:360px;'> <span v-if='!maximized'>Week {{weekno}}: </span>{{dateRangeLabel.start}} - {{ dateRangeLabel.end}} </button>
+										<button class='kg-btn-primary ' :disabled="!enableNextArrow" @click='gonextweek'> <i class='fa fa-angle-right fa-lg'></i></button>
 									</div>
-									<!-- <button class='kg-btn-primary labelonly' style='width:140px;'> {{dateRangeLabel.week}} </button> -->
-									<button class='kg-btn-wk ' :disabled="!enableNextArrow" @click='gonextweek'> <i v-show="!maximized" class='fa fa-angle-right fa-lg'></i></button>
-								</div>
-								<button class='kg-btn-primary inline' v-if='!maximized ' @click='toggleEditMode'>Edit</button>
+									<button class='kg-btn-primary inline' v-if='!maximized ' @click='toggleEditMode'>Edit</button>
 							</div>
 						</div>
 						</div>
-						<div 	ref='gridl' style="min-height:600px;">
+						<div 	ref='gridl' style="min-height:600px;margin-top:10px;">
 							<grid-layout :layout.sync="layout"
 												:col-num="colnum"
 												:row-height="rowheight"
@@ -89,15 +83,16 @@
 													:w.sync="item.w"
 													:h.sync="item.h"
 													:maxW=6
+													:maxH=3
 													:i="item.i"
 													ref='item'
 													v-bind:key="item.i"	>
-														<div class='' v-bind:class="{draggablehandle: isInEdit}" v-if='item.c!=""'>
+														<div class='noselect' v-bind:class="{draggablehandle: isInEdit}" v-if='item.c!=""'>
 															<div class='row mar-0 widgetTitle' :class='item.c.type' >
 																<span class="widgetLabel">{{item.c.label}}</span>
 																<i class='fa fa-close' v-if='isInEdit' style="font-size:11pt" @click='removeWidget(item.i)'></i>
-																<i class='fa fa-window-maximize' v-if='!isInEdit && !maximized' title="maximize" style="font-size:11pt" @click='maximizeWidget(item.i)'></i>
-																<i class='fa fa-window-restore' v-if='!isInEdit && maximized' title="restore"  style="font-size:11pt" @click='restoreLayout'></i>
+																<i class='fa fa-window-maximize' v-if='!isInEdit && !maximized && loaddata' title="maximize" style="font-size:11pt" @click='maximizeWidget(item.i)'></i>
+																<i class='fa fa-window-restore' v-if='!isInEdit && maximized && loaddata' title="restore"  style="font-size:11pt" @click='restoreLayout'></i>
 															</div>
 														</div>
 														<div class='widgetcontainer fill no-drag'>
@@ -127,7 +122,6 @@ export default {
 		return {
 			colnum:12,
 			registrationstatus:[],
-			alertText:[],
 			pwidgetlist:[],
 			draggedid:"",
 			timepoint:1,
@@ -149,12 +143,7 @@ export default {
 			maximized:false,
 			showModal:false,
 			fading:false,
-			weekselector:{
-				currentweek:8,
-				clicked:false,
-				currentoffset:0
-			},
-			contentindrag:''
+			contentindrag:'',
 		}
 	},
 	created : function() {
@@ -182,6 +171,7 @@ export default {
 	updated: function() {
 	  },
 	computed : {
+
 		widgetInuseList:function(){
 			var self=this;
 			return JSON.parse(JSON.stringify(this.widgetMasterList.filter(function(e){return (this.indexOf(e.id)>=0);},self.pwidgetlist)))
@@ -204,6 +194,16 @@ export default {
 			var arr=[]
 			for(var i=1; i<=this.simuweekcount;i++){
 				arr.push(i)
+			}
+			return arr
+		},
+		simuweekrange:function(){
+			var arr=[]
+			for(var i=1; i<=this.simuweekcount;i++){
+				var obj={}
+				obj.start=this.initdate+(i-1)*7*24*3600
+				obj.end=this.initdate+i*7*24*3600-1
+				arr.push(obj)
 			}
 			return arr
 		},
@@ -337,6 +337,7 @@ export default {
 		colwidth:function(){
 			return (this.layoutdim.x1-this.layoutdim.x0)/this.colnum
 		},
+
 	},
 	watch:{
 		isInEdit:function(){
@@ -379,7 +380,7 @@ export default {
 				obj.end=this.daterange.endtime+7*24*3600;
 				this.$store.commit('setcurrentdaterange',obj);
 			},
-		toggleviewmode:function(){
+			toggleviewmode:function(){
 			var self=this;
 			this.fading=true
 			setTimeout(function(){
@@ -485,6 +486,7 @@ export default {
 			this.layout[0].w=12;
 			this.layout[0].h=7;
 			this.maximized=true;
+
 		},
 		maxthis:function(id){
 			var index=this.widgetInuseList.map(function(e){return e.id}).indexOf(id)
@@ -552,7 +554,7 @@ export default {
 		draggable,
 		GridLayout:VueGridLayout.GridLayout,
 		GridItem:VueGridLayout.GridItem,
-		modal,
+		modal
 	},
 	onMove ({relatedContext, draggedContext}) {
 	const relatedElement = relatedContext.element;
@@ -604,7 +606,7 @@ export default {
 .kg-btn-primary.lg{
 	width: 180px;
 }
-.kg-btn-primary:disabled {
+.kg-btn-primary:disabled  {
 		border:1px solid #c7c7c7;
 		color:#c7c7c7
 }
@@ -615,6 +617,12 @@ export default {
 .kg-btn-primary.labelonly {
 	cursor:default;
 	border:1px solid #f7f7f7;
+	color:#666666;
+}
+.kg-btn-primary.labelonly:hover {
+	background-color:#f7f7f7;
+	border:1px solid #f7f7f7;
+	color:#666666;
 }
 .weektrack {
 	display: inline-block;
@@ -679,6 +687,11 @@ export default {
 .pdd-panel {
 	opacity: 1;
 	transition: opacity 1s ease;
+}
+.pdd-panel.inedit{
+	background-image: linear-gradient(45deg,#f5f5f5 25%,transparent 0,transparent 75%,#f5f5f5 0),linear-gradient(45deg,#f5f5f5 25%,transparent 0,transparent 75%,#f5f5f5 0);
+  background-position: 0 0,15px 15px;
+  background-size: 30px 30px;
 }
 .pdd-panel.fading {
 	opacity:0.05;

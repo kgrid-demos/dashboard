@@ -1,5 +1,5 @@
 <template name="smwidget">
-  <div>
+  <div class='noselect'>
     <div v-if='!editmode' :style='myStyles'>
       <div class="moduleContainer" v-if='maximized'>
         <p>Progress on Self Management Modules </p>
@@ -179,7 +179,6 @@
         }else {
           obj.days=7
         }
-
         obj.start= obj.end-obj.days*24*3600;;
         this.$store.commit('setcurrentdaterange',obj)
         this.$nextTick()

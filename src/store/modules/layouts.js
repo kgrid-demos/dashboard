@@ -6,7 +6,6 @@ const _layouttemplate= [
 			{ "x":8,"y":0,"w":4,"h":6,"i":"4","c":"PRO-02"},
 			{ "x":4,"y":6,"w":8,"h":12,"i":"5","c":"PRO-03"}
  		]
-
 // initial state
 const state = {
   defaultlayoutlist: [{"cancertype":0,"layout":[
@@ -34,7 +33,6 @@ const state = {
 			]}
 		]
 }
-
 // getters
 const getters = {
   getdefaultlayoutbycancerid:state=>{
@@ -48,11 +46,9 @@ const getters = {
     }
   }
 }
-
 // actions
 const actions = {
 }
-
 // mutations
 const mutations = {
 	savedefaultlayout(state,obj) {
@@ -62,10 +58,7 @@ const mutations = {
 			state.defaultlayoutlist[index].layout=JSON.parse(JSON.stringify(obj.layout))
 		}
 	}
-
-
 }
-
 export default {
   state,
   getters,
