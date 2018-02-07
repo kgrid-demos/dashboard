@@ -2,7 +2,7 @@
 <div class='content'>
 	<applayout :nothelper='false'>
 		<div slot='banner'>
-			<p>  </p>
+			<p></p>
 		</div>
 		</applayout>
 </div>
@@ -10,26 +10,18 @@
 <script>
 import applayout from './applayout.vue';
 export default {
-    name: 'about',
+  name: 'about',
 	data : function() {
 		return {
-
 		}
 	},
 	created : function() {
 	},
 	mounted:function(){
 	},
-	computed : {
-
-	},
-	methods : {
-	},
 	components:{
 		'applayout':applayout
 		}
 };
 </script>
-<style>
-
-</style>
+<style></style>

@@ -48,9 +48,8 @@
 <script>
 import applayout from './applayout.vue';
 import kogrid from './kogrid.vue';
-
 export default {
-    name: 'home',
+  name: 'home',
 	data : function() {
 		return {
 			searchQuery: '',
@@ -71,9 +70,6 @@ export default {
 	mounted:function(){
 		this.$store.commit('setScreenname','Patient List')
 	},
-	updated: function() {
-
-  },
 	computed : {
 		filterEnabled : function(){
 			return this.$store.getters.getfilterEnable
@@ -101,7 +97,6 @@ export default {
 				return ptlist.filter(function(e){
 				  return (e.groupid==self.currentGroup.id)});
 			}
-
 		},
 		stationSelected: function(){
 				if(this.filterEnabled){
@@ -164,7 +159,6 @@ form#search input {
 	line-height:1.5em;
 	padding:10px 10px;
 }
-
 .bannercontent {
     text-align: left;
     margin-bottom: 20px;
@@ -243,14 +237,12 @@ position:relative;
 ul.groupids li:hover {
 	color:#555555;
 }
-
 ul.groupids li.active {
  font-weight: 800;
  color:#333333;
   border-right: none;
  margin: 0px 140px 10px 0px;
 }
-
 ul.groupids li.active:after {
   content: '';
   position: absolute;
@@ -266,5 +258,4 @@ ul.groupids li.active:after {
   transform: skew(-45deg);
 	z-index:-1;
 }
-
 </style>

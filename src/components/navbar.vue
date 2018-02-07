@@ -12,6 +12,7 @@
 					<div class='dropdown' id="userDropdown" >
 						<a><span v-on:mouseenter='trigDropdown' v-on:mouseleave='checkDropdown'>Administrator</span></a>
 						<ul class='dropdown-menu' v-if='showDropdown' v-on:mouseleave='leaveDropdown'>
+							<li class='test' @click='setupstation'><a><span>Setup</span></a></li>
 							<li class='test' @click='resetstore'><a><span>Reset</span></a></li>
               <router-link tag='li' :class="{'active': $route.fullPath === '/datagenerator'}" to='/datagenerator'><a><span>Generate Data</span></a></router-link>
 						</ul>
@@ -67,14 +68,8 @@ export default {
 				var self=this;
 				window.localStorage.removeItem("first")
 				window.location.reload(true)
-				// this.$http.get("./static/json/default.json").then( response=> {
-				// 	self.$store.commit('resetState', response.data)
-				// }).catch(e=>{
-				// 	console.log(e)
-				// });
 				resetState()
 			} else {
-
 			}
 		},
 		stationselector:function(){
@@ -85,6 +80,9 @@ export default {
 			}else{
 				this.$store.commit('selstation',{value:-1});
 			}
+		},
+		setupstation:function(){
+
 		},
 		genpatientdata: function(){
 			const patientList = this.$store.getters.getPatientMasterList;

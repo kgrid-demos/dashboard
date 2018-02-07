@@ -4,11 +4,7 @@ const _patients= [	{ "id":"PA-67034-004", "name":"Larry Lambert", "age":"38", "g
 			{ "id":"PA-67034-001", "name":"Ms. Green", "age":"38", "gender":"female", "type":0,"group":[{"id":0},{"id":1},{"id":2},{"id":3},{"id":4},{"id":5}]},
 			{ "id":"PA-67034-007", "name":"Mr. Brown", "age":"62", "gender":"male", "type":1,"group":[{"id":0},{"id":1},{"id":2},{"id":3},{"id":4},{"id":5}]}
 ]
-const patienttemplate = { "id":"PA-67034-001","name":"Ms. Green", "age":"38", "gender":"female", "type":0, "groupid": -1,
-    "wlist":[{"id":"","label":"","count":-1,"alertText":""}],
-    "layout":[],
-    "widgetSettings": []
-}
+const patienttemplate = { "id":"PA-67034-001","name":"Ms. Green", "age":"38", "gender":"female", "type":0, "groupid": -1, "layout":[]}
 
 var alertlist=[
 	{"pid":"PA-67034-001",

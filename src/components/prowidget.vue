@@ -17,6 +17,14 @@
           <span class="fa fa-exclamation-circle warning pad-l-5"></span><span class="pad-l-5" style="font-weight:700;"> {{alert.text}}</span></li>
     </ul>
     </div>
+    <div class='notesdisplay' v-if='maximized'>
+      <span class="pad-l-15" v-if='hasnotes'> PATIENT NOTES </span>
+      <span class='pad-l-15' v-else> Patient has not posted any notes yet. </span>
+      <ul>
+        <li v-for='note in allnotes' >
+          <span class="fa fa-file-text-o notes pad-l-5"></span><span class="pad-l-5" style="font-style:italic;">{{formatted(note.date*1000)}} - {{note.note}}</span></li>
+        </ul>
+    </div>
   </div>
   <div class="graph">
     <div class='row ' v-if="maximized" >
@@ -90,14 +98,7 @@
       </div>
     </div>
   </div>
-  <div class='notesdisplay' v-if='maximized'>
-    <span class="pad-l-15" v-if='hasnotes'> PATIENT NOTES </span>
-    <span class='pad-l-15' v-else> Patient has not posted any notes yet. </span>
-    <ul>
-      <li v-for='note in allnotes' >
-        <span class="fa fa-file-text-o notes pad-l-5"></span><span class="pad-l-5" style="font-style:italic;">{{formatted(note.date*1000)}} - {{note.note}}</span></li>
-      </ul>
-  </div>
+
 </div>
 </template>
 <script>
@@ -160,7 +161,7 @@
                 unit: 'day',
                 round: 'day',
                 displayFormats: {
-                  day: 'MM/DD'
+                  day: 'MM/DD/YY'
                 },
                 stepSize:1,
                 tooltipFormat: 'MMMM Do YYYY'
@@ -184,20 +185,18 @@
     },
     created: function() {
       var self = this;
-      this.$eventBus.$on('saveSettings', function (obj) {
-        self.saveoptions(obj);
-      });
       const obj = {"id":this.$route.params.id,"group":this.currentGroup.id,"wid": this.object.id};
       if (this.$store.getters.getDataSettings(obj)) {
-        this.datasettings = Object.assign({}, this.$store.getters.getDataSettings(obj).datasettings);
-        this.selectedinstrname = this.datasettings.selectedinstrument.name;
+        this.datasettings = JSON.parse(JSON.stringify(this.$store.getters.getDataSettings(obj)));
+        console.log(this.datasettings)
+        this.selectedinstrname = this.instruments[this.datasettings.selindex].name;
         this.initChartOption()
       }else{
         if(this.object.selindex!=-1){
-          this.selectedinstrname = this.object.instruments[this.object.selindex].name;
+          this.selectedinstrname = this.instruments[this.object.selindex].name;
         }else {
           // if(this.object.instruments.length==1){
-            this.selectedinstrname = this.object.instruments[0].name;
+            this.selectedinstrname = this.instruments[0].name;
           // }
         }
         if(this.selectedinstrname!=""){
@@ -205,32 +204,6 @@
         }
       }
     },
-    updated:function(){
-      if(this.$route.params.id){
-      const obj = {"id":this.$route.params.id,"group":this.currentGroup.id,"wid": this.object.id};
-      if (this.$store.getters.getDataSettings(obj)) {
-        this.datasettings = Object.assign({}, this.$store.getters.getDataSettings(obj).datasettings);
-        this.selectedinstrname = this.datasettings.selectedinstrument.name;
-        this.initChartOption()
-      }else{
-        if(this.object.selindex!=-1){
-          this.selectedinstrname = this.object.instruments[this.object.selindex].name;
-        }else {
-          if(this.object.instruments.length==1){
-            this.selectedinstrname = this.object.instruments[0].name;
-          }else {
-            this.selectedinstrname=this.object.instruments[0].name
-          }
-        }
-        if(this.selectedinstrname!=""){
-          this.initChartOption()
-        }
-      }
-    }
-    },
-    beforeDestroy() {
-  	 this.$eventBus.$off("saveSettings");
-     },
     watch: {
       selectedinstrname: function(){
         var stat={id:this.object.id,sel:false,selindex:-1}
@@ -474,10 +447,6 @@
       formatted:function(t){
 				return this.$moment(t).format("dddd, MMMM Do YYYY, h:mm:ss a");
 			},
-      saveoptions:function (obj) {
-        var payload  = {'pid': obj.id, "group":obj.group, "wid":this.object.id,'datasettings':this.datasettings}
-        this.$store.commit('saveWidgetSettings', payload);
-      },
       getcolorfordata: function(value){
         var thresholds = this.selectedinstr.ryg
         var check= thresholds.filter(function(e){
@@ -561,7 +530,7 @@
   .notesdisplay {
       height:120px;
       background-color: #fff;
-      margin:15px 0px 0px 0px;
+      margin:15px 0px 15px 0px;
       border: none;
       overflow: auto;
       padding:10px 15px;

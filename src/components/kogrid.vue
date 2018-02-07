@@ -26,17 +26,11 @@
       <div class='col-md-4 '>  <small>GENDER:</small> {{filteredData[hoverrow].gender}} </div>
       <div class='col-md-4'> <small> AGE:</small> {{filteredData[hoverrow].age}} </div>
     </div>
-    <!-- <div class='row treatmentinfo mar-0 '>
-      <p class='ft-sz-18'>Diagnosis and Treatment Plan</p>
-      <p class='ft-sz-12'>{{filteredData[hoverrow].diagnosis}}</p>
-      <p class='ft-sz-12'>{{filteredData[hoverrow].treatment}}</p>
-    </div> -->
     <div class='row interventionlisting mar-0' ><p class='ft-sz-18'>Interventions</p>
      <ul v-if='groupid!=-1'><li v-for='widget in wlist'><koicon :object='widget' ></koicon></li></ul></div>
   </div>
 </div>
 </template>
-
 <script>
 import koicon from "./koicon.vue"
 export default {
@@ -90,11 +84,29 @@ export default {
     },
     wlist:function(){
       var l=[];
+      var wl=[];
+      var self=this;
+      l=JSON.parse(JSON.stringify( this.filteredData[0].layout));
+      this.widgetMasterList.forEach(function(e){
+        var w = {id:e.id,label:e.label,count:-1,alertText:""}
+        var ind = l.map(function(el){return el.c.id}).indexOf(e.id)
+        if(ind!=-1){
+          w.count=l[ind].c.count
+        }
+        wl.push(w)
+      })
+      return wl
+    },
+    widgetMasterList: function(){
       if(this.hoverrow!=-1){
-        l=JSON.parse(JSON.stringify( this.filteredData[this.hoverrow].wlist));
+        return JSON.parse(JSON.stringify(this.$store.getters.getwidgetlistbypatient(this.patient(this.hoverrow))));
+      }else {
+        return []
       }
-      return l
-    }
+    },
+    currentGroup: function(){
+      return this.$store.getters.getcurrentGroup;
+    },
   },
   filters: {
     capitalize: function (str) {
@@ -102,6 +114,11 @@ export default {
     }
   },
   methods: {
+    patient: function(i){
+			var id = this.filteredData[i].id
+			return this.$store.getters.getpatientbyid({"id":id,"group":this.currentGroup.id});
+		},
+
     sortBy: function (key) {
       this.sortKey = key
       this.sortOrders[key] = this.sortOrders[key] * -1
@@ -129,7 +146,6 @@ table {
   background-color: #fff;
   width: 100%;
 }
-
 table.default {
   border: 2px solid #0075bc;
 }
@@ -163,7 +179,6 @@ table.group8 {
 table.group9 {
   border: 2px solid #0075bc;
 }
-
 th {
 color: #fff;
   cursor: pointer;
@@ -178,7 +193,6 @@ color: #0075bc;
 }
 table.group0  th{
 background-color: #0075bc;
-
 }
   table.group1  th{
     background-color: blue;
@@ -211,7 +225,6 @@ th, td {
   padding: 15px 15px;
   text-overflow: ellipsis;
 }
-
 th:nth-child(1){  width: 20%;}
 th:nth-child(2){  width: 20%;}
 th:nth-child(3){  width: 20%;}
@@ -220,18 +233,16 @@ th:nth-child(5){  width: 25%;}
 th.active {
   color: #fff;
 }
-
 th.active .arrow {
   opacity: 1;
 }
-
 tr:nth-child(even) {
     background-color: #e3e3e3;
 }
 tr {
     background-color: #fff;
     border:1px solid transparent;
-    transition: background 0.5s ease, color 0.5s ease;
+    transition: background-color 0.5s ease, color 0.5s ease;
     cursor:pointer;
     position: relative;
 }
@@ -270,17 +281,14 @@ div.interventionlisting ul {
   margin-left: 5px;
   opacity: 0.66;
 }
-
 .arrow.asc {
   border-left: 4px solid transparent;
   border-right: 4px solid transparent;
   border-bottom: 4px solid #fff;
 }
-
 .arrow.dsc {
   border-left: 4px solid transparent;
   border-right: 4px solid transparent;
   border-top: 4px solid #fff;
 }
-
 </style>

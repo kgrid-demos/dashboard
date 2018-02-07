@@ -51,11 +51,11 @@
 								<button class='kg-btn-primary lg' v-if='isInEdit && pwidgetlist.length==0' @click='loadDefault'> Load Default Layout </button>
 								<button class='kg-btn-primary lg' v-if='isInEdit && pwidgetlist.length>0' @click='saveDefault'> Save As Default </button>
 								<button class='kg-btn-primary lg' v-if='isInEdit && pwidgetlist.length>0 ' @click='removeAll'> Remove All </button>
-								<button class='kg-btn-primary attn lg' v-if='isInEdit' :disabled='!configready' @click='saveconfig'>Apply Changes</button>
+								<button class='kg-btn-primary attn lg' v-if='isInEdit' v-show='configready' @click='saveconfig'>Apply Changes</button>
 							</div>
 							<div style="width:100%;"  v-else>
 									<button class='kg-btn-primary lg' v-if='!maximized && !loaddata & pddready' @click='toggleviewmode'> {{timeff}}</button>
-									<div class="pad-l-15 inline"  v-if=' pwidgetlist.length>=1 && loaddata'>
+									<div class="pad-l-15 inline"  v-if='pwidgetlist.length>=1 && loaddata'>
 										<button class='kg-btn-primary ' :disabled="!enablePreArrow" @click='gopreviousweek'> <i class='fa fa-angle-left fa-lg'></i></button>
 										<button class='kg-btn-primary labelonly' style='width:360px;'> <span v-if='!maximized'>Week {{weekno}}: </span>{{dateRangeLabel.start}} - {{ dateRangeLabel.end}} </button>
 										<button class='kg-btn-primary ' :disabled="!enableNextArrow" @click='gonextweek'> <i class='fa fa-angle-right fa-lg'></i></button>
@@ -91,12 +91,12 @@
 															<div class='row mar-0 widgetTitle' :class='item.c.type' >
 																<span class="widgetLabel">{{item.c.label}}</span>
 																<i class='fa fa-close' v-if='isInEdit' style="font-size:11pt" @click='removeWidget(item.i)'></i>
-																<i class='fa fa-window-maximize' v-if='!isInEdit && !maximized && loaddata' title="maximize" style="font-size:11pt" @click='maximizeWidget(item.i)'></i>
+																<i class='fa fa-window-maximize' v-if='!isInEdit && !maximized && loaddata' title="maximize" style="font-size:11pt" @click='maximizeWidget(item.c.id)'></i>
 																<i class='fa fa-window-restore' v-if='!isInEdit && maximized && loaddata' title="restore"  style="font-size:11pt" @click='restoreLayout'></i>
 															</div>
 														</div>
 														<div class='widgetcontainer fill no-drag'>
-																	<kotile :object='item.c'  :patientid='$route.params.id' v-on:setinstru='setinstru' v-on:maximizeme="maxthis" :maximized='maximized' :cflag="item.c['type']" :tileindex='item.i' :containerheight="((item.h)*rowheight-10)" :editmode='isInEdit' :viewmode='loaddata' >
+																	<kotile :object='item.c'  :patientid='$route.params.id' v-on:setinstru='setinstru' v-on:maximizeme="maximizeWidget" :maximized='maximized' :cflag="item.c['type']" :tileindex='item.i' :containerheight="((item.h)*rowheight-10)" :editmode='isInEdit' :viewmode='loaddata' >
 																	</kotile>
 															</div>
 												</grid-item>
@@ -150,7 +150,7 @@ export default {
 		var self = this;
 		var lastsunday = this.$moment().day(-7);
 		this.pddready=false;
-		this.$store.commit('setCurrentPatientIndex',{'pid':this.patient.id,'group':this.patient.groupid});
+	  this.$store.commit('setCurrentPatientIndex',{'pid':this.patient.id,'group':this.patient.groupid});
 	},
 	mounted:function(){
 		var self = this;
@@ -404,7 +404,6 @@ export default {
 			this.loaddata=false;
 			this.pddready=true;
 	    var pid=this.$route.params.id;
-      this.$eventBus.$emit("saveSettings",{'id':pid,'group':this.currentGroup.id});
 			this.$store.commit('saveConfig',{'id':pid,'group':this.currentGroup.id,'layout':this.layout});
 			if(true) this.updateLog(this.patient);
 			self.isInEdit = false;
@@ -435,15 +434,9 @@ export default {
 			var self = this;
 			this.layout.splice(0,1);
 			var obj = JSON.parse(JSON.stringify(this.$store.getters.getdefaultlayoutbycancerid(this.patient.type)));
-			this.pwidgetlist=obj.map(function(e){return e.c})
+			this.pwidgetlist=obj.map(function(e){return e.c.id})
 			obj.forEach(function(e){
-					var c = e.c;
-					var widg = self.widgetMasterList.filter(function(el){return el.id==c})
-					var o = JSON.parse(JSON.stringify(e))
-					if(widg.length>0){
-						o.c=widg[0]
-						self.layout.push(o)
-					}
+				self.layout.push(e)
 			})
 		},
 		saveDefault:function() {
@@ -469,7 +462,6 @@ export default {
 		removeWidget:function(i){
 			this.layout.splice(i,1);
 			this.pwidgetlist.splice(i,1);
-			// this.cleanupLayout();
 		},
 		removeAll:function(){
 			var n=this.pwidgetlist.length;
@@ -478,19 +470,14 @@ export default {
 				this.removeWidget(0)
 			}while(n>0)
 		},
-		maximizeWidget: function(i){
+		maximizeWidget: function(id){
 			this.temp =JSON.parse(JSON.stringify(this.layout));
-			this.layout=this.layout.filter(function(e){return e.i==i})
+			this.layout=this.layout.filter(function(e){return e.c.id==id})
 			this.layout[0].x=0;
 			this.layout[0].y=0;
 			this.layout[0].w=12;
 			this.layout[0].h=7;
 			this.maximized=true;
-
-		},
-		maxthis:function(id){
-			var index=this.widgetInuseList.map(function(e){return e.id}).indexOf(id)
-			this.maximizeWidget(index)
 		},
 		restoreLayout: function(){
 			this.layout=JSON.parse(JSON.stringify(this.temp));
@@ -503,7 +490,6 @@ export default {
 			this.$nextTick(() => {
 				this.checkGriddim()
       });
-
 		},
 	  resizedEvent: function(i, newH, newW, newHPx, newWPx){
       var msg = "RESIZED i=" + i + ", H=" + newH + ", W=" + newW + ", H(px)=" + newHPx + ", W(px)=" + newWPx;
@@ -526,17 +512,27 @@ export default {
 			var ny = Math.floor(y/30)
 			console.log("dropped @ "+e.clientX + " , "+e.clientY+" Grid coord: "+x + " , "+y)
 			console.log("Drop in the grid:"+nx+" "+ny)
-			var item={x:0,y:1,w:3,h:3,i:"0",c:""};
-			if(nx>9){nx=9}
-			item.x=nx;
-			item.y=ny;
-			var obj = JSON.parse(JSON.stringify(this.contentindrag))
-			obj.sel=true;
-			obj.selindex=0; //default to select the first instrument
-			item.c=obj;
-			item.i=this.layout.length+"";
-			this.layout.push(item)
-			this.pwidgetlist.push(obj.id)
+			if((nx>=0)&&(ny>=0)){
+				var item={x:0,y:1,w:3,h:3,i:"0",c:""};
+				if(nx>9){nx=9}
+				item.x=nx;
+				item.y=ny;
+				var obj = {}
+				// JSON.parse(JSON.stringify(this.contentindrag))
+				obj.id=this.contentindrag.id;
+				obj.label=this.contentindrag.label;
+				obj.type=this.contentindrag.type;
+				obj.constraint=this.contentindrag.constraint
+				obj.count=0
+				obj.pnotecount=0
+				obj.sel=true;
+				obj.selindex=0; //default to select the first instrument
+				console.log(obj)
+				item.c = JSON.parse(JSON.stringify(obj));
+				item.i=this.layout.length+"";
+				this.layout.push(item)
+				this.pwidgetlist.push(obj.id)
+			}
 		},
 		hoverin (e) {
 			e.preventDefault();
@@ -555,12 +551,7 @@ export default {
 		GridLayout:VueGridLayout.GridLayout,
 		GridItem:VueGridLayout.GridItem,
 		modal
-	},
-	onMove ({relatedContext, draggedContext}) {
-	const relatedElement = relatedContext.element;
-	const draggedElement = draggedContext.element;
-	return (!relatedElement || !relatedElement.fixed) && !draggedElement.fixed
-},
+	}
 };
 </script>
 <style scoped>

@@ -16,34 +16,6 @@
 			{ "id":"PA-67034-001", "name":"Ms. Green", "age":"38", "gender":"female", "type":0,"group":[{"id":0},{"id":1},{"id":2},{"id":3},{"id":4},{"id":5}]},
 			{ "id":"PA-67034-007", "name":"Mr. Brown", "age":"62", "gender":"male", "type":1,"group":[{"id":0},{"id":1},{"id":2},{"id":3},{"id":4},{"id":5}]}
 		],
-		"patientstemplate":{ "id":"PA-67034-001","name":"Ms. Green", "age":"38", "gender":"female", "type":0, "groupid": -1,
-			"wlist":[
-				{"id":"PRO-01","label":"Pain","count":-1,"alertText":""},
-				{"id":"PRO-02","label":"Anxiety","count":-1,"alertText":""},
-				{"id":"PRO-03","label":"Depression","count":-1,"alertText":""},
-				{"id":"PRO-04","label":"Nausea / Vomiting","count":-1,"alertText":""},
-				{"id":"PRO-05","label":"Nerve Pain & Tingling","count":-1,"alertText":""},
-				{"id":"PRO-06","label":"Palm & Sole Rash","count":-1,"alertText":""},
-				{"id":"PRO-07","label":"Fatigue","count":-1,"alertText":""},
-				{"id":"PRO-08","label":"Mouth sore","count":-1,"alertText":""},
-				{"id":"PRO-09","label":"Body Weight","count":-1,"alertText":""},
-				{"id":"PRO-10","label":"Drinking Fluids","count":-1,"alertText":""},
-				{"id":"PRO-11","label":"Ostomy Output","count":-1,"alertText":""},
-				{"id":"PRO-12","label":"Temperature & Fever","count":-1,"alertText":""},
-				{"id":"PRO-13","label":"Appetite","count":-1,"alertText":""},
-				{"id":"PRO-14","label":"Fertility","count":-1,"alertText":""},
-				{"id":"PRO-15","label":"Exercise","count":-1,"alertText":""},
-				{"id":"SM-01","label":"Colon Cancer Nutrition & Fluids","count":-1,"alertText":""},
-				{"id":"SM-02","label":"Colon Cancer & Self Image","count":-1,"alertText":""},
-				{"id":"SM-03","label":"Ostomy Care","count":-1,"alertText":""},
-				{"id":"SM-04","label":"Body Image","count":-1,"alertText":""},
-				{"id":"SM-05","label":"Family Talk About Cancer Risk","count":-1,"alertText":""},
-				{"id":"SM-06","label":"Chemo and Fertility","count":-1,"alertText":""},
-				{"id":"SM-07","label":"Advance Directive","count":-1,"alertText":""},
-				{"id":"SM-08","label":"Sexual Health","count":-1,"alertText":""}
-			],
-			"layout":[],
-			"widgetSettings": []
-		},
+		"patientstemplate":{ "id":"PA-67034-001","name":"Ms. Green", "age":"38", "gender":"female", "type":0, "groupid": -1,"layout":[]},
 		"patientData": []
 	}

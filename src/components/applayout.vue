@@ -6,8 +6,8 @@
 	</template>
 <script>
 export default {
-      name: 'applayout'
-  };
+  name: 'applayout'
+};
 </script>
 <style>
 .kgl-content{

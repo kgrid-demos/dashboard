@@ -6,7 +6,7 @@
 </template>
 <script>
 import navbar from './components/navbar.vue';
-
+import { BASE_URL } from '../static/config';
 export default {
   name: 'app1',
   data: function () {
@@ -15,6 +15,7 @@ export default {
   created: function () {
     var t = this.$moment().unix()
     this.$store.commit("settoday", t)
+    console.log(BASE_URL)
   },
   components: {
     navbar

@@ -108,42 +108,6 @@ const store = new Vuex.Store({
       var index = state.currentPatientIndex;
       console.log("SAVE=>"+obj.id+"   "+index);
       state.patientlist[index].layout=JSON.parse(JSON.stringify(obj.layout));
-      //Need to remove when the PRO registration is done , for front debug purpose
-      var objWlist = obj.layout.map(function(ee) {return ee.c.id});
-      state.patientlist[index].wlist.forEach(function(e){
-        var i=objWlist.indexOf(e.id);
-
-        if(i!=-1){
-            e.count=0;
-        }else {
-          e.count=-1;
-        }
-
-      })
-    },
-    updateAlert(state,obj){
-      var pindex  = state.patientlist.findIndex(function(el) {
-              return el.id==obj.pid && el.groupid==obj.group});
-      console.log("UPDATE ALERT"+pindex);
-
-      var windex = state.patientlist[pindex].wlist.map(function(e) {return e.id}).indexOf(obj.wid);
-      var value = state.patientlist[pindex].wlist[windex].count;
-      if(obj.message==""){  //clear message
-          if(value>0) {
-            state.patientlist[pindex].wlist[windex].count--;
-          }
-      }else {  //add message
-        state.patientlist[pindex].wlist[windex].count++;
-      }
-    },
-    setAlerts(state,obj) {
-      var pindex = state.patientlist.findIndex(function(el) {
-        return el.id===obj.pid && el.groupid===obj.group;
-      });
-      console.log("Setting alerts for " + obj.widget + ", " + pindex + " to " + obj.count);
-      var windex = state.patientlist[pindex].wlist.map(function(e) {return e.id}).indexOf(obj.wid);
-      var value = state.patientlist[pindex].wlist[windex].count;
-      state.patientlist[pindex].wlist[windex].count = obj.count;
     },
     selstation(state,obj){
       if(obj.value!=-1){
@@ -159,22 +123,8 @@ const store = new Vuex.Store({
     setgroupid(state,obj){
       state.currentGroup.id=obj.value;
     },
-    saveWidgetSettings(state, obj){
-      if(false){
-        console.log("Save Widget Settings =>")
-        console.log(obj)
-      }
-      var index = state.currentPatientIndex;
-      var windex = state.patientlist[index].widgetSettings.map(function(e){return e.id}).indexOf(obj.wid);
-      // console.log("save widget for=>"+"Pt "+index+"wd "+windex)
-      if(windex >= 0) {
-        state.patientlist[index].widgetSettings[windex].datasettings=JSON.parse(JSON.stringify(obj.datasettings));
-      } else {
-        state.patientlist[index].widgetSettings.push({id: obj.wid, datasettings:JSON.parse(JSON.stringify(obj.datasettings))});
-      }
-    },
     setCurrentPatientIndex(state, obj){
-      if(debug){
+      if(true){
         console.log("Set Current Patient Index =>")
         console.log(obj)
       }
@@ -212,9 +162,6 @@ const store = new Vuex.Store({
     getLoggerURL: state=> {
       return state.loggerURL
     },
-    testResetState: state =>{
-      return state.patientlist[7].wlist[1].count
-    },
     isDebugging: state => {
       return state.debugEnabled;
     },
@@ -232,16 +179,20 @@ const store = new Vuex.Store({
     },
     getDataSettings:state=>{
       return function(obj){
-        if(false){
+        if(true){
           console.log("Vuex GET datasettings")
           console.log(obj)
         }
         var index = state.patientlist.findIndex(function(el) {
           return el.id==obj.id && el.groupid==obj.group});
-          // console.log("Index: "+index)
-          var windex = state.patientlist[index].widgetSettings.map(function(e){return e.id}).indexOf(obj.wid);
-          // console.log("Widget Index: "+windex)
-        return state.patientlist[index].widgetSettings[windex];
+        console.log("Index: "+index)
+        var windex = state.patientlist[index].layout.map(function(e){return e.c.id}).indexOf(obj.wid);
+        console.log("Widget Index: "+windex)
+        if((index>=0)&&(windex>=0)){
+          return state.patientlist[index].layout[windex].c;
+        }else {
+          return null
+        }
       }
     },
     getpatientbyid:state => {

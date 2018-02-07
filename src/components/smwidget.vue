@@ -54,20 +54,15 @@
     },
     created: function() {
       var self = this;
-      this.$eventBus.$on('saveSettings', function () {
-        self.saveoptions();
-      });
       const obj = {"id":this.$route.params.id,"group":this.currentGroup.id,"wid": this.object.id};
       if (this.$store.getters.getDataSettings(obj)) {
-        this.datasettings = Object.assign({}, this.$store.getters.getDataSettings(obj).datasettings);
-        this.selectedinstrname = this.datasettings.selectedinstrument.name;
+        this.datasettings = JSON.parse(JSON.stringify(this.$store.getters.getDataSettings(obj)));
+        console.log(this.datasettings)
+        this.selectedinstrname = this.instruments[this.datasettings.selindex].name;
       }
-      this.custfreq = this.selectedfreq
+          this.custfreq = this.selectedfreq
       this.datasettings.selectedinstrument = this.selectedinstr
       this.datasettings.sendnotification = this.sendnotification
-    },
-    beforeDestroy() {
-      this.$eventBus.$off("saveSettings");
     },
     computed : {
       today:function(){
@@ -188,13 +183,6 @@
       maximizeWidget:function(){
         this.$emit("maximizeme",this.object.id)
       },
-      saveoptions :function ()  {
-          this.$store.commit('saveWidgetSettings', {'pid': this.$route.params.id, "group":this.currentGroup.id, "wid":this.object.id,'datasettings':this.datasettings});
-      },
-      generateNotification() {
-        let finalDataPoint = this.weeklydata[this.weeklydata.length - 1];
-        this.$emit("alert", finalDataPoint, this.datasettings.notifythresh);
-      }
     }
   }
 </script>
