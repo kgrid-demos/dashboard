@@ -90,7 +90,7 @@
 														<div class='noselect' v-bind:class="{draggablehandle: isInEdit}" v-if='item.c!=""'>
 															<div class='row mar-0 widgetTitle' :class='item.c.type' >
 																<span class="widgetLabel">{{item.c.label}}</span>
-																<i class='fa fa-close' v-if='isInEdit' style="font-size:11pt" @click='removeWidget(item.c.id)'></i>
+																<i class='fa fa-window-close' style="font-size:15pt" v-if='isInEdit' @click='removeWidget(item.c.id)'></i>
 																<i class='fa fa-window-maximize' v-if='!isInEdit && !maximized && loaddata' title="maximize" style="font-size:11pt" @click='maximizeWidget(item.c.id)'></i>
 																<i class='fa fa-window-restore' v-if='!isInEdit && maximized && loaddata' title="restore"  style="font-size:11pt" @click='restoreLayout'></i>
 															</div>
