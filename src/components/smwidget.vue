@@ -57,7 +57,6 @@
       const obj = {"id":this.$route.params.id,"group":this.currentGroup.id,"wid": this.object.id};
       if (this.$store.getters.getDataSettings(obj)) {
         this.datasettings = JSON.parse(JSON.stringify(this.$store.getters.getDataSettings(obj)));
-        console.log(this.datasettings)
         this.selectedinstrname = this.instruments[this.datasettings.selindex].name;
       }
           this.custfreq = this.selectedfreq

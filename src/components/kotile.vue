@@ -1,7 +1,7 @@
 <template>
 		<div class="container kgl-tile" :class="{max:maximized}" v-bind:id="object.label">
-          <prowidget v-if="cflag === 'PRO' " ref="widget" :patientid='patientid' :viewmode='viewmode' v-on:instrselected='instrselected' :chartheight='cHeight' v-on:maximizeme='maximizeme' :editmode="editmode" :object="object" :maximized="maximized" :title="object.label" ></prowidget>
-          <smwidget v-if="cflag === 'SM'  " :patientid='patientid' :chartheight='cHeight' :viewmode='viewmode' :editmode="editmode" :object="object" :title="object.label" v-on:maximizeme='maximizeme' :maximized="maximized" ></smwidget>
+          <prowidget v-if="object.type === 'PRO' " ref="widget" :patientid='patientid' :viewmode='viewmode' v-on:instrselected='instrselected' :chartheight='cHeight' v-on:maximizeme='maximizeme' :editmode="editmode" :object="object" :maximized="maximized" :title="object.label" ></prowidget>
+          <smwidget v-if="object.type === 'SM'  " :patientid='patientid' :chartheight='cHeight' :viewmode='viewmode' :editmode="editmode" :object="object" :title="object.label" v-on:maximizeme='maximizeme' :maximized="maximized" ></smwidget>
 		</div>
 	</template>
 	<script>
@@ -12,7 +12,7 @@
 		data() {
   	  return {}
 		},
-		props : [ 'object', 'patientid','cflag', 'viewmode', 'maximized','tileindex', 'containerheight', 'editmode'],
+		props : [ 'object', 'patientid', 'viewmode', 'maximized','tileindex', 'containerheight', 'editmode'],
 		computed : {
 			cHeight: function(){
 				var h = (this.containerheight-30)

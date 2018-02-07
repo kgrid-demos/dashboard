@@ -46,6 +46,16 @@
 		border-left-color: #20657e;
 		border-top-color: #20657e;
 	}
+	.kgl-tile.TCT::after {
+  	border-width: 1em;
+    border-left-color: #ba5827;
+    border-top-color: #ba5827;
+	}
+	.kgl-tile.TMO::after {
+		border-width: 1em;
+		border-left-color: #00b5AF;
+		border-top-color: #00b5AF;
+	}
 	.cornerflag p {
 		position:relative;
 		text-align:center;

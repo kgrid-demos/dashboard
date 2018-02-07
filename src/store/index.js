@@ -124,7 +124,7 @@ const store = new Vuex.Store({
       state.currentGroup.id=obj.value;
     },
     setCurrentPatientIndex(state, obj){
-      if(true){
+      if(false){
         console.log("Set Current Patient Index =>")
         console.log(obj)
       }
@@ -179,15 +179,13 @@ const store = new Vuex.Store({
     },
     getDataSettings:state=>{
       return function(obj){
-        if(true){
+        if(false){
           console.log("Vuex GET datasettings")
           console.log(obj)
         }
         var index = state.patientlist.findIndex(function(el) {
           return el.id==obj.id && el.groupid==obj.group});
-        console.log("Index: "+index)
         var windex = state.patientlist[index].layout.map(function(e){return e.c.id}).indexOf(obj.wid);
-        console.log("Widget Index: "+windex)
         if((index>=0)&&(windex>=0)){
           return state.patientlist[index].layout[windex].c;
         }else {

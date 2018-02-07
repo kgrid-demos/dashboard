@@ -96,7 +96,7 @@
 															</div>
 														</div>
 														<div class='widgetcontainer fill no-drag'>
-																	<kotile :object='item.c'  :patientid='$route.params.id' v-on:setinstru='setinstru' v-on:maximizeme="maximizeWidget" :maximized='maximized' :cflag="item.c['type']" :tileindex='item.i' :containerheight="((item.h)*rowheight-10)" :editmode='isInEdit' :viewmode='loaddata' >
+																	<kotile :object='item.c'  :patientid='$route.params.id' v-on:setinstru='setinstru' v-on:maximizeme="maximizeWidget" :maximized='maximized' :tileindex='item.i' :containerheight="((item.h)*rowheight-10)" :editmode='isInEdit' :viewmode='loaddata' >
 																	</kotile>
 															</div>
 												</grid-item>

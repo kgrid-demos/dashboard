@@ -15,7 +15,7 @@ export default {
   created: function () {
     var t = this.$moment().unix()
     this.$store.commit("settoday", t)
-    console.log(BASE_URL)
+    // console.log(BASE_URL)
   },
   components: {
     navbar

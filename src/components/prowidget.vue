@@ -168,6 +168,7 @@
               },
               ticks: {
                 maxTicksLimit: 8,
+                display:true
                 // source:'labels'
               },
               gridLines: {
@@ -188,16 +189,14 @@
       const obj = {"id":this.$route.params.id,"group":this.currentGroup.id,"wid": this.object.id};
       if (this.$store.getters.getDataSettings(obj)) {
         this.datasettings = JSON.parse(JSON.stringify(this.$store.getters.getDataSettings(obj)));
-        console.log(this.datasettings)
+        // console.log(this.datasettings)
         this.selectedinstrname = this.instruments[this.datasettings.selindex].name;
         this.initChartOption()
       }else{
         if(this.object.selindex!=-1){
           this.selectedinstrname = this.instruments[this.object.selindex].name;
         }else {
-          // if(this.object.instruments.length==1){
             this.selectedinstrname = this.instruments[0].name;
-          // }
         }
         if(this.selectedinstrname!=""){
           this.initChartOption()
@@ -279,11 +278,14 @@
             e.date=self.$moment().add(e.dateOffset+7-self.todaysdow, 'd').unix();
           })
           if(this.viewmode){
+            // this.chartOptions.scales.xAxes[0].ticks.display=true
             return data
           }else {
+            // this.chartOptions.scales.xAxes[0].ticks.display=false
             return []
           }
         }else {
+          // this.chartOptions.scales.xAxes[0].ticks.display=false
           return []
         }
       },

@@ -86,15 +86,17 @@ export default {
       var l=[];
       var wl=[];
       var self=this;
-      l=JSON.parse(JSON.stringify( this.filteredData[0].layout));
-      this.widgetMasterList.forEach(function(e){
-        var w = {id:e.id,label:e.label,count:-1,alertText:""}
-        var ind = l.map(function(el){return el.c.id}).indexOf(e.id)
-        if(ind!=-1){
-          w.count=l[ind].c.count
-        }
-        wl.push(w)
-      })
+      if(this.widgetMasterList.length>0){
+        l=JSON.parse(JSON.stringify( this.filteredData[this.hoverrow].layout));
+        this.widgetMasterList.forEach(function(e){
+          var w = {id:e.id,label:e.label,count:-1,alertText:""}
+          var ind = l.map(function(el){return el.c.id}).indexOf(e.id)
+          if(ind!=-1){
+            w.count=l[ind].c.count
+          }
+          wl.push(w)
+        })
+      }
       return wl
     },
     widgetMasterList: function(){
@@ -118,7 +120,6 @@ export default {
 			var id = this.filteredData[i].id
 			return this.$store.getters.getpatientbyid({"id":id,"group":this.currentGroup.id});
 		},
-
     sortBy: function (key) {
       this.sortKey = key
       this.sortOrders[key] = this.sortOrders[key] * -1
