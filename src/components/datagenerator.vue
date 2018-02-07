@@ -141,12 +141,15 @@
     created: function() {
       let that = this;
       this.widgetLists.forEach(function(widgetList) {
-        that.chartdata[widgetList.patientID] = {};
-        widgetList.widgets.forEach(function (widget){
-          that.chartdata[widgetList.patientID][widget.id + "-data"] =
+        console.log("Data Gen")
+        console.log(widgetList)
+        if(widgetList.patientID!="PA-67034-004"){
+          that.chartdata[widgetList.patientID] = {};
+          widgetList.widgets.forEach(function (widget){
+            that.chartdata[widgetList.patientID][widget.id + "-data"] =
               JSON.parse(JSON.stringify(that.$store.getters.getPatientData(widgetList.patientID)[widget.id + "-data"]));
-        });
-
+            });
+      }
 //        that.randomizeAllPROData(widgetList.patientID, widgetList.widgets);
 //        that.randomizeAllSMData(widgetList.patientID, widgetList.smWidgets);
       });

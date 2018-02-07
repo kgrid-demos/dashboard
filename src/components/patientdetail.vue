@@ -90,7 +90,7 @@
 														<div class='noselect' v-bind:class="{draggablehandle: isInEdit}" v-if='item.c!=""'>
 															<div class='row mar-0 widgetTitle' :class='item.c.type' >
 																<span class="widgetLabel">{{item.c.label}}</span>
-																<i class='fa fa-close' v-if='isInEdit' style="font-size:11pt" @click='removeWidget(item.i)'></i>
+																<i class='fa fa-close' v-if='isInEdit' style="font-size:11pt" @click='removeWidget(item.c.id)'></i>
 																<i class='fa fa-window-maximize' v-if='!isInEdit && !maximized && loaddata' title="maximize" style="font-size:11pt" @click='maximizeWidget(item.c.id)'></i>
 																<i class='fa fa-window-restore' v-if='!isInEdit && maximized && loaddata' title="restore"  style="font-size:11pt" @click='restoreLayout'></i>
 															</div>
@@ -459,16 +459,15 @@ export default {
   			});
 
 		},
-		removeWidget:function(i){
+		removeWidget:function(id){
+			var i =this.pwidgetlist.indexOf(id)
 			this.layout.splice(i,1);
 			this.pwidgetlist.splice(i,1);
 		},
 		removeAll:function(){
 			var n=this.pwidgetlist.length;
-			do{
-				n=n-1;
-				this.removeWidget(0)
-			}while(n>0)
+			this.layout.splice(0,n);
+			this.pwidgetlist.splice(0,n);
 		},
 		maximizeWidget: function(id){
 			this.temp =JSON.parse(JSON.stringify(this.layout));
@@ -479,6 +478,7 @@ export default {
 			this.layout[0].h=7;
 			this.maximized=true;
 		},
+
 		restoreLayout: function(){
 			this.layout=JSON.parse(JSON.stringify(this.temp));
 			this.maximized=false;
