@@ -30,7 +30,7 @@
 					<div class='ht-full kg-bg-custom-0' @drop='dropped'>
 						<div class='row ft-sz-16 lh-3 txtcenter'> <h3>Widget List</h3></div>
 						<div class='wlistctner'>
-							<draggable class='wlist' element="ul" :value="widgetInvetoryList" :options="dragOptions" :move="onMove" @start="isDragging=true" @end="isDragging=false">
+							<draggable class='wlist' element="ul" :value="widgetInvetoryList" :options="dragOptions"  @start="isDragging=true" @end="isDragging=false">
 								<li v-for='(object,index) in widgetInvetoryList' v-bind:key='index'  @dragstart="setdrag(object)" >
 									<kocard :object='object.label' :id='object.label' :cflag="object.type" :tileindex='index' draggable='true' ></kocard>
 								</li>
@@ -71,7 +71,7 @@
 												:is-draggable="isInEdit"
 												:is-resizable="isInEdit"
 												:vertical-compact="true"
-												:margin="[10, 10]"
+												:margin="[10,10]"
 												:use-css-transforms="true"
 												@dragenter.native='dragin'
 												@dragover.native="hoverin"
@@ -86,19 +86,21 @@
 													:maxH=3
 													:i="item.i"
 													ref='item'
+													@dragstart.native='dragnative'
 													v-bind:key="item.i"	>
-														<div class='noselect' v-bind:class="{draggablehandle: isInEdit}" v-if='item.c!=""'>
+														<div class='noselect' v-if='item.c!=""'>
 															<div class='row mar-0 widgetTitle' :class='item.c.type' >
 																<span class="widgetLabel">{{item.c.label}}</span>
-																<i class='fa fa-window-close' style="font-size:15pt" v-if='isInEdit' @click='removeWidget(item.c.id)'></i>
+																<i class='fa fa-window-close' style="font-size:15pt; margin-top:-3px;" v-if='isInEdit' @click='removeWidget(item.c.id)'></i>
 																<i class='fa fa-window-maximize' v-if='!isInEdit && !maximized && loaddata' title="maximize" style="font-size:11pt" @click='maximizeWidget(item.c.id)'></i>
 																<i class='fa fa-window-restore' v-if='!isInEdit && maximized && loaddata' title="restore"  style="font-size:11pt" @click='restoreLayout'></i>
 															</div>
 														</div>
-														<div class='widgetcontainer fill no-drag'>
+														<!-- <div class='widgetcontainer'> -->
 																	<kotile :object='item.c'  :patientid='$route.params.id' v-on:setinstru='setinstru' v-on:maximizeme="maximizeWidget" :maximized='maximized' :tileindex='item.i' :containerheight="((item.h)*rowheight-10)" :editmode='isInEdit' :viewmode='loaddata' >
 																	</kotile>
-															</div>
+															<!-- </div> -->
+					
 												</grid-item>
 											</grid-layout>
 										</div>
@@ -350,6 +352,13 @@ export default {
 		}
 	},
 	methods : {
+		cleanuplayout:function(){
+			var self=this;
+			this.layout.forEach(function(e){
+				var index=self.pwidgetlist.indexOf(e.c.id)
+				e.i=index+""
+			})
+		},
 		checkGriddim:function(){
 			this.layoutdim.x0=this.$refs.gridl.getBoundingClientRect().left
 			this.layoutdim.y0=this.$refs.gridl.getBoundingClientRect().top
@@ -463,6 +472,7 @@ export default {
 			var i =this.pwidgetlist.indexOf(id)
 			this.layout.splice(i,1);
 			this.pwidgetlist.splice(i,1);
+			this.cleanuplayout()
 		},
 		removeAll:function(){
 			var n=this.pwidgetlist.length;
@@ -501,6 +511,15 @@ export default {
 		dragout () {
 			// console.log("out")
 		},
+		endingdrag () {
+			console.log(this.contentindrag)
+			console.log("Drag ending")
+			this.contentindrag={}
+
+		},
+		dragnative (e) {
+			e.preventDefault();
+		},
 		setdrag(element){
 			this.contentindrag=JSON.parse(JSON.stringify(element))
 		},
@@ -512,7 +531,8 @@ export default {
 			var ny = Math.floor(y/30)
 			console.log("dropped @ "+e.clientX + " , "+e.clientY+" Grid coord: "+x + " , "+y)
 			console.log("Drop in the grid:"+nx+" "+ny)
-			if((nx>=0)&&(ny>=0)){
+			var idcheck = (this.pwidgetlist.indexOf(this.contentindrag.id)==-1)
+			if((nx>=0)&&(ny>=0)&&idcheck){
 				var item={x:0,y:1,w:3,h:3,i:"0",c:""};
 				if(nx>9){nx=9}
 				item.x=nx;
@@ -671,9 +691,6 @@ export default {
 	position:relative;
 	width:100%;
 	flex: auto;
-}
-.widgetcontainer.over {
-		background-color:yellow;
 }
 .pdd-panel {
 	opacity: 1;

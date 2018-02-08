@@ -5,7 +5,7 @@
       <div class="ft-sz-12 pad-l-8" >
         <span>{{selectedinstr.unit}}</span>
         <i v-if="hasalert"  @click='maximizeWidget' title="Click to view alert" class="fa fa-exclamation-circle warning pad-l-5"></i>
-        <i v-if="hasnotes"  @click='maximizeWidget' title="Click to view patient note" class="fa fa-file-text-o notes pad-l-5"></i>
+        <i v-if="hasnotes"  @click='maximizeWidget' title="Click to view patient note" class="fa fa-file-alt notes pad-l-5"></i>
         <span class= "float-r pad-r-10">{{selectedfreq}}</span>
       </div>
     </div>
@@ -22,7 +22,7 @@
       <span class='pad-l-15' v-else> Patient has not posted any notes yet. </span>
       <ul>
         <li v-for='note in allnotes' >
-          <span class="fa fa-file-text-o notes pad-l-5"></span><span class="pad-l-5" style="font-style:italic;">{{formatted(note.date*1000)}} - {{note.note}}</span></li>
+          <span class="fa fa-file-alt notes pad-l-5"></span><span class="pad-l-5" style="font-style:italic;">{{formatted(note.date*1000)}} - {{note.note}}</span></li>
         </ul>
     </div>
   </div>
@@ -477,7 +477,7 @@
     cursor:pointer;
   }
   .graph {
-    padding-top: 5px;
+    padding-top: 1px;
     margin:0 auto;
     background-color: white;
   }
