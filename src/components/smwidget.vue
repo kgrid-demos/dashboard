@@ -46,7 +46,6 @@
     },
     data () {
       return {
-        datasettings: {},
         selectedinstrname: "",
         custfreq:"",
         sendnotification:false
@@ -55,13 +54,8 @@
     created: function() {
       var self = this;
       const obj = {"id":this.$route.params.id,"group":this.currentGroup.id,"wid": this.object.id};
-      if (this.$store.getters.getDataSettings(obj)) {
-        this.datasettings = JSON.parse(JSON.stringify(this.$store.getters.getDataSettings(obj)));
-        this.selectedinstrname = this.instruments[this.datasettings.selindex].name;
-      }
-          this.custfreq = this.selectedfreq
-      this.datasettings.selectedinstrument = this.selectedinstr
-      this.datasettings.sendnotification = this.sendnotification
+      this.selectedinstrname = this.instruments[this.object.selindex].name;
+      this.custfreq = this.selectedfreq
     },
     computed : {
       today:function(){
@@ -103,7 +97,7 @@
       },
       widgetStyle() {
         return {
-          width: `${100 / this.datasettings.weeklyfreq}%`,
+          width: `${100 / this.selectedinstr.modulecount}%`,
           position: 'relative'
         }
       },

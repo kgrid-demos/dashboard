@@ -177,22 +177,6 @@ const store = new Vuex.Store({
       {patient:{name:"Tyler Durden", age:55, gender:"Male"}, timestamp: '2017-10-09T03:00:04Z',notes:[{"type":1,"text":"Pain rating scale has increased from 2 to 8 in last 24 hours"}]}
             ]
     },
-    getDataSettings:state=>{
-      return function(obj){
-        if(false){
-          console.log("Vuex GET datasettings")
-          console.log(obj)
-        }
-        var index = state.patientlist.findIndex(function(el) {
-          return el.id==obj.id && el.groupid==obj.group});
-        var windex = state.patientlist[index].layout.map(function(e){return e.c.id}).indexOf(obj.wid);
-        if((index>=0)&&(windex>=0)){
-          return state.patientlist[index].layout[windex].c;
-        }else {
-          return null
-        }
-      }
-    },
     getpatientbyid:state => {
       var self=this;
       return function(obj){

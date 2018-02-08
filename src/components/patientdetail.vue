@@ -85,6 +85,7 @@
 													:maxW=6
 													:maxH=3
 													:i="item.i"
+													:class="{inedit:isInEdit}"
 													ref='item'
 													@dragstart.native='dragnative'
 													v-bind:key="item.i"	>
@@ -100,7 +101,7 @@
 																	<kotile :object='item.c'  :patientid='$route.params.id' v-on:setinstru='setinstru' v-on:maximizeme="maximizeWidget" :maximized='maximized' :tileindex='item.i' :containerheight="((item.h)*rowheight-10)" :editmode='isInEdit' :viewmode='loaddata' >
 																	</kotile>
 															<!-- </div> -->
-					
+
 												</grid-item>
 											</grid-layout>
 										</div>
@@ -354,10 +355,18 @@ export default {
 	methods : {
 		cleanuplayout:function(){
 			var self=this;
-			this.layout.forEach(function(e){
-				var index=self.pwidgetlist.indexOf(e.c.id)
-				e.i=index+""
-			})
+			var l =[];
+			var ct=0;
+			this.layout.forEach(function(e,index){
+				if(e.c.count!=null){
+						var item=e;
+						item.i=ct+"";
+						l.push(item)
+						ct++;
+					}
+			});
+			this.layout=JSON.parse(JSON.stringify(l))
+			this.pwidgetlist=this.pwidgetlist.filter(function(e){return e!=""})
 		},
 		checkGriddim:function(){
 			this.layoutdim.x0=this.$refs.gridl.getBoundingClientRect().left
@@ -472,7 +481,7 @@ export default {
 			var i =this.pwidgetlist.indexOf(id)
 			this.layout.splice(i,1);
 			this.pwidgetlist.splice(i,1);
-			this.cleanuplayout()
+			// this.cleanuplayout()
 		},
 		removeAll:function(){
 			var n=this.pwidgetlist.length;
@@ -549,9 +558,14 @@ export default {
 				obj.selindex=0; //default to select the first instrument
 				console.log(obj)
 				item.c = JSON.parse(JSON.stringify(obj));
-				item.i=this.layout.length+"";
-				this.layout.push(item)
-				this.pwidgetlist.push(obj.id)
+				var max = 0
+				if(this.layout.length>0){
+					max= Math.max.apply(null, this.layout.map(function(e){return Number(e.i)}))+1
+				}
+				item.i=max+"";
+				this.layout.unshift(item)
+				this.pwidgetlist.unshift(obj.id)
+				// this.cleanuplayout()
 			}
 		},
 		hoverin (e) {
@@ -800,5 +814,9 @@ ul.wlayout li {
 	background-color:transparent;
 	display: flex;
 	flex-direction:column;
+	transition: all 200ms ease;;
+}
+.vue-grid-item.inedit {
+		transition: none;
 }
 </style>

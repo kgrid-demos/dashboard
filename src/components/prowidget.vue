@@ -112,7 +112,6 @@
   },
     data () {
       return {
-        datasettings: {},
         selectedinstrname: "",
         custfreq:"",
         sendnotification:false,
@@ -187,29 +186,21 @@
     created: function() {
       var self = this;
       const obj = {"id":this.$route.params.id,"group":this.currentGroup.id,"wid": this.object.id};
-      if (this.$store.getters.getDataSettings(obj)) {
-        this.datasettings = JSON.parse(JSON.stringify(this.$store.getters.getDataSettings(obj)));
-        // console.log(this.datasettings)
-        this.selectedinstrname = this.instruments[this.datasettings.selindex].name;
-        this.initChartOption()
-      }else{
-        if(this.object.selindex!=-1){
+      if(this.object.selindex!=-1){
           this.selectedinstrname = this.instruments[this.object.selindex].name;
-        }else {
+      }else {
             this.selectedinstrname = this.instruments[0].name;
-        }
-        if(this.selectedinstrname!=""){
+      }
+      if(this.selectedinstrname!=""){
           this.initChartOption()
         }
-      }
+
     },
     watch: {
       selectedinstrname: function(){
         var stat={id:this.object.id,sel:false,selindex:-1}
         if(this.selectedinstrname!=""){
           this.initChartOption()
-          this.datasettings.selectedinstrument = this.selectedinstr
-          this.datasettings.sendnotification = this.sendnotification
           stat.sel=true
           stat.selindex=this.selectedinstrindex
         }
