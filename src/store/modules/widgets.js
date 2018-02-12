@@ -117,8 +117,15 @@ const _widgets= [
   "instruments":[  { name:"Advance Directive",description: "End of Life/Advance Directive", value: 1, "modulecount": 1, "bwpoints": 0} ]},
   { "id":"SM-08","label":"Sexual Health",  "type":"SM",    "constraint":{}, "sel":false,"selindex":-1,
   "cancertype":[  {id:0}, {id:1},{id:2}],
-  "instruments":[  { name:"Sexual Health",description: "Sexual Health", value: 1, "modulecount": 4, "bwpoints": 1} ]}
-                        ]
+  "instruments":[  { name:"Sexual Health",description: "Sexual Health", value: 1, "modulecount": 4, "bwpoints": 1} ]},
+  { "id":"TRO-01","label":"Temperature", "type":"TRO",    "constraint":{}, "sel":false, "selindex":-1,
+  "cancertype":[  {id:99}], "instruments":[ { name: "Temperature in Fahrenheit", value: 1, "bwpoints":14,
+                    "dow":["Su","Mo","Tu","We","Th","Fr","Sa"], "range":{min:-20,max:130,inc:1,step:1},
+                    "unit":" Fahrenheit", "ryg":[{min:-20,max:40,color:"blue"}, {min:40,max:80, color:"green"}, {min:80,max:130,color:"red"}]} ]},
+  { "id":"TRS-01","label":"Tornado Safety",  "type":"TRS",    "constraint":{}, "sel":false,"selindex":-1,
+  "cancertype":[  {id:99}],
+  "instruments":[  { name:"Tornado Safety",description: "Tornado Safety training video", value: 1, "modulecount": 1, "bwpoints": 1} ]}
+  ]
 
 const _freqOptions = [
   {"label":"At Will", "bwdatapt":0},

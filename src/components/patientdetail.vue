@@ -19,7 +19,7 @@
 						</router-link>
 					</div>
 					<div class="col-md-10 col-sm-10 col-xs-10 pad-0">
-						<h1 class='pad-l-10'>{{patient.name}}<small class='pad-l-20'>Age {{patient.age}}, {{patient.gender}}</small></h1>
+						<h1 class='pad-l-10' >{{patient.name}}<small class='pad-l-20' v-if='patient.age!=""'>Age {{patient.age}}, {{patient.gender}}</small></h1>
 					</div>
 				</div>
 			</div>
@@ -213,13 +213,15 @@ export default {
 		timetitle: function(){
 			switch (this.timepoint){
 				case 1:
-					return 'Initialization of PRO-SM tools'
+					return 'Initialization of Dashboard'
 				case 2:
 					switch(this.patient.id){
 						case 'PA-67034-001':
 							return 'Twelve weeks into the treatment'
+						case 'PA-67034-007':
+								return 'Eight weeks into the treatment'
 						default:
-							return 'Eight weeks into the treatment'
+							return 'Eight weeks since start'
 
 					}
 			}
@@ -357,7 +359,7 @@ export default {
 			var self=this;
 			var l =[];
 			var ct=0;
-			this.layout.forEach(function(e,index){
+			this.layout.forEach(function(e){
 				if(e.c.count!=null){
 						var item=e;
 						item.i=ct+"";
@@ -365,6 +367,7 @@ export default {
 						ct++;
 					}
 			});
+			this.layout.splice(0,this.layout.length)
 			this.layout=JSON.parse(JSON.stringify(l))
 			this.pwidgetlist=this.pwidgetlist.filter(function(e){return e!=""})
 		},
@@ -441,13 +444,13 @@ export default {
 			},3000);
 				}
     },
-		getHeight:function(i){
-				if(this.$refs.item[i]){
-					return this.$refs.item[i].$el.clientHeight;
-				}else {
-					return 120;
-				}
-		},
+		// getHeight:function(i){
+		// 		if(this.$refs.item[i]){
+		// 			return this.$refs.item[i].$el.clientHeight;
+		// 		}else {
+		// 			return 120;
+		// 		}
+		// },
 		loadDefault:function(){
 			var self = this;
 			this.layout.splice(0,1);
@@ -481,7 +484,7 @@ export default {
 			var i =this.pwidgetlist.indexOf(id)
 			this.layout.splice(i,1);
 			this.pwidgetlist.splice(i,1);
-			// this.cleanuplayout()
+		  // this.cleanuplayout()
 		},
 		removeAll:function(){
 			var n=this.pwidgetlist.length;
@@ -565,7 +568,7 @@ export default {
 				item.i=max+"";
 				this.layout.unshift(item)
 				this.pwidgetlist.unshift(obj.id)
-				// this.cleanuplayout()
+			  // this.cleanuplayout()
 			}
 		},
 		hoverin (e) {
@@ -726,6 +729,12 @@ export default {
 }
 .widgetTitle.PRO {
 	background-color: #853754;
+}
+.widgetTitle.TRO {
+	background-color: #ba5827;
+}
+.widgetTitle.TRS {
+	background-color: #00b5AF;
 }
 .widgetTitle.SM {
 	background-color: #20657e;

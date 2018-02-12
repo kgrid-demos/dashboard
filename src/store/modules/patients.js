@@ -1,6 +1,6 @@
 import widgets from './widgets.js'
 
-const _patients= [	{ "id":"PA-67034-004", "name":"Larry Lambert", "age":"38", "gender":"male", "type":2,"group":[{"id":6},{"id":7},{"id":8}],"diagnosis":'A high-grade invasive ductal breast carcinoma with ER negative, PR negative, HER2 negative.',"treatment":'Chemotherapy after mastectomy: Dose-dense doxorubicin and cyclophosphamide (ddAC) every 14 days for 4 cycles, followed by weekly paclitaxel ("T") for 12 weeks.'},
+const _patients= [	{ "id":"training", "name":"Training", "age":"", "gender":"", "type":99,"group":[{"id":0},{"id":1},{"id":2}]},
 			{ "id":"PA-67034-001", "name":"Ms. Green", "age":"38", "gender":"female", "type":0,"group":[{"id":0},{"id":1},{"id":2},{"id":3},{"id":4},{"id":5}]},
 			{ "id":"PA-67034-007", "name":"Mr. Brown", "age":"62", "gender":"male", "type":1,"group":[{"id":0},{"id":1},{"id":2},{"id":3},{"id":4},{"id":5}]}
 ]

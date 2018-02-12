@@ -1,6 +1,6 @@
 <template>
 		<div class="container kgl-icon"
-		  :class="{ active: object.count>=0 , pro:object.id.includes('PRO'), sm:object.id.includes('SM'), tct:object.id.includes('TCT'), tmo:object.id.includes('TMO')}"
+		  :class="{ active: object.count>=0 , pro:object.id.includes('PRO'), sm:object.id.includes('SM'), tro:object.id.includes('TRO'), trs:object.id.includes('TRS')}"
 			v-bind:id="object.id">
 			<p :style="fontStyles">{{object.label}}</p>
 			<div class="badge" v-show='object.count>0'>
@@ -65,11 +65,11 @@
 		background-color: #20657e;
 		color: #fff;
 	}
-	.kgl-icon.active.tct {
+	.kgl-icon.active.tro{
 		background-color: #ba5827;
 		color: #fff;
 	}
-	.kgl-icon.active.tmo {
+	.kgl-icon.active.trs {
 		background-color: #00b5AF;
 		color: #fff;
 	}
