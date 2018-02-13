@@ -1,32 +1,5 @@
 <template id='navbar'>
 	<div class='kgl-nav noselect'>
-		<b-modal centered size="lg" v-model='settingShow' title='Setting' id="setting" ok-title='Apply Changes' @ok='savesetting'>
-			<div clas='row'>
-				<b-col sm="3">Cancer Type</b-col>
-				<b-col sm="9">
-					<b-form-group label="">
-							<b-form-radio-group id="radios1" buttons v-model="cancertypeselection" name="radioOpenions">
-								<b-form-radio value="0">{{options[0].text}}</b-form-radio>
-								<b-form-radio value="1">{{options[1].text}}</b-form-radio>
-								<b-form-radio value="2">{{options[2].text}}</b-form-radio>
-							</b-form-radio-group>
-					</b-form-group>
-				</b-col>
-				</div>
-				<div clas='row'>
-					<b-col sm="3"><label for="groupid">Test User ID</label></b-col>
-					<b-col sm="9"><b-form-input id="groupid" type="number" v-model='groupid'></b-form-input></b-col>
-				</div>
-			 <div clas='row' style="position:absolute;    bottom: 25px;   padding-left: 300px;">
-				 <b-form-checkbox id="checkbox1"
-									v-model="startwithtrain"
-									value="true"
-									style="text-align:right; ">
-									Start with Training session
-								</b-form-checkbox>
-			 </div>
-
-	 </b-modal>
 		<a class='navbar-brand kgl-1' @click='stationselector'>
 			<span>{{dashboard}}</span>
 		</a>
@@ -120,9 +93,8 @@ export default {
 		setupstation:function(){
 			var r = this.$route.fullPath;
 			if(true) console.log("Route Path: "+r);
-			if(r!='/'){
-				this.$eventBus.$emit("config");
-			}// this.settingShow=true;
+			this.$eventBus.$emit("config",r);
+			// this.settingShow=true;
 		},
 		genpatientdata: function(){
 			const patientList = this.$store.getters.getPatientMasterList;
