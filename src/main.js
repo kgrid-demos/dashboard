@@ -3,6 +3,8 @@ import VueRouter from 'vue-router';
 import Vuex from 'vuex';
 import draggable from 'vuedraggable';
 import VueGridLayout from 'vue-grid-layout';
+import BootstrapVue from 'bootstrap-vue'
+
 import App from './App';
 import store from './store';
 import eventBus from './eventBus.js';
@@ -26,7 +28,7 @@ Vue.prototype.$moment = moment
 Vue.prototype.$eventBus= eventBus
 // install router
 Vue.use(VueRouter);
-
+Vue.use(BootstrapVue);
 // install Vee-Validate
 //Vue.use(VeeValidate);
 
@@ -34,8 +36,8 @@ Vue.use(VueRouter);
 Vue.use(Vuex);
 
 // create router
-const routes = [
-                { path : '/', component : require('./components/home.vue')	},
+const routes = [{ path : '/', component : require('./components/cover.vue')	},
+                { path : '/picker', component : require('./components/home.vue')	},
                 { path : '/about', component: require('./components/about.vue') },
                 { path : '/datagenerator', component: require('./components/datagenerator.vue') },
                 { path : '/layout/:id', name : 'patient', component : require('./components/patientdetail.vue'), data: function(){
@@ -91,14 +93,11 @@ var vm = new Vue({
 		var self=this;
     console.log('Dashboard Web Application');
   	this.$eventBus.$on("return", function(){
-			router.push({ path: '/' });
+			router.push({ path: '/picker' });
 		});
 		this.$eventBus.$on("patientSelected", function(id){
 			router.push({ name:'patient' ,params: { id: id}});
 		});
-	  this.$eventBus.$on("patientRemoved", function(obj){
-			router.push({ path: '/' });
-	  });
 
 	}
 	}).$mount('#app');

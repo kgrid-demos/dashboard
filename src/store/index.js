@@ -150,6 +150,9 @@ const store = new Vuex.Store({
     getScreenname:state=>{
       return state.screenname
     },
+    gettrainmode:state=>{
+      return true;
+    },
     gettoday:state=>{
       return state.today
     },

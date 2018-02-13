@@ -53,7 +53,7 @@ export default {
 	data : function() {
 		return {
 			searchQuery: '',
-			gridColumns: ['id','name', 'age','gender','type'],
+			gridColumns: ['id','name', 'age','gender'],
 		}
 	},
 	created : function() {

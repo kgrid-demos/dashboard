@@ -14,12 +14,17 @@
 				<div class='row mar-0'>
 					<div class='col-md-1 col-sm-1 col-xs-1  pad-0' v-if='isInEdit'></div>
 					<div class='col-md-1 col-sm-1 col-xs-1'>
-						<router-link  class='float-r' to='/' v-if='!maximized & !isInEdit' data-toggle="tooltip" title="Click to go back to the patient list">
+						<router-link  class='float-r' to='/picker' v-if='!maximized && !isInEdit && !trainmode' data-toggle="tooltip" title="Click to go back to the patient list">
 							<i class='fa fa-arrow-left'></i>
 						</router-link>
 					</div>
-					<div class="col-md-10 col-sm-10 col-xs-10 pad-0">
+					<div class="col-md-6 col-sm-10 col-xs-10 pad-0">
 						<h1 class='pad-l-10' >{{patient.name}}<small class='pad-l-20' v-if='patient.age!=""'>Age {{patient.age}}, {{patient.gender}}</small></h1>
+					</div>
+					<div class='col-md-4 col-sm-1 col-xs-1'>
+						<router-link  class='float-r' to='/picker' v-if='trainmode && !isInEdit && loaddata' data-toggle="tooltip" title="Click to go to the patient list">
+							<span style='border:1px solid #0075bc; padding:5px 10px; font-weight:600;'>The training is finished. Click here to continue</span>
+						</router-link>
 					</div>
 				</div>
 			</div>
@@ -174,7 +179,9 @@ export default {
 	updated: function() {
 	  },
 	computed : {
-
+		trainmode:function(){
+			return this.$store.getters.gettrainmode
+		},
 		widgetInuseList:function(){
 			var self=this;
 			return JSON.parse(JSON.stringify(this.widgetMasterList.filter(function(e){return (this.indexOf(e.id)>=0);},self.pwidgetlist)))

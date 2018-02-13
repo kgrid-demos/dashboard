@@ -129,8 +129,8 @@ const getters = {
     return function() {
       var index = _patients.map(function(e){return e.id}).indexOf(state.patientid)
       if(index!=-1){
-        return _patients[index] }
-      else {
+        return _patients[index]
+			}else {
         return {}
       }
     }
