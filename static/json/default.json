@@ -12,7 +12,7 @@
 		],
 		"maxgroupinuse":6,
 		"patientMasterList":  [
-			{ "id":"training", "name":"TRAINING", "age":"", "gender":"", "type":99,"group":[{"id":0},{"id":1},{"id":2},{"id":3},{"id":4},{"id":5}]},
+			{ "id":"training", "name":"TRAINING", "age":"", "gender":"", "type":99,"group":[{"id":5}]},
 			{ "id":"PA-67034-001", "name":"Ms. Green", "age":"38", "gender":"female", "type":0,"group":[{"id":0},{"id":1},{"id":2},{"id":3},{"id":4},{"id":5}]},
 			{ "id":"PA-67034-007", "name":"Mr. Brown", "age":"62", "gender":"male", "type":1,"group":[{"id":0},{"id":1},{"id":2},{"id":3},{"id":4},{"id":5}]}
 		],
