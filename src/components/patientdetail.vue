@@ -22,9 +22,9 @@
 						<h1 class='pad-l-10' >{{patient.name}}<small class='pad-l-20' v-if='patient.age!=""'>Age {{patient.age}}, {{patient.gender}}</small></h1>
 					</div>
 					<div class='col-md-4 col-sm-1 col-xs-1'>
-						<router-link  class='float-r' to='/picker' v-if='trainmode && !isInEdit && loaddata' data-toggle="tooltip" title="Click to go to the patient list">
+						<div  class='float-r' v-if='trainmode && !isInEdit && loaddata' data-toggle="tooltip" @click='settrainingmode' title="Click to go to the patient list">
 							<span style='border:1px solid #0075bc; padding:5px 10px; font-weight:600;'>The training is finished. Click here to continue</span>
-						</router-link>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -362,6 +362,10 @@ export default {
 		}
 	},
 	methods : {
+		settrainingmode:function(){
+			this.$router.push('/picker')
+			this.$store.commit('settrainingmode',false)
+		},
 		cleanuplayout:function(){
 			var self=this;
 			var l =[];

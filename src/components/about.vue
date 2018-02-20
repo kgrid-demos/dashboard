@@ -15,10 +15,6 @@ export default {
 		return {
 		}
 	},
-	created : function() {
-	},
-	mounted:function(){
-	},
 	components:{
 		'applayout':applayout
 		}

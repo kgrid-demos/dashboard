@@ -35,7 +35,8 @@ const store = new Vuex.Store({
       maxgroupinuse:6,
       patientData:[],
       today:0,
-      screenname:'Patient List'
+      screenname:'Patient List',
+      trainingmode:true
     },
   mutations: {
     settoday(state,timestamp){
@@ -144,14 +145,18 @@ const store = new Vuex.Store({
     },
     setScreenname(state,s){
       state.screenname=s
+    },
+    settrainingmode(state,b){
+      state.trainingmode=b
     }
+
   },
   getters: {
     getScreenname:state=>{
       return state.screenname
     },
     gettrainmode:state=>{
-      return true;
+      return state.trainingmode;
     },
     gettoday:state=>{
       return state.today
@@ -174,11 +179,6 @@ const store = new Vuex.Store({
       }else {
         return []
       }
-    },
-    getNotificationList:state=> {
-      return [ {patient:{name:"Bridget Kearns", age:52, gender:"Female"}, timestamp: '2017-10-09',notes:[{"type":-1,"text":"Pain rating scale has decreased from 7 to 3 in last 24 hours"},{"type":0,"text":"Anxiety remains at 13 each of the last 13 days"}]},
-      {patient:{name:"Tyler Durden", age:55, gender:"Male"}, timestamp: '2017-10-09T03:00:04Z',notes:[{"type":1,"text":"Pain rating scale has increased from 2 to 8 in last 24 hours"}]}
-            ]
     },
     getpatientbyid:state => {
       var self=this;

@@ -147,6 +147,9 @@ export default {
 };
 </script>
 <style scoped>
+.mar-0 {
+	margin:0px;
+}
 form#search {
 	width:100%;
 		padding:10px 20px 10px 20px;

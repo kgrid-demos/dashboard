@@ -30,8 +30,7 @@ const routes = [{ path : '/', component : require('./components/cover.vue')	},
                 { path : '/datagenerator', component: require('./components/datagenerator.vue') },
                 { path : '/layout/:id', name : 'patient', component : require('./components/patientdetail.vue'), data: function(){
                 	   	console.log("current Patient ID:"+ this.$route.params.id);
-                    }	},
-                { path : '/notification', component: require('./components/notification.vue') },
+                    }	}
                 ];
 const router = new VueRouter({
 	routes : routes,

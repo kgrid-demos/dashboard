@@ -3,40 +3,29 @@
 	<modal v-if="settingShow">
 		<h3 slot="header">Set up the test station</h3>
 		<div slot="body">
-			<div class='row' >
-				<div class='col-md-4 col-sm-3 col-xs-3 ' @click='selectStation(-1)' style="padding:0px;"><div class='ft-wt-6 ft-sz-16 mar-top10'><p class='ft-wt-6 ft-sz-16'>Cancer Type</p></div></div>
+			<div class='row' style="margin:10px 0px;">
+				<div class='col-md-1 col-sm-1 col-xs-1'></div>
+				<div class='col-md-4 col-sm-4 col-xs-4 ' @click='selectStation(-1)' style="padding:0px;"><div class='ft-wt-6 ft-sz-16 mar-top10'><p class='ft-wt-6 ft-sz-16'>Cancer Type</p></div></div>
 				<div class='col-md-2 col-sm-2 col-xs-2 ' @click='selectStation(0)' style="padding:0px;"><div class='station' :class='{active:cancertypeselection==0}'><p>Breast Cancer</p></div></div>
 				<div class='col-md-2 col-sm-2 col-xs-2 ' @click='selectStation(1)' style="padding:0px;"><div class='station' :class='{active:cancertypeselection==1}'><p>GI Cancer</p></div></div>
 				<div class='col-md-2 col-sm-2 col-xs-2 ' @click='selectStation(2)' style="padding:0px;"><div class='station' :class='{active:cancertypeselection==2}'><p>Lung Cancer</p></div></div>
 				<div class='col-md-1 col-sm-1 col-xs-1'></div>
 			</div>
-			<!-- <div clas='row' style="min-width:200px;">
-				<b-col sm="3">Cancer Type</b-col>
-				<b-col sm="9">
-					<b-form-group label="">
-							<b-form-radio-group id="radios1" buttons v-model="cancertypeselection" name="radioOpenions">
-								<b-form-radio value="0">{{options[0]}}</b-form-radio>
-								<b-form-radio value="1">{{options[1]}}</b-form-radio>
-								<b-form-radio value="2">{{options[2]}}</b-form-radio>
-							</b-form-radio-group>
-					</b-form-group>
-				</b-col>
-				</div>
-				<div clas='row' style="min-width:200px;">
-					<b-col sm="3"><label for="groupid">Test User ID</label></b-col>
-					<b-col sm="9"><b-form-input id="groupid" type="number" v-model='groupid'></b-form-input></b-col>
-				</div> -->
-			 <!-- <div clas='row' style="min-width:100px;">
-				 <b-form-checkbox id="checkbox1"
-									v-model="startwithtrain"
-									value="true"
-									style="text-align:left; ">
-									Start with Training session
-								</b-form-checkbox>
-			 </div> -->
-			 <div class='row'>
-				 <button @click='modalhide'>OK</button>
-			 </div>
+			<div class='row' style="margin:10px 0px;">
+				<div class='col-md-1 col-sm-1 col-xs-1'></div>
+				<div class='col-md-4 col-sm-4 col-xs-4 ' style="padding:0px;"><div class='ft-wt-6 ft-sz-16 mar-top10'><p class='ft-wt-6 ft-sz-16'>Test Station ID</p></div></div>
+				<div class='col-md-6 col-sm-6 col-xs-6' style="padding:0px;"><input type='number' v-model='groupid' /></div>
+				<div class='col-md-1 col-sm-1 col-xs-1' style="padding:0px;"></div>
+			</div>
+			<div class='row' style="margin:10px 0px;">
+				<div class='col-md-1 col-sm-1 col-xs-1'></div>
+				<div class='col-md-4 col-sm-4 col-xs-4 ' style="padding:0px;"><div class='ft-wt-6 ft-sz-16 mar-top10'><p class='ft-wt-6 ft-sz-16'>Start with Training Mode</p></div></div>
+				<div class='col-md-6 col-sm-6 col-xs-6' style="padding:0px;"><input type='checkbox' v-model='trainstart'/></div>
+				<div class='col-md-1 col-sm-1 col-xs-1' style="padding:0px;"></div>
+			</div>
+		 <div class='row' style='text-align:center;'>
+				 <button @click='modalhide'>Apply</button>
+			</div>
 		</div>
 	</modal>
 	<applayout>
@@ -66,6 +55,7 @@ export default {
 			searchQuery: '',
 			cancertypeselection:0,
 			groupid:0,
+			trainstart:true,
 			startwithtrain:true,
 			gridColumns: ['id','name', 'age','gender','type'],
 			options:['Breast Cancer', "GI Cancer", "Lung Cancer"]
@@ -121,10 +111,14 @@ export default {
 	},
 	methods : {
 		savesetting:function(){
-			this.settingShow=true;
+			this.settingShow=false;
 			this.$store.commit('selstation',{value:i});
 		},
 		modalhide:function(){
+			this.$store.commit('selstation',{'value':this.cancertypeselection})
+			this.$store.commit('setgroupid',{'value':this.groupid});
+			this.$store.commit('setcurrentgroupid',{'value':this.groupid});
+			this.$store.commit('settrainingmode',this.trainstart)
 			this.settingShow=false
 		},
 		selectStation: function(i){
