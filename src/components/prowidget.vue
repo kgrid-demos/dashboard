@@ -2,7 +2,7 @@
   <div class="widgetcontainer noselect">
     <div v-if="!editmode" >
     <div class="widgetalert" v-if="!maximized ">
-      <div class="ft-sz-12 pad-l-8" >
+      <div class="ft-sz-11 ft-wt-6 pad-l-8" >
         <span>{{selectedinstr.unit}}</span>
         <i v-if="hasalert"  @click='maximizeWidget' title="Click to view alert" class="fa fa-exclamation-circle warning pad-l-5"></i>
         <i v-if="hasnotes"  @click='maximizeWidget' title="Click to view patient note" class="fa fa-file-alt notes pad-l-5"></i>
@@ -98,7 +98,6 @@
       </div>
     </div>
   </div>
-
 </div>
 </template>
 <script>
@@ -194,7 +193,6 @@
       if(this.selectedinstrname!=""){
           this.initChartOption()
         }
-
     },
     watch: {
       selectedinstrname: function(){
@@ -413,7 +411,6 @@
             }
           }
         }
-
       );
       if(this.maximized){
         var v={};
@@ -453,12 +450,10 @@
     },
   }
 </script>
-
 <style scoped>
   .widgetcontainer{
     width:100%;
-    height:100%;
-
+    height:90%;
   }
   .widgetalert{
     height: 20px;

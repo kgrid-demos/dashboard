@@ -1,18 +1,16 @@
 <template id='navbar'>
 	<div class='kgl-nav noselect'>
-		<a class='navbar-brand kgl-1' @click='stationselector'>
+		<a class='navbar-brand kgl-1' @click='stationselector' >
 			<span>{{dashboard}}</span>
 		</a>
-		<span class='navbar-label kgl-1'>{{screenname}}</span>
+		<span class='navbar-label kgl-1' v-if='screenname!=""'>{{screenname}}</span>
 		<nav class='navbar kgl-1 kg-bg-color kg-color'>
 			<ul class='nav navbar-nav'>
-				<router-link tag='li':class="{'active': $route.fullPath === '/'}" to='/' v-show='false'><a><span>Patients</span></a></router-link>
-				<router-link tag='li' :class="{'active': $route.fullPath === '/notification'}" to='/notification' v-show='false'><a><span>Notifications</span><div style='color:#bc2526;top:0px;right:-10px;position:absolute;font-size:10px;'><i class='fa fa-circle' v-if='notifCount>0'></i></div></a></router-link>
 				<li class='test'>
 					<div class='dropdown' id="userDropdown" >
 						<a><span v-on:mouseenter='trigDropdown' v-on:mouseleave='checkDropdown'>Administrator</span></a>
 						<ul class='dropdown-menu' v-if='showDropdown' v-on:mouseleave='leaveDropdown'>
-							<li class='test' @click='setupstation'><a><span>Setup</span></a></li>
+							<li class='test' v-if='fullpath=="/"'@click='setupstation'><a><span>Setup</span></a></li>
 							<li class='test' @click='resetstore'><a><span>Reset</span></a></li>
               <router-link tag='li' :class="{'active': $route.fullPath === '/datagenerator'}" to='/datagenerator'><a><span>Generate Data</span></a></router-link>
 						</ul>
@@ -22,7 +20,6 @@
 		</nav>
 	</div>
 </template>
-
 <script>
 import resetState from '../store/index.js'
 export default {
@@ -30,12 +27,6 @@ export default {
   data: function () {
     return {
  			showDropdown : false,
-			settingShow:false,
-			options:['Breast Cancer', "GI Cancer", "Lung Cancer"],
-			cancertypeselection:0,
-						startwithtrain:true,
-
-								groupid:0,
     };
   },
   created: function() {
@@ -47,22 +38,19 @@ export default {
 		},
 		dashboard: function(){
 			var d= 'Patient Data Dashboard';
-			if(this.$store.getters.getCurrentStation.label!=""){
-						d=this.$store.getters.getCurrentStation.label + ' '+d;
-			}
 			return d;
 		},
 		screenname: function(){
 			return this.$store.getters.getScreenname;
 		},
-		notifCount: function() {
-				return this.$store.getters.getNotificationList.length;
-			}
+		training:function(){
+			return this.$store.getters.gettrainmode;
+		},
+		fullpath:function(){
+			return this.$route.fullPath;
+		}
   },
   methods: {
-		savesetting:function(){
-			this.settingShow=true;
-		},
 		trigDropdown: function(){
 			this.showDropdown=true;
 			},
@@ -78,118 +66,20 @@ export default {
 				window.localStorage.removeItem("first")
 				window.location.reload(true)
 				resetState()
-			} else {
 			}
 		},
 		stationselector:function(){
-			var r = this.$route.fullPath;
-			if(this.debugging) console.log("Route Path: "+r);
-			if(r!='/'){
-				this.$router.push({ path: '/picker' });
-			}else{
-				this.$store.commit('selstation',{value:-1});
+			if(!this.training){
+				if(this.path!='/picker'){
+					this.$router.push({ path: '/picker' });
+				}else{
+					this.$store.commit('selstation',{value:-1});
+				}
 			}
 		},
 		setupstation:function(){
-			var r = this.$route.fullPath;
-			if(true) console.log("Route Path: "+r);
-			this.$eventBus.$emit("config",r);
-			// this.settingShow=true;
+			this.$eventBus.$emit("config",this.fullpath);
 		},
-		genpatientdata: function(){
-			const patientList = this.$store.getters.getPatientMasterList;
-			var widgetList = [];
-			const basedataurl = 'http://localhost:3001/patients/';
-			let that = this;
-      let url;
-			console.log(patientList);
-			patientList.forEach(function(patient) {
-			  if(patient.id) {
-				 	widgetList=that.$store.getters.getwidgetlistbypatient(patient)
-			    url = basedataurl + patient.id;
-          let data = {};
-			    widgetList.forEach(function(widget){
-            const widgetDataID = widget.id + "-data";
-			      if(widget.id.startsWith("PRO")) {
-			        const proMaxVal = 10;
-			        const proFreq = 14; // Data points per week
-			        const weeksToGenerate = 2;
-              data = that.genrandomprodata(widgetDataID, data, proMaxVal, weeksToGenerate);
-            } else {
-			        const smMaxVal = 2; // Only allow completed and skipped data
-			        const smFreq = 7; // Self-evals per week
-			        const weeksToGenerate = 2;
-              data = that.genrandomsmdata(widgetDataID, data, smMaxVal, smFreq, weeksToGenerate);
-						}
-			  	});
-          that.$http.put(url, data).catch(function (ex) {
-            if(ex.response.status === 404) {
-            }
-          });
-				}
-			});
-			this.$store.commit("resetPatientData");
-		},
-    genrandomsmdata: function(widgetDataID, data, maxVal, freq, weeks){
-		  let recordDate = this.$moment().set({'hour': 12, 'minute': 0, 'second': 0}).subtract(7 * weeks, 'd');
-      data[widgetDataID] = [];
-		  for(let i = 0; i < freq * weeks; i++) {
-		    // Once per day
-        recordDate.add(1, 'd');
-        data[widgetDataID].push({"date": this.$moment(recordDate).unix(), "value": this.getRandomSMValue(maxVal)});
-			}
-			return data;
-		},
-    genrandomprodata: function(widgetDataID, data, maxVal, weeks){
-      let recordDate = this.$moment().set({'hour': 0, 'minute': 0, 'second': 0}).subtract(7 * weeks, 'd');
-      let priorVal = 3;
-      let note = "";
-      data[widgetDataID] = [];
-      for(let i = 0; i < 28 * weeks; i++) {
-
-        recordDate.add(360, 'm');
-        priorVal = this.getRandomPROValue(maxVal, priorVal);
-        note = this.genNote(priorVal, maxVal);
-
-        let randomTime = this.getRandomMinutes();
-        data[widgetDataID].push({"date": this.$moment(recordDate).add(randomTime, 'm').unix(), "value": priorVal, "note": note});
-
-      }
-      return data;
-    },
-		getRandomSMValue: function(max) {
-      // Bias the data slightly towards completions
-			let val =  Math.floor(Math.random() * (max) * 2) + 1;
-			if (val > 2) {
-			  val = 2;
-      }
-      return val;
-		},
-		getRandomMinutes: function() {
-      // A random number of minutes between -2.5 hrs and + 2.5 hrs to add from the usual 6-hour increments
-      return Math.floor(Math.random() * 300) - 150;
-    },
-    getRandomPROValue: function(max, priorVal) {
-
-      // Wiener process-style random walk from the prior value biased towards the bottom of the scale
-      let val = Math.round((Math.random() * Math.random() - 0.4) * 15.25 + 0.5) + priorVal;
-      if(val > max) {
-        return max;
-			}
-			if(val < 0) {
-        return 0;
-			}
-			return val;
-    },
-		genNote: function(value, maxVal) {
-      if(value < maxVal/3) {
-        return "";
-			}
-			if(value < (maxVal/3)*2) {
-        return "I'm feeling a little distressed";
-			}
-			return "I'm not feeling well at all";
-		}
   }
 };
 </script>
@@ -255,9 +145,6 @@ export default {
 	border-bottom:1px solid #0075bc;
 	background-color:#fff;
 	color:#0075bc;
-}
-.kgl-1 .navbar-right {
-	margin-right: 0px;
 }
 #userDropdown.dropdown ul{
 	border-bottom-left-radius: 10px;

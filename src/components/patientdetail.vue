@@ -11,7 +11,7 @@
 	<applayout>
 		<div slot='banner'>
 			<div class='bannercontent noselect' >
-				<div class='row mar-0'>
+				<div class='row' style='margin:0;'>
 					<div class='col-md-1 col-sm-1 col-xs-1  pad-0' v-if='isInEdit'></div>
 					<div class='col-md-1 col-sm-1 col-xs-1'>
 						<router-link  class='float-r' to='/picker' v-if='!maximized && !isInEdit && !trainmode' data-toggle="tooltip" title="Click to go back to the patient list">
@@ -45,9 +45,9 @@
 				</div>
 				<div class='col-md-1 col-sm-1 col-xs-1 ht-full  pad-0' v-else></div>
 				<div class='col-md-10 col-sm-10 col-xs-10 kg-bg-custom-1 pdd-panel ht-full pad-0' :class='{fading:fading, inedit:isInEdit}'>
-					<div class='row ht-50'>
-						<div class='col-md-4 col-sm-4 pad-0 noselect' >
-							<div class="pad-l-30 pad-t-20 ft-sz-18 ft-italic ft-wt-6">Time Point {{timepoint}} - {{timetitle}}</div>
+					<div class='row ht-50' style="margin:10px 10px 0px 10px; background-color:#f7f7f7;">
+						<div class='col-md-4 col-sm-4 noselect' >
+							<div class="pad-l-5 pad-t-15 ft-sz-14 ft-italic ft-wt-6">Time Point {{timepoint}} - {{timetitle}}</div>
 								<div class="pad-l-15">
 						</div>
 						</div>
@@ -69,7 +69,7 @@
 							</div>
 						</div>
 						</div>
-						<div 	ref='gridl' style="min-height:600px;margin-top:10px;">
+						<div 	ref='gridl' style="min-height:580px;margin-top:0px;">
 							<grid-layout :layout.sync="layout"
 												:col-num="colnum"
 												:row-height="rowheight"
@@ -88,7 +88,7 @@
 													:w.sync="item.w"
 													:h.sync="item.h"
 													:maxW=6
-													:maxH=3
+													:maxH=6
 													:i="item.i"
 													:class="{inedit:isInEdit}"
 													ref='item'
@@ -97,7 +97,7 @@
 														<div class='noselect' v-if='item.c!=""'>
 															<div class='row mar-0 widgetTitle' :class='item.c.type' >
 																<span class="widgetLabel">{{item.c.label}}</span>
-																<i class='fa fa-window-close' style="font-size:15pt; margin-top:-3px;" v-if='isInEdit' @click='removeWidget(item.c.id)'></i>
+																<i class='fa fa-window-close' style="font-size:16px; margin-top:-2px;" v-if='isInEdit' @click='removeWidget(item.c.id)'></i>
 																<i class='fa fa-window-maximize' v-if='!isInEdit && !maximized && loaddata' title="maximize" style="font-size:11pt" @click='maximizeWidget(item.c.id)'></i>
 																<i class='fa fa-window-restore' v-if='!isInEdit && maximized && loaddata' title="restore"  style="font-size:11pt" @click='restoreLayout'></i>
 															</div>
@@ -147,7 +147,7 @@ export default {
 				disabled: true,
 				ghostClass: 'ghost',
 			},
-			rowheight:100,
+			rowheight:80,
 			maximized:false,
 			showModal:false,
 			fading:false,
@@ -611,11 +611,14 @@ export default {
 }
 .bannercontent h1 {
 	line-height:1.3em;
+	font-size:28px;
+	margin-top:5px;
+	margin-bottom:5px;
 }
 .kg-btn-primary{
 	background-color:#f7f7f7;
 	border:1px solid #0075bc;
-	padding:10px 20px;
+	padding:5px 10px;
 	margin:10px 10px;
 	display:inline-block;
 	color:#0075bc;
@@ -637,9 +640,6 @@ export default {
 }
 .kg-btn-wk:disabled {
 	color:#e7e7e7;
-}
-.kg-btn-primary.lg{
-	width: 180px;
 }
 .kg-btn-primary:disabled  {
 		border:1px solid #c7c7c7;
@@ -834,5 +834,8 @@ ul.wlayout li {
 }
 .vue-grid-item.inedit {
 		transition: none;
+}
+.pad-0 {
+	padding:0px;
 }
 </style>

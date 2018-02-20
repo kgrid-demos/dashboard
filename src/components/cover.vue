@@ -4,10 +4,11 @@
 		<h3 slot="header">Set up the test station</h3>
 		<div slot="body">
 			<div class='row' >
-				<div class='col-md-3 col-sm-3 col-xs-3  pad-0' @click='selectStation(-1)'><div><p>Cancer Type</p></div></div>
-				<div class='col-md-3 col-sm-3 col-xs-3  pad-0' @click='selectStation(0)'><div class='station'><p>Breast Cancer</p></div></div>
-				<div class='col-md-3 col-sm-3 col-xs-3  pad-0' @click='selectStation(1)'><div class='station'><p>GI Cancer</p></div></div>
-				<div class='col-md-3 col-sm-3 col-xs-3   pad-0' @click='selectStation(2)'><div class='station'><p>Lung Cancer</p></div></div>
+				<div class='col-md-4 col-sm-3 col-xs-3 ' @click='selectStation(-1)' style="padding:0px;"><div class='ft-wt-6 ft-sz-16 mar-top10'><p class='ft-wt-6 ft-sz-16'>Cancer Type</p></div></div>
+				<div class='col-md-2 col-sm-2 col-xs-2 ' @click='selectStation(0)' style="padding:0px;"><div class='station' :class='{active:cancertypeselection==0}'><p>Breast Cancer</p></div></div>
+				<div class='col-md-2 col-sm-2 col-xs-2 ' @click='selectStation(1)' style="padding:0px;"><div class='station' :class='{active:cancertypeselection==1}'><p>GI Cancer</p></div></div>
+				<div class='col-md-2 col-sm-2 col-xs-2 ' @click='selectStation(2)' style="padding:0px;"><div class='station' :class='{active:cancertypeselection==2}'><p>Lung Cancer</p></div></div>
+				<div class='col-md-1 col-sm-1 col-xs-1'></div>
 			</div>
 			<!-- <div clas='row' style="min-width:200px;">
 				<b-col sm="3">Cancer Type</b-col>
@@ -45,7 +46,7 @@
 					<p style='text-align:center'></p>
 				</div>
 			</div>
-			<div class='row'>
+			<div class='row' style='text-align:center;'>
 				<button class='knowledgeButton' @click='clickstart'>START</button>
 			</div>
 		</div>
@@ -127,7 +128,8 @@ export default {
 			this.settingShow=false
 		},
 		selectStation: function(i){
-			this.$store.commit('selstation',{value:i});
+			this.cancertypeselection=i;
+			// this.$store.commit('selstation',{value:i});
 		},
 		selectgroup: function(index){
 			this.$store.commit('setgroupid',{value:index});
@@ -176,26 +178,32 @@ export default {
 .station {
 	text-align: center;
 	vertical-align: middle;
-	padding:20px;
+	padding:2px;
  	position:relative;
- 	top:50%;
- 	background-color:#0075bc;
- 	border: 2px solid #0075bc;
- 	margin:20px;
+	width:100%;
+ 	background-color:#fff;
+ 	border: 1px solid #0075bc;
 	cursor:pointer;
-	border-radius: 15px;
 }
 .station p{
-	font-size: 18px;
+	font-size: 14px;
 	font-weight: 700;
+	line-height:1.5em;
+	color:#0075bc;
+	margin:0;
+}
+.station.active {
+	background:#0075bc;
+}
+.station.active p{
 	color:#fff;
-  transform: translateY(35%);
 }
 .station:hover {
-	 background-color:#fff;
+	 background-color:#0075bc;
+	 opacity:0.7;
 }
 .station:hover p{
-		color: #0075bc;
+		color: #fff;
 	}
 h1 small {
 	font-size:50%;
