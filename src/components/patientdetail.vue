@@ -18,12 +18,13 @@
 							<i class='fa fa-arrow-left'></i>
 						</router-link>
 					</div>
-					<div class="col-md-6 col-sm-10 col-xs-10 pad-0">
+					<div class="col-md-10 col-sm-10 col-xs-10 pad-0" v-if='!trainmode'>
 						<h1 class='pad-l-10' >{{patient.name}}<small class='pad-l-20' v-if='patient.age!=""'>Age {{patient.age}}, {{patient.gender}}</small></h1>
 					</div>
-					<div class='col-md-4 col-sm-1 col-xs-1'>
-						<div  class='float-r' v-if='trainmode && !isInEdit && loaddata' data-toggle="tooltip" @click='settrainingmode' title="Click to go to the patient list">
-							<span style='border:1px solid #0075bc; padding:5px 10px; font-weight:600;'>The training is finished. Click here to continue</span>
+					<div class="col-md-10 col-sm-10 col-xs-10 pad-0" v-else>
+						<h1 class='pad-l-10 inline' >{{patient.name}}</h1>
+						<div  class='float-r inline' v-if='trainmode && !isInEdit && loaddata' data-toggle="tooltip" @click='settrainingmode' title="Click to go to the patient list">
+							<div style='border:1px solid #0075bc; padding:8px 10px; font-size:14px; color: #0075bc; text-align:center;font-weight:600;'>All training steps are finished. You can explore the data-loaded dashboard. When ready, click here to continue</div>
 						</div>
 					</div>
 				</div>
@@ -45,7 +46,7 @@
 				</div>
 				<div class='col-md-1 col-sm-1 col-xs-1 ht-full  pad-0' v-else></div>
 				<div class='col-md-10 col-sm-10 col-xs-10 kg-bg-custom-1 pdd-panel ht-full pad-0' :class='{fading:fading, inedit:isInEdit}'>
-					<div class='row ht-50' style="margin:10px 10px 0px 10px; background-color:#f7f7f7;">
+					<div class='row ht-50' style="margin:10px 10px 0px 10px; ">
 						<div class='col-md-4 col-sm-4 noselect' >
 							<div class="pad-l-5 pad-t-15 ft-sz-14 ft-italic ft-wt-6">Time Point {{timepoint}} - {{timetitle}}</div>
 								<div class="pad-l-15">
@@ -53,8 +54,8 @@
 						</div>
 						<div class='col-md-8 col-sm-8 noselect float-r'>
 							<div class='float-r' v-if='isInEdit'>
-								<button class='kg-btn-primary lg' v-if='isInEdit && pwidgetlist.length==0' @click='loadDefault'> Load Default Layout </button>
-								<button class='kg-btn-primary lg' v-if='isInEdit && pwidgetlist.length>0' @click='saveDefault'> Save As Default </button>
+								<!-- <button class='kg-btn-primary lg' v-if='isInEdit && pwidgetlist.length==0' @click='loadDefault'> Load Default Layout </button> -->
+								<!-- <button class='kg-btn-primary lg' v-if='isInEdit && pwidgetlist.length>0' @click='saveDefault'> Save As Default </button> -->
 								<button class='kg-btn-primary lg' v-if='isInEdit && pwidgetlist.length>0 ' @click='removeAll'> Remove All </button>
 								<button class='kg-btn-primary attn lg' v-if='isInEdit' v-show='configready' @click='saveconfig'>Apply Changes</button>
 							</div>
@@ -363,8 +364,8 @@ export default {
 	},
 	methods : {
 		settrainingmode:function(){
-			this.$router.push('/picker')
 			this.$store.commit('settrainingmode',false)
+			this.$router.push('/picker')
 		},
 		cleanuplayout:function(){
 			var self=this;

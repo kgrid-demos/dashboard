@@ -29,7 +29,7 @@ var alertlist=[
 var notelist =[
 	{"PRO-05-notes":[
         {
-  "value": 0,
+  "v": 0,
   "note": "I am having difficulty buttoning my blouse due to constant tingling pain to my fingertips.",
   "date": -30}
        ],
@@ -38,10 +38,10 @@ var notelist =[
 
 
 	{ "PRO-06-notes":[
- {"value": 0,"note": "My itchiness on palms/soles are worsening. There are red peeling rash despite use of Eucerin","date": -20
+ {"v": 0,"note": "My itchiness on palms/soles are worsening. There are red peeling rash despite use of Eucerin","date": -20
  }
 ],"PRO-08-notes":[
- {"value": 0,"note": "There are pain due to mouth sores/ulcerations descpite using Magic Mouthwash; however the sores and pain get better before the start of each new cycle.","date": -31
+ {"v": 0,"note": "There are pain due to mouth sores/ulcerations descpite using Magic Mouthwash; however the sores and pain get better before the start of each new cycle.","date": -31
  }
 ],
       "pid": "PA-67034-007"
@@ -53,60 +53,60 @@ var smlist =[{   "SM-01-data": [],
       "SM-02-data": [],
       "SM-03-data": [],
       "SM-04-data": [
-{"value": 1,"dateOffset": -63},
-{"value": 2,"dateOffset": -48},
-{"value": 3,"dateOffset": -38},
-{"value": 4,"dateOffset": -28}
+{"v": 1,"d": -63},
+{"v": 2,"d": -48},
+{"v": 3,"d": -38},
+{"v": 4,"d": -28}
       ],
       "SM-05-data": [
-{"value": 1,"dateOffset": 10}
+{"v": 1,"d": 10}
       ],
       "SM-06-data": [
-{"value": 1,"dateOffset": 10},
-{"value": 2,"dateOffset": 10},
-{"value": 3,"dateOffset": 10},
-{"value": 4,"dateOffset": 10},
-{"value": 5,"dateOffset": 10},
-{"value": 6,"dateOffset": 10}
+{"v": 1,"d": 10},
+{"v": 2,"d": 10},
+{"v": 3,"d": 10},
+{"v": 4,"d": 10},
+{"v": 5,"d": 10},
+{"v": 6,"d": 10}
       ],
       "SM-07-data": [],
       "SM-08-data": [
-{"value": 1,"dateOffset": -58},
-{"value": 2,"dateOffset": -48},
-{"value": 3,"dateOffset": -26},
-{"value": 4,"dateOffset": -18}
+{"v": 1,"d": -58},
+{"v": 2,"d": -48},
+{"v": 3,"d": -26},
+{"v": 4,"d": -18}
       ],
        "PRO-05-notes":[
        {
- "value": 0,
+ "v": 0,
  "note": "I am having difficulty buttoning my blouse due to constant tingling pain to my fingertips.",
  "date": -30}
       ],
       "pid": "PA-67034-001"
     },
 	{ "SM-01-data": [
-	  {    "value": 1,"dateOffset": 10  },
-	  {    "value": 2,"dateOffset": 10  },
-	  {    "value": 3,"dateOffset": 10  }
+	  {    "v": 1,"d": 10  },
+	  {    "v": 2,"d": 10  },
+	  {    "v": 3,"d": 10  }
 	],"SM-02-data": [
-	  {    "value": 1,"dateOffset": 10  },
-	  {    "value": 2,"dateOffset": 10  },
-	  {    "value": 3,"dateOffset": 10  },
-	  {    "value": 4,"dateOffset": 10  }
+	  {    "v": 1,"d": 10  },
+	  {    "v": 2,"d": 10  },
+	  {    "v": 3,"d": 10  },
+	  {    "v": 4,"d": 10  }
 	],"SM-03-data": [
-	  {    "value": 1,"dateOffset": -48  },
-	  {    "value": 2,"dateOffset": -40  },
-	  {    "value": 3,"dateOffset": 10  },
-	  {    "value": 4,"dateOffset": 10  }
+	  {    "v": 1,"d": -48  },
+	  {    "v": 2,"d": -40  },
+	  {    "v": 3,"d": 10  },
+	  {    "v": 4,"d": 10  }
 	],"SM-04-data": [],"SM-05-data": [
-	  {    "value": 1,"dateOffset": -44  }
+	  {    "v": 1,"d": -44  }
 	],"SM-07-data": [
-	  {    "value": 1,"dateOffset": 10  }
+	  {    "v": 1,"d": 10  }
 	],"SM-08-data": [
-	  {    "value": 1,"dateOffset": 10  },
-	  {    "value": 2,"dateOffset": 10  },
-	  {    "value": 3,"dateOffset": 10  },
-	  {    "value": 4,"dateOffset": 10  }
+	  {    "v": 1,"d": 10  },
+	  {    "v": 2,"d": 10  },
+	  {    "v": 3,"d": 10  },
+	  {    "v": 4,"d": 10  }
 	],
 	      "pid": "PA-67034-007"
 	    }

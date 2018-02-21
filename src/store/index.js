@@ -11,7 +11,7 @@ const debug = process.env.NODE_ENV !== 'production'
 const vuexLocal = new VuexPersistence ({
     key:"first",
     storage: window.localStorage,
-    // reducer: state => ({patientlist: state.patientlist, currentStation: state.currentStation, currentGroup:state.currentGroup}),
+    // reducer: state => ({patientlist: state.patientlist, currentCancerType: state.currentCancerType, currentGroup:state.currentGroup}),
 })
 
 const store = new Vuex.Store({
@@ -23,11 +23,13 @@ const store = new Vuex.Store({
     layouts
   },
   state:{
+
       init:{},
       debugEnabled:true,
       filterEnabled:true,
+      testStation:'A',
       loggerURL:'http://localhost:3003/dashboardlog',
-      currentStation:{id:-1,"label":""},
+      currentCancerType:{id:0,"label":"Breast Caner"},
       currentGroup:{id:0,"color":"#0075bc"},
       currentPatientIndex: -1,
       currentdaterange:{starttime:0,endtime:0,days:7},
@@ -46,8 +48,8 @@ const store = new Vuex.Store({
       state.init=obj;
       state.filterEnabled=state.init.filterenable;
       if(state.filterEnabled){
-        state.currentStation.id=0;
-        state.currentStation.label="Breast Cancer"
+        state.currentCancerType.id=0;
+        state.currentCancerType.label="Breast Cancer"
       }
       state.loggerURL=state.init.loggerURL;
       state.maxgroupinuse=state.init.maxgroupinuse;
@@ -110,14 +112,14 @@ const store = new Vuex.Store({
       console.log("SAVE=>"+obj.id+"   "+index);
       state.patientlist[index].layout=JSON.parse(JSON.stringify(obj.layout));
     },
-    selstation(state,obj){
+    selcancertype(state,obj){
       if(obj.value!=-1){
-        state.currentStation.id=state.init.cancertypes[obj.value].id;
-        state.currentStation.label=state.init.cancertypes[obj.value].label;
+        state.currentCancerType.id=state.init.cancertypes[obj.value].id;
+        state.currentCancerType.label=state.init.cancertypes[obj.value].label;
       }
       else {
-        state.currentStation.id=-1;
-        state.currentStation.label="";
+        state.currentCancerType.id=-1;
+        state.currentCancerType.label="";
       }
       state.currentGroup.id=0;
     },
@@ -148,10 +150,23 @@ const store = new Vuex.Store({
     },
     settrainingmode(state,b){
       state.trainingmode=b
-    }
 
+    },
+    resettraininglayout(state){
+      var index = state.patientlist.findIndex(function(e){
+        return e.id=='training' && e.groupid==state.currentGroup.id
+      })
+      var n = state.patientlist[index].layout.length
+      state.patientlist[index].layout.splice(0,n )
+    },
+    setteststationid(state,id){
+      state.testStation=id
+    }
   },
   getters: {
+    getStationID:state=>{
+      return state.testStation
+    },
     getScreenname:state=>{
       return state.screenname
     },
@@ -188,8 +203,8 @@ const store = new Vuex.Store({
         return state.patientlist[index];
       }
     },
-    getCurrentStation: state =>{
-        return state.currentStation;
+    getCurrentCancerType: state =>{
+        return state.currentCancerType;
     },
     getcurrentGroup:state=>{
       return state.currentGroup;
@@ -197,9 +212,9 @@ const store = new Vuex.Store({
     getPatientList: state=>{
       var l=[];
       l=JSON.parse(JSON.stringify( state.patientlist));
-      if(state.currentStation.id!=-1){
+      if(state.currentCancerType.id!=-1){
         l=l.filter(function(e) {
-          return (e.type==state.currentStation.id)
+          return (e.type==state.currentCancerType.id)
         })
       }
       return l ;

@@ -401,7 +401,7 @@
             }
           }
           if(val){                                    // If all data frequency is daily
-              v.y=el.v;
+              v.y=el.value;
               obj.values.unshift(v);
               obj.colors.unshift(self.getcolorfordata(v.y));
             } else {
@@ -539,4 +539,5 @@ div.min {
 .thres.green {  background-color: green }
 .thres.orange {  background-color: orange }
 .thres.red {  background-color: red }
+.thres.blue {  background-color: blue }
 </style>

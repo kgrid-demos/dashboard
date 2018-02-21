@@ -10,5 +10,7 @@ export default {
 };
 </script>
 <style>
-
+.kgl-content {
+	margin-top:30px;
+}
 </style>

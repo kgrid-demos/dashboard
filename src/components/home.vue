@@ -2,7 +2,7 @@
 <div class='content'>
 	<applayout>
 		<div slot='banner'>
-			<div class='row mar-0' v-show='stationSelected'>
+			<div class='row mar-0'>
 				<div class='col-md-2 col-sm-2 col-xs-2 '></div>
 				<div class='col-md-8 col-sm-8 col-xs-8 '>
 					<form id="search">
@@ -14,14 +14,8 @@
 			</div>
 		</div>
 		<div slot='main'>
-			<div class='row mar-0' v-if="stationSelected">
-				<div class='col-md-2 col-sm-2 col-xs-2  ht-full'>
-					<div class='groupselector'>
-						<p style='text-align:center'></p>
-						<ul class='groupids'><li v-for='(num,index) in groups' @click='selectgroup(index)' :class="{'active': currentGroup.id==num}">{{num}}</li></ul>
-					</div>
-
-				</div>
+			<div class='row mar-0'>
+				<div class='col-md-2 col-sm-2 col-xs-2  ht-full'>				</div>
 				<div class='col-md-8 col-sm-8 col-xs-8  ht-full'>
 					<kogrid
 	    			:data="patients"
@@ -32,14 +26,6 @@
 	  			</kogrid>
 				</div>
 				<div class='col-md-2 col-sm-2 col-xs-2 ht-full'></div>
-			</div>
-			<div class='row' v-else>
-				<div class='col-md-2 col-sm-2 col-xs-2  ht-full pad-0'></div>
-				<div class='col-md-2 col-sm-2 col-xs-2  ht-full pad-0' @click='selectStation(-1)'><div class='station'><p class='ht-full '>All Patient</p></div></div>
-				<div class='col-md-2 col-sm-2 col-xs-2  ht-full pad-0' @click='selectStation(0)'><div class='station'><p class='ht-full '>Breast Cancer</p></div></div>
-				<div class='col-md-2 col-sm-2 col-xs-2  ht-full pad-0' @click='selectStation(1)'><div class='station'><p class='ht-full '>GI Cancer</p></div></div>
-				<div class='col-md-2 col-sm-2 col-xs-2  ht-full pad-0' @click='selectStation(2)'><div class='station'><p class='ht-full '>Lung Cancer</p></div></div>
-				<div class='col-md-2 col-sm-2 col-xs-2  ht-full pad-0'></div>
 			</div>
 		</div>
 	</applayout>
@@ -58,7 +44,6 @@ export default {
 	},
 	created : function() {
 		var self=this;
-		this.loadPatientDataIntoStorage();
 		var lastsunday = this.$moment().day(-7);
 		var obj={start:0, end:0, days:7};
 		obj.end=this.$moment().day(6).endOf('day').unix();   //next Saturday
@@ -71,16 +56,15 @@ export default {
 		this.$store.commit('setScreenname','Patient List')
 	},
 	computed : {
-		filterEnabled : function(){
-			return this.$store.getters.getfilterEnable
+		trainmode:function(){
+			return this.$store.getters.gettrainmode
 		},
-		groups:function(){
-				var n = this.$store.getters.getmaxgroupinuse;
-				var arr=[];
-				for(var i=0; i<n; i++){
-					arr.push(i);
-				}
-				return arr
+		cancertype:function(){
+			if(trainmode){
+				return 99
+			} else {
+				return this.$store.getters.getCurrentCancerType
+			}
 		},
 		currentGroup: function(){
 			return this.$store.getters.getcurrentGroup;
@@ -98,15 +82,6 @@ export default {
 				  return (e.groupid==self.currentGroup.id)});
 			}
 		},
-		stationSelected: function(){
-				if(this.filterEnabled){
-					var t=this.$store.getters.getCurrentStation.id
-					console.log(t)
-					return (t!=-1)
-				}else{
-					return true
-				}
-		},
 		currentGroup: function(){
 		  return this.$store.getters.getcurrentGroup;
 		},
@@ -120,25 +95,7 @@ export default {
 			this.$store.commit('setCurrentPatientIndex',{'pid':this.patients[t].id,'group':this.patients[t].groupid});
 			this.$store.commit('setcurrentpatientid',this.patients[t]);
 			this.$eventBus.$emit("patientSelected",this.patients[t].id);
-		},
-		selectStation: function(i){
-			this.$store.commit('selstation',{value:i});
-		},
-		selectgroup: function(index){
-			this.$store.commit('setgroupid',{value:index});
-			this.$store.commit('setcurrentgroupid',{value:index});
-		},
-    loadPatientDataIntoStorage: function() {
-		  if(!this.$store.getters.hasLoadedPatientData) {
-        const baseDataUrl = 'http://localhost:3001/patients/';
-        let that = this;
-        this.$http.get(baseDataUrl).then(response => {
-					console.log("load data...")
-					console.log(response.data)
-          that.$store.commit("loadPatientData", response.data);
-        });
-      }
-    }
+		}
 	},
 	components:{
 		applayout,
@@ -188,77 +145,7 @@ form#search input {
 	height: 100%;
 	min-height:450px;
 }
-.station {
-text-align: center;
-vertical-align: middle;
-padding:20px;
- position:relative;
- top:50%;
- background-color:#0075bc;
- border: 2px solid #0075bc;
- margin:20px;
-	cursor:pointer;
-	border-radius: 15px;
-}
-div.groupselector {
-	opacity:0.01;
-	transition: opacity 0.5s ease;
-	margin-right:30px;
-}
-div.groupselector:hover {
-	opacity:1;
-}
-.station p{
-font-size: 28px;
-font-weight: 700;
-color:#fff;
-    transform: translateY(35%);
-		}
-		.station:hover {
-		 background-color:#fff;
-		}
-		.station:hover p{
-			color: #0075bc;
-			}
 h1 small {
 	font-size:50%;
-}
-ul.groupids li {
-position:relative;
- text-align: center;
- cursor: pointer;
- font-size: 18px;
- font-weight: 400;
- color:#eeeeee;
- margin: 0px 200px 10px 0px;
- border: 1px dashed #e5e5e5;
-	min-width:60px;
-	padding: 10px;
-	background-color: #f7f7f7;
-	transition: all 0.3s ease;
-}
-ul.groupids li:hover {
-	color:#555555;
-}
-ul.groupids li.active {
- font-weight: 800;
- color:#333333;
-  border-right: none;
- margin: 0px 140px 10px 0px;
-}
-ul.groupids li.active:after {
-  content: '';
-  position: absolute;
-  top: -1px; right: -50px;
-	border: 1px dashed #e5e5e5;
-  width: 100%; height: 100%;
-  background: #f7f7f7;
-  -webkit-transform-origin: 100% 0;
-  -ms-transform-origin: 100% 0;
-  transform-origin: 100% 0;
-  -webkit-transform: skew(-45deg);
-  -ms-transform: skew(-45deg);
-  transform: skew(-45deg);
-	z-index:-1;
 }
 </style>

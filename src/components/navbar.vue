@@ -1,16 +1,16 @@
 <template id='navbar'>
 	<div class='kgl-nav noselect'>
-		<a class='navbar-brand kgl-1' @click='stationselector' >
+		<div class='navbar-brand kgl-1'>
 			<span>{{dashboard}}</span>
-		</a>
+		</div>
 		<span class='navbar-label kgl-1' v-if='screenname!=""'>{{screenname}}</span>
 		<nav class='navbar kgl-1 kg-bg-color kg-color'>
 			<ul class='nav navbar-nav'>
-				<li class='test'>
-					<div class='dropdown' id="userDropdown" >
+				<li class='test' >
+					<div class='dropdown' id="userDropdown" v-if='fullpath=="/"'>
 						<a><span v-on:mouseenter='trigDropdown' v-on:mouseleave='checkDropdown'>Administrator</span></a>
 						<ul class='dropdown-menu' v-if='showDropdown' v-on:mouseleave='leaveDropdown'>
-							<li class='test' v-if='fullpath=="/"'@click='setupstation'><a><span>Setup</span></a></li>
+							<li class='test' @click='setupstation'><a><span>Setup</span></a></li>
 							<li class='test' @click='resetstore'><a><span>Reset</span></a></li>
               <router-link tag='li' :class="{'active': $route.fullPath === '/datagenerator'}" to='/datagenerator'><a><span>Generate Data</span></a></router-link>
 						</ul>
@@ -37,8 +37,7 @@ export default {
 			return this.$store.getters.isDebugging;
 		},
 		dashboard: function(){
-			var d= 'Patient Data Dashboard';
-			return d;
+			return 'Patient Data Dashboard';
 		},
 		screenname: function(){
 			return this.$store.getters.getScreenname;
@@ -61,7 +60,7 @@ export default {
 			this.showDropdown=false;
 			},
 		resetstore:function(){
-			if (confirm("Datastore will be reset! Are you sure?") == true) {
+			if (confirm("Data store will be reset! Are you sure?") == true) {
 				var self=this;
 				window.localStorage.removeItem("first")
 				window.location.reload(true)
@@ -72,8 +71,6 @@ export default {
 			if(!this.training){
 				if(this.path!='/picker'){
 					this.$router.push({ path: '/picker' });
-				}else{
-					this.$store.commit('selstation',{value:-1});
 				}
 			}
 		},

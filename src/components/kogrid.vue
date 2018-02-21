@@ -21,13 +21,14 @@
     </tbody>
   </table>
   <div class='patientsummary' v-if='hoverrow!=-1'>
+
     <div class='patientinfo row mar-0 ft-sz-22'>
       <div class='col-md-4 '> <small>NAME:</small> {{filteredData[hoverrow].name}} </div>
       <div class='col-md-4 '>  <small>GENDER:</small> {{filteredData[hoverrow].gender}} </div>
       <div class='col-md-4'> <small> AGE:</small> {{filteredData[hoverrow].age}} </div>
     </div>
     <div class='row interventionlisting mar-0' ><p class='ft-sz-18'>Interventions</p>
-     <ul v-if='groupid!=-1'><li v-for='widget in wlist'><koicon :object='widget' ></koicon></li></ul></div>
+     <ul style='margin:0 auto;' v-if='groupid!=-1'><li v-for='widget in wlist'><koicon :object='widget' ></koicon></li></ul></div>
   </div>
 </div>
 </template>
@@ -130,6 +131,7 @@ export default {
         this.$emit("selected", key)
     },
     selrow: function(index){
+      // if(index==-1)index=0
       this.hoverrow =index
     }
   }
