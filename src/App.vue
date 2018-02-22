@@ -22,6 +22,7 @@ export default {
 	mounted:function(){
     var self=this;
     this.$http.get("./static/json/default.json").then(response=> {
+      console.log(response.data)
       self.$store.commit('init', response.data)
     }).catch(e=>{
       console.log(e)

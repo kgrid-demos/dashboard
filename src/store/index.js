@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import widgets from './modules/widgets'
 import patients from './modules/patients'
-import layouts from './modules/layouts'
+// import layouts from './modules/layouts'
 import VuexPersistence from 'vuex-persist'
 
 Vue.use(Vuex)
@@ -19,22 +19,18 @@ const store = new Vuex.Store({
   plugins: [vuexLocal.plugin],
   modules: {
     widgets,
-    patients,
-    layouts
+    patients
   },
   state:{
-
       init:{},
       debugEnabled:true,
-      filterEnabled:true,
       testStation:'A',
       loggerURL:'http://localhost:3003/dashboardlog',
       currentCancerType:{id:0,"label":"Breast Caner"},
-      currentGroup:{id:0,"color":"#0075bc"},
+      currentGroup:{id:1,"color":"#0075bc"},
       currentPatientIndex: -1,
       currentdaterange:{starttime:0,endtime:0,days:7},
       patientlist:  [],
-      maxgroupinuse:6,
       patientData:[],
       today:0,
       screenname:'Patient List',
@@ -46,13 +42,8 @@ const store = new Vuex.Store({
     },
     init(state, obj){
       state.init=obj;
-      state.filterEnabled=state.init.filterenable;
-      if(state.filterEnabled){
-        state.currentCancerType.id=0;
-        state.currentCancerType.label="Breast Cancer"
-      }
+      console.log(state.init.patientMasterList)
       state.loggerURL=state.init.loggerURL;
-      state.maxgroupinuse=state.init.maxgroupinuse;
       var ptlist=state.init.patientMasterList;
       ptlist.forEach(function(e){
         var pid=e.id;
@@ -61,7 +52,7 @@ const store = new Vuex.Store({
         var pgender = e.gender;
         var type=e.type;
         e.group.forEach(function(ee){
-          var gid=ee.id;
+          var gid=ee;
           var index = state.patientlist.findIndex(function(el) {
             return el.id==pid && el.groupid==gid});
           if(index==-1){
@@ -175,12 +166,6 @@ const store = new Vuex.Store({
     },
     gettoday:state=>{
       return state.today
-    },
-    getfilterEnable: state=>{
-      return state.filterEnabled
-    },
-    getmaxgroupinuse: state=>{
-      return state.maxgroupinuse
     },
     getLoggerURL: state=> {
       return state.loggerURL

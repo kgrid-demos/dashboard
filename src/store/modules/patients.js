@@ -1,11 +1,5 @@
 import widgets from './widgets.js'
 
-const _patients= [	{ "id":"training", "name":"Training", "age":"", "gender":"", "type":99,"group":[{"id":0},{"id":1},{"id":2}]},
-			{ "id":"PA-67034-001", "name":"Ms. Green", "age":"38", "gender":"female", "type":0,"group":[{"id":0},{"id":1},{"id":2},{"id":3},{"id":4},{"id":5}]},
-			{ "id":"PA-67034-007", "name":"Mr. Brown", "age":"62", "gender":"male", "type":1,"group":[{"id":0},{"id":1},{"id":2},{"id":3},{"id":4},{"id":5}]}
-]
-const patienttemplate = { "id":"PA-67034-001","name":"Ms. Green", "age":"38", "gender":"female", "type":0, "groupid": -1, "layout":[]}
-
 var alertlist=[
 	{"pid":"PA-67034-001",
 		"PRO-10-warn":[
@@ -22,31 +16,24 @@ var alertlist=[
 		"PRO-09-warn":[
 			{"alertid":"PRO09W001","text":"Patient's weight has been declining since starting chemotherapy. Discuss with patient","checked":false}
 		]
-	},
-
+	}
 ]
 
 var notelist =[
 	{"PRO-05-notes":[
-        {
-  "v": 0,
+        {  "v": 0,
   "note": "I am having difficulty buttoning my blouse due to constant tingling pain to my fingertips.",
   "date": -30}
        ],
        "pid": "PA-67034-001"
      },
-
-
 	{ "PRO-06-notes":[
  {"v": 0,"note": "My itchiness on palms/soles are worsening. There are red peeling rash despite use of Eucerin","date": -20
- }
-],"PRO-08-notes":[
+ }],"PRO-08-notes":[
  {"v": 0,"note": "There are pain due to mouth sores/ulcerations descpite using Magic Mouthwash; however the sores and pain get better before the start of each new cycle.","date": -31
- }
-],
+ }],
       "pid": "PA-67034-007"
     }
-
 ]
 
 var smlist =[{   "SM-01-data": [],
@@ -110,31 +97,15 @@ var smlist =[{   "SM-01-data": [],
 	],
 	      "pid": "PA-67034-007"
 	    }
-
 ]
 
 // initial state
 const state = {
-  groupid:0,
-  patientid:'',
-  ptconfiglist:[]
+  patientid:''
 }
 
 // getters
 const getters = {
-  getpatientlist: state=>{
-    return _patients
-  },
-  getpatientsummary:state=>{
-    return function() {
-      var index = _patients.map(function(e){return e.id}).indexOf(state.patientid)
-      if(index!=-1){
-        return _patients[index]
-			}else {
-        return {}
-      }
-    }
-  },
 	getpatientalert:state=>{
     return function(id) {
       var index = alertlist.map(function(e){return e.pid}).indexOf(state.patientid)
@@ -193,9 +164,6 @@ const actions = {
 const mutations = {
   setcurrentpatientid(state,pt){
     state.patientid = pt.id
-  },
-  setcurrentgroupid(state,idobj){
-    state.groupid = idobj.value
   }
 }
 

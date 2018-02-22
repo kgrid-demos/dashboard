@@ -36,7 +36,7 @@
 					<div class='ht-full kg-bg-custom-0' @drop='dropped'>
 						<div class='row ft-sz-16 lh-3 txtcenter'> <h3>Widget List</h3></div>
 						<div class='wlistctner'>
-							<draggable class='wlist' element="ul" :value="widgetInvetoryList" :options="dragOptions"  @start="isDragging=true" @end="isDragging=false">
+							<draggable class='wlist' element="ul" :value="widgetInvetoryList" :options="dragOptions"  @start="kocarddragstart" @end="isDragging=false">
 								<li v-for='(object,index) in widgetInvetoryList' v-bind:key='index'  @dragstart="setdrag(object)" >
 									<kocard :object='object.label' :id='object.label' :cflag="object.type" :tileindex='index' draggable='true' ></kocard>
 								</li>
@@ -54,9 +54,7 @@
 						</div>
 						<div class='col-md-8 col-sm-8 noselect float-r'>
 							<div class='float-r' v-if='isInEdit'>
-								<!-- <button class='kg-btn-primary lg' v-if='isInEdit && pwidgetlist.length==0' @click='loadDefault'> Load Default Layout </button> -->
-								<!-- <button class='kg-btn-primary lg' v-if='isInEdit && pwidgetlist.length>0' @click='saveDefault'> Save As Default </button> -->
-								<button class='kg-btn-primary lg' v-if='isInEdit && pwidgetlist.length>0 ' @click='removeAll'> Remove All </button>
+							<button class='kg-btn-primary lg' v-if='isInEdit && pwidgetlist.length>0 ' @click='removeAll'> Remove All </button>
 								<button class='kg-btn-primary attn lg' v-if='isInEdit' v-show='configready' @click='saveconfig'>Apply Changes</button>
 							</div>
 							<div style="width:100%;"  v-else>
@@ -456,28 +454,6 @@ export default {
 			},3000);
 				}
     },
-		// getHeight:function(i){
-		// 		if(this.$refs.item[i]){
-		// 			return this.$refs.item[i].$el.clientHeight;
-		// 		}else {
-		// 			return 120;
-		// 		}
-		// },
-		loadDefault:function(){
-			var self = this;
-			this.layout.splice(0,1);
-			var obj = JSON.parse(JSON.stringify(this.$store.getters.getdefaultlayoutbycancerid(this.patient.type)));
-			this.pwidgetlist=obj.map(function(e){return e.c.id})
-			obj.forEach(function(e){
-				self.layout.push(e)
-			})
-		},
-		saveDefault:function() {
-			var obj={}
-			obj.cancerid=this.patient.type;
-			obj.layout=this.layout;
-			this.$store.commit('savedefaultlayout', obj )
-		},
 		updateLog:function(obj){
 			var t = this.$moment().format();
 			var payload={};
@@ -543,6 +519,10 @@ export default {
 		},
 		dragnative (e) {
 			e.preventDefault();
+		},
+		kocarddragstart(e){
+			// console.log(e)
+			this.isDragging==true
 		},
 		setdrag(element){
 			this.contentindrag=JSON.parse(JSON.stringify(element))

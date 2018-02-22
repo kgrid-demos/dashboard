@@ -67,7 +67,7 @@ export default {
 			settingShow:false,
 			searchQuery: '',
 			cancertypeselection:0,
-			groupid:0,
+			groupid:1,
 			trainstart:true,
 			startwithtrain:true,
 			gridColumns: ['id','name', 'age','gender','type'],
@@ -98,9 +98,6 @@ export default {
 		this.$store.commit('setScreenname','Start Page')
 	},
 	computed : {
-		filterEnabled : function(){
-			return this.$store.getters.getfilterEnable
-		},
 		groupiddisp:function(){
 			var t=this.groupid+''
 			if(this.groupid<10) t='0'+t
@@ -108,15 +105,6 @@ export default {
 		},
 		currentGroup: function(){
 			return this.$store.getters.getcurrentGroup;
-		},
-		stationSelected: function(){
-				if(this.filterEnabled){
-					var t=this.$store.getters.getCurrentCancerType.id
-					console.log(t)
-					return (t!=-1)
-				}else{
-					return true
-				}
 		}
 	},
 	methods : {
@@ -137,7 +125,6 @@ export default {
 		savesettings:function(){
 			this.$store.commit('selcancertype',{'value':this.cancertypeselection})
 			this.$store.commit('setgroupid',{'value':this.groupid});
-			this.$store.commit('setcurrentgroupid',{'value':this.groupid});
 			this.$store.commit('settrainingmode',this.trainstart)
 			if(this.trainstart) this.$store.commit('resettraininglayout')
 			this.$store.commit('setteststationid', this.tstation);

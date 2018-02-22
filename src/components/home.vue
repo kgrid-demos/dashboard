@@ -60,8 +60,8 @@ export default {
 			return this.$store.getters.gettrainmode
 		},
 		cancertype:function(){
-			if(trainmode){
-				return 99
+			if(this.trainmode){
+				return {id:'99',label:'training'}
 			} else {
 				return this.$store.getters.getCurrentCancerType
 			}
