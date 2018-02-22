@@ -1,4 +1,4 @@
-<template name="prowidget">
+<template name="trowidget">
   <div class="widgetcontainer noselect">
     <div v-if="!editmode" >
     <div class="widgetalert" v-if="!maximized ">
@@ -401,7 +401,7 @@
             }
           }
           if(val){                                    // If all data frequency is daily
-              v.y=el.value;
+              v.y=el.v;
               obj.values.unshift(v);
               obj.colors.unshift(self.getcolorfordata(v.y));
             } else {

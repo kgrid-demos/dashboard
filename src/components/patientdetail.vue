@@ -23,7 +23,7 @@
 					</div>
 					<div class="col-md-10 col-sm-10 col-xs-10 pad-0" v-else>
 						<h1 class='pad-l-10 inline' >{{patient.name}}</h1>
-						<div  class='float-r inline' v-if='trainmode && !isInEdit && loaddata' data-toggle="tooltip" @click='settrainingmode' title="Click to go to the patient list">
+						<div  class='float-r inline' v-if='trainmode && !isInEdit && loaddata' data-toggle="tooltip" @click='endtrainingmode' title="Click to go to the patient list">
 							<div style='border:1px solid #0075bc; padding:8px 10px; font-size:14px; color: #0075bc; text-align:center;font-weight:600;'>All training steps are finished. You can explore the data-loaded dashboard. When ready, click here to continue</div>
 						</div>
 					</div>
@@ -196,7 +196,7 @@ export default {
 				case 'PA-67034-007':
 					return 8
 				default:
-					return 24
+					return 4
 			}
 		},
 		simuweeks:function(){
@@ -227,8 +227,7 @@ export default {
 						case 'PA-67034-007':
 								return 'Eight weeks into the treatment'
 						default:
-							return 'Eight weeks since start'
-
+							return 'Four weeks since start'
 					}
 			}
 		},
@@ -255,8 +254,10 @@ export default {
 		initdate:function(){
 			if(this.$route.params.id=='PA-67034-007'){
 				return	this.$moment.unix(this.today).day(-7*7).startOf('day').unix()
-			}else {
+			}else if(this.$route.params.id=='PA-67034-001') {
 				return	this.$moment.unix(this.today).day(-11*7).startOf('day').unix()
+			}else {
+				return	this.$moment.unix(this.today).day(-3*7).startOf('day').unix()
 			}
 		},
 		datatimestamp:function(){
@@ -348,7 +349,6 @@ export default {
 		colwidth:function(){
 			return (this.layoutdim.x1-this.layoutdim.x0)/this.colnum
 		},
-
 	},
 	watch:{
 		isInEdit:function(){
@@ -361,25 +361,9 @@ export default {
 		}
 	},
 	methods : {
-		settrainingmode:function(){
+		endtrainingmode:function(){
 			this.$store.commit('settrainingmode',false)
 			this.$router.push('/picker')
-		},
-		cleanuplayout:function(){
-			var self=this;
-			var l =[];
-			var ct=0;
-			this.layout.forEach(function(e){
-				if(e.c.count!=null){
-						var item=e;
-						item.i=ct+"";
-						l.push(item)
-						ct++;
-					}
-			});
-			this.layout.splice(0,this.layout.length)
-			this.layout=JSON.parse(JSON.stringify(l))
-			this.pwidgetlist=this.pwidgetlist.filter(function(e){return e!=""})
 		},
 		checkGriddim:function(){
 			this.layoutdim.x0=this.$refs.gridl.getBoundingClientRect().left
@@ -394,7 +378,6 @@ export default {
 			}).indexOf(obj.id)
 			self.layout[index].c.sel =obj.sel;
 			self.layout[index].c.selindex =obj.selindex
-
 		},
 		gopreviousweek:function(){
 			var obj= {}
@@ -403,7 +386,6 @@ export default {
 			obj.end=this.daterange.endtime-7*24*3600;
 			this.$store.commit('setcurrentdaterange',obj);
 		},
-
 		gonextweek:function(){
 				var obj={}
 				obj.days=this.daterange.days;
@@ -411,7 +393,7 @@ export default {
 				obj.end=this.daterange.endtime+7*24*3600;
 				this.$store.commit('setcurrentdaterange',obj);
 			},
-			toggleviewmode:function(){
+		toggleviewmode:function(){
 			var self=this;
 			this.fading=true
 			setTimeout(function(){
@@ -419,15 +401,6 @@ export default {
 				self.timepoint=2;
 				self.fading=false;
 			},1800)
-		},
-		parseobj:function(s){
-			var obj={}
-			try {
-				obj=JSON.parse(s)
-			}catch(e) {
-				console.log("JSON Input Error")
-			}
-			return obj
 		},
     saveconfig:function(){
 			var self = this;
@@ -466,13 +439,11 @@ export default {
   			.catch(function (error) {
     			// console.log(error);
   			});
-
 		},
 		removeWidget:function(id){
 			var i =this.pwidgetlist.indexOf(id)
 			this.layout.splice(i,1);
 			this.pwidgetlist.splice(i,1);
-		  // this.cleanuplayout()
 		},
 		removeAll:function(){
 			var n=this.pwidgetlist.length;
@@ -488,7 +459,6 @@ export default {
 			this.layout[0].h=7;
 			this.maximized=true;
 		},
-
 		restoreLayout: function(){
 			this.layout=JSON.parse(JSON.stringify(this.temp));
 			this.maximized=false;
@@ -515,13 +485,11 @@ export default {
 			console.log(this.contentindrag)
 			console.log("Drag ending")
 			this.contentindrag={}
-
 		},
 		dragnative (e) {
 			e.preventDefault();
 		},
 		kocarddragstart(e){
-			// console.log(e)
 			this.isDragging==true
 		},
 		setdrag(element){
@@ -542,7 +510,6 @@ export default {
 				item.x=nx;
 				item.y=ny;
 				var obj = {}
-				// JSON.parse(JSON.stringify(this.contentindrag))
 				obj.id=this.contentindrag.id;
 				obj.label=this.contentindrag.label;
 				obj.type=this.contentindrag.type;
@@ -560,7 +527,6 @@ export default {
 				item.i=max+"";
 				this.layout.unshift(item)
 				this.pwidgetlist.unshift(obj.id)
-			  // this.cleanuplayout()
 			}
 		},
 		hoverin (e) {
