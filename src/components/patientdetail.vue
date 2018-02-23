@@ -28,12 +28,15 @@
 						<h1 class='pad-l-10 inline' >{{patient.name}}</h1></div>
 										<div class='col-md-10 col-sm-10 col-xs-10' style='text-align:center;'>
 											<div class='inline' style='background-color:#fff;border:none;'>
-												<ul class='progressstatus' style='background-color:#fff;'>
+												<ul class='progressstatus' style='background-color:#fff; height:55px; '>
 													<li v-for='(item,index) in trainingstatus'><div class='prognode' :class='{done:item.status, current:index==currenttask}'><span class='ft-sz-10'>{{item.task}}</span></div></li>
 												</ul>
 											</div>
-											<div class='instruction'>
+											<div class='instruction' v-if='currenttask<trainingstatus.length' style='font-style: italic;text-align:left; padding-left:5px;letter-spacing:0.05em; width:93%; border-top:1px solid #0075bc; margin:-9px auto 0;'>
 												{{trainingstatus[currenttask].description}}
+											</div>
+											<div class='instruction' v-else>
+												Training complete! You can explore the dashboard. When ready, click on done to exit the training mode.
 											</div>
 				</div>
 				<div class='col-md-1 col-sm-1 col-xs-1'>
@@ -171,15 +174,15 @@ export default {
 				{task:'D&D',status:false, 'description':'Drag a widget from Widget List and drop into the layout'},
 				{task:'config',status:false, 'description':'Inside the widget, click on the dropdown, select an instrument; Check or uncheck the seeting for sending notification '},
 				{task:'remove',status:false,'description':'Drag and drop more widgets. To remove a widget, click the x at the right upper corner; Or click "remove all" to remove all widgets from the layout'},
-				{task:'resize',status:false, 'description':'Drag and drop more widgets. Pick a widget to resize; click on the right bottom handle, drag to resize the widget, and release the handle when it reaches the desired size'},
-				{task:'repos',status:false,'description':'Pick a widget to reposition; click on the widget, drag to a new position; THe other widget will reposition accordingly. '},
+				{task:'resize',status:false, 'description':'Drag and drop more widgets. To resize a widget, click on the right bottom handle, drag to resize the widget, and release the handle when it reaches the desired size'},
+				{task:'repos',status:false,'description':'To reposition a widget; click on the widget, drag to a new position; THe other widget will reposition accordingly. '},
 				{task:'apply',status:false,'description':'Click on "Apply changees" to save the configured layout and return to data view mode'},
 				{task:'loaddata',status:false,'description':'Click on "4 weeks later" to load simulated data to the dashboard'},
 				{task:'daterange',status:false,'description':'Click on "<" or ">" to change the date range, and the data in each widgets will update accordingly'},
-				{task:'max',status:false,'description':'Pick a widget to maximize; Click the max button at the right upper corner'},
+				{task:'max',status:false,'description':'To maximize a widget, Click the max button at the right upper corner'},
 				{task:'restore',status:false,'description':'When the widget is maximized, click the restore button at the right upper corner'},
 				{task:'warning',status:false,'description':'Pick a widget with warning; click on the warning icon and the widget will maximize so that the warning detail can be examined'},
-				{task:'notes',status:false,'description':'Pick a widget with notes; click on the notes icon and the widget will maximize so that the notes detail can be reviewed'},
+				{task:'notes',status:false,'description':'Restore the layout. Pick a widget with notes; click on the notes icon and the widget will maximize so that the notes detail can be reviewed'},
 			],
 			currenttask:0
 		}
@@ -196,6 +199,12 @@ export default {
 		}
 		this.$eventBus.$on("configured", function(){
 			if(self.trainmode) self.trainingstepfinished('config')
+		})
+		this.$eventBus.$on("warning", function(){
+			if(self.trainmode) self.trainingstepfinished('warning')
+		})
+		this.$eventBus.$on("notes", function(){
+			if(self.trainmode) self.trainingstepfinished('notes')
 		})
 	},
 	mounted:function(){
@@ -901,7 +910,8 @@ ul.progressstatus li {
 	line-height: 1em;
 }
 .prognode.current {
-border:2px solid #0075bc;
+	border:2px solid #0075bc;
+	height: 50px;
 }
 .prognode.done {
 background-position:left bottom;
@@ -910,5 +920,13 @@ border:1px solid #0075bc;
 .prognode.done span{
 	color:#fff;
 }
-
+div.instruction {
+	font-style: italic;
+	text-align:left;
+	padding-left:5px;
+	letter-spacing:0.05em;
+	width:93%;
+	border-top:1px solid #0075bc;
+	margin:-9px auto 0;
+}
 </style>

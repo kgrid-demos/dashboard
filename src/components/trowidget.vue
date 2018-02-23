@@ -4,8 +4,8 @@
     <div class="widgetalert" v-if="!maximized ">
       <div class="ft-sz-11 ft-wt-6 pad-l-8" >
         <span>{{selectedinstr.unit}}</span>
-        <i v-if="hasalert"  @click='maximizeWidget' title="Click to view alert" class="fa fa-exclamation-circle warning pad-l-5"></i>
-        <i v-if="hasnotes"  @click='maximizeWidget' title="Click to view patient note" class="fa fa-file-alt notes pad-l-5"></i>
+        <i v-if="hasalert"  @click='warningaction' title="Click to view alert" class="fa fa-exclamation-circle warning pad-l-5"></i>
+        <i v-if="hasnotes"  @click='notesaction' title="Click to view patient note" class="fa fa-file-alt notes pad-l-5"></i>
         <span class= "float-r pad-r-10">{{selectedfreq}}</span>
       </div>
     </div>
@@ -18,8 +18,8 @@
     </ul>
     </div>
     <div class='notesdisplay' v-if='maximized'>
-      <span class="pad-l-15" v-if='hasnotes'> PATIENT NOTES </span>
-      <span class='pad-l-15' v-else> Patient has not posted any notes yet. </span>
+      <span class="pad-l-15" v-if='hasnotes'> NOTES </span>
+      <span class='pad-l-15' v-else> No note has been posted yet. </span>
       <ul>
         <li v-for='note in allnotes' >
           <span class="fa fa-file-alt notes pad-l-5"></span><span class="pad-l-5" style="font-style:italic;">{{formatted(note.date*1000)}} - {{note.note}}</span></li>
@@ -426,6 +426,14 @@
     methods: {
       configuraction:function(){
         this.$eventBus.$emit('configured')
+      },
+      warningaction:function(){
+        this.$eventBus.$emit('warning')
+          this.$emit("maximizeme",this.object.id)
+      },
+      notesaction:function(){
+        this.$eventBus.$emit('notes')
+        this.$emit("maximizeme",this.object.id)
       },
       initChartOption:function(){
         this.custfreq = this.selectedfreq

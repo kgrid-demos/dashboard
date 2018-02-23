@@ -16,6 +16,14 @@ var alertlist=[
 		"PRO-09-warn":[
 			{"alertid":"PRO09W001","text":"Patient's weight has been declining since starting chemotherapy. Discuss with patient","checked":false}
 		]
+	},
+	{"pid":"training",
+		"TRO-03-warn":[
+			{"alertid":"TRO03W001","text":"Area Flood is possible overnight.","checked":false}
+		],
+		"TRO-04-warn":[
+			{"alertid":"TRO04W001","text":"Dense fog with limited visibility","checked":false}
+		]
 	}
 ]
 
@@ -33,7 +41,14 @@ var notelist =[
  {"v": 0,"note": "There are pain due to mouth sores/ulcerations descpite using Magic Mouthwash; however the sores and pain get better before the start of each new cycle.","date": -31
  }],
       "pid": "PA-67034-007"
-    }
+    },
+		{"TRO-01-notes":[
+	        {  "v": 0,
+	  "note": "Temperature is way above the avarage for this day.",
+	  "date": -10}
+	       ],
+	       "pid": "training"
+	     },
 ]
 
 var smlist =[{   "SM-01-data": [],
@@ -87,7 +102,7 @@ var smlist =[{   "SM-01-data": [],
 	  {    "v": 4,"d": 10  }
 	],"SM-04-data": [],"SM-05-data": [
 	  {    "v": 1,"d": -44  }
-	],"SM-07-data": [
+	],"SM-01-data": [
 	  {    "v": 1,"d": 10  }
 	],"SM-08-data": [
 	  {    "v": 1,"d": 10  },
@@ -96,7 +111,15 @@ var smlist =[{   "SM-01-data": [],
 	  {    "v": 4,"d": 10  }
 	],
 	      "pid": "PA-67034-007"
-	    }
+	    },
+			{ "TRS-01-data": [
+			  {    "v": 1,"d": -10  }
+			],
+			      "pid": "training"
+			    }
+
+
+
 ]
 
 // initial state
