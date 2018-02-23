@@ -22,10 +22,26 @@
 						<h1 class='pad-l-10' >{{patient.name}}<small class='pad-l-20' v-if='patient.age!=""'>Age {{patient.age}}, {{patient.gender}}</small></h1>
 					</div>
 					<div class="col-md-10 col-sm-10 col-xs-10 pad-0" v-else>
-						<h1 class='pad-l-10 inline' >{{patient.name}}</h1>
+
+						<div class='row'>
+							<div class='col-md-1 col-sm-1 col-xs-1' style='text-align:center;'>
+						<h1 class='pad-l-10 inline' >{{patient.name}}</h1></div>
+										<div class='col-md-10 col-sm-10 col-xs-10' style='text-align:center;'>
+											<div class='inline' style='background-color:#fff;border:none;'>
+												<ul class='progressstatus' style='background-color:#fff;'>
+													<li v-for='(item,index) in trainingstatus'><div class='prognode' :class='{done:item.status, current:index==currenttask}'><span class='ft-sz-10'>{{item.task}}</span></div></li>
+												</ul>
+											</div>
+											<div class='instruction'>
+												{{trainingstatus[currenttask].description}}
+											</div>
+				</div>
+				<div class='col-md-1 col-sm-1 col-xs-1'>
 						<div  class='float-r inline' v-if='trainmode && !isInEdit && loaddata' data-toggle="tooltip" @click='endtrainingmode' title="Click to go to the patient list">
-							<div style='border:1px solid #0075bc; padding:8px 10px; font-size:14px; color: #0075bc; text-align:center;font-weight:600;'>All training steps are finished. You can explore the data-loaded dashboard. When ready, click here to continue</div>
+							<div style='border:1px solid #0075bc; padding:8px 10px; font-size:14px; color: #0075bc; text-align:center;font-weight:600;'>Done</div>
 						</div>
+					</div>
+				</div>
 					</div>
 				</div>
 			</div>
@@ -92,7 +108,9 @@
 													:class="{inedit:isInEdit}"
 													ref='item'
 													@dragstart.native='dragnative'
-													v-bind:key="item.i"	>
+													v-bind:key="item.i"
+													@resize="resizeEvent"
+                   				@move="moveEvent">
 														<div class='noselect' v-if='item.c!=""'>
 															<div class='row mar-0 widgetTitle' :class='item.c.type' >
 																<span class="widgetLabel">{{item.c.label}}</span>
@@ -101,11 +119,8 @@
 																<i class='fa fa-window-restore' v-if='!isInEdit && maximized && loaddata' title="restore"  style="font-size:11pt" @click='restoreLayout'></i>
 															</div>
 														</div>
-														<!-- <div class='widgetcontainer'> -->
-																	<kotile :object='item.c'  :patientid='$route.params.id' v-on:setinstru='setinstru' v-on:maximizeme="maximizeWidget" :maximized='maximized' :tileindex='item.i' :containerheight="((item.h)*rowheight-10)" :editmode='isInEdit' :viewmode='loaddata' >
-																	</kotile>
-															<!-- </div> -->
-
+														<kotile :object='item.c' :patientid='$route.params.id' v-on:setinstru='setinstru' v-on:maximizeme="maximizeWidget" :maximized='maximized' :tileindex='item.i' :containerheight="((item.h)*rowheight-10)" :editmode='isInEdit' :viewmode='loaddata' >
+															</kotile>
 												</grid-item>
 											</grid-layout>
 										</div>
@@ -151,6 +166,22 @@ export default {
 			showModal:false,
 			fading:false,
 			contentindrag:'',
+			trainingstatus:[
+				{task:'Edit',status:false,'description':'Click on Edit to toggle the edit mode'},
+				{task:'D&D',status:false, 'description':'Drag a widget from Widget List and drop into the layout'},
+				{task:'config',status:false, 'description':'Inside the widget, click on the dropdown, select an instrument; Check or uncheck the seeting for sending notification '},
+				{task:'remove',status:false,'description':'Drag and drop more widgets. To remove a widget, click the x at the right upper corner; Or click "remove all" to remove all widgets from the layout'},
+				{task:'resize',status:false, 'description':'Drag and drop more widgets. Pick a widget to resize; click on the right bottom handle, drag to resize the widget, and release the handle when it reaches the desired size'},
+				{task:'repos',status:false,'description':'Pick a widget to reposition; click on the widget, drag to a new position; THe other widget will reposition accordingly. '},
+				{task:'apply',status:false,'description':'Click on "Apply changees" to save the configured layout and return to data view mode'},
+				{task:'loaddata',status:false,'description':'Click on "4 weeks later" to load simulated data to the dashboard'},
+				{task:'daterange',status:false,'description':'Click on "<" or ">" to change the date range, and the data in each widgets will update accordingly'},
+				{task:'max',status:false,'description':'Pick a widget to maximize; Click the max button at the right upper corner'},
+				{task:'restore',status:false,'description':'When the widget is maximized, click the restore button at the right upper corner'},
+				{task:'warning',status:false,'description':'Pick a widget with warning; click on the warning icon and the widget will maximize so that the warning detail can be examined'},
+				{task:'notes',status:false,'description':'Pick a widget with notes; click on the notes icon and the widget will maximize so that the notes detail can be reviewed'},
+			],
+			currenttask:0
 		}
 	},
 	created : function() {
@@ -158,6 +189,14 @@ export default {
 		var lastsunday = this.$moment().day(-7);
 		this.pddready=false;
 	  this.$store.commit('setCurrentPatientIndex',{'pid':this.patient.id,'group':this.patient.groupid});
+		if(this.trainmode){
+			this.trainingstatus.forEach(function(e){
+				e.status=false
+			})
+		}
+		this.$eventBus.$on("configured", function(){
+			if(self.trainmode) self.trainingstepfinished('config')
+		})
 	},
 	mounted:function(){
 		var self = this;
@@ -175,8 +214,6 @@ export default {
 	beforeDestroy: function () {
   	window.removeEventListener('resize', this.checkGriddim)
 	},
-	updated: function() {
-	  },
 	computed : {
 		trainmode:function(){
 			return this.$store.getters.gettrainmode
@@ -200,11 +237,7 @@ export default {
 			}
 		},
 		simuweeks:function(){
-			var arr=[]
-			for(var i=1; i<=this.simuweekcount;i++){
-				arr.push(i)
-			}
-			return arr
+			return this.$store.getters.getsimuweekbypid(this.patient.id)
 		},
 		simuweekrange:function(){
 			var arr=[]
@@ -385,6 +418,9 @@ export default {
 			obj.start= this.daterange.starttime-7*24*3600;
 			obj.end=this.daterange.endtime-7*24*3600;
 			this.$store.commit('setcurrentdaterange',obj);
+			if(this.trainmode) {
+				this.trainingstepfinished('daterange')
+			}
 		},
 		gonextweek:function(){
 				var obj={}
@@ -401,6 +437,9 @@ export default {
 				self.timepoint=2;
 				self.fading=false;
 			},1800)
+			if(this.trainmode) {
+				this.trainingstepfinished('loaddata')
+			}
 		},
     saveconfig:function(){
 			var self = this;
@@ -412,6 +451,9 @@ export default {
 			if(true) this.updateLog(this.patient);
 			self.isInEdit = false;
 			self.registrationstatus =[];
+			if(this.trainmode) {
+				this.trainingstepfinished('apply')
+			}
 			if(this.showModal){
 			setTimeout(function(){
 				self.registrationstatus.push("Saving registerations of prescribed interventions for "+self.patient.name+ " ... ")
@@ -444,11 +486,18 @@ export default {
 			var i =this.pwidgetlist.indexOf(id)
 			this.layout.splice(i,1);
 			this.pwidgetlist.splice(i,1);
+			if(this.trainmode) {
+				this.trainingstepfinished('remove')
+			}
+
 		},
 		removeAll:function(){
 			var n=this.pwidgetlist.length;
 			this.layout.splice(0,n);
 			this.pwidgetlist.splice(0,n);
+			if(this.trainmode) {
+				this.trainingstepfinished('remove')
+			}
 		},
 		maximizeWidget: function(id){
 			this.temp =JSON.parse(JSON.stringify(this.layout));
@@ -458,10 +507,18 @@ export default {
 			this.layout[0].w=12;
 			this.layout[0].h=7;
 			this.maximized=true;
+			if(this.trainmode) {
+				this.trainingstepfinished('max')
+			}
+
 		},
 		restoreLayout: function(){
 			this.layout=JSON.parse(JSON.stringify(this.temp));
 			this.maximized=false;
+			if(this.trainmode) {
+				this.trainingstepfinished('restore')
+			}
+
 		},
 		toggleEditMode:function(){
 			this.isInEdit=true;
@@ -470,11 +527,31 @@ export default {
 			this.$nextTick(() => {
 				this.checkGriddim()
       });
+			if(this.trainmode) {
+				this.trainingstepfinished('edit')
+			}
+		},
+		trainingstepfinished:function(txt){
+			var inx=this.trainingstatus.map(function(e){return e.task.toUpperCase()}).indexOf(txt.toUpperCase())
+			if(!this.trainingstatus[inx].status){
+				this.trainingstatus[inx].status=true;
+				this.currenttask=inx+1;
+			}
 		},
 	  resizedEvent: function(i, newH, newW, newHPx, newWPx){
       var msg = "RESIZED i=" + i + ", H=" + newH + ", W=" + newW + ", H(px)=" + newHPx + ", W(px)=" + newWPx;
 			window.dispatchEvent(new Event('resize'));
     },
+		resizeEvent:function(){
+			if(this.trainmode) {
+				this.trainingstepfinished('resize')
+			}
+		},
+		moveEvent:function(){
+			if(this.trainmode) {
+				this.trainingstepfinished('repos')
+			}
+		},
 		dragin () {
 			// console.log("in")
 		},
@@ -528,6 +605,7 @@ export default {
 				this.layout.unshift(item)
 				this.pwidgetlist.unshift(obj.id)
 			}
+			if(this.trainmode)	this.trainingstepfinished('d&d')
 		},
 		hoverin (e) {
 			e.preventDefault();
@@ -789,4 +867,48 @@ ul.wlayout li {
 .pad-0 {
 	padding:0px;
 }
+
+ul.progressstatus {
+	list-style: none;
+	display:table-cell;
+}
+ul.progressstatus li {
+	display:inline-block;
+}
+.prognode {
+	position: relative;
+	width:50px;
+	height:30px;
+	border-radius:0%;
+	border:1px solid #0075bc;
+	background-color:transparent;
+	display:inline-block;
+	margin:0px 10px;
+  background: linear-gradient(to left,  #fff 50%, #0075bc 50%);
+	background-size: 200% 100%;
+	background-position:right bottom;
+	transition:all 1s ease;
+	text-align:center;
+	line-height:1em;
+	letter-spacing:0.05em;
+}
+.prognode span{
+	/* position:absolute;
+	top:-20px; */
+	position:relative;
+	top:25%;
+	color: #0075bc;
+	line-height: 1em;
+}
+.prognode.current {
+border:2px solid #0075bc;
+}
+.prognode.done {
+background-position:left bottom;
+border:1px solid #0075bc;
+}
+.prognode.done span{
+	color:#fff;
+}
+
 </style>

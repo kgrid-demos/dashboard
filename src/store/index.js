@@ -188,6 +188,14 @@ const store = new Vuex.Store({
         return state.patientlist[index];
       }
     },
+    getsimuweekbypid:state=>{
+      return function(pid){
+        var inx = state.init.patientMasterList.findIndex(function(el){
+          return el.id==pid
+        })
+        return state.init.patientMasterList[inx].simuweek
+      }
+    },
     getCurrentCancerType: state =>{
         return state.currentCancerType;
     },

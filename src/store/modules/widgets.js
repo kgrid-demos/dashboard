@@ -132,8 +132,8 @@ const _widgets= [
                                                         "unit":" Mile/Hour", "ryg":[{min:0,max:5,color:"green"}, {min:5,max:20, color:"orange"}, {min:20,max:100,color:"red"}]} ]},
   { "id":"TRO-03","label":"Percipitation", "type":"TRO",    "constraint":{}, "sel":false, "selindex":-1,
           "cancertype":[  {id:99}], "instruments":[ { name: "Percipition in inches", value: 1, "bwpoints":14,
-          "dow":["Su","Mo","Tu","We","Th","Fr","Sa"], "range":{min:0,max:5,inc:0.5,step:1},
-          "unit":" Fahrenheit", "ryg":[{min:0,max:1,color:"orange"}, {min:1,max:3, color:"green"}, {min:3,max:20,color:"red"}]} ]},
+          "dow":["Su","Mo","Tu","We","Th","Fr","Sa"], "range":{min:0,max:3,inc:0.2,step:1},
+          "unit":" Inch", "ryg":[{min:0,max:1,color:"orange"}, {min:1,max:3, color:"green"}, {min:3,max:20,color:"red"}]} ]},
   { "id":"TRS-01","label":"Tornado Safety",  "type":"TRS",    "constraint":{}, "sel":false,"selindex":-1,
   "cancertype":[  {id:99}],
   "instruments":[  { name:"Tornado Safety",description: "Tornado Safety training video", value: 1, "modulecount": 1, "bwpoints": 1} ]}

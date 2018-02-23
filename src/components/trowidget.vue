@@ -52,7 +52,7 @@
         <div class="optionslabel">
           Instrument
         </div>
-        <div class="options instru">
+        <div class="options instru" @click='configuraction'>
           <select v-model="selectedinstrname" :class="{attn:!object.sel}">
           <option disabled value="">(Please select one)</option>
             <option v-for="instrument in instruments" v-bind:value="instrument.name">
@@ -88,7 +88,7 @@
           </div>
         </div>
       </div>
-      <div class="optrow" data-toggle="tooltip" title="If checked, notifications of every alert will be sent.">
+      <div class="optrow" data-toggle="tooltip" title="If checked, notifications of every alert will be sent." @click='configuraction'>
         <div class="optionslabel">
           Send Notification?
         </div>
@@ -424,6 +424,9 @@
       }
     },
     methods: {
+      configuraction:function(){
+        this.$eventBus.$emit('configured')
+      },
       initChartOption:function(){
         this.custfreq = this.selectedfreq
         this.chartOptions.scales.yAxes[0].ticks.min = this.selectedinstr.range.min
