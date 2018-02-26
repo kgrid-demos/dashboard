@@ -1,7 +1,7 @@
 {
-  "name": "kgridlibraryfront",
+  "name": "PDD",
   "version": "1.0.0",
-  "description": "Knowledge Grid Library Web App",
+  "description": "Patient Data Dashboard, with drag & drop capability of configurable widgets",
   "author": "<dlhs.knowledge.grid@umich.edu>",
   "private": true,
   "scripts": {
