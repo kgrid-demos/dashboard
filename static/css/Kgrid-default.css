@@ -24,12 +24,14 @@ h5    { font-size: 16px; display: inline-block; line-height:1.8em;}
 h6    { font-size: 14px; display: inline-block;}
 p     { font-size: 14px; }
 .ft-sz-10   { font-size: 10px; }
+.ft-sz-11   { font-size: 11px; }
 .ft-sz-12    { font-size: 12px; }
 .ft-sz-16    { font-size: 16px; }
 .ft-sz-18    { font-size: 18px; }
 .ft-sz-20    { font-size: 20px; }
 .ft-sz-22    { font-size: 22px; }
 .ft-sz-28    { font-size: 28px; }
+.ft-sz-32    { font-size: 32px; }
 .ft-italic   { font-style:italic;}
 .ft-wt-6     { font-weight: 600; }
 small { font-size:  70%; }
@@ -121,8 +123,8 @@ a, a:hover, a:visited, a:focus {
 .pad-r-10 {  padding-right:10px; }
 .pad-r-15 {  padding-right:15px; }
 .pad-r-20 {  padding-right:20px; }
-.pad-0 {  padding:0px; }
-.mar-0{  margin-left:0;  margin-right:0; }
+.pad-0 { padding:0px; }
+.mar-0 {  margin-left:0;  margin-right:0; }
 .mar-r-30 {  margin-right:30px; }
 .mar-r-12 {  margin-right:12px; }
 

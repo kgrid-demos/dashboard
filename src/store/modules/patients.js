@@ -1,11 +1,5 @@
 import widgets from './widgets.js'
 
-const _patients= [	{ "id":"training", "name":"Training", "age":"", "gender":"", "type":99,"group":[{"id":0},{"id":1},{"id":2}]},
-			{ "id":"PA-67034-001", "name":"Ms. Green", "age":"38", "gender":"female", "type":0,"group":[{"id":0},{"id":1},{"id":2},{"id":3},{"id":4},{"id":5}]},
-			{ "id":"PA-67034-007", "name":"Mr. Brown", "age":"62", "gender":"male", "type":1,"group":[{"id":0},{"id":1},{"id":2},{"id":3},{"id":4},{"id":5}]}
-]
-const patienttemplate = { "id":"PA-67034-001","name":"Ms. Green", "age":"38", "gender":"female", "type":0, "groupid": -1, "layout":[]}
-
 var alertlist=[
 	{"pid":"PA-67034-001",
 		"PRO-10-warn":[
@@ -23,118 +17,118 @@ var alertlist=[
 			{"alertid":"PRO09W001","text":"Patient's weight has been declining since starting chemotherapy. Discuss with patient","checked":false}
 		]
 	},
-
+	{"pid":"training",
+		"TRO-03-warn":[
+			{"alertid":"TRO03W001","text":"Area Flood is possible overnight.","checked":false}
+		],
+		"TRO-04-warn":[
+			{"alertid":"TRO04W001","text":"Dense fog with limited visibility","checked":false}
+		]
+	}
 ]
 
 var notelist =[
 	{"PRO-05-notes":[
-        {
-  "value": 0,
+        {  "v": 0,
   "note": "I am having difficulty buttoning my blouse due to constant tingling pain to my fingertips.",
   "date": -30}
        ],
        "pid": "PA-67034-001"
      },
-
-
 	{ "PRO-06-notes":[
- {"value": 0,"note": "My itchiness on palms/soles are worsening. There are red peeling rash despite use of Eucerin","date": -20
- }
-],"PRO-08-notes":[
- {"value": 0,"note": "There are pain due to mouth sores/ulcerations descpite using Magic Mouthwash; however the sores and pain get better before the start of each new cycle.","date": -31
- }
-],
+ {"v": 0,"note": "My itchiness on palms/soles are worsening. There are red peeling rash despite use of Eucerin","date": -20
+ }],"PRO-08-notes":[
+ {"v": 0,"note": "There are pain due to mouth sores/ulcerations descpite using Magic Mouthwash; however the sores and pain get better before the start of each new cycle.","date": -31
+ }],
       "pid": "PA-67034-007"
-    }
-
+    },
+		{"TRO-01-notes":[
+	        {  "v": 0,
+	  "note": "Temperature is way above the avarage for this day.",
+	  "date": -10}
+	       ],
+	       "pid": "training"
+	     },
 ]
 
 var smlist =[{   "SM-01-data": [],
       "SM-02-data": [],
       "SM-03-data": [],
       "SM-04-data": [
-{"value": 1,"dateOffset": -63},
-{"value": 2,"dateOffset": -48},
-{"value": 3,"dateOffset": -38},
-{"value": 4,"dateOffset": -28}
+{"v": 1,"d": -63},
+{"v": 2,"d": -48},
+{"v": 3,"d": -38},
+{"v": 4,"d": -28}
       ],
       "SM-05-data": [
-{"value": 1,"dateOffset": 10}
+{"v": 1,"d": 10}
       ],
       "SM-06-data": [
-{"value": 1,"dateOffset": 10},
-{"value": 2,"dateOffset": 10},
-{"value": 3,"dateOffset": 10},
-{"value": 4,"dateOffset": 10},
-{"value": 5,"dateOffset": 10},
-{"value": 6,"dateOffset": 10}
+{"v": 1,"d": 10},
+{"v": 2,"d": 10},
+{"v": 3,"d": 10},
+{"v": 4,"d": 10},
+{"v": 5,"d": 10},
+{"v": 6,"d": 10}
       ],
       "SM-07-data": [],
       "SM-08-data": [
-{"value": 1,"dateOffset": -58},
-{"value": 2,"dateOffset": -48},
-{"value": 3,"dateOffset": -26},
-{"value": 4,"dateOffset": -18}
+{"v": 1,"d": -58},
+{"v": 2,"d": -48},
+{"v": 3,"d": -26},
+{"v": 4,"d": -18}
       ],
        "PRO-05-notes":[
        {
- "value": 0,
+ "v": 0,
  "note": "I am having difficulty buttoning my blouse due to constant tingling pain to my fingertips.",
  "date": -30}
       ],
       "pid": "PA-67034-001"
     },
 	{ "SM-01-data": [
-	  {    "value": 1,"dateOffset": 10  },
-	  {    "value": 2,"dateOffset": 10  },
-	  {    "value": 3,"dateOffset": 10  }
+	  {    "v": 1,"d": 10  },
+	  {    "v": 2,"d": 10  },
+	  {    "v": 3,"d": 10  }
 	],"SM-02-data": [
-	  {    "value": 1,"dateOffset": 10  },
-	  {    "value": 2,"dateOffset": 10  },
-	  {    "value": 3,"dateOffset": 10  },
-	  {    "value": 4,"dateOffset": 10  }
+	  {    "v": 1,"d": 10  },
+	  {    "v": 2,"d": 10  },
+	  {    "v": 3,"d": 10  },
+	  {    "v": 4,"d": 10  }
 	],"SM-03-data": [
-	  {    "value": 1,"dateOffset": -48  },
-	  {    "value": 2,"dateOffset": -40  },
-	  {    "value": 3,"dateOffset": 10  },
-	  {    "value": 4,"dateOffset": 10  }
+	  {    "v": 1,"d": -48  },
+	  {    "v": 2,"d": -40  },
+	  {    "v": 3,"d": 10  },
+	  {    "v": 4,"d": 10  }
 	],"SM-04-data": [],"SM-05-data": [
-	  {    "value": 1,"dateOffset": -44  }
-	],"SM-07-data": [
-	  {    "value": 1,"dateOffset": 10  }
+	  {    "v": 1,"d": -44  }
+	],"SM-01-data": [
+	  {    "v": 1,"d": 10  }
 	],"SM-08-data": [
-	  {    "value": 1,"dateOffset": 10  },
-	  {    "value": 2,"dateOffset": 10  },
-	  {    "value": 3,"dateOffset": 10  },
-	  {    "value": 4,"dateOffset": 10  }
+	  {    "v": 1,"d": 10  },
+	  {    "v": 2,"d": 10  },
+	  {    "v": 3,"d": 10  },
+	  {    "v": 4,"d": 10  }
 	],
 	      "pid": "PA-67034-007"
-	    }
+	    },
+			{ "TRS-01-data": [
+			  {    "v": 1,"d": -10  }
+			],
+			      "pid": "training"
+			    }
+
+
 
 ]
 
 // initial state
 const state = {
-  groupid:0,
-  patientid:'',
-  ptconfiglist:[]
+  patientid:''
 }
 
 // getters
 const getters = {
-  getpatientlist: state=>{
-    return _patients
-  },
-  getpatientsummary:state=>{
-    return function() {
-      var index = _patients.map(function(e){return e.id}).indexOf(state.patientid)
-      if(index!=-1){
-        return _patients[index] }
-      else {
-        return {}
-      }
-    }
-  },
 	getpatientalert:state=>{
     return function(id) {
       var index = alertlist.map(function(e){return e.pid}).indexOf(state.patientid)
@@ -193,9 +187,6 @@ const actions = {
 const mutations = {
   setcurrentpatientid(state,pt){
     state.patientid = pt.id
-  },
-  setcurrentgroupid(state,idobj){
-    state.groupid = idobj.value
   }
 }
 

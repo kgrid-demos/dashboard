@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import widgets from './modules/widgets'
 import patients from './modules/patients'
-import layouts from './modules/layouts'
+// import layouts from './modules/layouts'
 import VuexPersistence from 'vuex-persist'
 
 Vue.use(Vuex)
@@ -11,7 +11,7 @@ const debug = process.env.NODE_ENV !== 'production'
 const vuexLocal = new VuexPersistence ({
     key:"first",
     storage: window.localStorage,
-    // reducer: state => ({patientlist: state.patientlist, currentStation: state.currentStation, currentGroup:state.currentGroup}),
+    // reducer: state => ({patientlist: state.patientlist, currentCancerType: state.currentCancerType, currentGroup:state.currentGroup}),
 })
 
 const store = new Vuex.Store({
@@ -19,23 +19,22 @@ const store = new Vuex.Store({
   plugins: [vuexLocal.plugin],
   modules: {
     widgets,
-    patients,
-    layouts
+    patients
   },
   state:{
       init:{},
       debugEnabled:true,
-      filterEnabled:true,
+      testStation:'A',
       loggerURL:'http://localhost:3003/dashboardlog',
-      currentStation:{id:-1,"label":""},
-      currentGroup:{id:0,"color":"#0075bc"},
+      currentCancerType:{id:0,"label":"Breast Caner"},
+      currentGroup:{id:1,"color":"#0075bc"},
       currentPatientIndex: -1,
       currentdaterange:{starttime:0,endtime:0,days:7},
       patientlist:  [],
-      maxgroupinuse:6,
       patientData:[],
       today:0,
-      screenname:'Patient List'
+      screenname:'Patient List',
+      trainingmode:true
     },
   mutations: {
     settoday(state,timestamp){
@@ -43,13 +42,8 @@ const store = new Vuex.Store({
     },
     init(state, obj){
       state.init=obj;
-      state.filterEnabled=state.init.filterenable;
-      if(state.filterEnabled){
-        state.currentStation.id=0;
-        state.currentStation.label="Breast Cancer"
-      }
+      console.log(state.init.patientMasterList)
       state.loggerURL=state.init.loggerURL;
-      state.maxgroupinuse=state.init.maxgroupinuse;
       var ptlist=state.init.patientMasterList;
       ptlist.forEach(function(e){
         var pid=e.id;
@@ -58,7 +52,7 @@ const store = new Vuex.Store({
         var pgender = e.gender;
         var type=e.type;
         e.group.forEach(function(ee){
-          var gid=ee.id;
+          var gid=ee;
           var index = state.patientlist.findIndex(function(el) {
             return el.id==pid && el.groupid==gid});
           if(index==-1){
@@ -109,14 +103,14 @@ const store = new Vuex.Store({
       console.log("SAVE=>"+obj.id+"   "+index);
       state.patientlist[index].layout=JSON.parse(JSON.stringify(obj.layout));
     },
-    selstation(state,obj){
+    selcancertype(state,obj){
       if(obj.value!=-1){
-        state.currentStation.id=state.init.cancertypes[obj.value].id;
-        state.currentStation.label=state.init.cancertypes[obj.value].label;
+        state.currentCancerType.id=state.init.cancertypes[obj.value].id;
+        state.currentCancerType.label=state.init.cancertypes[obj.value].label;
       }
       else {
-        state.currentStation.id=-1;
-        state.currentStation.label="";
+        state.currentCancerType.id=-1;
+        state.currentCancerType.label="";
       }
       state.currentGroup.id=0;
     },
@@ -144,20 +138,34 @@ const store = new Vuex.Store({
     },
     setScreenname(state,s){
       state.screenname=s
+    },
+    settrainingmode(state,b){
+      state.trainingmode=b
+
+    },
+    resettraininglayout(state){
+      var index = state.patientlist.findIndex(function(e){
+        return e.id=='training' && e.groupid==state.currentGroup.id
+      })
+      var n = state.patientlist[index].layout.length
+      state.patientlist[index].layout.splice(0,n )
+    },
+    setteststationid(state,id){
+      state.testStation=id
     }
   },
   getters: {
+    getStationID:state=>{
+      return state.testStation
+    },
     getScreenname:state=>{
       return state.screenname
     },
+    gettrainmode:state=>{
+      return state.trainingmode;
+    },
     gettoday:state=>{
       return state.today
-    },
-    getfilterEnable: state=>{
-      return state.filterEnabled
-    },
-    getmaxgroupinuse: state=>{
-      return state.maxgroupinuse
     },
     getLoggerURL: state=> {
       return state.loggerURL
@@ -172,11 +180,6 @@ const store = new Vuex.Store({
         return []
       }
     },
-    getNotificationList:state=> {
-      return [ {patient:{name:"Bridget Kearns", age:52, gender:"Female"}, timestamp: '2017-10-09',notes:[{"type":-1,"text":"Pain rating scale has decreased from 7 to 3 in last 24 hours"},{"type":0,"text":"Anxiety remains at 13 each of the last 13 days"}]},
-      {patient:{name:"Tyler Durden", age:55, gender:"Male"}, timestamp: '2017-10-09T03:00:04Z',notes:[{"type":1,"text":"Pain rating scale has increased from 2 to 8 in last 24 hours"}]}
-            ]
-    },
     getpatientbyid:state => {
       var self=this;
       return function(obj){
@@ -185,8 +188,16 @@ const store = new Vuex.Store({
         return state.patientlist[index];
       }
     },
-    getCurrentStation: state =>{
-        return state.currentStation;
+    getsimuweekbypid:state=>{
+      return function(pid){
+        var inx = state.init.patientMasterList.findIndex(function(el){
+          return el.id==pid
+        })
+        return state.init.patientMasterList[inx].simuweek
+      }
+    },
+    getCurrentCancerType: state =>{
+        return state.currentCancerType;
     },
     getcurrentGroup:state=>{
       return state.currentGroup;
@@ -194,9 +205,9 @@ const store = new Vuex.Store({
     getPatientList: state=>{
       var l=[];
       l=JSON.parse(JSON.stringify( state.patientlist));
-      if(state.currentStation.id!=-1){
+      if(state.currentCancerType.id!=-1){
         l=l.filter(function(e) {
-          return (e.type==state.currentStation.id)
+          return (e.type==state.currentCancerType.id)
         })
       }
       return l ;

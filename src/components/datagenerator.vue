@@ -50,7 +50,7 @@
             </div>
             <div style="width:1400px; margin-left:2em;">
               <div v-for="(n,index) in numdays" v-if="showpoint(index, widget.freq) || showAllData" style="display:inline-block; width:50px; margin-bottom: 1em; text-align:center;">
-                <vue-slider ref="sliders" v-model="chartdata[wlist.patientID][widget.id + '-data'][index].value"
+                <vue-slider ref="sliders" v-model="chartdata[wlist.patientID][widget.id + '-data'][index].v"
                             v-bind="dataSliders" :min="widget.range[0]" :max="widget.range[1]" :interval="widget.inc" v-on:drag-end="magnetize(wlist.patientID, widget, index)"></vue-slider>
                 {{index}}
               </div>
@@ -59,7 +59,7 @@
         </div>
         <div class="smcontainer" v-for="smwidget in wlist.smWidgets">
           <h5>{{smwidget.label}}</h5> <br>
-          <span class="smvals" v-for="(dpoint, n) in chartdata[wlist.patientID][smwidget.id + '-data']" @click="toggleSMVal(wlist.patientID, smwidget, dpoint, n)">{{convertSMVal(chartdata[wlist.patientID][smwidget.id + '-data'][n].value)}} </span>
+          <span class="smvals" v-for="(dpoint, n) in chartdata[wlist.patientID][smwidget.id + '-data']" @click="toggleSMVal(wlist.patientID, smwidget, dpoint, n)">{{convertSMVal(chartdata[wlist.patientID][smwidget.id + '-data'][n].v)}} </span>
         </div>
       </div>
     </div>
@@ -248,8 +248,8 @@
             priorVal = rand;
           }
           this.chartdata[patientID][widget.id + "-data"][i] = ({
-            'value': rand,
-            'dateOffset': dateOffset
+            'v': rand,
+            'd': dateOffset
           });
 
           dateOffset--;
@@ -289,12 +289,12 @@
       },
       magnetize(patientID, widget, index) {
         if(this.connected) {
-          let sliderVal = (this.chartdata[patientID][widget.id + "-data"][index].value ? this.chartdata[patientID][widget.id + "-data"][index].value : 0);
-          let leftVal = this.chartdata[patientID][widget.id + "-data"][index - 1].value;
-          let rightVal = this.chartdata[patientID][widget.id + "-data"][index + 1].value;
-          leftVal = this.chartdata[patientID][widget.id + "-data"][index - 1].value = Math.round(((leftVal ? leftVal : 0)
+          let sliderVal = (this.chartdata[patientID][widget.id + "-data"][index].v ? this.chartdata[patientID][widget.id + "-data"][index].v : 0);
+          let leftVal = this.chartdata[patientID][widget.id + "-data"][index - 1].v;
+          let rightVal = this.chartdata[patientID][widget.id + "-data"][index + 1].v;
+          leftVal = this.chartdata[patientID][widget.id + "-data"][index - 1].v = Math.round(((leftVal ? leftVal : 0)
               + sliderVal) / 2);
-          rightVal = this.chartdata[patientID][widget.id + "-data"][index + 1].value = Math.round(((rightVal ? rightVal : 0)
+          rightVal = this.chartdata[patientID][widget.id + "-data"][index + 1].v = Math.round(((rightVal ? rightVal : 0)
               + sliderVal) / 2);
           if(this.$refs.sliders[(index - 2)] !== undefined) {
             this.$refs.sliders[(index - 2)].setValue(leftVal);
@@ -317,7 +317,7 @@
               value = 0;
             }
             dateOffset = dateOffset - (Math.floor(Math.random() * that.numdays + 1) + dateOffset - (widget.modulecount - i));
-            that.chartdata[patientID][widget.id + "-data"][i] = {'value': value, 'dateOffset': dateOffset};
+            that.chartdata[patientID][widget.id + "-data"][i] = {'v': value, 'd': dateOffset};
 
           }
         });

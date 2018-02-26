@@ -1,4 +1,4 @@
-<template name="smwidget">
+<template name="trswidget">
   <div class='noselect'>
     <div v-if='!editmode' :style='myStyles'>
       <div class="moduleContainer" v-if='maximized'>

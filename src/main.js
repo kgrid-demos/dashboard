@@ -17,39 +17,26 @@ require('es6-promise').polyfill();
 require('jquery');
 require('tether');
 require('bootstrap');
-// require('lodash');
 
-// debug mode
 Vue.config.debug = false;
 Vue.prototype.$http = axios
 Vue.prototype.$moment = moment
 Vue.prototype.$eventBus= eventBus
-// install router
 Vue.use(VueRouter);
-
-// install Vee-Validate
-//Vue.use(VeeValidate);
-
-//install vuex
 Vue.use(Vuex);
-
-// create router
-const routes = [
-                { path : '/', component : require('./components/home.vue')	},
+const routes = [{ path : '/', component : require('./components/cover.vue')	},
+                { path : '/picker', component : require('./components/home.vue')	},
                 { path : '/about', component: require('./components/about.vue') },
                 { path : '/datagenerator', component: require('./components/datagenerator.vue') },
                 { path : '/layout/:id', name : 'patient', component : require('./components/patientdetail.vue'), data: function(){
                 	   	console.log("current Patient ID:"+ this.$route.params.id);
-                    }	},
-                { path : '/notification', component: require('./components/notification.vue') },
-                      	    ];
-
+                    }	}
+                ];
 const router = new VueRouter({
 	routes : routes,
   history: true,
   hashbang : false,
 });
-
 Vue.directive(
   'click-outside', {
     bind: function(el, binding, vNode) {
@@ -57,7 +44,6 @@ Vue.directive(
         const compName = vNode.context.name
         let warn = `[Vue-click-outside:] provided expression '${binding.expression}' is not a function, but has to be`
         if (compName) { warn += `Found in component '${compName}'` }
-
         console.warn(warn)
       }
       // Define Handler and cache it on the element
@@ -68,11 +54,9 @@ Vue.directive(
         }
       }
       el.__vueClickOutside__ = handler
-
       // add Event Listeners
       document.addEventListener('click', handler)
     },
-
     unbind: function(el, binding) {
       // Remove Event Listeners
       document.removeEventListener('click', el.__vueClickOutside__)
@@ -88,17 +72,12 @@ var vm = new Vue({
 	data : {},
 	components:{	App: App	},
 	created: function(){
-		var self=this;
     console.log('Dashboard Web Application');
   	this.$eventBus.$on("return", function(){
-			router.push({ path: '/' });
+			router.push({ path: '/picker' });
 		});
 		this.$eventBus.$on("patientSelected", function(id){
 			router.push({ name:'patient' ,params: { id: id}});
 		});
-	  this.$eventBus.$on("patientRemoved", function(obj){
-			router.push({ path: '/' });
-	  });
-
 	}
-	}).$mount('#app');
+}).$mount('#app');
