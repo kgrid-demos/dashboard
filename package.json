@@ -17,7 +17,6 @@
     "jquery": "^3.2.1",
     "moment": "^2.18.1",
     "tether": "^1.4.0",
-    "vee-validate": "^2.0.0-rc.5",
     "vue": "^2.3.4",
     "vue-chartjs": "^2.8.7",
     "vue-grid-layout": "^2.1.9",

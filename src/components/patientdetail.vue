@@ -22,25 +22,24 @@
 						<h1 class='pad-l-10' >{{patient.name}}<small class='pad-l-20' v-if='patient.age!=""'>Age {{patient.age}}, {{patient.gender}}</small></h1>
 					</div>
 					<div class="col-md-10 col-sm-10 col-xs-10 pad-0" v-else>
-
 						<div class='row'>
-							<div class='col-md-1 col-sm-1 col-xs-1' style='text-align:center;'>
-						<h1 class='pad-l-10 inline' >{{patient.name}}</h1></div>
-										<div class='col-md-10 col-sm-10 col-xs-10' style='text-align:center;'>
+							<div class='col-md-2 col-sm-2 col-xs-2' style='text-align:right;'>
+						<span class='pad-l-10 ft-sz-16' >TRAINING PROGRESS</span></div>
+										<div class='col-md-9 col-sm-9 col-xs-9' style='text-align:left;'>
 											<div class='inline' style='background-color:#fff;border:none;'>
 												<ul class='progressstatus' style='background-color:#fff; height:55px; '>
-													<li v-for='(item,index) in trainingstatus'><div class='prognode' :class='{done:item.status, current:index==currenttask}'><span class='ft-sz-10'>{{item.task}}</span></div></li>
+													<li v-for='(item,index) in trainingstatus'><div class='prognode' :class='{done:item.status, current:index==currenttask}'><span class='ft-sz-10'></span></div></li>
 												</ul>
 											</div>
-											<div class='instruction' v-if='currenttask<trainingstatus.length' style='font-style: italic;text-align:left; padding-left:5px;letter-spacing:0.05em; width:93%; border-top:1px solid #0075bc; margin:-9px auto 0;'>
-												{{trainingstatus[currenttask].description}}
-											</div>
-											<div class='instruction' v-else>
-												Training complete! You can explore the dashboard. When ready, click on done to exit the training mode.
-											</div>
+											<!-- <div class='instruction' v-if='currenttask<trainingstatus.length' style='font-style: italic;text-align:left; padding-left:5px;letter-spacing:0.05em; width:93%; border-top:1px solid #0075bc; margin:-9px auto 0;'> -->
+												<!-- {{trainingstatus[currenttask].description}} -->
+											<!-- </div> -->
+											<!-- <div class='instruction' v-else> -->
+												<!-- Training complete! You can explore the dashboard. When ready, click on done to exit the training mode. -->
+											<!-- </div> -->
 				</div>
 				<div class='col-md-1 col-sm-1 col-xs-1'>
-						<div  class='float-r inline' v-if='trainmode && !isInEdit && loaddata' data-toggle="tooltip" @click='endtrainingmode' title="Click to go to the patient list">
+						<div  class='float-r inline' v-if='trainmode && !isInEdit && currenttask>=trainingstatus.length' data-toggle="tooltip" @click='endtrainingmode' title="Click to go to the patient list">
 							<div style='border:1px solid #0075bc; padding:8px 10px; font-size:14px; color: #0075bc; text-align:center;font-weight:600;'>Done</div>
 						</div>
 					</div>
@@ -143,7 +142,7 @@ import modal from './modal.vue'
 
 export default {
     name: 'patientdetail',
-	data : function() {
+		data : function() {
 		return {
 			colnum:12,
 			registrationstatus:[],
@@ -759,9 +758,9 @@ export default {
 	transition: opacity 1s ease;
 }
 .pdd-panel.inedit{
-	background-image: linear-gradient(45deg,#f5f5f5 25%,transparent 0,transparent 75%,#f5f5f5 0),linear-gradient(45deg,#f5f5f5 25%,transparent 0,transparent 75%,#f5f5f5 0);
+	/* background-image: linear-gradient(45deg,#f5f5f5 25%,transparent 0,transparent 75%,#f5f5f5 0),linear-gradient(45deg,#f5f5f5 25%,transparent 0,transparent 75%,#f5f5f5 0);
   background-position: 0 0,15px 15px;
-  background-size: 30px 30px;
+  background-size: 30px 30px; */
 }
 .pdd-panel.fading {
 	opacity:0.05;
@@ -886,14 +885,14 @@ ul.progressstatus li {
 }
 .prognode {
 	position: relative;
-	width:50px;
-	height:30px;
+	width:60px;
+	height:10px;
 	border-radius:0%;
-	border:1px solid #0075bc;
+	border:none;
 	background-color:transparent;
 	display:inline-block;
-	margin:0px 10px;
-  background: linear-gradient(to left,  #fff 50%, #0075bc 50%);
+	margin:0px 0px;
+  background: linear-gradient(to left,  #f7f7f7 50%, #0075bc 50%);
 	background-size: 200% 100%;
 	background-position:right bottom;
 	transition:all 1s ease;
@@ -910,12 +909,12 @@ ul.progressstatus li {
 	line-height: 1em;
 }
 .prognode.current {
-	border:2px solid #0075bc;
-	height: 50px;
+	border:none;
+	height: 10px;
 }
 .prognode.done {
 background-position:left bottom;
-border:1px solid #0075bc;
+border:none;
 }
 .prognode.done span{
 	color:#fff;
