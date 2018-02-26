@@ -24,30 +24,25 @@
 					<div class="col-md-10 col-sm-10 col-xs-10 pad-0" v-else>
 						<div class='row'>
 							<div class='col-md-2 col-sm-2 col-xs-2' style='text-align:right;'>
-						<span class='pad-l-10 ft-sz-16' >TRAINING PROGRESS</span></div>
-										<div class='col-md-9 col-sm-9 col-xs-9' style='text-align:left;'>
-											<div class='inline' style='background-color:#fff;border:none;'>
-												<ul class='progressstatus' style='background-color:#fff; height:55px; '>
-													<li v-for='(item,index) in sortedstatus'>
-														<div class='prognode' :class='{done:item.status}' @mouseover='showtip(index)' @mouseleave='hidetip(index)'>
-															<span class='ft-sz-10' v-if='item.showtip'>{{item.task}}</span>
-														</div>
-													</li>
-												</ul>
+								<span class='pad-l-10 ft-sz-16' >TRAINING PROGRESS</span>
+							</div>
+							<div class='col-md-9 col-sm-9 col-xs-9' style='text-align:left;'>
+								<div class='inline' style='background-color:#fff;border:none;'>
+									<ul class='progressstatus' style='background-color:#fff; height:55px; '>
+										<li v-for='(item,index) in sortedstatus'>
+											<div class='prognode' :class='{done:item.status}' @mouseover='showtip(index)' @mouseleave='hidetip(index)'>
+												<span class='ft-sz-10' v-if='item.showtip'>{{item.task}}</span>
 											</div>
-											<!-- <div class='instruction' v-if='currenttask<trainingstatus.length' style='font-style: italic;text-align:left; padding-left:5px;letter-spacing:0.05em; width:93%; border-top:1px solid #0075bc; margin:-9px auto 0;'> -->
-												<!-- {{trainingstatus[currenttask].description}} -->
-											<!-- </div> -->
-											<!-- <div class='instruction' v-else> -->
-												<!-- Training complete! You can explore the dashboard. When ready, click on done to exit the training mode. -->
-											<!-- </div> -->
-				</div>
-				<div class='col-md-1 col-sm-1 col-xs-1'>
-						<div  class='float-r inline' v-if='trainmode && !isInEdit && currenttask>=trainingstatus.length' data-toggle="tooltip" @click='endtrainingmode' title="Click to go to the patient list">
-							<div style='border:1px solid #0075bc; padding:8px 10px; font-size:14px; color: #0075bc; text-align:center;font-weight:600;'>Done</div>
+										</li>
+									</ul>
+								</div>
+							</div>
+							<div class='col-md-1 col-sm-1 col-xs-1'>
+								<div  class='float-r inline' v-if='trainmode && !isInEdit && currenttask>=trainingstatus.length' data-toggle="tooltip" @click='endtrainingmode' title="Click to go to the patient list">
+									<div style='border:1px solid #0075bc; padding:8px 10px; font-size:14px; color: #0075bc; text-align:center;font-weight:600;'>Done</div>
+								</div>
+							</div>
 						</div>
-					</div>
-				</div>
 					</div>
 				</div>
 			</div>

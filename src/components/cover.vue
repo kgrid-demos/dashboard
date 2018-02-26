@@ -23,7 +23,7 @@
 			<div class='row' style="margin:10px 0px;">
 				<div class='col-md-1 col-sm-1 col-xs-1'></div>
 				<div class='col-md-4 col-sm-4 col-xs-4 ' style="padding:0px;"><div class='ft-wt-6 ft-sz-16 mar-top10'><p class='ft-wt-6 ft-sz-16'>Group ID</p></div></div>
-				<div class='col-md-6 col-sm-6 col-xs-6' style="padding:0px;"><input type='number' v-model='groupid' /></div>
+				<div class='col-md-6 col-sm-6 col-xs-6' style="padding:0px;"><input type='number' v-model='groupid' :min='groupidmin' :max='groupidmax'/></div>
 				<div class='col-md-1 col-sm-1 col-xs-1' style="padding:0px;"></div>
 			</div>
 			<div class='row' style="margin:10px 0px;">
@@ -89,7 +89,8 @@ export default {
 			self.settingShow=true;
 		})
 		this.tstation=this.$store.getters.getStationID;
-
+		this.groupid=this.$store.getters.getcurrentGroup.id
+		this.cancertypeselection=this.$store.getters.getCurrentCancerType.id
 	},
 	beforeDestroy:function(){
 		this.$eventBus.$off("config");
@@ -98,6 +99,12 @@ export default {
 		this.$store.commit('setScreenname','Start Page')
 	},
 	computed : {
+		groupidmin:function(){
+			return this.cancertypeselection*12+1
+		},
+		groupidmax:function(){
+			return (this.cancertypeselection+1)*12
+		},
 		groupiddisp:function(){
 			var t=this.groupid+''
 			if(this.groupid<10) t='0'+t
@@ -132,6 +139,7 @@ export default {
 		},
 		selectcancertype: function(i){
 			this.cancertypeselection=i;
+			this.groupid=this.groupidmin;
 		},
 		clickstart:function(){
 			var trainmode=this.$store.getters.gettrainmode
