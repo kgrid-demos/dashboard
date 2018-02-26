@@ -69,8 +69,8 @@ export default {
 		},
 		stationselector:function(){
 			if(!this.training){
-				if(this.path!='/picker'){
-					this.$router.push({ path: '/picker' });
+				if(this.path!='/list'){
+					this.$router.push({ path: '/list' });
 				}
 			}
 		},

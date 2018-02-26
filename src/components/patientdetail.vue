@@ -14,7 +14,7 @@
 				<div class='row' style='margin:0;'>
 					<div class='col-md-1 col-sm-1 col-xs-1  pad-0' v-if='isInEdit'></div>
 					<div class='col-md-1 col-sm-1 col-xs-1'>
-						<router-link  class='float-r' to='/picker' v-if='!maximized && !isInEdit && !trainmode' data-toggle="tooltip" title="Click to go back to the patient list">
+						<router-link  class='float-r' to='/list' v-if='!maximized && !isInEdit && !trainmode' data-toggle="tooltip" title="Click to go back to the patient list">
 							<i class='fa fa-arrow-left'></i>
 						</router-link>
 					</div>
@@ -418,7 +418,7 @@ export default {
 			},
 		endtrainingmode:function(){
 			this.$store.commit('settrainingmode',false)
-			this.$router.push('/picker')
+			this.$router.push('/list')
 		},
 		checkGriddim:function(){
 			this.layoutdim.x0=this.$refs.gridl.getBoundingClientRect().left

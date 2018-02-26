@@ -143,15 +143,11 @@
       this.widgetLists.forEach(function(widgetList) {
         console.log("Data Gen")
         console.log(widgetList)
-        if(widgetList.patientID!="PA-67034-004"){
-          that.chartdata[widgetList.patientID] = {};
+        that.chartdata[widgetList.patientID] = {};
           widgetList.widgets.forEach(function (widget){
             that.chartdata[widgetList.patientID][widget.id + "-data"] =
               JSON.parse(JSON.stringify(that.$store.getters.getPatientData(widgetList.patientID)[widget.id + "-data"]));
             });
-      }
-//        that.randomizeAllPROData(widgetList.patientID, widgetList.widgets);
-//        that.randomizeAllSMData(widgetList.patientID, widgetList.smWidgets);
       });
     },
     computed : {
@@ -159,9 +155,7 @@
         let patientNames = [];
         const patients = this.$store.getters.getPatientMasterList;
         patients.forEach(function (patient) {
-          if(patient.id !== "PA-67034-004") {
             patientNames.push(patient.name)
-          }
         });
 
         return patientNames;

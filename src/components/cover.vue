@@ -148,7 +148,7 @@ export default {
 				this.$store.commit('setcurrentpatientid',{id:'training'});
 				this.$router.push({ 'name':'patient' ,'params': { 'id': 'training'}});
 			}else {
-				this.$router.push({path:"/picker"})
+				this.$router.push({path:"/list"})
 			}
 		}
 	},

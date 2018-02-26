@@ -21,3 +21,17 @@ To run Patient Data Dashboard, your system should have the following required so
 5. When finished, on command line, run `pdd-stop.bat` for Windows, or run `./pdd-stop.sh` for Mac
 6. If you are upgrading the software with latest version, the web application will need a reset to clean the persisted local storage.
 After reset, it is recommended to also do a hard reload of the page to clear any cached content.
+
+#### Set up the test stations
+At the start page, test station, patient case type, session id will be displayed.
+
+To make changes,
+1. Move the mouse to the right upper area to bring out the administrator dropdown;
+2. Click on `Setup`, an overlay with input form will show up;
+3. Select test station;
+4. select cancer type;
+5. Enter session id or use the spinner;
+6. Check if the session will start with training mode;
+7. Once done, click `apply`.
+
+The start page should display the configured values. If all correct, click `Start`. 

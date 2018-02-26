@@ -36,16 +36,16 @@ module.exports = {
         loader: 'vue-loader',
         options: vueLoaderConfig
       },
-      {
-    test: require.resolve('jquery'),
-    use: [{
-        loader: 'expose-loader',
-        options: 'jQuery'
-    },{
-        loader: 'expose-loader',
-        options: '$'
-    }]
-    },
+    //   {
+    // test: require.resolve('jquery'),
+    // use: [{
+    //     loader: 'expose-loader',
+    //     options: 'jQuery'
+    // },{
+    //     loader: 'expose-loader',
+    //     options: '$'
+    // }]
+    // },
       {
         test: /\.js$/,
         loader: 'babel-loader',
@@ -58,7 +58,8 @@ module.exports = {
           limit: 10000,
           name: utils.assetsPath('img/[name].[hash:7].[ext]')
         }
-      },
+      }
+      ,
       {
         test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
         loader: 'url-loader',

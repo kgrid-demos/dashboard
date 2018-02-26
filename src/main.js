@@ -8,15 +8,15 @@ import store from './store';
 import eventBus from './eventBus.js';
 import axios from 'axios';
 import moment from 'moment';
-import $ from 'jquery';
-import 'bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
+// import $ from 'jquery';
+// import 'bootstrap';
+// import 'bootstrap/dist/css/bootstrap.min.css';
 
 require('es6-promise').polyfill();
 // Bootstrap 4
-require('jquery');
-require('tether');
-require('bootstrap');
+// require('jquery');
+// require('tether');
+// require('bootstrap');
 
 Vue.config.debug = false;
 Vue.prototype.$http = axios
@@ -25,10 +25,10 @@ Vue.prototype.$eventBus= eventBus
 Vue.use(VueRouter);
 Vue.use(Vuex);
 const routes = [{ path : '/', component : require('./components/cover.vue')	},
-                { path : '/picker', component : require('./components/home.vue')	},
+                { path : '/list', component : require('./components/home.vue')	},
                 { path : '/about', component: require('./components/about.vue') },
                 { path : '/datagenerator', component: require('./components/datagenerator.vue') },
-                { path : '/layout/:id', name : 'patient', component : require('./components/patientdetail.vue'), data: function(){
+                { path : '/dashboard/:id', name : 'patient', component : require('./components/patientdetail.vue'), data: function(){
                 	   	console.log("current Patient ID:"+ this.$route.params.id);
                     }	}
                 ];
@@ -74,7 +74,7 @@ var vm = new Vue({
 	created: function(){
     console.log('Dashboard Web Application');
   	this.$eventBus.$on("return", function(){
-			router.push({ path: '/picker' });
+			router.push({ path: '/list' });
 		});
 		this.$eventBus.$on("patientSelected", function(id){
 			router.push({ name:'patient' ,params: { id: id}});
