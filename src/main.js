@@ -6,7 +6,7 @@ import store from './store';
 import eventBus from './eventBus.js';
 import axios from 'axios';
 import moment from 'moment';
-
+import ToggleButton from 'vue-js-toggle-button';
 require('es6-promise').polyfill();
 
 Vue.config.debug = false;
@@ -15,6 +15,7 @@ Vue.prototype.$moment = moment
 Vue.prototype.$eventBus= eventBus
 Vue.use(VueRouter);
 Vue.use(Vuex);
+Vue.use(ToggleButton);
 const routes = [{ path : '/', component : require('./components/cover.vue')	},
                 { path : '/list', component : require('./components/home.vue')	},
                 { path : '/about', component: require('./components/about.vue') },

@@ -188,8 +188,14 @@ export default {
 	created : function() {
 		var self = this;
 		var lastsunday = this.$moment().day(-7);
+		var obj={start:0, end:0, days:7};
+		obj.end=this.$moment().day(6).endOf('day').unix();   //next Saturday
+		obj.start=this.$moment().day(obj.days-7).startOf('day').unix() //last Sunday
+		console.log("Start at: "+obj.start+"  End at:"+obj.end)
+		console.log("Start at: "+this.$moment.unix(obj.start).format()+"  End at:"+this.$moment.unix(obj.end).format())
+		this.$store.commit("setcurrentdaterange",obj)
 		this.pddready=false;
-	  this.$store.commit('setCurrentPatientIndex',{'pid':this.patient.id,'group':this.patient.groupid});
+	  this.$store.commit('setCurrentPatientIndex',{'pid':this.$route.params.id,'group':this.$store.getters.getcurrentGroup.id});
 		if(this.trainmode){
 			this.trainingstatus.forEach(function(e){
 				e.status=false
@@ -339,7 +345,7 @@ export default {
 			return wk
 		},
 		patient: function(){
-			// console.log(this.$route.params.id);
+			console.log(this.$route.params.id);
 			return this.$store.getters.getpatientbyid({"id":this.$route.params.id,"group":this.currentGroup.id});
 		},
 		nextitem:function(){
@@ -529,19 +535,44 @@ export default {
 			this.layout[0].w=12;
 			this.layout[0].h=7;
 			this.maximized=true;
+			this.setdaterange(this.maximized)
 			if(this.trainmode) {
 				this.trainingstepfinished('max')
 			}
-
 		},
+
 		restoreLayout: function(){
 			this.layout=JSON.parse(JSON.stringify(this.temp));
 			this.maximized=false;
+			this.setdaterange(this.maximized)
 			if(this.trainmode) {
 				this.trainingstepfinished('restore')
 			}
 
 		},
+		setdaterange:function(max){
+			var obj={};
+			obj.end=this.$moment.unix(this.today).day(6).endOf('day').unix();
+			if(max){
+				switch(this.$route.params.id){
+					case 'PA-67034-001':
+						obj.days=84;
+						break;
+					case 'PA-67034-007':
+						obj.days=56;
+						break;
+					default:
+						obj.days=28;
+						break;
+				}
+			}else {
+				obj.days=7
+			}
+			obj.start= obj.end-obj.days*24*3600;;
+			this.$store.commit('setcurrentdaterange',obj)
+			this.$nextTick()
+		},
+
 		toggleEditMode:function(){
 			this.isInEdit=true;
 			this.timepoint=1;

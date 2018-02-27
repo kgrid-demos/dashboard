@@ -148,30 +148,6 @@
         }
       }
     },
-    watch:{
-      maximized:function(){
-        var obj={};
-        obj.end=this.$moment.unix(this.today).day(6).endOf('day').unix();
-        if(this.maximized){
-          switch(this.patientid){
-            case 'PA-67034-001':
-              obj.days=84;
-              break;
-            case 'PA-67034-007':
-              obj.days=56;
-              break;
-            default:
-              obj.days=28;
-              break;
-          }
-        }else {
-          obj.days=7
-        }
-        obj.start= obj.end-obj.days*24*3600;;
-        this.$store.commit('setcurrentdaterange',obj)
-        this.$nextTick()
-      }
-    },
     methods: {
       maximizeWidget:function(){
         this.$emit("maximizeme",this.object.id)

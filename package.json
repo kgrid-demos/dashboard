@@ -16,6 +16,7 @@
     "vue": "^2.3.4",
     "vue-chartjs": "^2.8.7",
     "vue-grid-layout": "^2.1.9",
+    "vue-js-toggle-button": "^1.2.2",
     "vue-router": "2.5.3",
     "vue-slider-component": "^2.4.1",
     "vuedraggable": "^2.14.1",

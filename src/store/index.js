@@ -191,6 +191,10 @@ const store = new Vuex.Store({
         return []
       }
     },
+    getcancertypes:state=>{
+      return state.init.cancertypes.map(function(e){return e.label})
+
+    },
     getpatientbyid:state => {
       var self=this;
       return function(obj){

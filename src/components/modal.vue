@@ -9,12 +9,16 @@
 					<div class="modal-body">
 						<slot name="body">default body</slot>
 					</div>
+					<div class="modal-footer">
+						<slot name="footer">default header</slot>
+					</div>
 				</div>
 			</div>
 		</div>
 	</transition>
 </template>
 <script>
+
 	export default {
     name: 'modal'
   };
@@ -52,6 +56,9 @@
 }
 .modal-body {
   margin: 20px 0;
+}
+.modal-footer {
+	padding:0px;
 }
 .modal-default-button {
   float: right;

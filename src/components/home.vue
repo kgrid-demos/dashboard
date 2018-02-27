@@ -43,14 +43,6 @@ export default {
 		}
 	},
 	created : function() {
-		var self=this;
-		var lastsunday = this.$moment().day(-7);
-		var obj={start:0, end:0, days:7};
-		obj.end=this.$moment().day(6).endOf('day').unix();   //next Saturday
-		obj.start=this.$moment().day(obj.days-7).startOf('day').unix() //last Sunday
-		console.log("Start at: "+obj.start+"  End at:"+obj.end)
-		console.log("Start at: "+this.$moment.unix(obj.start).format()+"  End at:"+this.$moment.unix(obj.end).format())
-		this.$store.commit("setcurrentdaterange",obj)
 	},
 	mounted:function(){
 		this.$store.commit('setScreenname','Patient List')
@@ -65,9 +57,6 @@ export default {
 			} else {
 				return this.$store.getters.getCurrentCancerType
 			}
-		},
-		currentGroup: function(){
-			return this.$store.getters.getcurrentGroup;
 		},
 		patients: function() {
 			var self =this;
