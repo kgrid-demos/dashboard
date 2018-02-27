@@ -10,7 +10,20 @@ const debug = process.env.NODE_ENV !== 'production'
 const vuexLocal = new VuexPersistence ({
     key:"first",
     storage: window.localStorage,
-
+    reducer:state=>({
+      init:state.init,
+      debugEnabled:state.debugEnabled,
+      testStation:state.testStation,
+      currentCancerType:state.currentCancerType,
+      currentGroup:state.currentGroup,
+      currentPatientIndex: state.currentPatientIndex,
+      currentdaterange:state.currentdaterange,
+      patientlist: state.patientlist,
+      today:state.today,
+      screenname:state.screenname,
+      trainingmode:state.trainingmode,
+      baseurl:state.baseurl
+    })
 })
 
 const store = new Vuex.Store({
@@ -24,7 +37,6 @@ const store = new Vuex.Store({
       init:{},
       debugEnabled:true,
       testStation:'A',
-      // loggerURL:'http://localhost:3003/dashboardlog',
       currentCancerType:{id:0,"label":"Breast Caner"},
       currentGroup:{id:1,"color":"#0075bc"},
       currentPatientIndex: -1,
