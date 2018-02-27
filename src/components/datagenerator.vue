@@ -151,6 +151,10 @@
       });
     },
     computed : {
+      basedataurl (){
+        var baseurl = this.$store.getters.getbaseurl
+        return this.$store.getters.getbaseurl+':3001/patients/'
+      } ,
       patientNameList () {
         let patientNames = [];
         const patients = this.$store.getters.getPatientMasterList;
@@ -323,10 +327,10 @@
         return '☑';
       },
       saveData() {
-        const basedataurl = 'http://localhost:3001/patients/';
+
         let that = this;
         this.widgetLists.forEach(function(wlist){
-          that.$http.put(basedataurl + wlist.patientID, that.chartdata[wlist.patientID]);
+          that.$http.put(that.basedataurl + wlist.patientID, that.chartdata[wlist.patientID]);
         });
 
       },

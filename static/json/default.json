@@ -1,5 +1,4 @@
 {
-	"loggerURL":"http://localhost:3003/dashboardlog",
 	"cancertypes": [
 			{"id":0,"label":"Breast Cancer"},
 			{"id":1,"label":"GI Cancer"},
@@ -32,6 +31,5 @@
 									"group":[25,26,27,28,29,30,31,32,33,34,35,36]},
 									{ "id":"PA-67034-024", "name":"Mr. Gray", "age":"62", "gender":"male", "type":2,"simuweek":8,
 											"group":[25,26,27,28,29,30,31,32,33,34,35,36]}
-		],
-		"patientstemplate":{ "id":"PA-67034-001","name":"Ms. Green", "age":"38", "gender":"female", "type":0, "groupid": -1,"layout":[]}
+		]
 	}

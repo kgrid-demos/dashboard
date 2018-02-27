@@ -312,7 +312,7 @@ export default {
 			return this.$moment.unix(this.today).startOf('day').unix()-this.datatimestamp
 		},
 		loggerurl:function(){
-			return this.$store.getters.getLoggerURL;
+			return this.$store.getters.getbaseurl+':3003/dashboardlog';
 		},
 		currentGroup: function(){
 			return this.$store.getters.getcurrentGroup;

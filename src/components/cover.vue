@@ -117,13 +117,18 @@ export default {
 	methods : {
 		loadPatientDataIntoStorage: function() {
 		  if(!this.$store.getters.hasLoadedPatientData) {
-        const baseDataUrl = "./static/json/db.json";
+
         var self = this;
-        this.$http.get(baseDataUrl).then(response => {
-					console.log("load data...")
-					console.log(response.data)
-          self.$store.commit("loadPatientData", response.data.patients);
-        });
+				var getprodata = this.$http.get("./static/json/db.json")
+				var getsimudata = this.$http.get("./static/json/simudata.json")
+
+        this.$http.all([getprodata, getsimudata]).then(this.$http.spread(function(prodata,simudata) {
+					console.log("loading pro data...")
+					console.log(prodata.data)
+					console.log(simudata.data)
+          self.$store.commit("loadPatientData", prodata.data.patients);
+					self.$store.commit("loadsimudata", simudata.data);
+        }));
       }
     },
 		selectstation:function(i){

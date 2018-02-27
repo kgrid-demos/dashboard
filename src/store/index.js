@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import widgets from './modules/widgets'
 import patients from './modules/patients'
-// import layouts from './modules/layouts'
 import VuexPersistence from 'vuex-persist'
 
 Vue.use(Vuex)
@@ -11,7 +10,7 @@ const debug = process.env.NODE_ENV !== 'production'
 const vuexLocal = new VuexPersistence ({
     key:"first",
     storage: window.localStorage,
-    // reducer: state => ({patientlist: state.patientlist, currentCancerType: state.currentCancerType, currentGroup:state.currentGroup}),
+
 })
 
 const store = new Vuex.Store({
@@ -25,7 +24,7 @@ const store = new Vuex.Store({
       init:{},
       debugEnabled:true,
       testStation:'A',
-      loggerURL:'http://localhost:3003/dashboardlog',
+      // loggerURL:'http://localhost:3003/dashboardlog',
       currentCancerType:{id:0,"label":"Breast Caner"},
       currentGroup:{id:1,"color":"#0075bc"},
       currentPatientIndex: -1,
@@ -34,16 +33,20 @@ const store = new Vuex.Store({
       patientData:[],
       today:0,
       screenname:'Patient List',
-      trainingmode:true
+      trainingmode:true,
+      baseurl:'http://localhost'
     },
   mutations: {
     settoday(state,timestamp){
       state.today=timestamp
     },
+    setbaseurl(state,url){
+      state.baseurl=url
+    },
     init(state, obj){
       state.init=obj;
       console.log(state.init.patientMasterList)
-      state.loggerURL=state.init.loggerURL;
+      // state.loggerURL=state.init.loggerURL;
       var ptlist=state.init.patientMasterList;
       ptlist.forEach(function(e){
         var pid=e.id;
@@ -57,13 +60,13 @@ const store = new Vuex.Store({
             return el.id==pid && el.groupid==gid});
           if(index==-1){
             var temp={};
-            temp=JSON.parse(JSON.stringify(state.init.patientstemplate));
             temp.id=pid;
             temp.name=pname;
             temp.age=page;
             temp.gender=pgender;
             temp.groupid=gid;
             temp.type=type;
+            temp.layout=[];
             state.patientlist.push(temp);
           }
         })
@@ -86,13 +89,13 @@ const store = new Vuex.Store({
             return el.id==pid && el.groupid==gid});
           if(index==-1){
             var temp={};
-            temp=JSON.parse(JSON.stringify(state.init.patientstemplate));
             temp.id=pid;
             temp.name=pname;
             temp.age=page;
             temp.gender=pgender;
             temp.groupid=gid;
             temp.type=type;
+                temp.layout=[];
             state.patientlist.push(temp);
           }
         })
@@ -128,9 +131,6 @@ const store = new Vuex.Store({
     loadPatientData(state, obj) {
       state.patientData = obj;
     },
-    resetPatientData(state) {
-      state.patientData = [];
-    },
     setcurrentdaterange(state,obj){
       state.currentdaterange.starttime=obj.start
       state.currentdaterange.endtime=obj.end
@@ -141,7 +141,6 @@ const store = new Vuex.Store({
     },
     settrainingmode(state,b){
       state.trainingmode=b
-
     },
     resettraininglayout(state){
       var index = state.patientlist.findIndex(function(e){
@@ -155,6 +154,9 @@ const store = new Vuex.Store({
     }
   },
   getters: {
+    getbaseurl:state=>{
+      return state.baseurl
+    },
     getStationID:state=>{
       return state.testStation
     },
@@ -166,9 +168,6 @@ const store = new Vuex.Store({
     },
     gettoday:state=>{
       return state.today
-    },
-    getLoggerURL: state=> {
-      return state.loggerURL
     },
     isDebugging: state => {
       return state.debugEnabled;
@@ -243,7 +242,6 @@ const store = new Vuex.Store({
       commit('init')
     },
   }
-  // plugins: debug ? [createLogger()] : []
 })
 
 export default store
@@ -253,4 +251,3 @@ const initialStateCopy = JSON.parse(JSON.stringify(store.state))
 export function resetState () {
   store.replaceState(JSON.parse(JSON.stringify(initialStateCopy)))
 }
-// export default store
