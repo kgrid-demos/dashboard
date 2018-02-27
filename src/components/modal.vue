@@ -10,7 +10,7 @@
 						<slot name="body">default body</slot>
 					</div>
 					<div class="modal-footer">
-						<slot name="footer">default header</slot>
+						<slot name="footer"></slot>
 					</div>
 				</div>
 			</div>
@@ -18,7 +18,6 @@
 	</transition>
 </template>
 <script>
-
 	export default {
     name: 'modal'
   };

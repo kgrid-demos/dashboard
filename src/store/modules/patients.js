@@ -1,5 +1,3 @@
-import widgets from './widgets.js'
-
 // initial state
 const state = {
   patientid:'',
@@ -7,7 +5,6 @@ const state = {
 	notelist:[],
 	alertlist:[]
 }
-
 // getters
 const getters = {
 	getpatientalert:state=>{
@@ -59,11 +56,9 @@ const getters = {
     }
   }
 }
-
 // actions
 const actions = {
 }
-
 // mutations
 const mutations = {
   setcurrentpatientid(state,pt){
@@ -75,7 +70,6 @@ const mutations = {
 		state.notelist=data.notelist
 	}
 }
-
 export default {
   state,
   getters,

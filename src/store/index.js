@@ -58,7 +58,6 @@ const store = new Vuex.Store({
     init(state, obj){
       state.init=obj;
       console.log(state.init.patientMasterList)
-      // state.loggerURL=state.init.loggerURL;
       var ptlist=state.init.patientMasterList;
       ptlist.forEach(function(e){
         var pid=e.id;
@@ -127,7 +126,6 @@ const store = new Vuex.Store({
         state.currentCancerType.id=-1;
         state.currentCancerType.label="";
       }
-      state.currentGroup.id=0;
     },
     setgroupid(state,obj){
       state.currentGroup.id=obj.value;
@@ -184,16 +182,8 @@ const store = new Vuex.Store({
     isDebugging: state => {
       return state.debugEnabled;
     },
-    getlayoutbyid:state=>{
-      if(state.currentPatientIndex!=-1){
-        return state.patientlist[state.currentPatientIndex].layout;
-      }else {
-        return []
-      }
-    },
     getcancertypes:state=>{
       return state.init.cancertypes.map(function(e){return e.label})
-
     },
     getpatientbyid:state => {
       var self=this;
@@ -232,18 +222,13 @@ const store = new Vuex.Store({
     },
     getPatientData: state=>{
       return function(patientId) {
+        console.log(patientId)
         let index = state.patientData.findIndex(function(patient) {
-          return patient.id===patientId
+          return patient.id==patientId
         });
+        console.log(state.patientData)
+        console.log(index)
         return state.patientData[index];
-      }
-    },
-    getPatientDataTimestamp: state=>{
-      return function(patientId) {
-        let index = state.patientData.findIndex(function(patient) {
-          return patient.id===patientId
-        });
-        return state.patientData[index].timestamp;
       }
     },
     hasLoadedPatientData: state=>{

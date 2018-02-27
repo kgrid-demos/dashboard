@@ -187,12 +187,9 @@ export default {
 	},
 	created : function() {
 		var self = this;
-		var lastsunday = this.$moment().day(-7);
 		var obj={start:0, end:0, days:7};
 		obj.end=this.$moment().day(6).endOf('day').unix();   //next Saturday
 		obj.start=this.$moment().day(obj.days-7).startOf('day').unix() //last Sunday
-		console.log("Start at: "+obj.start+"  End at:"+obj.end)
-		console.log("Start at: "+this.$moment.unix(obj.start).format()+"  End at:"+this.$moment.unix(obj.end).format())
 		this.$store.commit("setcurrentdaterange",obj)
 		this.pddready=false;
 	  this.$store.commit('setCurrentPatientIndex',{'pid':this.$route.params.id,'group':this.$store.getters.getcurrentGroup.id});
@@ -214,15 +211,18 @@ export default {
 	mounted:function(){
 		var self = this;
 		var l = this.$refs.gridl
-		this.layout=JSON.parse(JSON.stringify(this.patient.layout));
-		this.pwidgetlist=this.layout.map(function(e){return e.c.id})
-		if(this.pwidgetlist.length==0){
-		 	this.pddready=false;
-		} else {
-			this.pddready=true;
+		if(!this.$store.getters.hasLoadedPatientData) {
+			var self = this;
+			var getprodata = this.$http.get("./static/json/db.json")
+			var getsimudata = this.$http.get("./static/json/simudata.json")
+			this.$http.all([getprodata, getsimudata]).then(this.$http.spread(function(prodata,simudata) {
+				self.$store.commit("loadPatientData", prodata.data.patients);
+				self.$store.commit("loadsimudata", simudata.data);
+				self.initlayout()
+			}));
+		}else {
+			this.initlayout()
 		}
-		this.$store.commit('setScreenname','Data View')
-	 	window.addEventListener('resize', this.checkGriddim)
 	},
 	beforeDestroy: function () {
   	window.removeEventListener('resize', this.checkGriddim)
@@ -254,19 +254,6 @@ export default {
 					return 4
 			}
 		},
-		simuweeks:function(){
-			return this.$store.getters.getsimuweekbypid(this.patient.id)
-		},
-		simuweekrange:function(){
-			var arr=[]
-			for(var i=1; i<=this.simuweekcount;i++){
-				var obj={}
-				obj.start=this.initdate+(i-1)*7*24*3600
-				obj.end=this.initdate+i*7*24*3600-1
-				arr.push(obj)
-			}
-			return arr
-		},
 		timetitle: function(){
 			switch (this.timepoint){
 				case 1:
@@ -282,20 +269,6 @@ export default {
 					}
 			}
 		},
-		wktracker: function(){
-			var x= (this.weekno-1)*54
-			var w=this.simuweekcount*54
-			if(this.maximized){
-				x=0
-			}else{
-				w=54
-			}
-			return {
-	        // transform: `translateX(${x}px)`,
-					left: `${x}px`,
-					width:`${w}px`
-	      }
-		},
 		timeff:function(){
 			return this.simuweekcount+' weeks later...'
 		},
@@ -310,12 +283,6 @@ export default {
 			}else {
 				return	this.$moment.unix(this.today).day(-3*7).startOf('day').unix()
 			}
-		},
-		datatimestamp:function(){
-			return this.$store.getters.getPatientDataTimestamp(this.patient.id)
-		},
-		timeoffset:function(){
-			return this.$moment.unix(this.today).startOf('day').unix()-this.datatimestamp
 		},
 		loggerurl:function(){
 			return this.$store.getters.getbaseurl+':3003/dashboardlog';
@@ -347,31 +314,6 @@ export default {
 		patient: function(){
 			console.log(this.$route.params.id);
 			return this.$store.getters.getpatientbyid({"id":this.$route.params.id,"group":this.currentGroup.id});
-		},
-		nextitem:function(){
-			var item={x:0,y:20,w:3,h:6,i:"0",c:""};
-			var x = 0;
-			var y = 0;
-			var self=this;
-			var temp = JSON.parse(JSON.stringify(this.layout))
-			var layout = temp.sort(function(a,b){return (a.y+a.h)-(b.y+b.h)})
-			layout.forEach(function(e){
-				var w0 = x-e.x;
-				var h0= y-e.y;
-				if( w0<self.defaultw | h0<self.defaulth )	{
-					x = e.x+e.w;
-					if((x+self.defaultw)>self.colnum){
-						x=0;
-						y=e.y+e.h;
-					}
-				}
-				})
-				item.x=x;
-			item.y=y;
-			item.w=this.defaultw;
-			item.h=this.defaulth;
-			item.i=this.layout.length+"";
-			return item
 		},
 		widgetMasterList: function(){
 			return JSON.parse(JSON.stringify(this.$store.getters.getwidgetlistbypatient(this.patient)));
@@ -412,6 +354,17 @@ export default {
 		}
 	},
 	methods : {
+		initlayout:function(){
+			this.layout=JSON.parse(JSON.stringify(this.patient.layout));
+			this.pwidgetlist=this.layout.map(function(e){return e.c.id})
+			if(this.pwidgetlist.length==0){
+				this.pddready=false;
+			} else {
+				this.pddready=true;
+			}
+			this.$store.commit('setScreenname','Data View')
+			window.addEventListener('resize', this.checkGriddim)
+		},
 		showtip:function(i){
 			if(this.sortedstatus[i].status){
 				this.sortedstatus[i].showtip=false
@@ -540,7 +493,6 @@ export default {
 				this.trainingstepfinished('max')
 			}
 		},
-
 		restoreLayout: function(){
 			this.layout=JSON.parse(JSON.stringify(this.temp));
 			this.maximized=false;
@@ -548,7 +500,6 @@ export default {
 			if(this.trainmode) {
 				this.trainingstepfinished('restore')
 			}
-
 		},
 		setdaterange:function(max){
 			var obj={};
@@ -572,7 +523,6 @@ export default {
 			this.$store.commit('setcurrentdaterange',obj)
 			this.$nextTick()
 		},
-
 		toggleEditMode:function(){
 			this.isInEdit=true;
 			this.timepoint=1;

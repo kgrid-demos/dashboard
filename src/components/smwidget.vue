@@ -149,9 +149,7 @@
       }
     },
     methods: {
-      maximizeWidget:function(){
-        this.$emit("maximizeme",this.object.id)
-      },
+      
     }
   }
 </script>

@@ -108,17 +108,6 @@ export default {
 			this.groupid=this.$store.getters.getcurrentGroup.id
 			this.cancertypeselection=this.$store.getters.getCurrentCancerType.id
 		},
-		loadPatientDataIntoStorage: function() {
-		  if(!this.$store.getters.hasLoadedPatientData) {
-        var self = this;
-				var getprodata = this.$http.get("./static/json/db.json")
-				var getsimudata = this.$http.get("./static/json/simudata.json")
-        this.$http.all([getprodata, getsimudata]).then(this.$http.spread(function(prodata,simudata) {
-          self.$store.commit("loadPatientData", prodata.data.patients);
-					self.$store.commit("loadsimudata", simudata.data);
-        }));
-      }
-    },
 		selectstation:function(i){
 			this.tstation=this.stations[i]
 		},

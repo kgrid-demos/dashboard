@@ -152,7 +152,6 @@
     },
     computed : {
       basedataurl (){
-        var baseurl = this.$store.getters.getbaseurl
         return this.$store.getters.getbaseurl+':3001/patients/'
       } ,
       patientNameList () {

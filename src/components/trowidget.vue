@@ -230,13 +230,6 @@
       daterange:function(){
         return this.$store.getters.getcurrentdaterange
       },
-      initdate:function(){
-  			if(this.$route.params.id=='PA-67034-007'){
-  				return	this.$moment.unix(this.today).day(-7*7).startOf('day').unix()
-  			}else {
-  				return	this.$moment.unix(this.today).day(-11*7).startOf('day').unix()
-  			}
-  		},
       alldata:function(){
         var self=this;
         var data = JSON.parse(JSON.stringify(this.$store.getters.getPatientData(this.patientid)[this.object.id + "-data"]));
@@ -245,14 +238,11 @@
             e.date=self.$moment().add(e.d+7-self.todaysdow, 'd').unix();
           })
           if(this.viewmode){
-            // this.chartOptions.scales.xAxes[0].ticks.display=true
             return data
           }else {
-            // this.chartOptions.scales.xAxes[0].ticks.display=false
             return []
           }
         }else {
-          // this.chartOptions.scales.xAxes[0].ticks.display=false
           return []
         }
       },

@@ -50,7 +50,6 @@ const _widgets= [
   "instruments":[ { name: "WHO Stomatitis Toxicity Scale", value: 1, "bwpoints":2,
                     "dow":["Su","Mo","Tu","We","Th","Fr","Sa"], "range":{min:0,max:4,inc:1,step:1},
                     "unit":" WHO Stomatitis Toxicity Scale", "ryg":[{min:0,max:1,color:"green"}, {min:2,max:2, color:"orange"}, {min:3,max:4,color:"red"}]}
-
                 ]},
   { "id":"PRO-09","label":"Body Weight", "type":"PRO",    "constraint":{}, "sel":false,"selindex":-1,
   "cancertype":[  {id:0}, {id:1},{id:2}],
@@ -149,9 +148,7 @@ const _freqOptions = [
 ]
 // initial state
 const state = {
-
 }
-
 // getters
 const getters = {
   getfrequencyops:state=>{
@@ -211,7 +208,6 @@ const getters = {
 // actions
 const actions = {
 }
-
 // mutations
 const mutations = {
 }
