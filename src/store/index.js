@@ -222,7 +222,7 @@ const store = new Vuex.Store({
     },
     getPatientData: state=>{
       return function(patientId) {
-        console.log(patientId)
+        console.log('Retrieving Patient Data for ' +patientId)
         let index = state.patientData.findIndex(function(patient) {
           return patient.id==patientId
         });
