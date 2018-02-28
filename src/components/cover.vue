@@ -171,7 +171,7 @@ export default {
 .station {
 	text-align: center;
 	vertical-align: middle;
-	padding:2px;
+	padding:5px;
  	position:relative;
 	width:100%;
  	background-color:#fff;

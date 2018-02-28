@@ -192,6 +192,7 @@ export default {
 		obj.start=this.$moment().day(obj.days-7).startOf('day').unix() //last Sunday
 		this.$store.commit("setcurrentdaterange",obj)
 		this.pddready=false;
+				this.$store.commit('setcurrentpatientid',{'id':this.$route.params.id});
 	  this.$store.commit('setCurrentPatientIndex',{'pid':this.$route.params.id,'group':this.$store.getters.getcurrentGroup.id});
 		if(this.trainmode){
 			this.trainingstatus.forEach(function(e){
@@ -711,7 +712,6 @@ export default {
 	z-index:300;
 	transition:left 0.5s ease, width 0.5s ease;
 }
-
 .wklabel {
 	position:relative;
 	cursor:default;
@@ -726,7 +726,6 @@ export default {
 	color: #fff;
 	font-size:14px;
 	font-weight:600;
-	/* mix-blend-mode: darken; */
 }
 .wlistctner {
 	overflow:auto;
@@ -743,19 +742,11 @@ export default {
 .maincontent{
 	min-height:500px;
 }
-.widgetcontainer {
-	position:relative;
-	width:100%;
-	flex: auto;
-}
 .pdd-panel {
 	opacity: 1;
 	transition: opacity 1s ease;
 }
 .pdd-panel.inedit{
-	/* background-image: linear-gradient(45deg,#f5f5f5 25%,transparent 0,transparent 75%,#f5f5f5 0),linear-gradient(45deg,#f5f5f5 25%,transparent 0,transparent 75%,#f5f5f5 0);
-  background-position: 0 0,15px 15px;
-  background-size: 30px 30px; */
 }
 .pdd-panel.fading {
 	opacity:0.05;
