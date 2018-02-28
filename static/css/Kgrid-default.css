@@ -53,43 +53,34 @@ a, a:hover, a:visited, a:focus {
 	cursor: pointer;
 	transition: color 0.5s ease;
 }
-
 .wrapper {
 	background-color: transparent;
 	width: 1584px;
 	margin: 0 auto;
 }
-
 ::-webkit-scrollbar {
     width: 10px;
 }
-
 ::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.1);
     border-radius: 0px;
 }
-
 ::-webkit-scrollbar-thumb {
     border-radius: 0px;
-/*     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);  */
 }
 ::-webkit-scrollbar-track {
       background-color: #fff;
 } /* the new scrollbar will have a flat appearance with the set background color */
-
 ::-webkit-scrollbar-thumb {
       background-color: #b5b5b5;
 } /* this will style the thumb, ignoring the track */
-
 ::-webkit-scrollbar-button {
     display:none;
     background-color: #b5b5b5;
 } /* optionally, you can style the top and the bottom buttons (left and right for horizontal bars) */
-
 ::-webkit-scrollbar-corner {
       background-color: #fff;
 } /* if both the vertical and the horizontal bars appear, then perhaps the right bottom corner also needs to be styled */
-
 
 .noscroll { overflow: hidden; }
 .whitebacking {
@@ -130,13 +121,11 @@ a, a:hover, a:visited, a:focus {
 
 .bg-trans {  background-color: transparent; }
 .bg-white {  background-color: #fff;        }
-
+.inline {display:inline-block;}
 .brd-r {  border-right: 1px solid #666666; }
-
 .lh-1 { line-height: 1em; }
 .lh-15 { line-height: 1.5em; }
 .lh-3 { line-height: 3em; }
-
 .ht-60 {  height: 60px; }
 .ht-50 {  height: 50px; }
 .ht-40 {  height: 40px; }
@@ -157,7 +146,6 @@ a, a:hover, a:visited, a:focus {
     margin: 0 auto;
     padding: 0px 12px;
 }
-.inline {display:inline-block;}
 
   .kgl-content {
   	position: absolute;
@@ -175,4 +163,151 @@ a, a:hover, a:visited, a:focus {
          -moz-user-select: none; /* Firefox */
           -ms-user-select: none; /* Internet Explorer/Edge */
               user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
+  }
+  /* PDD Widget Common*/
+  .options, .optionslabel {
+    height: 100%;
+    float: left;
+  }
+  .optionslabel{
+    width: 40%;
+    font-style: italic;
+    font-weight: 600;
+  }
+  .options {
+    width:60%;
+  }
+  .options select {
+    width:100%;
+  }
+  .optrow {
+    padding: 12px 10px;
+    clear: both;
+  }
+  /* PRO, TRO */
+  .graph {
+    padding-top: 1px;
+    margin:0 auto;
+    background-color: white;
+  }
+  .graph.max{
+    margin-top:15px;
+  }
+  .instru select.attn{
+    border: 1px dashed red;
+  }
+  .graph .edit {
+    width: 25px;
+    height: 25px;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: 0;
+    right: 8px;
+    background: none;
+  }
+  .graph .save {
+    font-size: 1em;
+    margin: 1em auto;
+    width: 10em;
+    padding: 0.5ex 1ex;
+  }
+  .widgetcontainer{
+    width:100%;
+    height:90%;
+  }
+  .widgetalert{
+    height: 20px;
+    background-color: white;
+  }
+  .widgetalert i{
+    cursor:pointer;
+  }
+  .thres {
+    display:inline-block;
+    min-width:33%;
+    text-align: center;
+    color: #fff;
+  }
+  div.min {
+    min-width:240px;
+    max-width:300px;
+    display:inline-block;
+  }
+  .thres.green {  background-color: green }
+  .thres.orange {  background-color: orange }
+  .thres.red {  background-color: red }
+  .widgetalertdisplay {
+        height:130px;
+        background-color: #fff;
+        margin:15px 0px;
+        overflow: auto;
+        padding:10px 15px;
+        text-align: left;
+        text-transform: none;
+    }
+    .notesdisplay {
+        height:120px;
+        background-color: #fff;
+        margin:15px 0px 15px 0px;
+        border: none;
+        overflow: auto;
+        padding:10px 15px;
+        text-align: left;
+        text-transform: none;
+    }
+  /* SM, TRS*/
+  .progresscont {
+    margin: 10px auto;
+    padding: 1px;
+    font-size: 11pt;
+    border: 1px solid green;
+    height: 26px;
+    border-radius: 5px;
+    width: 90%;
+    position: relative;
+    top:50%;
+    transform: translateY(-80%);
+    background-color:#fff
+  }
+  .barlabel {
+    color: aqua;
+    position: absolute;
+    top: 2px;
+    width: 100%;
+    text-align: center;
+    left: 0;
+    font-weight:700;
+    mix-blend-mode:difference;
+  }
+  .moduleContainer {
+    margin: 3em;
+    padding-top: 2.5em;
+    text-transform: none;
+    background-color: #fff;
+    text-align: center;
+  }
+  .moduleList {
+    width: 100%;
+    display: table;
+    margin: 2.5em auto;
+    padding: 20px 0px;
+  }
+  .☑ {
+    color: green;
+  }
+  .☒ {
+    color: red;
+  }
+  .module {
+    font-size:24pt;
+    line-height: 14pt;
+    display: table-cell;
+  }
+  .module div {
+    color: gray;
+    font-size: 10pt;
+  }
+  .moduleLabel {
+    font-size: 10pt;
   }

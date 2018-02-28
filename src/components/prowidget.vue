@@ -88,12 +88,13 @@
           </div>
         </div>
       </div>
-      <div class="optrow" data-toggle="tooltip" title="If checked, notifications of every alert will be sent.">
-        <div class="optionslabel">
+      <div class="optrow" data-toggle="tooltip" title="If checked, notifications of every alert will be sent." style='padding:2px 10px; border-top:1px solid #e7e7e7; margin-top:25px;'>
+        <div class="optionslabel" style='padding:10px 0px;'>
           Send Notification?
         </div>
         <div class="options">
-              <input type="checkbox" id="checkbox" v-model="sendnotification">
+          <toggle-button id='changed-font' v-model='sendnotification' :labels="{checked: 'YES', unchecked: 'NO'}" :color="{checked: '#853754', unchecked: '#B3B3B3'}" :width='60' :height='20'/>
+              <!-- <input type="checkbox" id="checkbox" v-model="sendnotification"> -->
         </div>
       </div>
     </div>
@@ -204,28 +205,6 @@
         }
         this.$emit('instrselected',stat)
       },
-      maximized:function(){
-        var obj={};
-        obj.end=this.$moment.unix(this.today).day(6).endOf('day').unix();
-        if(this.maximized){
-          switch(this.patientid){
-            case 'PA-67034-001':
-              obj.days=84;
-              break;
-            case 'PA-67034-007':
-              obj.days=56;
-              break;
-            default:
-              obj.days=28;
-              break;
-          }
-        }else {
-          obj.days=7
-        }
-        obj.start= obj.end-obj.days*24*3600;;
-        this.$store.commit('setcurrentdaterange',obj)
-        this.$nextTick()
-      }
     },
     computed : {
       todaysdow:function(){
@@ -252,13 +231,6 @@
       daterange:function(){
         return this.$store.getters.getcurrentdaterange
       },
-      initdate:function(){
-  			if(this.$route.params.id=='PA-67034-007'){
-  				return	this.$moment.unix(this.today).day(-7*7).startOf('day').unix()
-  			}else {
-  				return	this.$moment.unix(this.today).day(-11*7).startOf('day').unix()
-  			}
-  		},
       alldata:function(){
         var self=this;
         var data = JSON.parse(JSON.stringify(this.$store.getters.getPatientData(this.patientid)[this.object.id + "-data"]));
@@ -267,14 +239,11 @@
             e.date=self.$moment().add(e.d+7-self.todaysdow, 'd').unix();
           })
           if(this.viewmode){
-            // this.chartOptions.scales.xAxes[0].ticks.display=true
             return data
           }else {
-            // this.chartOptions.scales.xAxes[0].ticks.display=false
             return []
           }
         }else {
-          // this.chartOptions.scales.xAxes[0].ticks.display=false
           return []
         }
       },
@@ -451,92 +420,7 @@
   }
 </script>
 <style scoped>
-  .widgetcontainer{
-    width:100%;
-    height:90%;
-  }
-  .widgetalert{
-    height: 20px;
-    background-color: white;
-  }
-  .widgetalert i{
-    cursor:pointer;
-  }
-  .graph {
-    padding-top: 1px;
-    margin:0 auto;
-    background-color: white;
-  }
-  .graph.max{
-    margin-top:15px;
-  }
-  .instru select.attn{
-    border: 1px dashed red;
-  }
-  .graph .edit {
-    width: 25px;
-    height: 25px;
-    margin: 0;
-    padding: 0;
-    position: absolute;
-    top: 0;
-    right: 8px;
-    background: none;
-  }
-  .graph .save {
-    font-size: 1em;
-    margin: 1em auto;
-    width: 10em;
-    padding: 0.5ex 1ex;
-  }
-  .options, .optionslabel {
-    height: 100%;
-    float: left;
-  }
-  .optionslabel{
-    width: 40%;
-  }
-  .options {
-    width:60%;
-  }
-  .options select {
-    width:100%;
-  }
-  .optrow {
-    padding: 12px 10px;
-    clear: both;
-  }
-  .widgetalertdisplay {
-      height:130px;
-      background-color: #fff;
-      margin:15px 0px;
-      overflow: auto;
-      padding:10px 15px;
-      text-align: left;
-      text-transform: none;
-  }
-  .notesdisplay {
-      height:120px;
-      background-color: #fff;
-      margin:15px 0px 15px 0px;
-      border: none;
-      overflow: auto;
-      padding:10px 15px;
-      text-align: left;
-      text-transform: none;
-  }
-.thres {
-  display:inline-block;
-  min-width:33%;
-  text-align: center;
-  color: #fff;
+.vue-js-switch#changed-font {
+  font-size: 14px;
 }
-div.min {
-  min-width:240px;
-  max-width:300px;
-  display:inline-block;
-}
-.thres.green {  background-color: green }
-.thres.orange {  background-color: orange }
-.thres.red {  background-color: red }
 </style>

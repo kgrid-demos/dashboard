@@ -21,7 +21,6 @@
     </tbody>
   </table>
   <div class='patientsummary' v-if='hoverrow!=-1'>
-
     <div class='patientinfo row mar-0 ft-sz-22'>
       <div class='col-md-4 '> <small>NAME:</small> {{filteredData[hoverrow].name}} </div>
       <div class='col-md-4 '>  <small>GENDER:</small> {{filteredData[hoverrow].gender}} </div>
@@ -131,55 +130,18 @@ export default {
         this.$emit("selected", key)
     },
     selrow: function(index){
-      // if(index==-1)index=0
       this.hoverrow =index
     }
   }
 }
 </script>
 <style scoped>
-small {
-  font-size:50%;
-}
-ul li {
-	display: inline-flex;
-}
+small {  font-size:50%; }
+ul li {	display: inline-flex; }
 table {
   border-radius: 3px;
   background-color: #fff;
   width: 100%;
-}
-table.default {
-  border: 2px solid #0075bc;
-}
-table.group0 {
-  border: 2px solid #0075bc;
-}
-table.group1 {
-  border: 2px solid blue;
-}
-table.group2 {
-  border: 2px solid green;
-}
-table.group3 {
-  border: 2px solid #0075bc;
-}
-table.group4 {
-  border: 2px solid #0075bc;
-}
-table.group5 {
-  border: 2px solid #0075bc;
-}
-table.group6 {
-  border: 2px solid #0075bc;
-}
-table.group7 {
-  border: 2px solid #0075bc;
-}
-table.group8 {
-  border: 2px solid #0075bc;
-}
-table.group9 {
   border: 2px solid #0075bc;
 }
 th {
@@ -197,33 +159,7 @@ color: #0075bc;
 table.group0  th{
 background-color: #0075bc;
 }
-  table.group1  th{
-    background-color: blue;
-}
-table.group2  th{
-  background-color: green;
-}
-table.group3  th{
-  border: 2px solid #0075bc;
-}
-table.group4  th{
-  border: 2px solid #0075bc;
-}
-table.group5  th {
-  border: 2px solid #0075bc;
-}
-table.group6  th{
-  border: 2px solid #0075bc;
-}
-table.group7  th{
-  border: 2px solid #0075bc;
-}
-table.group8  th{
-  border: 2px solid #0075bc;
-}
-table.group9 th {
-  border: 2px solid #0075bc;
-}
+
 th, td {
   padding: 15px 15px;
   text-overflow: ellipsis;

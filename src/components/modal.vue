@@ -9,6 +9,9 @@
 					<div class="modal-body">
 						<slot name="body">default body</slot>
 					</div>
+					<div class="modal-footer">
+						<slot name="footer"></slot>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -52,6 +55,9 @@
 }
 .modal-body {
   margin: 20px 0;
+}
+.modal-footer {
+	padding:0px;
 }
 .modal-default-button {
   float: right;

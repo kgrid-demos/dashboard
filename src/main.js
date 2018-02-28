@@ -1,22 +1,13 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Vuex from 'vuex';
-import draggable from 'vuedraggable';
-import VueGridLayout from 'vue-grid-layout';
 import App from './App';
 import store from './store';
 import eventBus from './eventBus.js';
 import axios from 'axios';
 import moment from 'moment';
-import $ from 'jquery';
-import 'bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
-
+import ToggleButton from 'vue-js-toggle-button';
 require('es6-promise').polyfill();
-// Bootstrap 4
-require('jquery');
-require('tether');
-require('bootstrap');
 
 Vue.config.debug = false;
 Vue.prototype.$http = axios
@@ -24,47 +15,19 @@ Vue.prototype.$moment = moment
 Vue.prototype.$eventBus= eventBus
 Vue.use(VueRouter);
 Vue.use(Vuex);
+Vue.use(ToggleButton);
 const routes = [{ path : '/', component : require('./components/cover.vue')	},
-                { path : '/picker', component : require('./components/home.vue')	},
+                { path : '/list', component : require('./components/home.vue')	},
                 { path : '/about', component: require('./components/about.vue') },
                 { path : '/datagenerator', component: require('./components/datagenerator.vue') },
-                { path : '/layout/:id', name : 'patient', component : require('./components/patientdetail.vue'), data: function(){
-                	   	console.log("current Patient ID:"+ this.$route.params.id);
-                    }	}
+                { path : '/dashboard/:id', name : 'patient', component : require('./components/patientdetail.vue'), data: function(){
+                	   	console.log("current Patient ID:"+ this.$route.params.id);   }	}
                 ];
 const router = new VueRouter({
 	routes : routes,
   history: true,
   hashbang : false,
 });
-Vue.directive(
-  'click-outside', {
-    bind: function(el, binding, vNode) {
-    if (typeof binding.value !== 'function') {
-        const compName = vNode.context.name
-        let warn = `[Vue-click-outside:] provided expression '${binding.expression}' is not a function, but has to be`
-        if (compName) { warn += `Found in component '${compName}'` }
-        console.warn(warn)
-      }
-      // Define Handler and cache it on the element
-      const bubble = binding.modifiers.bubble
-      const handler = (e) => {
-        if (bubble || (!el.contains(e.target) && el !== e.target)) {
-          binding.value(e)
-        }
-      }
-      el.__vueClickOutside__ = handler
-      // add Event Listeners
-      document.addEventListener('click', handler)
-    },
-    unbind: function(el, binding) {
-      // Remove Event Listeners
-      document.removeEventListener('click', el.__vueClickOutside__)
-      el.__vueClickOutside__ = null
-    }
-  }
-)
-
 var vm = new Vue({
 	router : router,
 	el: '#app',
@@ -74,7 +37,7 @@ var vm = new Vue({
 	created: function(){
     console.log('Dashboard Web Application');
   	this.$eventBus.$on("return", function(){
-			router.push({ path: '/picker' });
+			router.push({ path: '/list' });
 		});
 		this.$eventBus.$on("patientSelected", function(id){
 			router.push({ name:'patient' ,params: { id: id}});

@@ -15,32 +15,32 @@
 			<div class='row' style="margin:10px 0px;">
 				<div class='col-md-1 col-sm-1 col-xs-1'></div>
 				<div class='col-md-4 col-sm-4 col-xs-4 ' @click='selectcancertype(-1)' style="padding:0px;"><div class='ft-wt-6 ft-sz-16 mar-top10'><p class='ft-wt-6 ft-sz-16'>Cancer Type</p></div></div>
-				<div class='col-md-2 col-sm-2 col-xs-2 ' @click='selectcancertype(0)' style="padding:0px;"><div class='station' style="padding:4px;margin-left:-1px;" :class='{active:cancertypeselection==0}'><p>Breast Cancer</p></div></div>
-				<div class='col-md-2 col-sm-2 col-xs-2 ' @click='selectcancertype(1)' style="padding:0px;"><div class='station' style="padding:4px;margin-left:-1px;" :class='{active:cancertypeselection==1}'><p>GI Cancer</p></div></div>
-				<div class='col-md-2 col-sm-2 col-xs-2 ' @click='selectcancertype(2)' style="padding:0px;"><div class='station' style="padding:4px;margin-left:-1px;" :class='{active:cancertypeselection==2}'><p>Lung Cancer</p></div></div>
+				<div class='col-md-2 col-sm-2 col-xs-2 ' v-for='(op,index) in options' @click='selectcancertype(index)' style="padding:0px;"><div class='station' style="padding:4px;margin-left:-1px;" :class='{active:cancertypeselection==index}'><p>{{op}}</p></div></div>
 				<div class='col-md-1 col-sm-1 col-xs-1'></div>
 			</div>
 			<div class='row' style="margin:10px 0px;">
 				<div class='col-md-1 col-sm-1 col-xs-1'></div>
-				<div class='col-md-4 col-sm-4 col-xs-4 ' style="padding:0px;"><div class='ft-wt-6 ft-sz-16 mar-top10'><p class='ft-wt-6 ft-sz-16'>Group ID</p></div></div>
-				<div class='col-md-6 col-sm-6 col-xs-6' style="padding:0px;"><input type='number' v-model='groupid' :min='groupidmin' :max='groupidmax'/></div>
+				<div class='col-md-4 col-sm-4 col-xs-4 ' style="padding:0px;"><div class='ft-wt-6 ft-sz-16 mar-top10'><p class='ft-wt-6 ft-sz-16'>Session</p></div></div>
+				<div class='col-md-6 col-sm-6 col-xs-6' style="padding:0px;"><input id='sid' type='number' v-model='groupid' :min='groupidmin' :max='groupidmax'/></div>
 				<div class='col-md-1 col-sm-1 col-xs-1' style="padding:0px;"></div>
 			</div>
-			<div class='row' style="margin:10px 0px;">
+				<div class='row' style="margin:10px 0px;">
 				<div class='col-md-1 col-sm-1 col-xs-1'></div>
 				<div class='col-md-4 col-sm-4 col-xs-4 ' style="padding:0px;"><div class='ft-wt-6 ft-sz-16 mar-top10'><p class='ft-wt-6 ft-sz-16'>Start with Training Mode</p></div></div>
-				<div class='col-md-6 col-sm-6 col-xs-6' style="padding:0px;"><input type='checkbox' v-model='trainstart'/></div>
+				<div class='col-md-6 col-sm-6 col-xs-6' style="padding:0px;">
+					<toggle-button id='changed-font' v-model='trainstart' :labels="{checked: 'YES', unchecked: 'NO'}" :color="{checked: '#0075BC', unchecked: '#B3B3B3'}" :width='80' :height='30'/></div>
 				<div class='col-md-1 col-sm-1 col-xs-1' style="padding:0px;"></div>
 			</div>
-		 <div class='row' style='text-align:center;'>
-				 <button @click='savesettings'>Apply</button>
+		</div>
+		<div slot='footer'>
+		 <div class='row' style='text-align:right; padding-right:30px;'>
+				 <button class='kg-btn' @click='savesettings(true)'>Apply</button>
+				 <button class='kg-btn-secondary' @click='savesettings(false)'>Cancel</button>
 			</div>
 		</div>
 	</modal>
 	<applayout>
-		<div slot='banner'>
-			<p style='height:60px;'></p>
-		</div>
+		<div slot='banner'>			<p style='height:60px;'></p>		</div>
 		<div slot='main'>
 			<div class='row'>
 				<div class='hgroupselector'>
@@ -59,46 +59,34 @@
 <script>
 import applayout from './applayout.vue';
 import modal from './modal.vue';
+import ToggleButton from 'vue-js-toggle-button';
+
 export default {
   name: 'cover',
 	data : function() {
 		return {
 			tstation:0,
 			settingShow:false,
-			searchQuery: '',
 			cancertypeselection:0,
 			groupid:1,
 			trainstart:true,
-			startwithtrain:true,
-			gridColumns: ['id','name', 'age','gender','type'],
-			options:['Breast Cancer', "GI Cancer", "Lung Cancer"],
 			stations:['A','B','C','D']
 		}
 	},
 	created : function() {
 		var self=this;
-		var lastsunday = this.$moment().day(-7);
-		var obj={start:0, end:0, days:7};
-		this.loadPatientDataIntoStorage();
-		obj.end=this.$moment().day(6).endOf('day').unix();   //next Saturday
-		obj.start=this.$moment().day(obj.days-7).startOf('day').unix() //last Sunday
-		console.log("Start at: "+obj.start+"  End at:"+obj.end)
-		console.log("Start at: "+this.$moment.unix(obj.start).format()+"  End at:"+this.$moment.unix(obj.end).format())
-		this.$store.commit("setcurrentdaterange",obj)
 		this.$eventBus.$on("config",function(){
 			self.settingShow=true;
 		})
-		this.tstation=this.$store.getters.getStationID;
-		this.groupid=this.$store.getters.getcurrentGroup.id
-		this.cancertypeselection=this.$store.getters.getCurrentCancerType.id
-	},
-	beforeDestroy:function(){
-		this.$eventBus.$off("config");
+		this.init()
 	},
 	mounted:function(){
 		this.$store.commit('setScreenname','Start Page')
 	},
 	computed : {
+		options:function(){
+			return this.$store.getters.getcancertypes
+		},
 		groupidmin:function(){
 			return this.cancertypeselection*12+1
 		},
@@ -115,26 +103,24 @@ export default {
 		}
 	},
 	methods : {
-		loadPatientDataIntoStorage: function() {
-		  if(!this.$store.getters.hasLoadedPatientData) {
-        const baseDataUrl = "./static/json/db.json";
-        var self = this;
-        this.$http.get(baseDataUrl).then(response => {
-					console.log("load data...")
-					console.log(response.data)
-          self.$store.commit("loadPatientData", response.data.patients);
-        });
-      }
-    },
+		init:function(){
+			this.tstation=this.$store.getters.getStationID;
+			this.groupid=this.$store.getters.getcurrentGroup.id
+			this.cancertypeselection=this.$store.getters.getCurrentCancerType.id
+		},
 		selectstation:function(i){
 			this.tstation=this.stations[i]
 		},
-		savesettings:function(){
-			this.$store.commit('selcancertype',{'value':this.cancertypeselection})
-			this.$store.commit('setgroupid',{'value':this.groupid});
-			this.$store.commit('settrainingmode',this.trainstart)
-			if(this.trainstart) this.$store.commit('resettraininglayout')
-			this.$store.commit('setteststationid', this.tstation);
+		savesettings:function(b){
+			if(b){
+				this.$store.commit('selcancertype',{'value':this.cancertypeselection})
+				this.$store.commit('setgroupid',{'value':this.groupid});
+				this.$store.commit('settrainingmode',this.trainstart)
+				if(this.trainstart) this.$store.commit('resettraininglayout')
+				this.$store.commit('setteststationid', this.tstation);
+			}else {
+				this.init()
+			}
 			this.settingShow=false
 		},
 		selectcancertype: function(i){
@@ -148,7 +134,7 @@ export default {
 				this.$store.commit('setcurrentpatientid',{id:'training'});
 				this.$router.push({ 'name':'patient' ,'params': { 'id': 'training'}});
 			}else {
-				this.$router.push({path:"/picker"})
+				this.$router.push({path:"/list"})
 			}
 		}
 	},
@@ -159,29 +145,7 @@ export default {
 };
 </script>
 <style scoped>
-.bannercontent {
-    text-align: left;
-    margin-bottom: 20px;
-    margin: 0 auto;
-    line-height: 2em;
-		letter-spacing: 0.1em;
-    padding-top: 5px;
-    background: transparent;
-		height: 40px;
-}
-.bannercontent h1 {
-	line-height:1.3em;
-}
-.maincontent{
-	min-height:200px;
-}
-.kg-bg-custom-0 {
-	background-color:#f5f5f5;
-}
-.kg-bg-custom-1 {
-	background-color:#e5e5e5;
-}
-.kg-btn-primary{
+.kg-btn-primary, .kg-btn, .kg-btn-secondary {
 	background-color:#fff;
 	border:1px solid #0075bc;
 	padding:5px 10px;
@@ -192,7 +156,14 @@ export default {
 	font-weight:600;
 	font-size:24px;
 }
-.kg-btn-primary:hover{
+.kg-btn, .kg-btn-secondary {
+	font-size: 18px;
+}
+.kg-btn-secondary {
+	color: #666;
+	border:none;
+}
+.kg-btn-primary:hover, .kg-btn:hover{
 	background-color:#0075bc;
 	color:#fff;
 	border:1px solid #fff;
@@ -200,12 +171,23 @@ export default {
 .station {
 	text-align: center;
 	vertical-align: middle;
-	padding:2px;
+	padding:5px;
  	position:relative;
 	width:100%;
  	background-color:#fff;
  	border: 1px solid #0075bc;
 	cursor:pointer;
+}
+input#sid {
+	font-size:20px;
+	margin: 10px auto;
+	border: 1px solid #e7e7e7;
+	text-align:center;
+	min-width: 160px;
+}
+input#chek {
+	width: 25px;
+	height:25px;
 }
 .station p{
 	font-size: 14px;
@@ -229,5 +211,8 @@ export default {
 	}
 h1 small {
 	font-size:50%;
+}
+.vue-js-switch#changed-font {
+  font-size: 16px;
 }
 </style>

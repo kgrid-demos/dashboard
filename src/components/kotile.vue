@@ -4,7 +4,6 @@
 					<trowidget v-if="object.type === 'TRO' " ref="widget" :patientid='patientid' :viewmode='viewmode' v-on:instrselected='instrselected' :chartheight='cHeight' v-on:maximizeme='maximizeme' :editmode="editmode" :object="object" :maximized="maximized" :title="object.label" ></trowidget>
           <smwidget v-if="object.type === 'SM'  " :patientid='patientid' :chartheight='cHeight' :viewmode='viewmode' :editmode="editmode" :object="object" :title="object.label" v-on:maximizeme='maximizeme' :maximized="maximized" ></smwidget>
 					<trswidget v-if="object.type === 'TRS'  " :patientid='patientid' :chartheight='cHeight' :viewmode='viewmode' :editmode="editmode" :object="object" :title="object.label" v-on:maximizeme='maximizeme' :maximized="maximized" ></trswidget>
-
 		</div>
 	</template>
 	<script>
@@ -21,9 +20,7 @@
 		computed : {
 			cHeight: function(){
 				var h = (this.containerheight-30)
-				if (this.maximized) {
-					h=h*0.5;
-				}
+				if (this.maximized) {	h=h*0.5;	}
 				return h
 			}
 		},
@@ -40,12 +37,10 @@
 			maximizeme:function(id){
 				this.$emit("maximizeme",id)
 			}
-
 		}
 	};
 				</script>
 				<style scoped>
-
 				.kgl-tile {
 						position: relative;
 				    width: 100%;
@@ -60,11 +55,6 @@
 				.kgl-tile.max{
 						background-color: #e5e5e5;
 					}
-
-				/*.kgl-tile:hover {
-					 cursor:pointer;
-				}*/
-
 				.kgl-tile.max:hover {
 					border: none;
 					cursor: initial;
@@ -74,13 +64,11 @@
 					background-color:#fff;
 					min-height:200px;
 				}
-
 				.kgl-id {
 					text-align: right;
 					padding-right: 0px;
 					right:-10px;
 				}
-
 				.alert {
 					color:red;
 					margin:14px 0 0 20px;

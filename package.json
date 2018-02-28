@@ -1,7 +1,7 @@
 {
-  "name": "kgridlibraryfront",
+  "name": "PDD",
   "version": "1.0.0",
-  "description": "Knowledge Grid Library Web App",
+  "description": "Patient Data Dashboard, with drag & drop capability of configurable widgets",
   "author": "<dlhs.knowledge.grid@umich.edu>",
   "private": true,
   "scripts": {
@@ -10,16 +10,13 @@
   },
   "dependencies": {
     "axios": "^0.16.2",
-    "bootstrap": "^3.3.7",
     "chart.js": "^2.7.0",
     "es6-promise": "^4.1.0",
-    "expose-loader": "^0.7.4",
-    "jquery": "^3.2.1",
     "moment": "^2.18.1",
-    "tether": "^1.4.0",
     "vue": "^2.3.4",
     "vue-chartjs": "^2.8.7",
     "vue-grid-layout": "^2.1.9",
+    "vue-js-toggle-button": "^1.2.2",
     "vue-router": "2.5.3",
     "vue-slider-component": "^2.4.1",
     "vuedraggable": "^2.14.1",

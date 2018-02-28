@@ -14,7 +14,7 @@
 				<div class='row' style='margin:0;'>
 					<div class='col-md-1 col-sm-1 col-xs-1  pad-0' v-if='isInEdit'></div>
 					<div class='col-md-1 col-sm-1 col-xs-1'>
-						<router-link  class='float-r' to='/picker' v-if='!maximized && !isInEdit && !trainmode' data-toggle="tooltip" title="Click to go back to the patient list">
+						<router-link  class='float-r' to='/list' v-if='!maximized && !isInEdit && !trainmode' data-toggle="tooltip" title="Click to go back to the patient list">
 							<i class='fa fa-arrow-left'></i>
 						</router-link>
 					</div>
@@ -187,9 +187,13 @@ export default {
 	},
 	created : function() {
 		var self = this;
-		var lastsunday = this.$moment().day(-7);
+		var obj={start:0, end:0, days:7};
+		obj.end=this.$moment().day(6).endOf('day').unix();   //next Saturday
+		obj.start=this.$moment().day(obj.days-7).startOf('day').unix() //last Sunday
+		this.$store.commit("setcurrentdaterange",obj)
 		this.pddready=false;
-	  this.$store.commit('setCurrentPatientIndex',{'pid':this.patient.id,'group':this.patient.groupid});
+				this.$store.commit('setcurrentpatientid',{'id':this.$route.params.id});
+	  this.$store.commit('setCurrentPatientIndex',{'pid':this.$route.params.id,'group':this.$store.getters.getcurrentGroup.id});
 		if(this.trainmode){
 			this.trainingstatus.forEach(function(e){
 				e.status=false
@@ -208,15 +212,18 @@ export default {
 	mounted:function(){
 		var self = this;
 		var l = this.$refs.gridl
-		this.layout=JSON.parse(JSON.stringify(this.patient.layout));
-		this.pwidgetlist=this.layout.map(function(e){return e.c.id})
-		if(this.pwidgetlist.length==0){
-		 	this.pddready=false;
-		} else {
-			this.pddready=true;
+		if(!this.$store.getters.hasLoadedPatientData) {
+			var self = this;
+			var getprodata = this.$http.get("./static/json/db.json")
+			var getsimudata = this.$http.get("./static/json/simudata.json")
+			this.$http.all([getprodata, getsimudata]).then(this.$http.spread(function(prodata,simudata) {
+				self.$store.commit("loadPatientData", prodata.data.patients);
+				self.$store.commit("loadsimudata", simudata.data);
+				self.initlayout()
+			}));
+		}else {
+			this.initlayout()
 		}
-		this.$store.commit('setScreenname','Data View')
-	 	window.addEventListener('resize', this.checkGriddim)
 	},
 	beforeDestroy: function () {
   	window.removeEventListener('resize', this.checkGriddim)
@@ -248,19 +255,6 @@ export default {
 					return 4
 			}
 		},
-		simuweeks:function(){
-			return this.$store.getters.getsimuweekbypid(this.patient.id)
-		},
-		simuweekrange:function(){
-			var arr=[]
-			for(var i=1; i<=this.simuweekcount;i++){
-				var obj={}
-				obj.start=this.initdate+(i-1)*7*24*3600
-				obj.end=this.initdate+i*7*24*3600-1
-				arr.push(obj)
-			}
-			return arr
-		},
 		timetitle: function(){
 			switch (this.timepoint){
 				case 1:
@@ -275,20 +269,6 @@ export default {
 							return 'Four weeks since start'
 					}
 			}
-		},
-		wktracker: function(){
-			var x= (this.weekno-1)*54
-			var w=this.simuweekcount*54
-			if(this.maximized){
-				x=0
-			}else{
-				w=54
-			}
-			return {
-	        // transform: `translateX(${x}px)`,
-					left: `${x}px`,
-					width:`${w}px`
-	      }
 		},
 		timeff:function(){
 			return this.simuweekcount+' weeks later...'
@@ -305,14 +285,8 @@ export default {
 				return	this.$moment.unix(this.today).day(-3*7).startOf('day').unix()
 			}
 		},
-		datatimestamp:function(){
-			return this.$store.getters.getPatientDataTimestamp(this.patient.id)
-		},
-		timeoffset:function(){
-			return this.$moment.unix(this.today).startOf('day').unix()-this.datatimestamp
-		},
 		loggerurl:function(){
-			return this.$store.getters.getLoggerURL;
+			return this.$store.getters.getbaseurl+':3003/dashboardlog';
 		},
 		currentGroup: function(){
 			return this.$store.getters.getcurrentGroup;
@@ -339,33 +313,8 @@ export default {
 			return wk
 		},
 		patient: function(){
-			// console.log(this.$route.params.id);
+			console.log(this.$route.params.id);
 			return this.$store.getters.getpatientbyid({"id":this.$route.params.id,"group":this.currentGroup.id});
-		},
-		nextitem:function(){
-			var item={x:0,y:20,w:3,h:6,i:"0",c:""};
-			var x = 0;
-			var y = 0;
-			var self=this;
-			var temp = JSON.parse(JSON.stringify(this.layout))
-			var layout = temp.sort(function(a,b){return (a.y+a.h)-(b.y+b.h)})
-			layout.forEach(function(e){
-				var w0 = x-e.x;
-				var h0= y-e.y;
-				if( w0<self.defaultw | h0<self.defaulth )	{
-					x = e.x+e.w;
-					if((x+self.defaultw)>self.colnum){
-						x=0;
-						y=e.y+e.h;
-					}
-				}
-				})
-				item.x=x;
-			item.y=y;
-			item.w=this.defaultw;
-			item.h=this.defaulth;
-			item.i=this.layout.length+"";
-			return item
 		},
 		widgetMasterList: function(){
 			return JSON.parse(JSON.stringify(this.$store.getters.getwidgetlistbypatient(this.patient)));
@@ -406,6 +355,17 @@ export default {
 		}
 	},
 	methods : {
+		initlayout:function(){
+			this.layout=JSON.parse(JSON.stringify(this.patient.layout));
+			this.pwidgetlist=this.layout.map(function(e){return e.c.id})
+			if(this.pwidgetlist.length==0){
+				this.pddready=false;
+			} else {
+				this.pddready=true;
+			}
+			this.$store.commit('setScreenname','Data View')
+			window.addEventListener('resize', this.checkGriddim)
+		},
 		showtip:function(i){
 			if(this.sortedstatus[i].status){
 				this.sortedstatus[i].showtip=false
@@ -418,7 +378,7 @@ export default {
 			},
 		endtrainingmode:function(){
 			this.$store.commit('settrainingmode',false)
-			this.$router.push('/picker')
+			this.$router.push('/list')
 		},
 		checkGriddim:function(){
 			this.layoutdim.x0=this.$refs.gridl.getBoundingClientRect().left
@@ -529,18 +489,40 @@ export default {
 			this.layout[0].w=12;
 			this.layout[0].h=7;
 			this.maximized=true;
+			this.setdaterange(this.maximized)
 			if(this.trainmode) {
 				this.trainingstepfinished('max')
 			}
-
 		},
 		restoreLayout: function(){
 			this.layout=JSON.parse(JSON.stringify(this.temp));
 			this.maximized=false;
+			this.setdaterange(this.maximized)
 			if(this.trainmode) {
 				this.trainingstepfinished('restore')
 			}
-
+		},
+		setdaterange:function(max){
+			var obj={};
+			obj.end=this.$moment.unix(this.today).day(6).endOf('day').unix();
+			if(max){
+				switch(this.$route.params.id){
+					case 'PA-67034-001':
+						obj.days=84;
+						break;
+					case 'PA-67034-007':
+						obj.days=56;
+						break;
+					default:
+						obj.days=28;
+						break;
+				}
+			}else {
+				obj.days=7
+			}
+			obj.start= obj.end-obj.days*24*3600;;
+			this.$store.commit('setcurrentdaterange',obj)
+			this.$nextTick()
 		},
 		toggleEditMode:function(){
 			this.isInEdit=true;
@@ -730,7 +712,6 @@ export default {
 	z-index:300;
 	transition:left 0.5s ease, width 0.5s ease;
 }
-
 .wklabel {
 	position:relative;
 	cursor:default;
@@ -745,7 +726,6 @@ export default {
 	color: #fff;
 	font-size:14px;
 	font-weight:600;
-	/* mix-blend-mode: darken; */
 }
 .wlistctner {
 	overflow:auto;
@@ -762,19 +742,11 @@ export default {
 .maincontent{
 	min-height:500px;
 }
-.widgetcontainer {
-	position:relative;
-	width:100%;
-	flex: auto;
-}
 .pdd-panel {
 	opacity: 1;
 	transition: opacity 1s ease;
 }
 .pdd-panel.inedit{
-	/* background-image: linear-gradient(45deg,#f5f5f5 25%,transparent 0,transparent 75%,#f5f5f5 0),linear-gradient(45deg,#f5f5f5 25%,transparent 0,transparent 75%,#f5f5f5 0);
-  background-position: 0 0,15px 15px;
-  background-size: 30px 30px; */
 }
 .pdd-panel.fading {
 	opacity:0.05;

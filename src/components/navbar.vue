@@ -7,13 +7,16 @@
 		<nav class='navbar kgl-1 kg-bg-color kg-color'>
 			<ul class='nav navbar-nav'>
 				<li class='test' >
-					<div class='dropdown' id="userDropdown" v-if='fullpath=="/"'>
+					<div class='dropdown' id="userDropdown"  v-if='fullpath=="/"'>
 						<a><span v-on:mouseenter='trigDropdown' v-on:mouseleave='checkDropdown'>Administrator</span></a>
 						<ul class='dropdown-menu' v-if='showDropdown' v-on:mouseleave='leaveDropdown'>
 							<li class='test' @click='setupstation'><a><span>Setup</span></a></li>
 							<li class='test' @click='resetstore'><a><span>Reset</span></a></li>
               <router-link tag='li' :class="{'active': $route.fullPath === '/datagenerator'}" to='/datagenerator'><a><span>Generate Data</span></a></router-link>
 						</ul>
+					</div>
+					<div class='sid' v-else>
+						{{sessionid}}
 					</div>
 				</li>
 			</ul>
@@ -47,6 +50,12 @@ export default {
 		},
 		fullpath:function(){
 			return this.$route.fullPath;
+		},
+		sessionid:function(){
+			var id=this.$store.getters.getcurrentGroup.id
+			var t=id+''
+			if(id<10) t='0'+t
+			return this.$store.getters.getStationID+t
 		}
   },
   methods: {
@@ -69,8 +78,8 @@ export default {
 		},
 		stationselector:function(){
 			if(!this.training){
-				if(this.path!='/picker'){
-					this.$router.push({ path: '/picker' });
+				if(this.path!='/list'){
+					this.$router.push({ path: '/list' });
 				}
 			}
 		},
@@ -108,6 +117,14 @@ export default {
 }
 .kgl-nav {
 	z-index:50;
+}
+.sid {
+	font-size:20px;
+	margin: 10px auto;
+	border: none;
+	text-align:center;
+	min-width: 100px;
+	color:#666;
 }
 .kgl-1 {
 	z-index: 250;
