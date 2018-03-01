@@ -200,6 +200,7 @@
             });
             widgetList.push({"patientName":patient.name,
                             "patientID": patient.id,
+                            "simuweek":patient.simuweek,
                             "widgets": widgetProps,
                             "smWidgets": smWidgets});
           }
@@ -254,7 +255,7 @@
         this.widgetLists[idx].widgets.forEach(function(e){
           var wid = e.id+'-data'
           if(dobj[wid].length<self.numdays){
-            console.log(wid+"   ===  "+dobj[wid].length)
+            // console.log(wid+"   ===  "+dobj[wid].length)
               for(var j=dobj[wid].length; j<self.numdays; j++){
                   var dtemplate ={v:0,d:0}
                   dtemplate.d=-j
@@ -276,6 +277,7 @@
       this.currentpid = this.widgetLists[i].patientID
       this.currentsmindex=-1
       this.currentWidget=0;
+      this.numdays = this.widgetLists[idx].simuweek*7
       this.$http.get(this.basedataurl+this.currentpid).then(function(resp){
         self.newpatient=false
       }).catch(function(err){
