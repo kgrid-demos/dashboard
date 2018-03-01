@@ -1,16 +1,12 @@
 <template>
 		<div class="container kgl-tile" :class="{max:maximized}" v-bind:id="object.label">
-          <prowidget v-if="object.type === 'PRO' " ref="widget" :patientid='patientid' :viewmode='viewmode' v-on:instrselected='instrselected' :chartheight='cHeight' v-on:maximizeme='maximizeme' :editmode="editmode" :object="object" :maximized="maximized" :title="object.label" ></prowidget>
-					<trowidget v-if="object.type === 'TRO' " ref="widget" :patientid='patientid' :viewmode='viewmode' v-on:instrselected='instrselected' :chartheight='cHeight' v-on:maximizeme='maximizeme' :editmode="editmode" :object="object" :maximized="maximized" :title="object.label" ></trowidget>
-          <smwidget v-if="object.type === 'SM'  " :patientid='patientid' :chartheight='cHeight' :viewmode='viewmode' :editmode="editmode" :object="object" :title="object.label" v-on:maximizeme='maximizeme' :maximized="maximized" ></smwidget>
-					<trswidget v-if="object.type === 'TRS'  " :patientid='patientid' :chartheight='cHeight' :viewmode='viewmode' :editmode="editmode" :object="object" :title="object.label" v-on:maximizeme='maximizeme' :maximized="maximized" ></trswidget>
+          <prowidget v-if="object.type === 'PRO' | object.type === 'TRO'  " ref="widget" :patientid='patientid' :viewmode='viewmode' v-on:instrselected='instrselected' :chartheight='cHeight' v-on:maximizeme='maximizeme' :editmode="editmode" :object="object" :maximized="maximized" :title="object.label" ></prowidget>
+          <smwidget v-if="object.type === 'SM' | object.type === 'TRS'" :patientid='patientid' :chartheight='cHeight' :viewmode='viewmode' :editmode="editmode" :object="object" :title="object.label" v-on:maximizeme='maximizeme' :maximized="maximized" ></smwidget>
 		</div>
 	</template>
 	<script>
 	import prowidget from './prowidget.vue';
 	import smwidget from './smwidget.vue'
-	import trswidget from './trswidget.vue';
-	import trowidget from './trowidget.vue';
 	export default {
   	name:	"kotile",
 		data() {
@@ -27,8 +23,6 @@
 		components : {
 		  prowidget,
       smwidget,
-			trswidget,
-			trowidget
 		},
 		methods: {
 			instrselected:function(obj){

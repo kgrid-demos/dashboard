@@ -323,6 +323,12 @@
             rand = this.getRandomPROValue(priorVal, widget.inc);
             priorVal = rand;
           }
+          rand=Math.round(rand/widget.inc)*widget.inc
+          if(widget.inc<1){
+            rand=Math.round(rand*10)/10
+          }else {
+            rand=Math.round(rand)
+          }
           this.chartdata[this.currentdataindex][widget.id + "-data"][i] = ({
             'v': rand,
             'd': dateOffset
