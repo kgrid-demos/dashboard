@@ -183,7 +183,11 @@ const store = new Vuex.Store({
       return state.debugEnabled;
     },
     getcancertypes:state=>{
-      return state.init.cancertypes.map(function(e){return e.label})
+      if(state.init.cancertypes){
+        return state.init.cancertypes.map(function(e){return e.label})
+      }else {
+        return []
+      }
     },
     getpatientbyid:state => {
       var self=this;
@@ -220,15 +224,13 @@ const store = new Vuex.Store({
     getPatientMasterList: state=>{
       return state.init.patientMasterList;
     },
-    getPatientData: state=>{
-      return function(patientId) {
-        console.log(patientId)
+    getWidgetData: state=>{
+      return function(widgetId) {
         let index = state.patientData.findIndex(function(patient) {
-          return patient.id==patientId
+          return patient.id==state.patients.patientid
         });
-        console.log(state.patientData)
-        console.log(index)
-        return state.patientData[index];
+        if(state.debugEnabled) console.log('Retrieving Patient Data for ' +state.patients.patientid +'. Patient Index : '+ index +' Widget ID:  '+widgetId)
+        return state.patientData[index][widgetId+'-data'];
       }
     },
     hasLoadedPatientData: state=>{
@@ -246,9 +248,7 @@ const store = new Vuex.Store({
 })
 
 export default store
-
 const initialStateCopy = JSON.parse(JSON.stringify(store.state))
-
 export function resetState () {
   store.replaceState(JSON.parse(JSON.stringify(initialStateCopy)))
 }

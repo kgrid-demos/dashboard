@@ -1,7 +1,6 @@
 // initial state
 const state = {
   patientid:'',
-	smlist:[],
 	notelist:[],
 	alertlist:[]
 }
@@ -36,24 +35,6 @@ const getters = {
 				return []
 			}
     }
-  },
-	getpatientsmdata:state=>{
-    return function(id) {
-      var index = state.smlist.map(function(e){return e.pid}).indexOf(state.patientid)
-			var alist={}
-			var wid = id+'-data'
-      if(index!=-1){
-	      alist=JSON.parse(JSON.stringify(state.smlist[index]))
-				console.log("get sm data " +wid)
-				console.log(alist)
-			}
-      if(alist[wid]){
-				console.log(alist[wid])
-				return alist[wid]
-			}else{
-				return []
-			}
-    }
   }
 }
 // actions
@@ -66,7 +47,6 @@ const mutations = {
   },
 	loadsimudata (state, data){
 		state.alertlist=data.alertlist
-		state.smlist=data.smlist
 		state.notelist=data.notelist
 	}
 }

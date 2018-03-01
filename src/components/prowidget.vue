@@ -4,8 +4,8 @@
     <div class="widgetalert" v-if="!maximized ">
       <div class="ft-sz-11 ft-wt-6 pad-l-8" >
         <span>{{selectedinstr.unit}}</span>
-        <i v-if="hasalert"  @click='maximizeWidget' title="Click to view alert" class="fa fa-exclamation-circle warning pad-l-5"></i>
-        <i v-if="hasnotes"  @click='maximizeWidget' title="Click to view patient note" class="fa fa-file-alt notes pad-l-5"></i>
+        <i v-if="hasalert"  @click='warningaction' title="Click to view alert" class="fa fa-exclamation-circle warning pad-l-5"></i>
+        <i v-if="hasnotes"  @click='notesaction' title="Click to view patient note" class="fa fa-file-alt notes pad-l-5"></i>
         <span class= "float-r pad-r-10">{{selectedfreq}}</span>
       </div>
     </div>
@@ -18,8 +18,8 @@
     </ul>
     </div>
     <div class='notesdisplay' v-if='maximized'>
-      <span class="pad-l-15" v-if='hasnotes'> PATIENT NOTES </span>
-      <span class='pad-l-15' v-else> Patient has not posted any notes yet. </span>
+      <span class="pad-l-15" v-if='hasnotes'> NOTES </span>
+      <span class='pad-l-15' v-else> No note has been posted yet. </span>
       <ul>
         <li v-for='note in allnotes' >
           <span class="fa fa-file-alt notes pad-l-5"></span><span class="pad-l-5" style="font-style:italic;">{{formatted(note.date*1000)}} - {{note.note}}</span></li>
@@ -52,7 +52,7 @@
         <div class="optionslabel">
           Instrument
         </div>
-        <div class="options instru">
+        <div class="options instru" @click='configuraction'>
           <select v-model="selectedinstrname" :class="{attn:!object.sel}">
           <option disabled value="">(Please select one)</option>
             <option v-for="instrument in instruments" v-bind:value="instrument.name">
@@ -88,13 +88,12 @@
           </div>
         </div>
       </div>
-      <div class="optrow" data-toggle="tooltip" title="If checked, notifications of every alert will be sent." style='padding:2px 10px; border-top:1px solid #e7e7e7; margin-top:25px;'>
+      <div class="optrow" data-toggle="tooltip" title="If checked, notifications of every alert will be sent." @click='configuraction'>
         <div class="optionslabel" style='padding:10px 0px;'>
           Send Notification?
         </div>
         <div class="options">
           <toggle-button id='changed-font' v-model='sendnotification' :labels="{checked: 'YES', unchecked: 'NO'}" :color="{checked: '#853754', unchecked: '#B3B3B3'}" :width='60' :height='20'/>
-              <!-- <input type="checkbox" id="checkbox" v-model="sendnotification"> -->
         </div>
       </div>
     </div>
@@ -204,7 +203,7 @@
           stat.selindex=this.selectedinstrindex
         }
         this.$emit('instrselected',stat)
-      },
+      }
     },
     computed : {
       todaysdow:function(){
@@ -233,7 +232,7 @@
       },
       alldata:function(){
         var self=this;
-        var data = JSON.parse(JSON.stringify(this.$store.getters.getPatientData(this.patientid)[this.object.id + "-data"]));
+        var data = JSON.parse(JSON.stringify(this.$store.getters.getWidgetData(this.object.id)));
         if(data){
           data.forEach(function(e){
             e.date=self.$moment().add(e.d+7-self.todaysdow, 'd').unix();
@@ -393,6 +392,17 @@
       }
     },
     methods: {
+      configuraction:function(){
+        this.$eventBus.$emit('configured')
+      },
+      warningaction:function(){
+        this.$eventBus.$emit('warning')
+          this.$emit("maximizeme",this.object.id)
+      },
+      notesaction:function(){
+        this.$eventBus.$emit('notes')
+        this.$emit("maximizeme",this.object.id)
+      },
       initChartOption:function(){
         this.custfreq = this.selectedfreq
         this.chartOptions.scales.yAxes[0].ticks.min = this.selectedinstr.range.min
@@ -423,4 +433,75 @@
 .vue-js-switch#changed-font {
   font-size: 14px;
 }
+.graph {
+  padding-top: 1px;
+  margin:0 auto;
+  background-color: white;
+}
+.graph.max{
+  margin-top:15px;
+}
+.instru select.attn{
+  border: 1px dashed red;
+}
+.graph .edit {
+  width: 25px;
+  height: 25px;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  top: 0;
+  right: 8px;
+  background: none;
+}
+.graph .save {
+  font-size: 1em;
+  margin: 1em auto;
+  width: 10em;
+  padding: 0.5ex 1ex;
+}
+.widgetcontainer{
+  width:100%;
+  height:90%;
+}
+.widgetalert{
+  height: 20px;
+  background-color: white;
+}
+.widgetalert i{
+  cursor:pointer;
+}
+.thres {
+  display:inline-block;
+  min-width:33%;
+  text-align: center;
+  color: #fff;
+}
+div.min {
+  min-width:240px;
+  max-width:300px;
+  display:inline-block;
+}
+.thres.green {  background-color: green }
+.thres.orange {  background-color: orange }
+.thres.red {  background-color: red }
+.widgetalertdisplay {
+      height:130px;
+      background-color: #fff;
+      margin:15px 0px;
+      overflow: auto;
+      padding:10px 15px;
+      text-align: left;
+      text-transform: none;
+  }
+  .notesdisplay {
+      height:120px;
+      background-color: #fff;
+      margin:15px 0px 15px 0px;
+      border: none;
+      overflow: auto;
+      padding:10px 15px;
+      text-align: left;
+      text-transform: none;
+  }
 </style>

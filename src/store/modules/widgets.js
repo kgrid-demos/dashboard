@@ -120,19 +120,19 @@ const _widgets= [
   { "id":"TRO-01","label":"Temperature", "type":"TRO",    "constraint":{}, "sel":false, "selindex":-1,
   "cancertype":[  {id:99}], "instruments":[ { name: "Temperature in Fahrenheit", value: 1, "bwpoints":14,
                     "dow":["Su","Mo","Tu","We","Th","Fr","Sa"], "range":{min:-20,max:120,inc:1,step:20},
-                    "unit":" Fahrenheit", "ryg":[{min:-20,max:40,color:"orange"}, {min:40,max:80, color:"green"}, {min:80,max:130,color:"red"}]} ]},
+                    "unit":" Fahrenheit", "ryg":[{min:-20,max:39,color:"orange"}, {min:40,max:79, color:"green"}, {min:80,max:130,color:"red"}]} ]},
   { "id":"TRO-04","label":"Humidity", "type":"TRO",    "constraint":{}, "sel":false, "selindex":-1,
                     "cancertype":[  {id:99}], "instruments":[ { name: "Relative Humidity", value: 1, "bwpoints":14,
                                       "dow":["Su","Mo","Tu","We","Th","Fr","Sa"], "range":{min:0,max:100,inc:1,step:20},
-                                      "unit":" %", "ryg":[{min:0,max:30,color:"orange"}, {min:30,max:60, color:"green"}, {min:60,max:100,color:"red"}]} ]},
+                                      "unit":" %", "ryg":[{min:0,max:29,color:"orange"}, {min:30,max:59, color:"green"}, {min:60,max:100,color:"red"}]} ]},
   { "id":"TRO-02","label":"Wind Speed", "type":"TRO",    "constraint":{}, "sel":false, "selindex":-1,
           "cancertype":[  {id:99}], "instruments":[ { name: "Wind Speed in miles/hour", value: 1, "bwpoints":14,
                       "dow":["Su","Mo","Tu","We","Th","Fr","Sa"], "range":{min:0,max:100,inc:1,step:20},
-                                                        "unit":" Mile/Hour", "ryg":[{min:0,max:5,color:"green"}, {min:5,max:20, color:"orange"}, {min:20,max:100,color:"red"}]} ]},
+                                                        "unit":" Mile/Hour", "ryg":[{min:0,max:4,color:"green"}, {min:5,max:19, color:"orange"}, {min:20,max:100,color:"red"}]} ]},
   { "id":"TRO-03","label":"Percipitation", "type":"TRO",    "constraint":{}, "sel":false, "selindex":-1,
           "cancertype":[  {id:99}], "instruments":[ { name: "Percipition in inches", value: 1, "bwpoints":14,
           "dow":["Su","Mo","Tu","We","Th","Fr","Sa"], "range":{min:0,max:3,inc:0.2,step:1},
-          "unit":" Inch", "ryg":[{min:0,max:1,color:"orange"}, {min:1,max:3, color:"green"}, {min:3,max:20,color:"red"}]} ]},
+          "unit":" Inch", "ryg":[{min:0,max:0.8,color:"orange"}, {min:1,max:2.8, color:"green"}, {min:3,max:20,color:"red"}]} ]},
   { "id":"TRS-01","label":"Tornado Safety",  "type":"TRS",    "constraint":{}, "sel":false,"selindex":-1,
   "cancertype":[  {id:99}],
   "instruments":[  { name:"Tornado Safety",description: "Tornado Safety training video", value: 1, "modulecount": 1, "bwpoints": 1} ]}
@@ -206,11 +206,9 @@ const getters = {
 }
 
 // actions
-const actions = {
-}
+const actions = {}
 // mutations
-const mutations = {
-}
+const mutations = {}
 
 export default {
   state,
