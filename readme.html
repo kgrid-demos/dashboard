@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Patient Data Dashboard</title>
+		<style>
+			<style>
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+margin: 0;
+padding: 0;
+border: 0;
+font-size: 100%;
+font: inherit;
+vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+display: block;
+}
+body {
+line-height: 1;
+}
+ol, ul {
+list-style: none;
+}
+blockquote, q {
+quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+content: '';
+content: none;
+}
+table {
+border-collapse: collapse;
+border-spacing: 0;
+}
+sup {
+vertical-align: super;
+font-size: smaller;
+}
+
+sub {
+vertical-align: sub;
+font-size: smaller;
+}
+
+/* Generic styles */
+body {
+background: #f5f5f5;
+color: #222;
+font-family: 'Sans Serif',serif;
+font-size: 18px;
+margin: 0;
+padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6,
+ul, ol,
+p,
+code, pre,
+hr {
+line-height: 1.5em;
+margin: 1.5em 0 0.5em 0;
+}
+
+*:first-child {
+margin-top: 0;
+}
+/* Headers */
+h1, h2, h3, h4, h5, h6 {
+font-weight: bold;
+}
+
+h1 {
+font-size: 3em;
+}
+
+h2 {
+font-size: 2.2em;
+}
+
+h3 {
+font-size: 1.6em;
+}
+
+h4 {
+font-size: 1.5em
+}
+
+h5 {
+font-size: 1.2em;
+}
+
+h6 {
+font-size: 1em;
+}
+
+/* Lists */
+ul, ol {
+padding-left: 2em;
+}
+
+ul {
+list-style-type: disc;
+}
+
+ol {
+list-style-type: decimal;
+}
+
+/* Code and pre */
+code, pre {
+font-family: "Bitstream Vera Sans Mono", "Courier", monospace;
+}
+code {
+padding: 2px 4px;
+font-size: 90%;
+color: #333333;
+background-color: #f5f5f5;
+border-radius: 4px;
+}
+pre {
+  background-color: #f5f5f5;
+border-left: 2px solid #eee;
+margin-left: 2em;
+padding-left: 1em;
+}
+pre > code {
+background: transparent;
+border: none;
+padding: 0;
+}
+
+/* Links */
+a {
+color: #428bca;
+text-decoration: none;
+}
+
+a:hover, a:focus {
+color: #2a6496;
+text-decoration: underline;
+}
+
+/* Inlines */
+strong {
+font-weight: bold;
+}
+
+em {
+font-style: italic;
+}
+
+/* Container */
+.container {
+background: #FFF;
+padding: 30px 50px;
+margin: 0 auto;
+width: 82%;
+max-width:930px;
+}
+
+p.inst{
+  padding:5px 35px;
+  font-weight:bold;
+  background-color: #f5f5f5;
+}
+</style>
+
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<h1 id="patient-data-dashboard">Patient Data Dashboard</h1>
+<p>The software system of &quot;Patient Data Dashboard&quot; is developed for Genentech PRO-SM Dashboard Project. It will help the clinician to improve the patient experience of cancer care. It features drag-and-drop widgets for various Patient-Report-Outcome and Self-Management modules.</p>
+<h4 id="prepare-your-system">Prepare your system</h4>
+<p>To run Patient Data Dashboard, your system should have the following required software:</p>
+<ul>
+<li><a href="https://www.npmjs.com/get-npm">Node.js + npm</a> - Note: get the long-term release version.</li>
+<li>After installing Node.js and <code>npm</code>, install the demo server (to run the PDD web app). From the command line:<br><code>npm install -g http-server</code></li>
+<li>Install the mock-up server (to serve simulated data). From the command line:<br>  <code>npm install -g json-server</code></li>
+</ul>
+<h4 id="the-pdd-software-can-be-downloaded-at-patient-data-dashboard-release-page-https-github-com-kgrid-dashboard-releases-">The PDD software can be downloaded at <a href="https://github.com/kgrid/dashboard/releases">Patient Data Dashboard Release Page</a></h4>
+<ol>
+<li>Download the latest version and unzip;</li>
+<li>Change to the designated folder;</li>
+<li>On command line,
+ For Windows, run <code>pdd-start.bat</code>;
+ For Mac, run <code>./pdd-start.sh</code>;</li>
+<li>Open your browser and go to <code>http://localhost:8086</code></li>
+<li>When finished, on command line, run <code>pdd-stop.bat</code> for Windows, or run <code>./pdd-stop.sh</code> for Mac</li>
+<li>If you are upgrading the software with latest version, the web application will need a reset to clean the persisted local storage.
+After reset, it is recommended to also do a hard reload of the page to clear any cached content.</li>
+</ol>
+<h4 id="set-up-the-test-stations">Set up the test stations</h4>
+<p>At the start page, test station, patient case type, session id will be displayed.</p>
+<p>To make changes,</p>
+<ol>
+<li>Move the mouse to the right upper area to bring out the administrator dropdown;</li>
+<li>Click on <code>Setup</code>, an overlay with input form will show up;</li>
+<li>Select test station;</li>
+<li>select cancer type;</li>
+<li>Enter session id or use the spinner;</li>
+<li>Check if the session will start with training mode;</li>
+<li>Once done, click <code>Apply</code>.</li>
+<li>click <code>Cancel</code> will discard the changes and revert back the values.</li>
+</ol>
+<p>The start page should display the configured values. If all correct, click <code>Start</code>.</p>
+<h4 id="patient-simulated-data-generation">Patient Simulated Data Generation</h4>
+<p>A build-in data generator is available to generate the simulated patient data.</p>
+<p>To use the data generator, db.json should be served at <a href="http://localhost:3001">http://localhost:3001</a>. Proceed as following:</p>
+<ol>
+<li>Go to the designated folder</li>
+<li>On command line, start the web application by running<br> For Windows, run <code>pdd-start.bat</code>;
+ For Mac, run <code>./pdd-start.sh</code>;</li>
+<li>On command line, run<pre><code>json-server static\json\db.json -p 3001
+</code></pre></li>
+<li>Open your browser and go to <code>http://localhost:8086</code></li>
+<li>Move the mouse to the right upper area to bring out the administrator dropdown;</li>
+<li>Click on <code>Generate Data</code>, the app will launch the data generator</li>
+<li>Select a patient, a panel with different widgets will show up and the data is ready to be changed.</li>
+<li>For PRO/TRO widgets, a series of sliders are used to assign the value for each data point depending on the reporting Frequency</li>
+<li>For SM/TRS widgets, selecting the widget will bring up the module list so that completion date offset can be entered.</li>
+<li>When ready, Click on <code>Save Data</code> will save the simulated data for this patient.</li>
+<li>To exit the data generator, simply change the page to <code>http://localhost:8086</code></li>
+<li>To use the newly generated data, it is recommended to stop and restart the PDD app.</li>
+</ol>
+
+		</div>
+
+		<script></script>
+	</body>
+</html>
