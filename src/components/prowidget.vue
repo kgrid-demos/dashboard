@@ -409,7 +409,7 @@
       getcolorfordata: function(value){
         var thresholds = this.selectedinstr.ryg
         var check= thresholds.filter(function(e){
-          return (value>=e.min & value<=e.max)})
+          return (value>=e.min & value<e.max)})
         if(check.length==1){
           return check[0].color
         }else {

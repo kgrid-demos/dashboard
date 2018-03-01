@@ -17,6 +17,13 @@ export default {
     var t = this.$moment().unix()
     this.$store.commit("settoday", t)
     this.$store.commit("setbaseurl",BASE_URL)
+    var self=this;
+    this.$http.get("./static/json/default.json").then(response=> {
+      if(this.debugging) console.log(response.data)
+      self.$store.commit('init', response.data)
+    }).catch(e=>{
+      console.log(e)
+    });
   },
   components: {
     navbar
@@ -27,13 +34,7 @@ export default {
     }
   },
 	mounted:function(){
-    var self=this;
-    this.$http.get("./static/json/default.json").then(response=> {
-      if(this.debugging) console.log(response.data)
-      self.$store.commit('init', response.data)
-    }).catch(e=>{
-      console.log(e)
-    });
+
 	}
 };
 </script>
