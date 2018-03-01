@@ -233,7 +233,7 @@
       },
       alldata:function(){
         var self=this;
-        var data = JSON.parse(JSON.stringify(this.$store.getters.getPatientData(this.patientid)[this.object.id + "-data"]));
+        var data = JSON.parse(JSON.stringify(this.$store.getters.getWidgetData(this.object.id)));
         if(data){
           data.forEach(function(e){
             e.date=self.$moment().add(e.d+7-self.todaysdow, 'd').unix();

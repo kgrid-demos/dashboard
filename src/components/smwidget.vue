@@ -142,7 +142,7 @@
       },
       alldata:function(){
         if(this.viewmode){
-          return this.$store.getters.getpatientsmdata(this.object.id)
+          return this.$store.getters.getWidgetData(this.object.id)
         }else {
           return []
         }

@@ -2,7 +2,7 @@
   <applayout>
     <div slot="main" style="margin: 2em">
       <div class="plist">
-        <span v-for="(patientName,index) in patientNameList" v-on:click="selectpatient(index)" class="pbutton">{{patientName}}</span>
+        <span v-for="(w,index) in widgetLists" v-on:click="selectpatient(index)" class="pbutton">{{w.patientName}}</span>
       </div>
       <div v-for="(wlist, index) in widgetLists" v-if="wlist.patientID === currentpid">
         <hr/>
@@ -10,7 +10,7 @@
         Days of data: <input v-model.number="numdays" type="number" placeholder="Number of days:" class="dayInput"/>
         <button v-on:click="saveData">Save Data</button>
         <br>
-        <div v-for="(widget, index) in wlist.widgets" style='margin-top:35px;' v-if="index === currentWidget">
+        <div v-for="(widget, index) in wlist.widgets" style='margin:35px 0px; padding-left: 25px;border-left:5px solid #853754' v-if="index === currentWidget">
             <button v-on:click="prevWidget(wlist.widgets[index - 1])">◀</button>
             <div style="display:inline-block">
               <select v-model="currentWidget">
@@ -53,6 +53,18 @@
               </div>
             </div>
         </div>
+        <div style='margin:35px 0px; padding-left: 25px;border-left:5px solid #20657e'>
+        <div class="smcontainer" v-for="(smwidget,index) in wlist.smWidgets" @click='currentsmindex=index'>
+           <h5>{{smwidget.label}}</h5>
+          </div>
+          <div v-if='currentsmindex!=-1'>
+            <ul>
+              <li v-for='(m,mindex) in wlist.smWidgets[currentsmindex].modulecount'>
+                Module {{m}}: <input type='number' v-model.number="chartdata[currentdataindex][wlist.smWidgets[currentsmindex].id + '-data'][mindex].d" :min='-numdays'/>
+              </li>
+            </ul>
+          </div>
+      </div>
       </div>
     </div>
   </applayout>
@@ -68,9 +80,9 @@
     },
     data () {
       return {
-        currentPatient: "",
         currentpid:"",
         currentWidget:0,
+        currentsmindex:-1,
         chartdata: {},
         numdays: 30,
         period: 0,
@@ -159,9 +171,6 @@
           console.log(ws)
           return ws[0]
       },
-      patientNameList () {
-        return this.widgetLists.map(function(e){return e.patientName});
-      },
       widgetLists () {
         const patientList = this.$store.getters.getPatientMasterList;
         let widgetList = [];
@@ -208,14 +217,14 @@
           var wid = e.id+'-data'
           if(dobj[wid].length<self.numdays){
             console.log(wid+"   ===  "+dobj[wid].length)
-              for(var j=dobj[wid].length; j<self.numdays; j++){
+            for(var j=dobj[wid].length; j<self.numdays; j++){
                   var dtemplate ={v:0,d:0}
                   dtemplate.d=-j
                   console.log(dtemplate)
                   self.chartdata[dindex][wid].push(dtemplate)
-              }
             }
-      })
+          }
+        })
       }
     },
     mounted () {
@@ -227,6 +236,10 @@
         obj.id=id;
         var idx = this.widgetLists.map(function(e){return e.patientID}).indexOf(id)
         this.widgetLists[idx].widgets.forEach(function(e){
+          var wid = e.id+'-data'
+          obj[wid]=[]
+        })
+        this.widgetLists[idx].smWidgets.forEach(function(e){
           var wid = e.id+'-data'
           obj[wid]=[]
         })
@@ -245,13 +258,23 @@
               for(var j=dobj[wid].length; j<self.numdays; j++){
                   var dtemplate ={v:0,d:0}
                   dtemplate.d=-j
-                  console.log(dtemplate)
                   self.chartdata[dindex][wid].push(dtemplate)
               }
             }
       })
-      this.currentPatient = this.patientNameList[i]
+      this.widgetLists[idx].smWidgets.forEach(function(e){
+        var wid = e.id+'-data'
+        var count = e.modulecount
+        if(dobj[wid].length<count){
+          console.log(wid+"   ===  "+dobj[wid].length)
+            for(var j=0; j<count; j++){
+                var dtemplate ={v:j+1,d:10}
+                self.chartdata[dindex][wid].push(dtemplate)
+            }
+          }
+        })
       this.currentpid = this.widgetLists[i].patientID
+      this.currentsmindex=-1
       this.currentWidget=0;
       this.$http.get(this.basedataurl+this.currentpid).then(function(resp){
         self.newpatient=false
@@ -265,6 +288,7 @@
           this.currentWidget = 0;
         } else {
           this.generateRange = widget.range;
+          this.initVal = widget.range[0]
         }
       },
       nextWidget(widget, maxWidgets) {
@@ -273,6 +297,7 @@
           this.currentWidget = maxWidgets - 1;
         } else {
           this.generateRange = widget.range;
+          this.initVal = widget.range[0]
         }
       },
       randomizePROData(patientID, widget) {
@@ -353,28 +378,6 @@
           }
         }
       },
-      randomizeAllSMData(patientID, smWidgets) {
-        let self = this;
-        smWidgets.forEach(function(widget){
-          let dateOffset = 0;
-          let value = 1;
-          self.chartdata[this.currentdataindex][widget.id + "-data"] = [];
-          for(let i = 0; i < widget.modulecount; i++) {
-            let completed =  Math.floor(Math.random() * 2 + 1);
-            if(completed === 2) {
-              value = 0;
-            }
-            dateOffset = dateOffset - (Math.floor(Math.random() * self.numdays + 1) + dateOffset - (widget.modulecount - i));
-            self.chartdata[this.currentdataindex][widget.id + "-data"][i] = {'v': value, 'd': dateOffset};
-          }
-        });
-      },
-      convertSMVal(value) {
-        if(value === 0) {
-          return '☐';
-        }
-        return '☑';
-      },
       saveData() {
         let self = this;
         this.currentwidgetList.widgets.forEach(function(e){
@@ -383,12 +386,10 @@
         })
         if(this.newpatient){
           this.$http.post(this.basedataurl, this.chartdata[this.currentdataindex]).then(function(resp){
-            console.log('Save data...')
             console.log(resp)
           });
         }else {
           this.$http.put(this.basedataurl+this.currentpid, this.chartdata[this.currentdataindex]).then(function(resp){
-            console.log('Save data...')
             console.log(resp)
           });
         }
@@ -405,9 +406,7 @@
     border: 1px solid #373a3c;
     padding: 2px;
   }
-  hr {
-    margin: 10px auto;
-  }
+  hr {    margin: 10px auto;  }
   input {
     border:1px solid black;
     width: 3em;
@@ -427,10 +426,6 @@
     margin:3px;
     padding:2px;
     cursor: pointer;
-  }
-  .smvals {
-    font-size: 16pt;
-    padding: 0 0 0 2px;
   }
   .smcontainer {
     display: inline-block;
