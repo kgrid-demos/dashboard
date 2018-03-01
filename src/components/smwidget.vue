@@ -153,3 +153,59 @@
     }
   }
 </script>
+<style>
+.progresscont {
+  margin: 10px auto;
+  padding: 1px;
+  font-size: 11pt;
+  border: 1px solid green;
+  height: 26px;
+  border-radius: 5px;
+  width: 90%;
+  position: relative;
+  top:50%;
+  transform: translateY(-80%);
+  background-color:#fff
+}
+.barlabel {
+  color: aqua;
+  position: absolute;
+  top: 2px;
+  width: 100%;
+  text-align: center;
+  left: 0;
+  font-weight:700;
+  mix-blend-mode:difference;
+}
+.moduleContainer {
+  margin: 3em;
+  padding-top: 2.5em;
+  text-transform: none;
+  background-color: #fff;
+  text-align: center;
+}
+.moduleList {
+  width: 100%;
+  display: table;
+  margin: 2.5em auto;
+  padding: 20px 0px;
+}
+.☑ {
+  color: green;
+}
+.☒ {
+  color: red;
+}
+.module {
+  font-size:24pt;
+  line-height: 14pt;
+  display: table-cell;
+}
+.module div {
+  color: gray;
+  font-size: 10pt;
+}
+.moduleLabel {
+  font-size: 10pt;
+}
+</style>

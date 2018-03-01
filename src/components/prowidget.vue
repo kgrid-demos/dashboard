@@ -433,4 +433,75 @@
 .vue-js-switch#changed-font {
   font-size: 14px;
 }
+.graph {
+  padding-top: 1px;
+  margin:0 auto;
+  background-color: white;
+}
+.graph.max{
+  margin-top:15px;
+}
+.instru select.attn{
+  border: 1px dashed red;
+}
+.graph .edit {
+  width: 25px;
+  height: 25px;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  top: 0;
+  right: 8px;
+  background: none;
+}
+.graph .save {
+  font-size: 1em;
+  margin: 1em auto;
+  width: 10em;
+  padding: 0.5ex 1ex;
+}
+.widgetcontainer{
+  width:100%;
+  height:90%;
+}
+.widgetalert{
+  height: 20px;
+  background-color: white;
+}
+.widgetalert i{
+  cursor:pointer;
+}
+.thres {
+  display:inline-block;
+  min-width:33%;
+  text-align: center;
+  color: #fff;
+}
+div.min {
+  min-width:240px;
+  max-width:300px;
+  display:inline-block;
+}
+.thres.green {  background-color: green }
+.thres.orange {  background-color: orange }
+.thres.red {  background-color: red }
+.widgetalertdisplay {
+      height:130px;
+      background-color: #fff;
+      margin:15px 0px;
+      overflow: auto;
+      padding:10px 15px;
+      text-align: left;
+      text-transform: none;
+  }
+  .notesdisplay {
+      height:120px;
+      background-color: #fff;
+      margin:15px 0px 15px 0px;
+      border: none;
+      overflow: auto;
+      padding:10px 15px;
+      text-align: left;
+      text-transform: none;
+  }
 </style>

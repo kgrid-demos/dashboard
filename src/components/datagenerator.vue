@@ -54,13 +54,13 @@
             </div>
         </div>
         <div style='margin:35px 0px; padding-left: 25px;border-left:5px solid #20657e'>
-        <div class="smcontainer" v-for="(smwidget,index) in wlist.smWidgets" @click='currentsmindex=index'>
+        <div class="smcontainer" v-for="(smwidget,index) in wlist.smWidgets" @click='currentsmindex=index' :class='{active:currentsmindex==index}'>
            <h5>{{smwidget.label}}</h5>
           </div>
           <div v-if='currentsmindex!=-1'>
             <ul>
-              <li v-for='(m,mindex) in wlist.smWidgets[currentsmindex].modulecount'>
-                Module {{m}}: <input type='number' v-model.number="chartdata[currentdataindex][wlist.smWidgets[currentsmindex].id + '-data'][mindex].d" :min='-numdays'/>
+              <li class='moduleentry' v-for='(m,mindex) in wlist.smWidgets[currentsmindex].modulecount'>
+                Module {{m}} completion date offset: <input type='number' v-model.number="chartdata[currentdataindex][wlist.smWidgets[currentsmindex].id + '-data'][mindex].d" :min='-numdays' max='10'/>
               </li>
             </ul>
           </div>
@@ -439,8 +439,16 @@
     padding: 1px 6px;
     border: 1px solid gray;
   }
-  h5 {
+  .smcontainer.active {
+    border: 1px solid #0075bc;
+    background-color:#0075bc;
+  }
+  .smcontainer.active h5 {
     margin:0;
     padding: 0;
+      color: #fff;
+  }
+  li.moduleentry {
+    padding: 5px 10px;
   }
 </style>
