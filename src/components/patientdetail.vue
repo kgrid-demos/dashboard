@@ -861,7 +861,6 @@ ul.wlayout li {
 .pad-0 {
 	padding:0px;
 }
-
 ul.progressstatus {
 	list-style: none;
 	display:table-cell;
