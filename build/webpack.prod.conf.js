@@ -8,6 +8,7 @@ var CopyWebpackPlugin = require('copy-webpack-plugin')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
+const WorkboxPlugin = require('workbox-webpack-plugin');
 
 var env = config.build.env
 
@@ -92,7 +93,13 @@ var webpackConfig = merge(baseWebpackConfig, {
         to: config.build.assetsSubDirectory,
         ignore: ['.*']
       }
-    ])
+    ]),
+    new WorkboxPlugin({
+         // these options encourage the ServiceWorkers to get in there fast
+         // and not allow any straggling "old" SWs to hang around
+         clientsClaim: true,
+         skipWaiting: true
+       })
   ]
 })
 

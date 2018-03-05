@@ -16,6 +16,17 @@ Vue.prototype.$eventBus= eventBus
 Vue.use(VueRouter);
 Vue.use(Vuex);
 Vue.use(ToggleButton);
+
+ if ('serviceWorker' in navigator) {
+   window.addEventListener('load', () => {
+     navigator.serviceWorker.register('/sw.js').then(registration => {
+       console.log('SW registered: ', registration);
+     }).catch(registrationError => {
+       console.log('SW registration failed: ', registrationError);
+     });
+   });
+ }
+ 
 const routes = [{ path : '/', component : require('./components/cover.vue')	},
                 { path : '/list', component : require('./components/home.vue')	},
                 { path : '/about', component: require('./components/about.vue') },

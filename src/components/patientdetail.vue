@@ -212,18 +212,7 @@ export default {
 	mounted:function(){
 		var self = this;
 		var l = this.$refs.gridl
-		if(!this.$store.getters.hasLoadedPatientData) {
-			var self = this;
-			var getprodata = this.$http.get("./static/json/db.json")
-			var getsimudata = this.$http.get("./static/json/simudata.json")
-			this.$http.all([getprodata, getsimudata]).then(this.$http.spread(function(prodata,simudata) {
-				self.$store.commit("loadPatientData", prodata.data.patients);
-				self.$store.commit("loadsimudata", simudata.data);
-				self.initlayout()
-			}));
-		}else {
-			this.initlayout()
-		}
+		this.initlayout()
 	},
 	beforeDestroy: function () {
   	window.removeEventListener('resize', this.checkGriddim)
