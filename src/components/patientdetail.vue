@@ -71,7 +71,9 @@
 						</div>
 						<div class='col-md-8 col-sm-8 noselect float-r'>
 							<div class='float-r' v-if='isInEdit'>
-							<button class='kg-btn-primary lg' v-if='isInEdit && pwidgetlist.length>0 ' @click='removeAll'> Remove All </button>
+								<button class='kg-btn-primary lg' v-if='isInEdit && pwidgetlist.length==0' @click='loadDefault'> Load Default Layout </button>
+								<!-- <button class='kg-btn-primary lg' v-if='isInEdit && pwidgetlist.length>0' @click='saveDefault'> Save As Default </button> -->
+								<button class='kg-btn-primary lg' v-if='isInEdit && pwidgetlist.length>0 ' @click='removeAll'> Remove All </button>
 								<button class='kg-btn-primary attn lg' v-if='isInEdit' v-show='configready' @click='saveconfig'>Apply Changes</button>
 							</div>
 							<div style="width:100%;"  v-else>
@@ -419,7 +421,7 @@ export default {
 			this.pddready=true;
 	    var pid=this.$route.params.id;
 			this.$store.commit('saveConfig',{'id':pid,'group':this.currentGroup.id,'layout':this.layout});
-			if(true) this.updateLog(this.patient);
+			if(true) this.updateLog('End',this.patient);
 			self.isInEdit = false;
 			self.registrationstatus =[];
 			if(this.trainmode) {
@@ -440,10 +442,11 @@ export default {
 			},3000);
 				}
     },
-		updateLog:function(obj){
+		updateLog:function(flag, obj){
 			var t = this.$moment().format();
 			var payload={};
 			payload.timestamp=t;
+			payload.flag=flag
 			payload.entry=obj;
 			this.$http.post(this.loggerurl, payload)
 				.then(function (response) {
@@ -491,6 +494,21 @@ export default {
 				this.trainingstepfinished('restore')
 			}
 		},
+		loadDefault:function(){
+			var self = this;
+			this.layout.splice(0,1);
+			var obj = JSON.parse(JSON.stringify(this.$store.getters.getdefaultlayoutbycancerid(this.patient.type)));
+			this.pwidgetlist=obj.map(function(e){return e.c.id})
+			obj.forEach(function(e){
+				self.layout.push(e)
+			})
+		},
+		saveDefault:function() {
+			var obj={}
+			obj.cancerid=this.patient.type;
+			obj.layout=this.layout;
+			this.$store.commit('savedefaultlayout', obj )
+		},
 		setdaterange:function(max){
 			var obj={};
 			obj.end=this.$moment.unix(this.today).day(6).endOf('day').unix();
@@ -523,6 +541,7 @@ export default {
 			if(this.trainmode) {
 				this.trainingstepfinished('edit')
 			}
+			this.updateLog('Start',this.patient);
 		},
 		trainingstepfinished:function(txt){
 			var inx=this.trainingstatus.map(function(e){return e.task.toUpperCase()}).indexOf(txt.toUpperCase())
