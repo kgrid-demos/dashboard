@@ -184,7 +184,8 @@ export default {
 				{task:'warning',status:false,showtip:false,'description':'Pick a widget with warning; click on the warning icon and the widget will maximize so that the warning detail can be examined'},
 				{task:'notes',status:false,showtip:false,'description':'Restore the layout. Pick a widget with notes; click on the notes icon and the widget will maximize so that the notes detail can be reviewed'},
 			],
-			currenttask:0
+			currenttask:0,
+			currenttoken:0
 		}
 	},
 	created : function() {
@@ -443,14 +444,16 @@ export default {
 				}
     },
 		updateLog:function(flag, obj){
+			var self=this;
 			var t = this.$moment().format();
 			var payload={};
 			payload.timestamp=t;
 			payload.flag=flag
 			payload.entry=obj;
+			payload.token=this.currenttoken;
 			this.$http.post(this.loggerurl, payload)
 				.then(function (response) {
-    			// console.log(response);
+					console.log(response)
   			})
   			.catch(function (error) {
     			// console.log(error);
@@ -541,7 +544,19 @@ export default {
 			if(this.trainmode) {
 				this.trainingstepfinished('edit')
 			}
+			this.currenttoken=this.generatetoken()
 			this.updateLog('Start',this.patient);
+		},
+		generatetoken:function(){
+			var t =''
+			t=t+this.$store.getters.getStationID
+			var j=this.$store.getters.getcurrentGroup.id
+			if(j<10) t=t+'0'
+			t=t+j
+			var pid=this.patient.id
+			t=t+pid.substring(pid.length-3)
+			var timestamp = this.$moment().unix()+'';
+			return t+timestamp
 		},
 		trainingstepfinished:function(txt){
 			var inx=this.trainingstatus.map(function(e){return e.task.toUpperCase()}).indexOf(txt.toUpperCase())
