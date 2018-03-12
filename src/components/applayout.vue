@@ -11,6 +11,8 @@ export default {
 </script>
 <style>
 .kgl-content {
-	margin-top:30px;
+	position: absolute;
+	margin-top: 30px;
+	width:100%;
 }
 </style>

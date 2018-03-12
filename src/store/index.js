@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import widgets from './modules/widgets'
 import patients from './modules/patients'
+import layouts from './modules/layouts'
 import VuexPersistence from 'vuex-persist'
 
 Vue.use(Vuex)
@@ -31,7 +32,8 @@ const store = new Vuex.Store({
   plugins: [vuexLocal.plugin],
   modules: {
     widgets,
-    patients
+    patients,
+    layouts
   },
   state:{
       init:{},

@@ -8,13 +8,7 @@ body, div, h1, h2, h3, h4, h5, h6, p, ul, ol, li, dl, dt, dd, img, form, fieldse
   color: #555555;
   font-weight: 500;
 }
-ul {
-  list-style:none;
-}
-img {
-  image-rendering: auto;
-  image-rendering: crisp-edges;
-}
+ul {   list-style:none; }
 h1    { font-size: 32px; }
 h2    { font-size: 21px; }
 h3    { font-size: 21px; display: inline-block; }
@@ -34,10 +28,7 @@ p     { font-size: 14px; }
 .ft-italic   { font-style:italic;}
 .ft-wt-6     { font-weight: 600; }
 small { font-size:  70%; }
-
-* {
-	outline:none;
-}
+* { 	outline:none;  }
 .nav>li>a {
     position: relative;
     display: block;
@@ -52,43 +43,24 @@ a, a:hover, a:visited, a:focus {
 	cursor: pointer;
 	transition: color 0.5s ease;
 }
-.wrapper {
-	background-color: transparent;
-	width: 1584px;
-	margin: 0 auto;
+.row {
+  margin-left:0px;
+  margin-right:0px;
 }
-::-webkit-scrollbar {
-    width: 10px;
-}
+::-webkit-scrollbar {  width: 10px;  }
 ::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.1);
     border-radius: 0px;
 }
-::-webkit-scrollbar-thumb {
-    border-radius: 0px;
-}
-::-webkit-scrollbar-track {
-      background-color: #fff;
-} /* the new scrollbar will have a flat appearance with the set background color */
-::-webkit-scrollbar-thumb {
-      background-color: #b5b5b5;
-} /* this will style the thumb, ignoring the track */
+::-webkit-scrollbar-thumb {   border-radius: 0px; }
+::-webkit-scrollbar-track {   background-color: #fff;  } /* the new scrollbar will have a flat appearance with the set background color */
+::-webkit-scrollbar-thumb {   background-color: #b5b5b5; } /* this will style the thumb, ignoring the track */
 ::-webkit-scrollbar-button {
     display:none;
     background-color: #b5b5b5;
 } /* optionally, you can style the top and the bottom buttons (left and right for horizontal bars) */
-::-webkit-scrollbar-corner {
-      background-color: #fff;
-} /* if both the vertical and the horizontal bars appear, then perhaps the right bottom corner also needs to be styled */
+::-webkit-scrollbar-corner {  background-color: #fff;  } /* if both the vertical and the horizontal bars appear, then perhaps the right bottom corner also needs to be styled */
 
-.noscroll { overflow: hidden; }
-.whitebacking {
-	background-color:transparent;
-	position: relative;
-	z-index:200;
-}
-
-.e5backing {	background-color:#e5e5e5; }
 .warning {  color: red; }
 .notes {  color: blue; }
 .mar-top10 { margin-top:10px; }
@@ -112,12 +84,9 @@ a, a:hover, a:visited, a:focus {
 .pad-r-10 {  padding-right:10px; }
 .pad-r-15 {  padding-right:15px; }
 .pad-r-20 {  padding-right:20px; }
-.pad-0 { padding:0px; }
 .mar-0 {  margin-left:0;  margin-right:0; }
 .mar-r-30 {  margin-right:30px; }
 .mar-r-12 {  margin-right:12px; }
-.bg-trans {  background-color: transparent; }
-.bg-white {  background-color: #fff;        }
 .inline {display:inline-block;}
 .brd-r {  border-right: 1px solid #666666; }
 .lh-1 { line-height: 1em; }
@@ -142,11 +111,6 @@ a, a:hover, a:visited, a:focus {
     margin: 0 auto;
     padding: 0px 12px;
 }
-  .kgl-content {
-  	position: absolute;
-  	margin-top: 0px;
-  	width:100%;
-  }
   label {
   		font-weight: 400;
   		margin:10px 0px;

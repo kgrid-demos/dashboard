@@ -82,6 +82,15 @@ export default {
 	},
 	mounted:function(){
 		this.$store.commit('setScreenname','Start Page')
+		if(!this.$store.getters.hasLoadedPatientData) {
+			var self = this;
+			var getprodata = this.$http.get("./static/json/db.json")
+			var getsimudata = this.$http.get("./static/json/simudata.json")
+			this.$http.all([getprodata, getsimudata]).then(this.$http.spread(function(prodata,simudata) {
+				self.$store.commit("loadPatientData", prodata.data.patients);
+				self.$store.commit("loadsimudata", simudata.data);
+			}));
+		}
 	},
 	computed : {
 		options:function(){
