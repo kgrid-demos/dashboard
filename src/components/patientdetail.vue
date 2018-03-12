@@ -306,7 +306,7 @@ export default {
 		},
 		patient: function(){
 			console.log(this.$route.params.id);
-			return this.$store.getters.getpatientbyid({"id":this.$route.params.id,"group":this.currentGroup.id});
+			return this.$store.getters.getpatient;
 		},
 		widgetMasterList: function(){
 			return JSON.parse(JSON.stringify(this.$store.getters.getwidgetlistbypatient(this.patient)));
