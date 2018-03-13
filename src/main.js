@@ -31,7 +31,6 @@ if(process.env.NODE_ENV == 'production'){
 
 const routes = [{ path : '/', component : require('./components/cover.vue')	},
                 { path : '/list', component : require('./components/home.vue')	},
-                // { path : '/about', component: require('./components/about.vue') },
                 { path : '/datagenerator', component: require('./components/datagenerator.vue') },
                 { path : '/logview', component: require('./components/logview.vue') },
                 { path : '/dashboard/:id', name : 'patient', component : require('./components/patientdetail.vue'), data: function(){

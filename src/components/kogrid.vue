@@ -54,13 +54,6 @@ export default {
     }
   },
   computed: {
-    groupclass: function(){
-      var c="default";
-      if(this.groupid!=-1){
-        c='group'+this.groupid;
-      }
-      return c;
-    },
     filteredData: function () {
       var sortKey = this.sortKey
       var filterKey = this.filterKey && this.filterKey.toLowerCase()

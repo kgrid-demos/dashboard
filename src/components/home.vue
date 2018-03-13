@@ -40,7 +40,6 @@ export default {
 		return {
 			searchQuery: '',
 			filteron:true,
-
 		}
 	},
 	created : function() {

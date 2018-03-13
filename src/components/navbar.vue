@@ -14,9 +14,6 @@
 							<li class='test' @click='resetstore'><a><span>Reset</span></a></li>
               <router-link tag='li' :class="{'active': $route.fullPath === '/datagenerator'}" to='/datagenerator'><a><span>Generate Data</span></a></router-link>
 							<router-link tag='li' :class="{'active': $route.fullPath === '/logview'}" to='/logview'><a><span>View Log</span></a></router-link>
-
-
-							<!-- <router-link tag='li' :class="{'active': $route.fullPath === '/logbrowser'}" to='/datagenerator'><a><span>Generate Data</span></a></router-link> -->
 						</ul>
 					</div>
 					<div class='sid' v-else>

@@ -6,7 +6,6 @@
 			<div class='row' style="margin:10px 0px;">
 				<div class='col-md-1 col-sm-1 col-xs-1'></div>
 				<div class='col-md-4 col-sm-4 col-xs-4 ' style="padding:0px;"><div class='ft-wt-6 ft-sz-16 mar-top10'><p class='ft-wt-6 ft-sz-16'>Test Station ID</p></div></div>
-
 				<div class='col-md-6 col-sm-6 col-xs-6' style="padding:0px;">
 					<div class='inline' v-for='(item, index) in stations' @click='selectstation(index)' style="padding:0px;margin-left:-1px;width:25%;"><div class='station' :class='{active:tstation==item}'><p>{{item}}</p></div></div>
 				</div>
@@ -194,10 +193,6 @@ input#sid {
 	text-align:center;
 	min-width: 160px;
 }
-input#chek {
-	width: 25px;
-	height:25px;
-}
 .station p{
 	font-size: 14px;
 	font-weight: 700;
@@ -218,9 +213,6 @@ input#chek {
 .station:hover p{
 		color: #fff;
 	}
-h1 small {
-	font-size:50%;
-}
 .vue-js-switch#changed-font {
   font-size: 16px;
 }

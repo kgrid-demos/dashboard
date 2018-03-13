@@ -45,7 +45,7 @@ export default {
 	created : function() {
 		var self = this
 		this.$http.post('http://localhost:3601/processedlog',
-				{"query":"SELECT B.station, A.* FROM logentrypair A INNER JOIN teststation B ON B.groupid = A.group_id"})
+				{"query":"SELECT * FROM logentrypair"})
 				.then(function(response){
 					self.data=response.data
 					console.log(self.data)
