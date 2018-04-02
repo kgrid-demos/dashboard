@@ -277,7 +277,7 @@
       this.currentpid = this.widgetLists[i].patientID
       this.currentsmindex=-1
       this.currentWidget=0;
-      this.numdays = this.widgetLists[idx].simuweek*7
+      this.numdays = this.widgetLists[idx].simuweek*7+7
       this.$http.get(this.basedataurl+this.currentpid).then(function(resp){
         self.newpatient=false
       }).catch(function(err){

@@ -14,7 +14,7 @@
 				<div class='row' style='margin:0;'>
 					<div class='col-md-1 col-sm-1 col-xs-1  pad-0' v-if='isInEdit'></div>
 					<div class='col-md-1 col-sm-1 col-xs-1'>
-						<router-link  class='float-r' to='/list' v-if='!maximized && !isInEdit && !trainmode' data-toggle="tooltip" title="Click to go back to the patient list">
+						<router-link  class='float-r' to='/' v-if='!maximized && !isInEdit && !trainmode' data-toggle="tooltip" title="Click to go back to the patient list">
 							<i class='fa fa-arrow-left'></i>
 						</router-link>
 					</div>
@@ -250,10 +250,8 @@ export default {
 			switch(this.patient.id){
 				case 'PA-67034-001':
 					return 12
-				case 'PA-67034-007':
-					return 8
 				default:
-					return 4
+					return 12
 			}
 		},
 		timetitle: function(){
@@ -278,12 +276,12 @@ export default {
 			return this.$store.getters.gettoday
 		},
 		initdate:function(){
-			if(this.$route.params.id=='PA-67034-007'){
-				return	this.$moment.unix(this.today).day(-7*7).startOf('day').unix()
+			if(this.$route.params.id=='training'){
+				return	this.$moment.unix(this.today).day(-3*7).startOf('day').unix()
 			}else if(this.$route.params.id=='PA-67034-001') {
 				return	this.$moment.unix(this.today).day(-11*7).startOf('day').unix()
 			}else {
-				return	this.$moment.unix(this.today).day(-3*7).startOf('day').unix()
+				return	this.$moment.unix(this.today).day(-11*7).startOf('day').unix()
 			}
 		},
 		loggerurl:function(){
@@ -530,10 +528,10 @@ export default {
 						obj.days=84;
 						break;
 					case 'PA-67034-007':
-						obj.days=56;
+						obj.days=84;
 						break;
 					default:
-						obj.days=28;
+						obj.days=84;
 						break;
 				}
 			}else {

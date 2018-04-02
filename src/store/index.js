@@ -47,7 +47,7 @@ const store = new Vuex.Store({
       patientData:[],
       today:0,
       screenname:'Patient List',
-      trainingmode:true,
+      trainingmode:false,
       baseurl:'http://localhost'
     },
   mutations: {
@@ -167,7 +167,7 @@ const store = new Vuex.Store({
     setpatientlayoutfromlog(state,obj){
       var layout = JSON.parse(obj.layoutafter)
       state.patientlist[state.currentPatientIndex].layout.splice(0,state.patientlist[state.currentPatientIndex].layout.length)
-      layout.forEach(function(e){        
+      layout.forEach(function(e){
         state.patientlist[state.currentPatientIndex].layout.push(e)
       })
     }

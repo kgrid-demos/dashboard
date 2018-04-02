@@ -68,7 +68,7 @@ export default {
 			settingShow:false,
 			cancertypeselection:0,
 			groupid:1,
-			trainstart:true,
+			trainstart:false,
 			stations:['A','B','C','D']
 		}
 	},
@@ -92,6 +92,9 @@ export default {
 		}
 	},
 	computed : {
+		patientlist: function(){
+			return this.$store.getters.getPatientList(false);
+		},
 		options:function(){
 			return this.$store.getters.getcancertypes
 		},
@@ -108,6 +111,13 @@ export default {
 		},
 		currentGroup: function(){
 			return this.$store.getters.getcurrentGroup;
+		},
+		firstpatient:function(){
+			var self =this
+			var p = this.patientlist.filter(function(e){
+				return ((e.type==self.cancertypeselection) &&(e.groupid==self.groupid))
+			})
+			return p[0]
 		}
 	},
 	methods : {
@@ -141,8 +151,13 @@ export default {
 				this.$store.commit('setCurrentPatientIndex',{'pid':'training','group':this.currentGroup});
 				this.$store.commit('setcurrentpatientid',{id:'training'});
 				this.$router.push({ 'name':'patient' ,'params': { 'id': 'training'}});
-			}else {
-				this.$router.push({path:"/list"})
+		}else {
+				// Skip patient Picker
+				this.$store.commit('setCurrentPatientIndex',{'pid':this.firstpatient.id,'group':this.currentGroup});
+				this.$store.commit('setcurrentpatientid',{id:this.firstpatient.id});
+				this.$router.push({ 'name':'patient' ,'params': { 'id': this.firstpatient.id}});
+				//USe Patient Picker
+				//this.$router.push({path:"/list"})
 			}
 		}
 	},

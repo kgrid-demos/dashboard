@@ -5,11 +5,17 @@
 		,	"PRO-13-warn":[
 			{"alertid":"PRO13W001","text":"Discuss eating habits with patient","checked":false,"date":-10}]
 	}
-	,	{ "pid":"PA-67034-007"
+	,	{ "pid":"PA-67034-008"
 		  , "PRO-02-warn":[
 			  {"alertid":"PRO02W001","text":"Discuss patient's worries and concerns and consider treatment for anxiety if needed.","checked":false,"date":-10} ]
 		  , "PRO-09-warn":[
 			  {"alertid":"PRO09W001","text":"Patient's weight has been declining since starting chemotherapy. Discuss with patient","checked":false,"date":-10}]
+	}
+	, { "pid":"PA-67034-021"
+		,	"PRO-10-warn":[
+			{"alertid":"PRO10W001","text":"Discuss drinking of fluids with patient","checked":false,"date":-10}]
+		,	"PRO-13-warn":[
+			{"alertid":"PRO13W001","text":"Discuss eating habits with patient","checked":false,"date":-10}]
 	}
 	,	{ "pid":"training"
 		  , "TRO-03-warn":[
@@ -27,7 +33,13 @@
  			  {"v": 0,"note": "My itchiness on palms/soles are worsening. There are red peeling rash despite use of Eucerin","date": -20	}]
  		, "PRO-08-notes":[
  				{"v": 0,"note": "There are pain due to mouth sores/ulcerations descpite using Magic Mouthwash; however the sores and pain get better before the start of each new cycle.","date": -31}]
- 		, "pid": "PA-67034-007"
+ 		, "pid": "PA-67034-008"
+  }
+	,	{ "PRO-06-notes":[
+ 			  {"v": 0,"note": "My itchiness on palms/soles are worsening. There are red peeling rash despite use of Eucerin","date": -20	}]
+ 		, "PRO-08-notes":[
+ 				{"v": 0,"note": "There are pain due to mouth sores/ulcerations descpite using Magic Mouthwash; however the sores and pain get better before the start of each new cycle.","date": -31}]
+ 		, "pid": "PA-67034-021"
   }
 	,	{"TRO-01-notes":[
 	      {  "v": 0, "note": "Temperature is way above the avarage for this day.",  "date": -10} ]
