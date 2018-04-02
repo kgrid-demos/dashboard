@@ -20,28 +20,16 @@
       </tr>
     </tbody>
   </table>
-  <div class='patientsummary' v-if='hoverrow!=-1'>
-    <div class='patientinfo row mar-0 ft-sz-22'>
-      <div class='col-md-4 '> <small>NAME:</small> {{filteredData[hoverrow].name}} </div>
-      <div class='col-md-4 '>  <small>GENDER:</small> {{filteredData[hoverrow].gender}} </div>
-      <div class='col-md-4'> <small> AGE:</small> {{filteredData[hoverrow].age}} </div>
-    </div>
-    <div class='row interventionlisting mar-0' ><p class='ft-sz-18'>Interventions</p>
-     <ul style='margin:0 auto;' v-if='groupid!=-1'><li v-for='widget in wlist'><koicon :object='widget' ></koicon></li></ul></div>
-  </div>
 </div>
 </template>
 <script>
-import koicon from "./koicon.vue"
 export default {
-  name: 'kogrid',
+  name: 'loggrid',
   template: '#grid-template',
   props: [
-    'data','columns','filterKey','groupid'
+    'data','columns','filterKey'
   ],
-  components:{
-    koicon
-  },
+  components:{},
   data: function () {
     var sortOrders = {}
     this.columns.forEach(function (key) {
@@ -75,33 +63,6 @@ export default {
       }
       return data
     },
-    wlist:function(){
-      var l=[];
-      var wl=[];
-      var self=this;
-      if(this.widgetMasterList.length>0){
-        l=JSON.parse(JSON.stringify( this.filteredData[this.hoverrow].layout));
-        this.widgetMasterList.forEach(function(e){
-          var w = {id:e.id,label:e.label,count:-1,alertText:""}
-          var ind = l.map(function(el){return el.c.id}).indexOf(e.id)
-          if(ind!=-1){
-            w.count=l[ind].c.count
-          }
-          wl.push(w)
-        })
-      }
-      return wl
-    },
-    widgetMasterList: function(){
-      if(this.hoverrow!=-1){
-        return JSON.parse(JSON.stringify(this.$store.getters.getwidgetlistbypatient(this.patient(this.hoverrow))));
-      }else {
-        return []
-      }
-    },
-    currentGroup: function(){
-      return this.$store.getters.getcurrentGroup;
-    },
   },
   filters: {
     capitalize: function (str) {
@@ -109,17 +70,13 @@ export default {
     }
   },
   methods: {
-    patient: function(i){
-			var id = this.filteredData[i].id
-			return this.$store.getters.getpatientbyid({"id":id,"group":this.currentGroup.id});
-		},
     sortBy: function (key) {
       this.sortKey = key
       this.sortOrders[key] = this.sortOrders[key] * -1
     },
     selectRow: function(key){
       console.log(key)
-      if(this.groupid!=-1)
+      if(this.group_id!=-1)
         this.$emit("selected", key)
     },
     selrow: function(index){
@@ -146,22 +103,24 @@ color: #fff;
   user-select: none;
 }
 table.default  th {
-background-color: #fff;
-color: #0075bc;
+  background-color: #fff;
+  color: #0075bc;
 }
 table.group0  th{
-background-color: #0075bc;
+  background-color: #0075bc;
 }
-
 th, td {
-  padding: 15px 15px;
+  padding: 5px 5px;
+  font-size:11px;
   text-overflow: ellipsis;
 }
-th:nth-child(1){  width: 20%;}
-th:nth-child(2){  width: 20%;}
-th:nth-child(3){  width: 20%;}
-th:nth-child(4){  width: 25%;}
-th:nth-child(5){  width: 25%;}
+th:nth-child(1){  width: 10%;}
+th:nth-child(2){  width: 10%;}
+th:nth-child(3){  width: 10%;}
+th:nth-child(4){  width: 15%;}
+th:nth-child(5){  width: 15%;}
+th:nth-child(6){  width: 20%;}
+th:nth-child(7){  width: 20%;}
 th.active {
   color: #fff;
 }

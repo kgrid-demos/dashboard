@@ -14,7 +14,7 @@
 				<div class='row' style='margin:0;'>
 					<div class='col-md-1 col-sm-1 col-xs-1  pad-0' v-if='isInEdit'></div>
 					<div class='col-md-1 col-sm-1 col-xs-1'>
-						<router-link  class='float-r' to='/list' v-if='!maximized && !isInEdit && !trainmode' data-toggle="tooltip" title="Click to go back to the patient list">
+						<router-link  class='float-r' to='/' v-if='!maximized && !isInEdit && !trainmode' data-toggle="tooltip" title="Click to go back to the patient list">
 							<i class='fa fa-arrow-left'></i>
 						</router-link>
 					</div>
@@ -216,6 +216,15 @@ export default {
 		var self = this;
 		var l = this.$refs.gridl
 		this.initlayout()
+		if(!this.$store.getters.hasLoadedPatientData) {
+			var self = this;
+			var getprodata = this.$http.get("./static/json/db.json")
+			var getsimudata = this.$http.get("./static/json/simudata.json")
+			this.$http.all([getprodata, getsimudata]).then(this.$http.spread(function(prodata,simudata) {
+				self.$store.commit("loadPatientData", prodata.data.patients);
+				self.$store.commit("loadsimudata", simudata.data);
+			}));
+		}
 	},
 	beforeDestroy: function () {
   	window.removeEventListener('resize', this.checkGriddim)
@@ -241,10 +250,8 @@ export default {
 			switch(this.patient.id){
 				case 'PA-67034-001':
 					return 12
-				case 'PA-67034-007':
-					return 8
 				default:
-					return 4
+					return 12
 			}
 		},
 		timetitle: function(){
@@ -269,12 +276,12 @@ export default {
 			return this.$store.getters.gettoday
 		},
 		initdate:function(){
-			if(this.$route.params.id=='PA-67034-007'){
-				return	this.$moment.unix(this.today).day(-7*7).startOf('day').unix()
+			if(this.$route.params.id=='training'){
+				return	this.$moment.unix(this.today).day(-3*7).startOf('day').unix()
 			}else if(this.$route.params.id=='PA-67034-001') {
 				return	this.$moment.unix(this.today).day(-11*7).startOf('day').unix()
 			}else {
-				return	this.$moment.unix(this.today).day(-3*7).startOf('day').unix()
+				return	this.$moment.unix(this.today).day(-11*7).startOf('day').unix()
 			}
 		},
 		loggerurl:function(){
@@ -306,7 +313,7 @@ export default {
 		},
 		patient: function(){
 			console.log(this.$route.params.id);
-			return this.$store.getters.getpatientbyid({"id":this.$route.params.id,"group":this.currentGroup.id});
+			return this.$store.getters.getpatient;
 		},
 		widgetMasterList: function(){
 			return JSON.parse(JSON.stringify(this.$store.getters.getwidgetlistbypatient(this.patient)));
@@ -521,10 +528,10 @@ export default {
 						obj.days=84;
 						break;
 					case 'PA-67034-007':
-						obj.days=56;
+						obj.days=84;
 						break;
 					default:
-						obj.days=28;
+						obj.days=84;
 						break;
 				}
 			}else {
@@ -715,27 +722,27 @@ export default {
 	border:1px solid #f7f7f7;
 	color:#666666;
 }
-.weektrack {
+/* .weektrack {
 	display: inline-block;
 	position:relative;
 	border-bottom:1px solid #0075bc;
 	margin: 20px 0px;
-}
-.wkcursorfg {
+} */
+/* .wkcursorfg {
 	position:absolute;
 	height:25px;
 	background-color: transparent;
 	z-index:400;
 	transition:left 0.5s ease, width 0.5s ease;
-}
-.wkcursorbg {
+} */
+/* .wkcursorbg {
 	position:absolute;
 	height:25px;
 	background-color: #0075bc;
 	z-index:300;
 	transition:left 0.5s ease, width 0.5s ease;
-}
-.wklabel {
+} */
+/* .wklabel {
 	position:relative;
 	cursor:default;
 	background-color:transparent;
@@ -749,7 +756,7 @@ export default {
 	color: #fff;
 	font-size:14px;
 	font-weight:600;
-}
+} */
 .wlistctner {
 	overflow:auto;
 	min-height:752px;

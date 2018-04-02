@@ -47,7 +47,7 @@ const store = new Vuex.Store({
       patientData:[],
       today:0,
       screenname:'Patient List',
-      trainingmode:true,
+      trainingmode:false,
       baseurl:'http://localhost'
     },
   mutations: {
@@ -163,6 +163,13 @@ const store = new Vuex.Store({
     },
     setteststationid(state,id){
       state.testStation=id
+    },
+    setpatientlayoutfromlog(state,obj){
+      var layout = JSON.parse(obj.layoutafter)
+      state.patientlist[state.currentPatientIndex].layout.splice(0,state.patientlist[state.currentPatientIndex].layout.length)
+      layout.forEach(function(e){
+        state.patientlist[state.currentPatientIndex].layout.push(e)
+      })
     }
   },
   getters: {
@@ -199,6 +206,9 @@ const store = new Vuex.Store({
         return state.patientlist[index];
       }
     },
+    getpatient:state=>{
+      return state.patientlist[state.currentPatientIndex]
+    },
     getsimuweekbypid:state=>{
       return function(pid){
         var inx = state.init.patientMasterList.findIndex(function(el){
@@ -214,14 +224,18 @@ const store = new Vuex.Store({
       return state.currentGroup;
     },
     getPatientList: state=>{
-      var l=[];
-      l=JSON.parse(JSON.stringify( state.patientlist));
-      if(state.currentCancerType.id!=-1){
-        l=l.filter(function(e) {
-          return (e.type==state.currentCancerType.id)
-        })
+      return function(filtering){
+
+        var l=[];
+        l=JSON.parse(JSON.stringify( state.patientlist));
+        if(filtering){
+        if(state.currentCancerType.id!=-1){
+          l=l.filter(function(e) {
+            return (e.type==state.currentCancerType.id)
+          })
+        }}
+        return l ;
       }
-      return l ;
     },
     getPatientMasterList: state=>{
       return state.init.patientMasterList;

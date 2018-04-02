@@ -6,7 +6,6 @@
 			<div class='row' style="margin:10px 0px;">
 				<div class='col-md-1 col-sm-1 col-xs-1'></div>
 				<div class='col-md-4 col-sm-4 col-xs-4 ' style="padding:0px;"><div class='ft-wt-6 ft-sz-16 mar-top10'><p class='ft-wt-6 ft-sz-16'>Test Station ID</p></div></div>
-
 				<div class='col-md-6 col-sm-6 col-xs-6' style="padding:0px;">
 					<div class='inline' v-for='(item, index) in stations' @click='selectstation(index)' style="padding:0px;margin-left:-1px;width:25%;"><div class='station' :class='{active:tstation==item}'><p>{{item}}</p></div></div>
 				</div>
@@ -69,8 +68,9 @@ export default {
 			settingShow:false,
 			cancertypeselection:0,
 			groupid:1,
-			trainstart:true,
-			stations:['A','B','C','D']
+			trainstart:false,
+			stations:['A','B','C','D'],
+			pickerenable:false
 		}
 	},
 	created : function() {
@@ -93,6 +93,9 @@ export default {
 		}
 	},
 	computed : {
+		patientlist: function(){
+			return this.$store.getters.getPatientList(false);
+		},
 		options:function(){
 			return this.$store.getters.getcancertypes
 		},
@@ -109,6 +112,13 @@ export default {
 		},
 		currentGroup: function(){
 			return this.$store.getters.getcurrentGroup;
+		},
+		firstpatient:function(){
+			var self =this
+			var p = this.patientlist.filter(function(e){
+				return ((e.type==self.cancertypeselection) &&(e.groupid==self.groupid))
+			})
+			return p[0]
 		}
 	},
 	methods : {
@@ -142,8 +152,16 @@ export default {
 				this.$store.commit('setCurrentPatientIndex',{'pid':'training','group':this.currentGroup});
 				this.$store.commit('setcurrentpatientid',{id:'training'});
 				this.$router.push({ 'name':'patient' ,'params': { 'id': 'training'}});
-			}else {
-				this.$router.push({path:"/list"})
+		}else {
+				if(!this.pickerenable) {
+					// Skip patient Picker
+					this.$store.commit('setCurrentPatientIndex',{'pid':this.firstpatient.id,'group':this.currentGroup});
+					this.$store.commit('setcurrentpatientid',{id:this.firstpatient.id});
+					this.$router.push({ 'name':'patient' ,'params': { 'id': this.firstpatient.id}});
+				} else {
+					//Use Patient Picker
+					this.$router.push({path:"/list"})
+				}
 			}
 		}
 	},
@@ -194,10 +212,6 @@ input#sid {
 	text-align:center;
 	min-width: 160px;
 }
-input#chek {
-	width: 25px;
-	height:25px;
-}
 .station p{
 	font-size: 14px;
 	font-weight: 700;
@@ -218,9 +232,6 @@ input#chek {
 .station:hover p{
 		color: #fff;
 	}
-h1 small {
-	font-size:50%;
-}
 .vue-js-switch#changed-font {
   font-size: 16px;
 }

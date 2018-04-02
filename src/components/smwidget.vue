@@ -37,13 +37,9 @@
 </template>
 
 <script>
-  import vueSlider from 'vue-slider-component';
-
   export default {
     props: ['chartheight', 'patientid', 'editmode', 'viewmode','object','title', 'totalminutes', 'minutescompleted', 'maximized'],
-    components: {
-      vueSlider
-    },
+    components: {},
     data () {
       return {
         selectedinstrname: "",

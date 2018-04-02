@@ -1,1 +1,4 @@
 export const BASE_URL = 'http://localhost';
+export const LOGGERSERVER_PORT = '3601';
+export const LOG_PORT = '3003';
+export const DB_PORT = '3001';
