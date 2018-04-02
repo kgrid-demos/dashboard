@@ -52,3 +52,4 @@ jspm_packages
 
 /patientserver
 /*.bat
+/db_raw.json

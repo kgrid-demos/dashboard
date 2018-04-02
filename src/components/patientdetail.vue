@@ -722,27 +722,27 @@ export default {
 	border:1px solid #f7f7f7;
 	color:#666666;
 }
-.weektrack {
+/* .weektrack {
 	display: inline-block;
 	position:relative;
 	border-bottom:1px solid #0075bc;
 	margin: 20px 0px;
-}
-.wkcursorfg {
+} */
+/* .wkcursorfg {
 	position:absolute;
 	height:25px;
 	background-color: transparent;
 	z-index:400;
 	transition:left 0.5s ease, width 0.5s ease;
-}
-.wkcursorbg {
+} */
+/* .wkcursorbg {
 	position:absolute;
 	height:25px;
 	background-color: #0075bc;
 	z-index:300;
 	transition:left 0.5s ease, width 0.5s ease;
-}
-.wklabel {
+} */
+/* .wklabel {
 	position:relative;
 	cursor:default;
 	background-color:transparent;
@@ -756,7 +756,7 @@ export default {
 	color: #fff;
 	font-size:14px;
 	font-weight:600;
-}
+} */
 .wlistctner {
 	overflow:auto;
 	min-height:752px;

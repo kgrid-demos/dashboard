@@ -101,7 +101,7 @@ a, a:hover, a:visited, a:focus {
 .float-l {  float: left; }
 .float-r {  float: right; }
 .txtcenter {	text-align:center; }
-.kgl-banner {
+/* .kgl-banner {
     background-color: transparent;
     position: relative;
     width: 1024px;
@@ -110,7 +110,7 @@ a, a:hover, a:visited, a:focus {
     height: 220px;
     margin: 0 auto;
     padding: 0px 12px;
-}
+} */
   label {
   		font-weight: 400;
   		margin:10px 0px;
