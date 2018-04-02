@@ -69,7 +69,8 @@ export default {
 			cancertypeselection:0,
 			groupid:1,
 			trainstart:false,
-			stations:['A','B','C','D']
+			stations:['A','B','C','D'],
+			pickerenable:false
 		}
 	},
 	created : function() {
@@ -152,12 +153,15 @@ export default {
 				this.$store.commit('setcurrentpatientid',{id:'training'});
 				this.$router.push({ 'name':'patient' ,'params': { 'id': 'training'}});
 		}else {
-				// Skip patient Picker
-				this.$store.commit('setCurrentPatientIndex',{'pid':this.firstpatient.id,'group':this.currentGroup});
-				this.$store.commit('setcurrentpatientid',{id:this.firstpatient.id});
-				this.$router.push({ 'name':'patient' ,'params': { 'id': this.firstpatient.id}});
-				//USe Patient Picker
-				//this.$router.push({path:"/list"})
+				if(!this.pickerenable) {
+					// Skip patient Picker
+					this.$store.commit('setCurrentPatientIndex',{'pid':this.firstpatient.id,'group':this.currentGroup});
+					this.$store.commit('setcurrentpatientid',{id:this.firstpatient.id});
+					this.$router.push({ 'name':'patient' ,'params': { 'id': this.firstpatient.id}});
+				} else {
+					//Use Patient Picker
+					this.$router.push({path:"/list"})
+				}
 			}
 		}
 	},
